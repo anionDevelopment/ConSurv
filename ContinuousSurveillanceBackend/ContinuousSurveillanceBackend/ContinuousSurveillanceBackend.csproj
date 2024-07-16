@@ -27,7 +27,7 @@
         <WarningLevel>4</WarningLevel>
         <Prefer32Bit>false</Prefer32Bit>
         <SignAssembly>True</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\CommonProjectStructureExamplesPublicKey.snk</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ContinuousSurveillancePublicKey.snk</AssemblyOriginatorKeyFile>
         <DelaySign>True</DelaySign>
         <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859</NoWarn>
         <WarningsAsErrors>NU1605</WarningsAsErrors>
@@ -62,26 +62,26 @@
         <PackageReference Include="ExtendedXmlSerializer" Version="3.7.18" />
         <PackageReference Include="GRYLibrary" Version="0.12.103" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
-        <PackageReference Include="OpenTelemetry" Version="1.8.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+        <PackageReference Include="OpenTelemetry" Version="1.9.0" />
         <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.7.0-alpha.1" />
         <PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.7.0-alpha.1" />
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.8.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.0" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
         <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.3" />
-		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="NJsonSchema" Version="11.0.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.0.7" />
-        <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.0" />
-        <PackageReference Include="System.Reactive" Version="6.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.7" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="NJsonSchema" Version="11.0.1" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.8" />
+        <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+        <PackageReference Include="System.Reactive" Version="6.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
 </Project>

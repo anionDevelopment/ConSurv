@@ -1,0 +1,40 @@
+﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Trans;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.Miscellaneous.Migration;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+
+namespace ContinuousSurveillanceBackend.Core.Database.Contexts
+{
+    public sealed class DatabaseContext : DbContext
+    {
+
+        private readonly IGeneralLogger _Logger;
+        private readonly ITimeService _TimeService;
+        private readonly IDatabaseManager _DatabaseManager;
+        public  MySqlConnection Connection { get;private set; }
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager) : base(options)
+        {
+            this._Logger = logger;
+            this._TimeService = timeService;
+            this.Connection = (MySqlConnection)this.Database.GetDbConnection();
+            this._DatabaseManager = databaseManager;
+            this.Initialize();
+        }
+
+        private void Initialize()
+        {
+            this.Connection.Open();
+
+            GRYMigrator migrator = new GRYMigrator(this._Logger, this._TimeService, this.Connection, this._DatabaseManager.GetAllMigrations(), this._DatabaseManager.GetGenericDatabaseInteractor());
+            migrator.InitializeDatabaseAndMigrateIfRequired();
+        }
+        public override void Dispose()
+        {
+            this.Connection.Close();
+            base.Dispose();
+        }
+    }
+}

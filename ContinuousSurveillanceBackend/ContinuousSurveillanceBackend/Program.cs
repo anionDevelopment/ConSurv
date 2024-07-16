@@ -20,9 +20,9 @@ using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Mid.DLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
-using ContinuousSurveillanceBackend.Core.Database.Contexts.Context000001;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.EntityFrameworkCore;
+using ContinuousSurveillanceBackend.Core.Database.Contexts;
 
 namespace ContinuousSurveillanceBackend.Core
 {
@@ -69,10 +69,10 @@ namespace ContinuousSurveillanceBackend.Core
                     bool runPersistent = functionalInformation.InitializationInformation.ApplicationConstants.Environment is not Development && functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     if (runPersistent)
                     {
-                          functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext000001>(options =>
+                          functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                           {
                               string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabaseConnectionString;
-                              Tools.ConnectToDatabase(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), logger, GUtilities.AdaptMySQLConnectionString(connectionString, true));
+                              Tools.ConnectToDatabase(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), logger, GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
                           }, ServiceLifetime.Transient);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
                     }
@@ -81,7 +81,6 @@ namespace ContinuousSurveillanceBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMathService, MathService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISomeBackgroundService, SomeBackgroundService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISomeBackgroundServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);

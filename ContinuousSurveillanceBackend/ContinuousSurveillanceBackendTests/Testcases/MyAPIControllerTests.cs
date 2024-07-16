@@ -16,9 +16,8 @@ namespace ContinuousSurveillanceBackend.Tests
         public void TestSomeFunction()
         {
             // arrange
-            IMathService someService = new MathService();
             Mock<IPersistence> persistence = new Mock<IPersistence>();
-            ExampleController controller = new ExampleController(someService, GeneralLogger.NoLog(), persistence.Object);
+            ExampleController controller = new ExampleController( GeneralLogger.NoLog(), persistence.Object);
             decimal parameter1 = 2.5m;
             decimal parameter2 = 3m;
             decimal expectedResultValue = 5.5m;

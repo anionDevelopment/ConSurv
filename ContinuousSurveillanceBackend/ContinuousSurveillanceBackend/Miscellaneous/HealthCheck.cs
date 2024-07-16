@@ -23,10 +23,10 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
             return Tools.CheckHealthAsync(this._Logger, () =>
             {
                 IList<string> messages = new List<string>();
-                bool result = true;
-                if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (bool, IList<string>) abortResult))
+                HealthStatus result=HealthStatus.Healthy;
+                if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))
                 { return abortResult; }
-                Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true);
+                Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true,true);
                 return (result, messages);
             }, context, cancellationToken);
         }
