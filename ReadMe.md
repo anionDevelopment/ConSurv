@@ -2,4 +2,4 @@
 
 ## Purpose
 
-ContinuousSurveillance is an IP-cam-manager.
+ContinuousSurveillance is an IP-cam-management-system.

@@ -7,7 +7,7 @@
     <cps:version>1.0.1</cps:version>
     <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"
         throwexceptionifcodeunitfilecannotbevalidated="true"
-        description="ContinuousSurveillance is a demonstration-codeunit which works as reverse-proxy for a backend-server-application and a frontend-web-application." />
+        description="ContinuousSurveillance is an IP-cam-management-system." />
     <cps:dependentcodeunits>
         <cps:dependentcodeunit>ContinuousSurveillanceBackend</cps:dependentcodeunit>
         <cps:dependentcodeunit>ContinuousSurveillanceFrontend</cps:dependentcodeunit>
