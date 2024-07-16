@@ -1,13 +1,15 @@
 -- MariaDB-syntax
 
-CREATE TABLE `CurrencyTypes` (
-    `Id` tinyint unsigned NOT NULL,
-    `Name` longtext CHARACTER SET utf8mb4 NULL,
-    CONSTRAINT `PK_CurrencyTypes` PRIMARY KEY (`Id`)
+CREATE TABLE `User` (
+    `Id` VARCHAR(256) NOT NULL,
+    `Name` VARCHAR(256) NOT NULL,
+    `PasswordHash` NOT NULL,
+    CONSTRAINT `PK_User` PRIMARY KEY (`Id`)
 ) CHARACTER SET=utf8mb4;
 
-INSERT 
-    INTO CurrencyTypes (Id, `Name`) VALUES
-        (1, 'Fiat'),
-        (2, 'ISIN'),
-        (3, 'Crypto');
+CREATE TABLE `Cameras` (
+    `Id` VARCHAR(256) NOT NULL,
+    `Name` VARCHAR(256) NOT NULL,
+    `Url` VARCHAR(256) NOT NULL,
+    CONSTRAINT `PK_Cameras` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;

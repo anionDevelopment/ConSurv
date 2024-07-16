@@ -1,4 +1,5 @@
 using ContinuousSurveillanceBackend.Core.Controller;
+using ContinuousSurveillanceBackend.Core.Model;
 using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Miscellaneous;
@@ -9,7 +10,7 @@ using Moq;
 namespace ContinuousSurveillanceBackend.Tests
 {
     [TestClass]
-    public class MyAPIControllerTests
+    public class CameraControllerTests
     {
         [TestMethod]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
@@ -17,18 +18,16 @@ namespace ContinuousSurveillanceBackend.Tests
         {
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
-            ExampleController controller = new ExampleController( GeneralLogger.NoLog(), persistence.Object);
-            decimal parameter1 = 2.5m;
-            decimal parameter2 = 3m;
-            decimal expectedResultValue = 5.5m;
+            Mock<ICameraService> cameraService= new Mock<ICameraService>();
+            CameraController controller = new CameraController( GeneralLogger.NoLog(), persistence.Object, cameraService.Object);
+            CreateCameraDTO cameraDTO = new CreateCameraDTO();
 
             // act
-            IActionResult actualResult = controller.Calculate("Add", parameter1, parameter2);
+            IActionResult actualResult = controller.CreateCamera(cameraDTO);
 
             // assert
             Assert.IsTrue(actualResult is OkObjectResult);
             decimal acturalResultValue = (decimal)(actualResult as OkObjectResult).Value;
-            Assert.AreEqual(expectedResultValue, acturalResultValue);
         }
     }
 }

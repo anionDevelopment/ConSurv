@@ -4,5 +4,6 @@ namespace ContinuousSurveillanceBackend.Core.Services
 {
     public interface IPersistence : IExternalService
     {
+
     }
 }

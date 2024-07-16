@@ -14,15 +14,17 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using ContinuousSurveillanceBackend.Core.Miscellaneous;
 using Microsoft.AspNetCore.Builder;
-using System;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Mid.DLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.EntityFrameworkCore;
 using ContinuousSurveillanceBackend.Core.Database.Contexts;
+using GRYLibrary.Core.APIServer.Mid.AuthS;
+using GRYLibrary.Core.APIServer.Mid.Auth;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
 
 namespace ContinuousSurveillanceBackend.Core
 {
@@ -38,6 +40,8 @@ namespace ContinuousSurveillanceBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                     initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
+                    initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
+                    initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                     initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation = new CommonRoutesInformation()
                     {
@@ -69,11 +73,11 @@ namespace ContinuousSurveillanceBackend.Core
                     bool runPersistent = functionalInformation.InitializationInformation.ApplicationConstants.Environment is not Development && functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     if (runPersistent)
                     {
-                          functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
-                          {
-                              string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabaseConnectionString;
-                              Tools.ConnectToDatabase(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), logger, GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
-                          }, ServiceLifetime.Transient);
+                        functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
+                        {
+                            string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabaseConnectionString;
+                            Tools.ConnectToDatabase(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), logger, GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
+                        }, ServiceLifetime.Transient);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
                     }
                     else
@@ -91,19 +95,12 @@ namespace ContinuousSurveillanceBackend.Core
 
                     functionalInformation.WebApplicationBuilder.Services.AddOpenTelemetry().WithMetrics(builder =>
                     {
-                        builder.AddMeter(CodeUnitSpecificConstants.Metric1NameFull);
-                        builder.AddView(
-                            instrumentName: CodeUnitSpecificConstants.Metric1NameFull,
-                            metricStreamConfiguration: new MetricStreamConfiguration { TagKeys = Array.Empty<string>(), });
-                        builder.AddMeter(CodeUnitSpecificConstants.Metric2NameFull);
-                        builder.AddView(
-                            instrumentName: CodeUnitSpecificConstants.Metric2NameFull,
-                            metricStreamConfiguration: new MetricStreamConfiguration { TagKeys = Array.Empty<string>(), });
-                        builder.AddPrometheusExporter();
+                        //TODO add metrics
                     });
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
+                    Initialize(functionalInformationForWebApplication.WebApplication.Services.GetService<IAuthenticationService>());
                     ISomeBackgroundService someBackgroundService = functionalInformationForWebApplication.WebApplication.Services.GetService<ISomeBackgroundService>();
                     functionalInformationForWebApplication.PreRun = () =>
                     {
@@ -117,6 +114,21 @@ namespace ContinuousSurveillanceBackend.Core
                     functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
                 };
             });
+        }
+        public static void Initialize(IAuthenticationService authenticationService)
+        {
+            authenticationService.EnsureRoleExists(CodeUnitSpecificConstants.UserNameAdmin);
+            if (!authenticationService.UserExistsByName(CodeUnitSpecificConstants.UserNameAdmin))
+            {
+                User adminUser = new User();
+                adminUser.Name = "admin";
+                string password = adminUser.Name;
+                adminUser.PasswordHash = authenticationService.Hash(password);
+                adminUser.UserIsActivated = true;
+                authenticationService.AddUser(adminUser);
+                Role adminRole = authenticationService.GetRoleByName(CodeUnitSpecificConstants.UserNameAdmin);
+                authenticationService.EnsureUserHasRole(adminUser.Id, adminRole.Id);
+            }
         }
     }
 }

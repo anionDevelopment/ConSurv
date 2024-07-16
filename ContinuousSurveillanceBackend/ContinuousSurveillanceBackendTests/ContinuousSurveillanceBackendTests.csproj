@@ -57,6 +57,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\ContinuousSurveillanceBackend\ContinuousSurveillanceBackend.csproj" />
+        <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\Common\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
         <PackageReference Include="coverlet.collector" Version="6.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -65,7 +66,6 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="0.12.103" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="17.10.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />

@@ -25,9 +25,6 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
 
             this._Meter1 = new Meter(CodeUnitSpecificConstants.Metric1Name);//https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation
             this.SomeMetricsValue1 = this._Meter1.CreateCounter<decimal>(CodeUnitSpecificConstants.Metric1Name);
-
-            this._Meter2 = new Meter(CodeUnitSpecificConstants.Metric2Name);//https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation
-            this.SomeMetricsValue2 = this._Meter2.CreateCounter<decimal>(CodeUnitSpecificConstants.Metric2Name);
         }
 
         protected override void Run()
