@@ -17,6 +17,7 @@ def common_tasks():
     codeunit_version = sc.get_semver_version_from_gitversion(GeneralUtilities.resolve_relative_path(
         "../..", os.path.dirname(file)))  # Should always be the same as the project-version
     folder_of_current_file = os.path.dirname(file)
+    sc.run_program("nom","run generate-api-client",folder_of_current_file)
     codeunit_folder = GeneralUtilities.resolve_relative_path("..", os.path.dirname(file))
     additional_arguments_file = t.get_additionalargumentsfile_from_commandline_arguments(cmd_args, None)
     t.replace_version_in_packagejson_file(GeneralUtilities.resolve_relative_path(f"../package.json", folder_of_current_file), codeunit_version)

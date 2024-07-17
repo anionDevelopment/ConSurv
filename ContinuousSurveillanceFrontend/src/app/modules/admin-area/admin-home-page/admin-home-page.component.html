@@ -1,0 +1,29 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h1>Admin area</h1>
+    <span class="example-spacer"></span>
+    <app-user-menu></app-user-menu>
+</mat-toolbar>
+
+<mat-sidenav-container autosize>
+    <mat-sidenav [opened]="isCollapsed ? 'false' : 'true'" mode="side">
+        <mat-nav-list>
+            <a *ngFor="let dashboardOption of dashboardOptions" mat-list-item [routerLink]="['.']"
+                fragment="{{dashboardOption.fragment}}">
+                <span class="entry">
+                    <mat-icon>{{dashboardOption.icon}}</mat-icon>
+                    <span>{{dashboardOption.name}}</span>
+                </span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div [ngSwitch]="fragment|async">
+            <ng-container *ngSwitchCase="''"> <app-admin-dashboard></app-admin-dashboard></ng-container>
+            <ng-container *ngSwitchCase="'cameras'"> <app-list-cameras></app-list-cameras></ng-container>
+            <ng-container *ngSwitchCase="'users'"> <app-list-users></app-list-users></ng-container>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -23,7 +23,9 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     FormsModule,
     MatButtonModule,
-    BrowserModule, ReactiveFormsModule, BrowserAnimationsModule
+    BrowserModule, 
+    ReactiveFormsModule, 
+    BrowserAnimationsModule,
   ],
   exports: [
     HomePageComponent
