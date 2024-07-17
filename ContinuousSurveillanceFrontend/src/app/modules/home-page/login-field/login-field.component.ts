@@ -13,9 +13,9 @@ export class LoginFieldComponent {
     password: new FormControl(''),
   });
 
-  submit() {
+  login() {
     if (this.form.valid) {
-
+      //TODO login
     }
   }
 }

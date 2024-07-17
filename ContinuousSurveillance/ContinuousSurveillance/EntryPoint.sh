@@ -1,2 +1,2 @@
 #!/bin/bash
-#TODO start nginx
+#TODO start nginx and backend
