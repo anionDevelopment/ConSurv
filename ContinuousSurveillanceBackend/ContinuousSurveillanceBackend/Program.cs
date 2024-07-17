@@ -28,7 +28,6 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
-using GRYLibrary.Core.APIServer.Settings;
 using OpenTelemetry.Metrics;
 
 namespace ContinuousSurveillanceBackend.Core

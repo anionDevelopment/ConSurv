@@ -2,16 +2,13 @@
 using GRYLibrary.Core.APIServer.Settings;
 using System.Threading;
 using System;
-using Microsoft.Extensions.Logging;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.Miscellaneous;
 using System.Diagnostics.Metrics;
 using ContinuousSurveillanceBackend.Core.Constants;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using ContinuousSurveillanceBackend.Core.Model;
 using ContinuousSurveillanceBackend.Core.Miscellaneous;
 

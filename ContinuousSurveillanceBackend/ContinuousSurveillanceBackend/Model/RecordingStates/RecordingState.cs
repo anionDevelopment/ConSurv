@@ -1,11 +1,4 @@
-﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ContinuousSurveillanceBackend.Core.Model.RecordingStates
+﻿namespace ContinuousSurveillanceBackend.Core.Model.RecordingStates
 {
     public abstract class RecordingState
     {

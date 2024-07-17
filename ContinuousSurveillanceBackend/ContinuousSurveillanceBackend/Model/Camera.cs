@@ -1,4 +1,6 @@
-﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
+﻿using ContinuousSurveillanceBackend.Core.Model.CameraProperties.SoundTypes;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes;
+using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Model.RecordingStates;
 using System;
 
@@ -8,7 +10,8 @@ namespace ContinuousSurveillanceBackend.Core.Model
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Url { get; set; }
+        public VideoType VideoType { get; set; }
+        public SoundType SoundType { get; set; }
         public RecordMode RecordingMode { get; set; }
 
         public bool IsAvailable()

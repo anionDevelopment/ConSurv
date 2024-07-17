@@ -1,12 +1,7 @@
 ﻿using ContinuousSurveillanceBackend.Core.Model;
-using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Model.RecordingStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GUtilities = GRYLibrary.Core.Miscellaneous.Utilities;
 
 namespace ContinuousSurveillanceBackend.Core.Miscellaneous
