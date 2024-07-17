@@ -25,6 +25,11 @@ using GRYLibrary.Core.APIServer.Mid.AuthS;
 using GRYLibrary.Core.APIServer.Mid.Auth;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using System;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
+using GRYLibrary.Core.APIServer.Settings;
+using OpenTelemetry.Metrics;
 
 namespace ContinuousSurveillanceBackend.Core
 {
@@ -52,14 +57,13 @@ namespace ContinuousSurveillanceBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
                     bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings = new SomeBackgroundServiceSettings()
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings = new CameraSchedulerServiceSettings()
                     {
                         Enabled = runServices,
-                        LogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString($"./{nameof(SomeBackgroundService)}.log"), verbose),
-                        SomePropertyOfTypeBool = true,
-                        SomePropertyOfTypeInt = 42,
-                        SomePropertyOfTypeString = "some string value",
+                        LogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString($"./{nameof(CameraSchedulerService)}.log"), verbose),      
                     };
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(10);
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.StorageFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings");
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
@@ -85,8 +89,8 @@ namespace ContinuousSurveillanceBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISomeBackgroundService, SomeBackgroundService>();
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISomeBackgroundServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerService, CameraSchedulerService>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMaintenanceRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForLoggingMiddleware);
@@ -95,13 +99,14 @@ namespace ContinuousSurveillanceBackend.Core
 
                     functionalInformation.WebApplicationBuilder.Services.AddOpenTelemetry().WithMetrics(builder =>
                     {
-                        //TODO add metrics
+                        builder.AddMeter(CodeUnitSpecificConstants.AvailableCamerasRatioMeterName);
+                        builder.AddPrometheusExporter();
                     });
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
                     Initialize(functionalInformationForWebApplication.WebApplication.Services.GetService<IAuthenticationService>());
-                    ISomeBackgroundService someBackgroundService = functionalInformationForWebApplication.WebApplication.Services.GetService<ISomeBackgroundService>();
+                    ICameraSchedulerService someBackgroundService = functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraSchedulerService>();
                     functionalInformationForWebApplication.PreRun = () =>
                     {
                         someBackgroundService.StartAsync();
@@ -110,6 +115,16 @@ namespace ContinuousSurveillanceBackend.Core
                     {
                         someBackgroundService.Stop().Wait();
                     };
+
+                    if (functionalInformationForWebApplication.InitializationInformation.ApplicationConstants.Environment is not Development)
+                    {
+                        //only available in non-development-environment-mode where the backend is running and runs as HTTP-Server-host together with the frontend-code (in the frame of the ContinuousSurveillance-container)
+                        functionalInformationForWebApplication.WebApplication.UseStaticFiles(new StaticFileOptions
+                        {
+                            FileProvider = new PhysicalFileProvider("/Workspace/Frontend/Application"),
+                            RequestPath = $"/{CodeUnitSpecificConstants.WebControllerRoute}"
+                        });
+                    }
                     functionalInformationForWebApplication.WebApplication.MapHealthChecks(GRYLibrary.Core.APIServer.Utilities.Constants.UsualHealthCheckEndpoint);
                     functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
                 };

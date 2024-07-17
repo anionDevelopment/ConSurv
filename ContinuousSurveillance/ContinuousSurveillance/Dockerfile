@@ -1,6 +1,8 @@
 FROM nginx:latest
 
-RUN mkdir /Workspace && \
+RUN apt-get update && \
+    apt-get install ffmpeg && \
+    mkdir /Workspace && \
     mkdir /Workspace/Backend && \
     mkdir /Workspace/Backend/Application && \
     mkdir /Workspace/Frontend && \
@@ -11,6 +13,8 @@ ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/BuildResult
 ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceFrontend/BuildResult_Website /Workspace/Frontend/Application
 COPY ContinuousSurveillance/nginx.configuration /etc/nginx
 COPY ContinuousSurveillance/EntryPoint.sh /Workspace/Other/EntryPoint
-#TODO set healthckeck
+
+HEALTHCHECK CMD curl --fail -k http://localhost:80
+
 WORKDIR /usr/src/app
 ENTRYPOINT ["/Workspace/Other/EntryPoint/EntryPoint.sh"]

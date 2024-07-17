@@ -1,4 +1,6 @@
-﻿namespace ContinuousSurveillanceBackend.Core.Model
+﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
+
+namespace ContinuousSurveillanceBackend.Core.Model.DTOs
 {
     public class UpdateCameraDTO
     {

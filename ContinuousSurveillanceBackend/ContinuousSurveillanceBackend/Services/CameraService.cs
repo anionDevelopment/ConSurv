@@ -1,11 +1,11 @@
-﻿using ContinuousSurveillanceBackend.Core.Model;
+﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using System;
 
 namespace ContinuousSurveillanceBackend.Core.Services
 {
     public class CameraService : ICameraService
     {
-        public void CreateCamera(string name, string cameraAddress, NotRecording notRecording)
+        public void CreateCamera(string name, string cameraAddress, NoRecording notRecording)
         {
             throw new NotImplementedException();
         }

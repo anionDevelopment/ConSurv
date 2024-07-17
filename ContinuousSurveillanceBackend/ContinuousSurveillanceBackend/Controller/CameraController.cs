@@ -1,5 +1,6 @@
 ﻿using ContinuousSurveillanceBackend.Core.Constants;
-using ContinuousSurveillanceBackend.Core.Model;
+using ContinuousSurveillanceBackend.Core.Model.DTOs;
+using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -37,8 +38,8 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(CreateCamera)}")]
         public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO)
         {
-            _CameraService.CreateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, new NotRecording());
-            return Ok();
+            this._CameraService.CreateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, new NoRecording());
+            return this.Ok();
         }
 
         [HttpPost]
@@ -46,8 +47,8 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(RemoveCamera)}/{{{nameof(cameraId)}}}")]
         public IActionResult RemoveCamera([FromRoute] string cameraId)
         {
-            _CameraService.RemoveCamera(cameraId);
-            return Ok();
+            this._CameraService.RemoveCamera(cameraId);
+            return this.Ok();
         }
 
         [HttpPost]
@@ -55,8 +56,8 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(UpdateCamera)}")]
         public IActionResult UpdateCamera([FromBody] UpdateCameraDTO createCameraDTO)
         {
-            _CameraService.UpdateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, createCameraDTO.RecordMode);
-            return Ok();
+            this._CameraService.UpdateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, createCameraDTO.RecordMode);
+            return this.Ok();
         }
     }
 }

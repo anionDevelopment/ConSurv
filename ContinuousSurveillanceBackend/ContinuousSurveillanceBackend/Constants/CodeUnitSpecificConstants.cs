@@ -6,6 +6,7 @@
         public const string UserNameAdmin = "admin";
         public const string UserGroupAdmin = "Adminstrators";
         public const string UserGroupUser= "Users";
-        public const string Metric1Name = "AvailableCamerasRato";
+        public const string AvailableCamerasRatioMeterName = "AvailableCamerasRatio";
+        public const string WebControllerRoute = "Web";
     }
 }

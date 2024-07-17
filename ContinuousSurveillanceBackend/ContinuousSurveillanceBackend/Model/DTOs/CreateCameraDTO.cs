@@ -1,4 +1,4 @@
-﻿namespace ContinuousSurveillanceBackend.Core.Model
+﻿namespace ContinuousSurveillanceBackend.Core.Model.DTOs
 {
     public class CreateCameraDTO
     {
