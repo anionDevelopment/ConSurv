@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UtilitiesModule } from './modules/utilities/utilities.module';
 import { AdminAreaModule } from './modules/admin-area/admin-area.module';
 import { UserAreaModule } from './modules/user-area/user-area.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BackendURLUpdaterInterceptor } from './interceptors/backend-urlupdater.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,11 @@ import { UserAreaModule } from './modules/user-area/user-area.module';
     UserAreaModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: BackendURLUpdaterInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

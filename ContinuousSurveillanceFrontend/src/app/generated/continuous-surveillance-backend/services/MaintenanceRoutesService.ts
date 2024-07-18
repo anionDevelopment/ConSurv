@@ -2,16 +2,22 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class MaintenanceRoutesService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherMaintenanceAvailabilityCheck(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherMaintenanceAvailabilityCheck(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Maintenance/AvailabilityCheck',
         });
@@ -20,8 +26,8 @@ export class MaintenanceRoutesService {
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherMaintenanceCurrentVersion(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherMaintenanceCurrentVersion(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Maintenance/CurrentVersion',
         });
@@ -30,8 +36,8 @@ export class MaintenanceRoutesService {
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherMaintenanceShowAllEndpoints(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherMaintenanceShowAllEndpoints(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Maintenance/ShowAllEndpoints',
         });

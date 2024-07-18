@@ -116,6 +116,7 @@
             }
           },
           "options": {
+            "open": false,
             "port": 4200
           }
         },

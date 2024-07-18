@@ -2,16 +2,22 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class CommonRoutesService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherResourcesInformationTermsOfService(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherResourcesInformationTermsOfService(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Resources/Information/TermsOfService',
         });
@@ -20,8 +26,8 @@ export class CommonRoutesService {
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherResourcesInformationContact(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherResourcesInformationContact(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Resources/Information/Contact',
         });
@@ -30,8 +36,8 @@ export class CommonRoutesService {
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiOtherResourcesInformationLicense(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApiOtherResourcesInformationLicense(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/Other/Resources/Information/License',
         });

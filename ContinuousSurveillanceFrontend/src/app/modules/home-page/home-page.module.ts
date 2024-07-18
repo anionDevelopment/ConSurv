@@ -10,6 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatInputModule,
     MatCardModule,
     MatIconModule,

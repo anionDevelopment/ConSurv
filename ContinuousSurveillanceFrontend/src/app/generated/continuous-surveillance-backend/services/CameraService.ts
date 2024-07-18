@@ -2,23 +2,29 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import type { CreateCameraDTO } from '../models/CreateCameraDTO';
 import type { UpdateCameraDTO } from '../models/UpdateCameraDTO';
-import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class CameraService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * @param cameraId
      * @param resolution
      * @returns any OK
      * @throws ApiError
      */
-    public static getApiV0CameraControllerGetStream(
+    public getApiV0CameraControllerGetStream(
         cameraId: string,
         resolution?: string,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    ): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API/v0/CameraController/GetStream/{cameraId}',
             path: {
@@ -34,10 +40,10 @@ export class CameraService {
      * @returns any OK
      * @throws ApiError
      */
-    public static postApiV0CameraControllerCreateCamera(
+    public postApiV0CameraControllerCreateCamera(
         requestBody?: CreateCameraDTO,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    ): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'POST',
             url: '/API/v0/CameraController/CreateCamera',
             body: requestBody,
@@ -49,10 +55,10 @@ export class CameraService {
      * @returns any OK
      * @throws ApiError
      */
-    public static postApiV0CameraControllerRemoveCamera(
+    public postApiV0CameraControllerRemoveCamera(
         cameraId: string,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    ): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'POST',
             url: '/API/v0/CameraController/RemoveCamera/{cameraId}',
             path: {
@@ -65,10 +71,10 @@ export class CameraService {
      * @returns any OK
      * @throws ApiError
      */
-    public static postApiV0CameraControllerUpdateCamera(
+    public postApiV0CameraControllerUpdateCamera(
         requestBody?: UpdateCameraDTO,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    ): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'POST',
             url: '/API/v0/CameraController/UpdateCamera',
             body: requestBody,

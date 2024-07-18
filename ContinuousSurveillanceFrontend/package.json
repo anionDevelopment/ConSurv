@@ -6,8 +6,8 @@
     "test-Development": "ng test --configuration Development --browsers ChromeHeadless",
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless",
     "test-Productive": "ng test --configuration Productive --browsers ChromeHeadless",
-    "generate-api-client": "openapi --input ./Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/APISpecification/ContinuousSurveillanceBackend.latest.api.json --output ./src/app/generated/continuous-surveillance-backend",
-    "start": "ng serve --configuration Development --watch=true"
+    "generate-api-client": "openapi --input ./Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/APISpecification/ContinuousSurveillanceBackend.latest.api.json --output ./src/app/generated/continuous-surveillance-backend --client angular",
+    "start": "ng serve --configuration Development --proxy-config DevelopmentProxy.config.json"
   },
   "private": true,
   "dependencies": {

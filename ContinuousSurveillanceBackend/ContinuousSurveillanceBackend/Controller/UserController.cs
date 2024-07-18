@@ -22,7 +22,7 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             this._Persistence = persistence;
         }
 
-        [Authorize(Constants.CodeUnitSpecificConstants.UserGroupAdmin)]
+        [Authorize(CodeUnitSpecificConstants.UserGroupAdmin)]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [Route($"{nameof(CreateUser)}")]
@@ -36,9 +36,10 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(Login)}")]
         public IActionResult Login([FromHeader] string user, [FromHeader] string password)
         {
-            throw new NotImplementedException();
+            return Ok("sometoken");//TODO
         }
 
+        [Authenticate]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(Logout)}")]

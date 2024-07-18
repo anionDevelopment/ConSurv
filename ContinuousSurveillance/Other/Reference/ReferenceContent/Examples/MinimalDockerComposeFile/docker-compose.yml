@@ -2,8 +2,12 @@ version: '3.2'
 
 services:
 
-  webapicontainercodeUnit:
-    image: webapicontainercodeUnit:0.1.0
-    container_name: 'webapicontainercodeUnit'
+  continuoussurveillance:
+    image: continuoussurveillance:0.1.0
+    container_name: 'continuoussurveillance'
     ports:
-      - "80:80"
+      - "443:443"
+    volumes:
+      - "./Volumes/Configuration:/Workspace/Configuration"
+      - "./Volumes/Data:/Workspace/Data"
+      - "./Volumes/Logs:/Workspace/Logs"

@@ -2,21 +2,27 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class UserService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * @param user
      * @param password
      * @returns string OK
      * @throws ApiError
      */
-    public static putApiV0UserControllerCreateUser(
+    public putApiV0UserControllerCreateUser(
         user?: string,
         password?: string,
-    ): CancelablePromise<string> {
-        return __request(OpenAPI, {
+    ): Observable<string> {
+        return __request(OpenAPI, this.http, {
             method: 'PUT',
             url: '/API/v0/UserController/CreateUser',
             headers: {
@@ -31,11 +37,11 @@ export class UserService {
      * @returns string OK
      * @throws ApiError
      */
-    public static putApiV0UserControllerLogin(
+    public putApiV0UserControllerLogin(
         user?: string,
         password?: string,
-    ): CancelablePromise<string> {
-        return __request(OpenAPI, {
+    ): Observable<string> {
+        return __request(OpenAPI, this.http, {
             method: 'PUT',
             url: '/API/v0/UserController/Login',
             headers: {
@@ -49,10 +55,10 @@ export class UserService {
      * @returns any OK
      * @throws ApiError
      */
-    public static putApiV0UserControllerLogout(
+    public putApiV0UserControllerLogout(
         token?: string,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    ): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'PUT',
             url: '/API/v0/UserController/Logout',
             headers: {

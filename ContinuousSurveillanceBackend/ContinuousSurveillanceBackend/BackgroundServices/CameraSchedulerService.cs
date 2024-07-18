@@ -22,7 +22,7 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
         private readonly IList<Camera> _Cameras;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly ICameraSchedulerServiceSettings _CameraSchedulerServiceSettings;
-        public  ObservableGauge<decimal> AvailableCamerasRatio { get; private set; }
+        public ObservableGauge<decimal> AvailableCamerasRatio { get; private set; }
 
         public CameraSchedulerService(ICameraSchedulerServiceSettings cameraSchedulerServiceSettings, IApplicationConstants applicationConstants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(applicationConstants.ExecutionMode, GeneralLoggerExtensions.SetupLogger(cameraSchedulerServiceSettings.LogConfiguration, applicationConstants.GetLogFolder(), nameof(CameraSchedulerService)))
         {
@@ -63,7 +63,14 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
         }
         public decimal CalculateAvailableCamerasRatio()
         {
-            return Math.Round(this._Cameras.Count(camera => camera.IsAvailable()) / (decimal)this._Cameras.Count, 2);
+            if (this._Cameras.Count == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return Math.Round(this._Cameras.Count(camera => camera.IsAvailable()) / (decimal)this._Cameras.Count, 2);
+            }
         }
         public override void Dispose()
         {

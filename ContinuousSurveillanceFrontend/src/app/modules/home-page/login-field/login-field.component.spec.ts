@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginFieldComponent', () => {
   let component: LoginFieldComponent;
@@ -14,6 +15,7 @@ describe('LoginFieldComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,

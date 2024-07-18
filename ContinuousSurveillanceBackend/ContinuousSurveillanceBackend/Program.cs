@@ -35,6 +35,8 @@ using GRYLibrary.Core.APIServer.Services.Cred;
 using GRYLibrary.Core.APIServer.Services.CredC;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.Services.Auth;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ContinuousSurveillanceBackend.Core
 {
@@ -72,19 +74,32 @@ namespace ContinuousSurveillanceBackend.Core
                         VideoLength = TimeSpan.FromMinutes(10),
                         StorageFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings"),
                     };
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration();
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthenticationConfiguration();
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthenticationConfiguration()
+                    {
+                        RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
+                            Regex.Escape("/API/Other/Resources/APISpecification/")+"*",
+                        },
+                    };
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AuthorizationConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CookieServiceConfiguration = new CookieServiceConfiguration()
                     {
                         CookieName = GeneralConstants.CodeUnitName,
                     };
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
+                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
+                    {
+                        NotLoggedRoutes = new HashSet<string>()
+                        {
+                            @$"^/favicon\.ico$",
+                            @$"^/Web/.*$",
+                        },
+                        MaximalLengthofResponseBodies = 50,
+                    };
+           initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
-                };
+                        };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //initialization for every run
                 {
                     IGeneralLogger logger = functionalInformation.Logger;
@@ -106,6 +121,7 @@ namespace ContinuousSurveillanceBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, CookieService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICookieServiceConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CookieServiceConfiguration);
 
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
 
@@ -154,7 +170,7 @@ namespace ContinuousSurveillanceBackend.Core
                         //only available in non-development-environment-mode where the backend is running and runs as HTTP-Server-host together with the frontend-code (in the frame of the ContinuousSurveillance-container)
                         functionalInformationForWebApplication.WebApplication.UseStaticFiles(new StaticFileOptions
                         {
-                            FileProvider = new PhysicalFileProvider("/Workspace/Frontend/Application"),
+                            FileProvider = new PhysicalFileProvider("/Workspace/Application/Frontend"),
                             RequestPath = $"/{CodeUnitSpecificConstants.WebControllerRoute}"
                         });
                     }

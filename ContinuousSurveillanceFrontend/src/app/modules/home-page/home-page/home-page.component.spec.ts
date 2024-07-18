@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
@@ -21,6 +22,7 @@ describe('HomePageComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         NoopAnimationsModule,
+        HttpClientTestingModule,
       ],
       declarations: [
         LoginFieldComponent,

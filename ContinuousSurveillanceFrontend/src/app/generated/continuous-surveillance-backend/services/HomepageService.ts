@@ -2,16 +2,22 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class HomepageService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * @returns any OK
      * @throws ApiError
      */
-    public static getApi(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getApi(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/API',
         });
