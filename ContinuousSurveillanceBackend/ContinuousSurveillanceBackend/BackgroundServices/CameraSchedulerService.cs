@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ContinuousSurveillanceBackend.Core.Model;
 using ContinuousSurveillanceBackend.Core.Miscellaneous;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 
 namespace ContinuousSurveillanceBackend.Core.BackgroundServices
 {
@@ -19,11 +20,11 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
 
         private readonly Meter _AvailableCamerasRatioMeter;
         private readonly IList<Camera> _Cameras;
-        private readonly CodeUnitSpecificConfiguration _CodeUnitSpecificConfiguration;
+        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly ICameraSchedulerServiceSettings _CameraSchedulerServiceSettings;
         public  ObservableGauge<decimal> AvailableCamerasRatio { get; private set; }
 
-        public CameraSchedulerService(ICameraSchedulerServiceSettings cameraSchedulerServiceSettings, IApplicationConstants applicationConstants, CodeUnitSpecificConfiguration codeUnitSpecificConfiguration) : base(applicationConstants.ExecutionMode, GeneralLoggerExtensions.SetupLogger(cameraSchedulerServiceSettings.LogConfiguration, applicationConstants.GetLogFolder(), nameof(CameraSchedulerService)))
+        public CameraSchedulerService(ICameraSchedulerServiceSettings cameraSchedulerServiceSettings, IApplicationConstants applicationConstants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(applicationConstants.ExecutionMode, GeneralLoggerExtensions.SetupLogger(cameraSchedulerServiceSettings.LogConfiguration, applicationConstants.GetLogFolder(), nameof(CameraSchedulerService)))
         {
             this._CameraSchedulerServiceSettings = cameraSchedulerServiceSettings;
             this.Enabled = this._CameraSchedulerServiceSettings.Enabled;
@@ -58,7 +59,7 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
 
         private void CameraManagementLoop(Camera camera)
         {
-            camera.RecordingMode.Accept(new CameraManagementLoopVisitor(this._Logger, camera, this._CodeUnitSpecificConfiguration));
+            camera.RecordingMode.Accept(new CameraManagementLoopVisitor(this._Logger, camera, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
         }
         public decimal CalculateAvailableCamerasRatio()
         {

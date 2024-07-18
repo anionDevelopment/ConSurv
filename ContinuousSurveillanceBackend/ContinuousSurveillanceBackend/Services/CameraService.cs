@@ -5,7 +5,7 @@ namespace ContinuousSurveillanceBackend.Core.Services
 {
     public class CameraService : ICameraService
     {
-        public void CreateCamera(string name, string cameraAddress, NoRecording notRecording)
+        public void CreateCamera(string name, NoRecording notRecording)
         {
             throw new NotImplementedException();
         }
@@ -15,7 +15,7 @@ namespace ContinuousSurveillanceBackend.Core.Services
             throw new NotImplementedException();
         }
 
-        public void UpdateCamera(string name, string cameraAddress, RecordMode recordMode)
+        public void UpdateCamera(string name, RecordMode recordMode)
         {
             throw new NotImplementedException();
         }

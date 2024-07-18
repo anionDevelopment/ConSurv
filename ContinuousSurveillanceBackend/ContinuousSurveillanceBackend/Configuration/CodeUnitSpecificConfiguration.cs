@@ -3,7 +3,7 @@ using GRYLibrary.Core.APIServer.MaintenanceRoutes;
 using GRYLibrary.Core.APIServer.Mid.DLog;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.MidT.RLog;
-using System;
+using GRYLibrary.Core.APIServer.Services.CredC;
 
 namespace ContinuousSurveillanceBackend.Core.Configuration
 {
@@ -19,7 +19,7 @@ namespace ContinuousSurveillanceBackend.Core.Configuration
         public IAuthorizationConfiguration ConfigurationForAuthorizationMiddleware { get { return this.AuthorizationConfiguration; } }
         public IAuthenticationConfiguration AuthenticationConfiguration { get; set; }
         public IAuthenticationConfiguration ConfigurationForAuthenticationMiddleware { get { return this.AuthenticationConfiguration; } }
-        public TimeSpan VideoLength { get; set; }
-        public string StorageFolder { get; set; }
+        public ICameraSchedulerServiceSettings CameraSchedulerServiceSettings { get; set; }
+        public ICookieServiceConfiguration CookieServiceConfiguration { get; set; }
     }
 }

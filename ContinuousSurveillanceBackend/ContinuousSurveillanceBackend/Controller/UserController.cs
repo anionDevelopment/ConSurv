@@ -1,5 +1,7 @@
-﻿using ContinuousSurveillanceBackend.Core.Services;
+﻿using ContinuousSurveillanceBackend.Core.Constants;
+using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +22,26 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             this._Persistence = persistence;
         }
 
+        [Authorize(Constants.CodeUnitSpecificConstants.UserGroupAdmin)]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [Route($"Login")]
+        [Route($"{nameof(CreateUser)}")]
+        public IActionResult CreateUser([FromHeader] string user, [FromHeader] string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [Route($"{nameof(Login)}")]
         public IActionResult Login([FromHeader] string user, [FromHeader] string password)
         {
-             throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
-        [Route($"Logout")]
+        [Route($"{nameof(Logout)}")]
         public IActionResult Logout([FromHeader] string token)
         {
             throw new NotImplementedException();

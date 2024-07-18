@@ -1,7 +1,9 @@
-﻿using ContinuousSurveillanceBackend.Core.Model.DTOs;
+﻿using ContinuousSurveillanceBackend.Core.Constants;
+using ContinuousSurveillanceBackend.Core.Model.DTOs;
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +26,7 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             this._CameraService = cameraService;
         }
 
+        [Authorize(CodeUnitSpecificConstants.UserGroupUser)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(GetStream)}/{{{nameof(cameraId)}}}")]
@@ -32,15 +35,17 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             throw new NotImplementedException();
         }
 
+        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(CreateCamera)}")]
         public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO)
         {
-            this._CameraService.CreateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, new NoRecording());
+            this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording());
             return this.Ok();
         }
 
+        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(RemoveCamera)}/{{{nameof(cameraId)}}}")]
@@ -50,12 +55,13 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             return this.Ok();
         }
 
+        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(UpdateCamera)}")]
         public IActionResult UpdateCamera([FromBody] UpdateCameraDTO createCameraDTO)
         {
-            this._CameraService.UpdateCamera(createCameraDTO.Name, createCameraDTO.CameraAddress, createCameraDTO.RecordMode);
+            this._CameraService.UpdateCamera(createCameraDTO.Name, createCameraDTO.RecordMode);
             return this.Ok();
         }
     }

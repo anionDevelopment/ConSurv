@@ -18,16 +18,21 @@ namespace ContinuousSurveillanceBackend.Tests
         {
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
-            Mock<ICameraService> cameraService= new Mock<ICameraService>();
-            CameraController controller = new CameraController( GeneralLogger.NoLog(), persistence.Object, cameraService.Object);
-            CreateCameraDTO cameraDTO = new CreateCameraDTO();
+            Mock<ICameraService> cameraServiceMock = new Mock<ICameraService>(MockBehavior.Strict);
+            CreateCameraDTO cameraDTO = new CreateCameraDTO()
+            {
+                Name = "MyCamera",
+            };
+            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording()));
+            CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.CreateCamera(cameraDTO);
 
             // assert
-            Assert.IsTrue(actualResult is OkObjectResult);
-            decimal acturalResultValue = (decimal)(actualResult as OkObjectResult).Value;
+            Assert.IsTrue(actualResult is OkResult);
+            cameraServiceMock.Verify(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording()));
+            cameraServiceMock.VerifyNoOtherCalls();
         }
     }
 }
