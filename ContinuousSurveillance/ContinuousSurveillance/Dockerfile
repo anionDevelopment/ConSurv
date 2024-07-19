@@ -1,19 +1,21 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM nginx:latest
 
 RUN mkdir /Workspace && \
     mkdir /Workspace/Application && \
     mkdir /Workspace/Application/Backend && \
     mkdir /Workspace/Application/Frontend && \
     mkdir /Workspace/Configuration && \
-    mkdir /Workspace/Data && \
-    mkdir /Workspace/Logs
+    mkdir /Workspace/Logs && \
+    mkdir /Workspace/Other && \
+    mkdir /Workspace/Other/EntryPoint
+# TODO install dotnet
 
 ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/BuildResult_DotNet_win-x64 /Workspace/Application/Backend
 ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceFrontend/BuildResult_Website /Workspace/Application/Frontend
+COPY ContinuousSurveillance/nginx.configuration /etc/nginx
+COPY ContinuousSurveillance/EntryPoint.sh /Workspace/Other/EntryPoint
 
-#TODO set healthckeck
+HEALTHCHECK CMD curl --insecure --fail https://localhost:443/Backend/API/Other/Maintenance/HealthCheck
 
-HEALTHCHECK CMD curl --insecure --fail https://localhost:443/API/Other/Maintenance/HealthCheck
-
-WORKDIR /Workspace/Application/Backend
-ENTRYPOINT ["dotnet", "./ContinuousSurveillanceBackend.dll"]
+WORKDIR /Workspace/Other/EntryPoint
+ENTRYPOINT ["/Workspace/Other/EntryPoint/EntryPoint.sh"]
