@@ -165,15 +165,6 @@ namespace ContinuousSurveillanceBackend.Core
                         someBackgroundService.Stop().Wait();
                     };
 
-                    if (functionalInformationForWebApplication.InitializationInformation.ApplicationConstants.Environment is not Development)
-                    {
-                        //only available in non-development-environment-mode where the backend is running and runs as HTTP-Server-host together with the frontend-code (in the frame of the ContinuousSurveillance-container)
-                        functionalInformationForWebApplication.WebApplication.UseStaticFiles(new StaticFileOptions
-                        {
-                            FileProvider = new PhysicalFileProvider("/Workspace/Application/Frontend"),
-                            RequestPath = $"/Web"
-                        });
-                    }
                     functionalInformationForWebApplication.WebApplication.MapHealthChecks(GRYLibrary.Core.APIServer.Utilities.Constants.UsualHealthCheckEndpoint);
                     functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
                 };

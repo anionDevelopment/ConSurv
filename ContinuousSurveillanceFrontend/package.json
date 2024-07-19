@@ -4,8 +4,8 @@
   "scripts": {
     "build": "npm run build-QualityCheck",
     "build-Development": "ng build --configuration Development",
-    "build-QualityCheck": "ng build --configuration QualityCheck --base-href=/Web/",
-    "build-Productive": "ng build --configuration Productive  --base-href=/Web/",
+    "build-QualityCheck": "ng build --configuration QualityCheck --base-href=/Frontend/",
+    "build-Productive": "ng build --configuration Productive  --base-href=/Frontend/",
     "test": "npm run test-QualityCheck",
     "test-Development": "ng test --configuration Development --browsers ChromeHeadless --code-coverage --watch false",
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless --code-coverage --watch false",
