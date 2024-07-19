@@ -105,14 +105,14 @@
           "defaultConfiguration": "Development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "Production": {
-              "browserTarget": "ContinuousSurveillanceFrontend:build:Production"
+            "Development": {
+              "browserTarget": "ContinuousSurveillanceFrontend:build:Development"
             },
             "QualityCheck": {
               "browserTarget": "ContinuousSurveillanceFrontend:build:QualityCheck"
             },
-            "Development": {
-              "browserTarget": "ContinuousSurveillanceFrontend:build:Development"
+            "Production": {
+              "browserTarget": "ContinuousSurveillanceFrontend:build:Production"
             }
           },
           "options": {

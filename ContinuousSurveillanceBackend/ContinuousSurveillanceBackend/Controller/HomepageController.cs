@@ -8,12 +8,14 @@ namespace ContinuousSurveillanceBackend.Core.Controller
     [Route(GUtilities.EmptyString)]
     public class HomepageController : ControllerBase
     {
+        /*
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route(GUtilities.EmptyString)]
         public IActionResult GetHomePage()
         {
-            return this.Redirect($"/{Constants.CodeUnitSpecificConstants.WebControllerRoute}/index.html");
+            return this.Redirect($"/{Constants.CodeUnitSpecificConstants.WebControllerRoute}");
         }
+        */
     }
 }

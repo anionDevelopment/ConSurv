@@ -13,6 +13,5 @@ export type { UpdateCameraDTO } from './models/UpdateCameraDTO';
 
 export { CameraService } from './services/CameraService';
 export { CommonRoutesService } from './services/CommonRoutesService';
-export { HomepageService } from './services/HomepageService';
 export { MaintenanceRoutesService } from './services/MaintenanceRoutesService';
 export { UserService } from './services/UserService';

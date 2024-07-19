@@ -171,7 +171,7 @@ namespace ContinuousSurveillanceBackend.Core
                         functionalInformationForWebApplication.WebApplication.UseStaticFiles(new StaticFileOptions
                         {
                             FileProvider = new PhysicalFileProvider("/Workspace/Application/Frontend"),
-                            RequestPath = $"/{CodeUnitSpecificConstants.WebControllerRoute}"
+                            RequestPath = $"/Web"
                         });
                     }
                     functionalInformationForWebApplication.WebApplication.MapHealthChecks(GRYLibrary.Core.APIServer.Utilities.Constants.UsualHealthCheckEndpoint);
