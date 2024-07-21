@@ -1,5 +1,8 @@
 #!/bin/bash
+
 { cd /Workspace/Application/Backend && dotnet ContinuousSurveillanceBackend.dll; } &
-{ cd /Workspace/Application/Frontend && ping -c 8 8.8.8.8; } & # TODO run frontend using nginx instead
+{ cd /Workspace/Application/Frontend && nginx -c /Workspace/Application/Frontend/nginx.configuration -g "daemon off;"; } &
+
 wait -n
+
 pkill -P $$

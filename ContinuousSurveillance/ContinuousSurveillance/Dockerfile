@@ -1,21 +1,33 @@
-FROM nginx:latest
+FROM debian:stable-slim
 
 RUN mkdir /Workspace && \
     mkdir /Workspace/Application && \
     mkdir /Workspace/Application/Backend && \
     mkdir /Workspace/Application/Frontend && \
+    mkdir /Workspace/Application/Frontend/WebApplicationFiles && \
     mkdir /Workspace/Configuration && \
     mkdir /Workspace/Logs && \
     mkdir /Workspace/Other && \
-    mkdir /Workspace/Other/EntryPoint
-# TODO install dotnet
+    mkdir /Workspace/Other/EntryPoint && \
+    apt-get update && \
+    apt-get install -y wget iputils-ping curl procps nginx
+
+WORKDIR /Workspace/Other/EntryPoint
+
+RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    rm packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-8.0
 
 ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/BuildResult_DotNet_win-x64 /Workspace/Application/Backend
-ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceFrontend/BuildResult_Website /Workspace/Application/Frontend
-COPY ContinuousSurveillance/nginx.configuration /etc/nginx
+
+ADD Other/Resources/DependentCodeUnits/ContinuousSurveillanceFrontend/BuildResult_Website /Workspace/Application/Frontend/WebApplicationFiles
+COPY ContinuousSurveillance/nginx.configuration /Workspace/Application/Frontend
+
 COPY ContinuousSurveillance/EntryPoint.sh /Workspace/Other/EntryPoint
+RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh
 
 HEALTHCHECK CMD curl --insecure --fail https://localhost:443/Backend/API/Other/Maintenance/HealthCheck
 
-WORKDIR /Workspace/Other/EntryPoint
-ENTRYPOINT ["/Workspace/Other/EntryPoint/EntryPoint.sh"]
+ENTRYPOINT ["./EntryPoint.sh"]
