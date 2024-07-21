@@ -4,6 +4,8 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
+@include mat.core();
+
 // Note: Color palettes are generated from primary: 3E8914, secondary: 3DA35D, tertiary: 96E072, neutral: E8FCCF
 $_palettes: (
   primary: (
@@ -149,3 +151,26 @@ $dark-theme: mat.define-theme((
     tertiary: $_tertiary,
   ),
 ));
+
+html {
+  // Apply the dark theme by default
+  @include mat.all-component-themes($dark-theme);
+  background-color: mat.get-theme-color($dark-theme, $primary, 500) !important;
+  //see https://stackblitz.com/github/Angular-Material-Dev/angular-material-3/tree/stackblitz?file=src%2Fapp%2Flayout%2F_layout-component.theme.scss
+  //@include mat.core-theme($dark-theme);
+  //@include mat.button-theme($dark-theme);
+
+
+  // Apply the light theme only when the user prefers light themes.
+  @media (prefers-color-scheme: light) {
+    // Use the `-color` mixins to only apply color styles without reapplying the same
+    // typography and density styles.
+    
+    @include mat.all-component-themes($light-theme);//TODO remove this line and replace it by the lines below to drastically reduce the package-size
+
+    //@include mat.core-color($light-theme);
+    //@include mat.button-color($light-theme);
+  }
+  
+
+}
