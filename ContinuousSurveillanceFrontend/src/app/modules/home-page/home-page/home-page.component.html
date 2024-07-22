@@ -1,3 +1,5 @@
-<h1 class="title">ContinuousSurveillance</h1>
-
-<app-login-field></app-login-field>
+<div [class.demo-unicorn-dark-theme]="darkThemeSelected">
+    <h1 class="title">ContinuousSurveillance</h1>
+    <button (click)="changetheme()">change theme</button>
+    <app-login-field></app-login-field>
+</div>

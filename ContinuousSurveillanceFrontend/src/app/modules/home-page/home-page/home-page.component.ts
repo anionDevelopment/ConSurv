@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
-
+  darkThemeSelected: boolean = true;
+  public changetheme(): void {
+    this.darkThemeSelected = !this.darkThemeSelected;
+  }
 }

@@ -1,4 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
-@use './app/styles/m3-theme.scss' as theme;
+
+@use './app/styles/continuous-surveillance-theme';
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }//TODO use noto-font instead
+
+
+
+//@include angular-material-theme(continuous-surveillance-theme.$light-theme);//https://gedoplan.de/angular-material-theming/
+/*
+.light {
+    @include angular-material-theme($light-theme);
+}
+.dark {
+    @include angular-material-theme($dark-theme);
+}
+*/
