@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Theme } from '../theme-switch/ThemeMode';
 
 @Component({
   selector: 'app-home-page',
@@ -6,8 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
+
   darkThemeSelected: boolean = true;
-  public changetheme(): void {
-    this.darkThemeSelected = !this.darkThemeSelected;
+
+  themeChanged(newTheme: Theme): void {
+    if (newTheme == Theme.Light) {
+      this.darkThemeSelected = false;
+    } else if (newTheme == Theme.Dark) {
+      this.darkThemeSelected = true;
+    } else {
+      throw Error(`Unknown theme-mode-value: ${newTheme}`);
+    }
   }
 }

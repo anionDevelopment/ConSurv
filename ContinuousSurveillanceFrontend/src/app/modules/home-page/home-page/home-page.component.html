@@ -1,5 +1,5 @@
 <div [class.demo-unicorn-dark-theme]="darkThemeSelected">
     <h1 class="title">ContinuousSurveillance</h1>
-    <button (click)="changetheme()">change theme</button>
+    <app-theme-switch (activatedTheme)="themeChanged($event)"></app-theme-switch>
     <app-login-field></app-login-field>
 </div>

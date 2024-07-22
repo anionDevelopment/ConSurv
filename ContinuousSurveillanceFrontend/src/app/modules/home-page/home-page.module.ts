@@ -11,22 +11,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ThemeSwitchComponent } from './theme-switch/theme-switch.component';
 
 @NgModule({
   declarations: [
     HomePageComponent,
     LoginFieldComponent,
+    ThemeSwitchComponent,
   ],
   imports: [
     CommonModule,
     HttpClientModule,
+    MatButtonToggleModule,
     MatInputModule,
     MatCardModule,
     MatIconModule,
     FormsModule,
     MatButtonModule,
-    BrowserModule, 
-    ReactiveFormsModule, 
+    BrowserModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
   ],
   exports: [

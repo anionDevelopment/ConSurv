@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
 
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
@@ -15,7 +16,7 @@ describe('HomePageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[
+      imports: [
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
@@ -26,6 +27,7 @@ describe('HomePageComponent', () => {
       ],
       declarations: [
         LoginFieldComponent,
+        ThemeSwitchComponent,
         HomePageComponent,
       ]
     });
