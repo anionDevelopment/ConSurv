@@ -34,7 +34,8 @@ import { ThemeSwitchComponent } from './theme-switch/theme-switch.component';
     BrowserAnimationsModule,
   ],
   exports: [
-    HomePageComponent
+    HomePageComponent,
+    ThemeSwitchComponent,
   ]
 })
 export class HomePageModule { }

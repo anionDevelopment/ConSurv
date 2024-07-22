@@ -152,14 +152,18 @@ html {
   //@include mat.core-color($light-theme);
   //@include mat.button-color($light-theme);
 
-  @include mat.system-level-colors($light-theme);
-  @include mat.system-level-typography($light-theme);
+  //@include mat.system-level-colors($light-theme);
+  //@include mat.system-level-typography($light-theme);
+  background-color: mat.get-theme-color($light-theme, neutral, 98);
+  color:  mat.get-theme-color($light-theme, neutral, 12);
 
 }
 .dark-theme {
   @include mat.all-component-colors($dark-theme);
-  @include mat.system-level-colors($dark-theme);
-  &.demo-strong-focus {
-    @include mat.strong-focus-indicators-color($dark-theme);
-  }
+  background-color: mat.get-theme-color($light-theme, neutral, 12);
+  color:  mat.get-theme-color($light-theme, neutral, 98);
+ // @include mat.system-level-colors($dark-theme);
+ // &.demo-strong-focus {
+//    @include mat.strong-focus-indicators-color($dark-theme);
+// }
 }

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/generated/continuous-surveillance-backend';
 
 @Component({
@@ -18,14 +19,14 @@ export class LoginFieldComponent {
     password: this.passwordForm,
   });
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.userService = new UserService(httpClient);
   }
 
   login() {
     if (this.form.valid) {
       this.userService.putApiV0UserControllerLogin(this.usernameForm.value, this.passwordForm.value).subscribe(() => {
-        console.log("logged in");
+        this.router.navigate(['user'], { relativeTo: this.route });
       })
     }
   }

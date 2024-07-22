@@ -1,2 +1,5 @@
-<router-outlet>
-</router-outlet>
+<div [class.dark-theme]="darkThemeSelected" class="main-div">
+    <app-theme-switch (activatedTheme)="themeChanged($event)" class="theme-switch"></app-theme-switch>
+    <router-outlet>
+    </router-outlet>
+</div>
