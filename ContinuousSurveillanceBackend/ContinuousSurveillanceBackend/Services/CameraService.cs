@@ -1,23 +1,27 @@
 ﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
-using System;
 
 namespace ContinuousSurveillanceBackend.Core.Services
 {
     public class CameraService : ICameraService
     {
-        public void CreateCamera(string name, NoRecording notRecording)
+        private readonly IPersistence _Persistence;
+        public CameraService(IPersistence persistence)
         {
-            throw new NotImplementedException();
+            this._Persistence = persistence;
+        }
+        public string CreateCamera(string name, NoRecording notRecording)
+        {
+           return this._Persistence.CreateCamera( name, notRecording);
         }
 
         public void RemoveCamera(string cameraId)
         {
-            throw new NotImplementedException();
+            this._Persistence.RemoveCamera(cameraId);
         }
 
-        public void UpdateCamera(string name, RecordMode recordMode)
+        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
         {
-            throw new NotImplementedException();
+            this._Persistence.UpdateCamera(cameraId, name, recordMode);
         }
     }
 }

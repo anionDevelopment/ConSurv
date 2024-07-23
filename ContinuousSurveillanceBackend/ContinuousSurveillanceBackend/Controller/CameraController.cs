@@ -32,22 +32,21 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(GetStream)}/{{{nameof(cameraId)}}}")]
         public IActionResult GetStream([FromRoute] string cameraId, [FromQuery] string resolution)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
         }
 
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [Route($"{nameof(CreateCamera)}")]
         public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO)
         {
-            this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording());
-            return this.Ok();
+            return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording()));
         }
 
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(RemoveCamera)}/{{{nameof(cameraId)}}}")]
         public IActionResult RemoveCamera([FromRoute] string cameraId)
         {
@@ -57,11 +56,11 @@ namespace ContinuousSurveillanceBackend.Core.Controller
 
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(UpdateCamera)}")]
-        public IActionResult UpdateCamera([FromBody] UpdateCameraDTO createCameraDTO)
+        public IActionResult UpdateCamera([FromBody] UpdateCameraDTO updateCameraDTO)
         {
-            this._CameraService.UpdateCamera(createCameraDTO.Name, createCameraDTO.RecordMode);
+            this._CameraService.UpdateCamera(updateCameraDTO.CameraId, updateCameraDTO.Name, updateCameraDTO.RecordMode);
             return this.Ok();
         }
     }

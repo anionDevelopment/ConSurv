@@ -27,7 +27,6 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
-using Microsoft.Extensions.FileProviders;
 using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
@@ -85,7 +84,7 @@ namespace ContinuousSurveillanceBackend.Core
                     {
                         CookieName = GeneralConstants.CodeUnitName,
                     };
-                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
@@ -94,12 +93,12 @@ namespace ContinuousSurveillanceBackend.Core
                         },
                         MaximalLengthofResponseBodies = 50,
                     };
-           initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
+                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
-                        };
+                };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //initialization for every run
                 {
                     IGeneralLogger logger = functionalInformation.Logger;
