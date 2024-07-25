@@ -3,7 +3,7 @@ using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Miscellaneous;
+using GRYLibrary.Core.Misc;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using System.Collections.Generic;

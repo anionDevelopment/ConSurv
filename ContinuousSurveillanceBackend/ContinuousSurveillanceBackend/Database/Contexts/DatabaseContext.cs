@@ -1,7 +1,7 @@
 ﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Miscellaneous.Migration;
+using GRYLibrary.Core.Misc.Migration;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 

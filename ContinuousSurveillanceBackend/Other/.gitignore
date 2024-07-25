@@ -16,6 +16,6 @@ Resources/Constants/DevelopmentCertificatePublicKey.*
 Resources/CodeAnalysisResult/**
 !Resources/CodeAnalysisResult/.gitkeep
 Resources/GRYLibrary
-Resources/DevelopmentCertificateAuthority
+Resources/CA
 Resources/DevelopmentCertificate
 Workspace

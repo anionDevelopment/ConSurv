@@ -89,6 +89,6 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\Common\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
+      <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>

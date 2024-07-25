@@ -2,10 +2,11 @@ using ContinuousSurveillanceBackend.Core.Controller;
 using ContinuousSurveillanceBackend.Core.Model.DTOs;
 using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Miscellaneous;
+using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 
 namespace ContinuousSurveillanceBackend.Tests
 {
@@ -23,14 +24,17 @@ namespace ContinuousSurveillanceBackend.Tests
             {
                 Name = "MyCamera",
             };
-            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording()));
+            string cameraId = Guid.NewGuid().ToString();
+            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording())).Returns(cameraId);
             CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.CreateCamera(cameraDTO);
 
             // assert
-            Assert.IsTrue(actualResult is OkResult);
+            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
+            Assert.AreEqual(cameraId, (string)okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording()));
             cameraServiceMock.VerifyNoOtherCalls();
         }

@@ -2,7 +2,7 @@
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using System;
 using System.Collections.Generic;
-using GUtilities = GRYLibrary.Core.Miscellaneous.Utilities;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ContinuousSurveillanceBackend.Core.Services
 {
