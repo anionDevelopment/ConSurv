@@ -15,7 +15,9 @@ namespace ContinuousSurveillanceBackend.Core.Services
 
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
-            onvifCommand.Accept(new RunONVIFCommandVisitor(GetCameraById(cameraId)));
+            Camera camera = this.GetCameraById(cameraId);
+
+            onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
         }
 
         public void RemoveCamera(string cameraId)

@@ -27,7 +27,6 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
-using Microsoft.Extensions.FileProviders;
 using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
@@ -37,7 +36,6 @@ using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.Services.Auth;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using GRYLibrary.Core.Misc.FilePath;
 
 namespace ContinuousSurveillanceBackend.Core
 {

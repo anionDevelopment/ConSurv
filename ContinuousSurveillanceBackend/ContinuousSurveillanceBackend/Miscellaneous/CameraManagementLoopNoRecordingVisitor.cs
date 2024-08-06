@@ -2,7 +2,7 @@
 using ContinuousSurveillanceBackend.Core.Model.RecordingStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
-using GUtilities = GRYLibrary.Core.Miscellaneous.Utilities;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 {
@@ -19,7 +19,7 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 
         public void Handle(CurrentlyRecording currentlyRecording)
         {
-            var recordingProcess=currentlyRecording.GetRecordingProcess();
+            System.Diagnostics.Process recordingProcess = currentlyRecording.GetRecordingProcess();
             throw new NotImplementedException();//TODO stop camera
         }
 

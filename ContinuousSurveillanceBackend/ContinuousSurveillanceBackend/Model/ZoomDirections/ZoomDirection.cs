@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ContinuousSurveillanceBackend.Core.Model.ZoomDirections
+﻿namespace ContinuousSurveillanceBackend.Core.Model.ZoomDirections
 {
     public abstract class ZoomDirection
     {
@@ -21,3 +15,4 @@ namespace ContinuousSurveillanceBackend.Core.Model.ZoomDirections
         T Handle(ZoomIn zoomIn);
         T Handle(ZoomOut zoomOut);
     }
+}

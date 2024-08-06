@@ -1,10 +1,8 @@
 ﻿using ContinuousSurveillanceBackend.Core.Model;
 using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 {
@@ -14,6 +12,7 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 
         public RunONVIFCommandVisitor(Camera camera)
         {
+            GUtilities.AssertCondition(camera.VideoType is ONVIF, "ONVIF-commands can only be executed on camers whose camera-type is ONVIF.");
             this._Camera = camera;
         }
 

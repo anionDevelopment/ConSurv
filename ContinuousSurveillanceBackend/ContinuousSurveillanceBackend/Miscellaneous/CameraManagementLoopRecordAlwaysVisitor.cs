@@ -4,7 +4,7 @@ using ContinuousSurveillanceBackend.Core.Model.RecordingStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.Extensions.Logging;
 using System;
-using GUtilities = GRYLibrary.Core.Miscellaneous.Utilities;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 {

@@ -2,7 +2,7 @@ using ContinuousSurveillanceBackend.Core.Controller;
 using ContinuousSurveillanceBackend.Core.Model.DTOs;
 using ContinuousSurveillanceBackend.Core.Services;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Miscellaneous;
+using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
