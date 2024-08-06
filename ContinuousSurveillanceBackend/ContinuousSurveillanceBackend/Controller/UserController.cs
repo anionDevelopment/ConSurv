@@ -36,7 +36,7 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [Route($"{nameof(Login)}")]
         public IActionResult Login([FromHeader] string user, [FromHeader] string password)
         {
-            return Ok("sometoken");//TODO
+            return this.Ok("sometoken");//TODO
         }
 
         [Authenticate]
