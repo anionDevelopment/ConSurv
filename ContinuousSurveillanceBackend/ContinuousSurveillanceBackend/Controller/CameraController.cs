@@ -1,4 +1,5 @@
 ﻿using ContinuousSurveillanceBackend.Core.Constants;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
 using ContinuousSurveillanceBackend.Core.Model.DTOs;
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Services;
@@ -61,6 +62,16 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         public IActionResult UpdateCamera([FromBody] UpdateCameraDTO updateCameraDTO)
         {
             this._CameraService.UpdateCamera(updateCameraDTO.CameraId, updateCameraDTO.Name, updateCameraDTO.RecordMode);
+            return this.Ok();
+        }
+
+        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route($"{nameof(RunONVIFCommand)}/{nameof(cameraId)}")]
+        public IActionResult RunONVIFCommand([FromRoute] string cameraId, [FromBody] ONVIFCommand onvifCommand)
+        {
+            this._CameraService.RunONVIFCommand(cameraId, onvifCommand);
             return this.Ok();
         }
     }

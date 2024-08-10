@@ -19,7 +19,7 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 
         public void Handle(CurrentlyRecording currentlyRecording)
         {
-            var recordingProcess=currentlyRecording.GetRecordingProcess();
+            System.Diagnostics.Process recordingProcess = currentlyRecording.GetRecordingProcess();
             throw new NotImplementedException();//TODO stop camera
         }
 

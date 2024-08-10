@@ -1,4 +1,9 @@
-﻿using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
+using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
+﻿using ContinuousSurveillanceBackend.Core.Miscellaneous;
+using ContinuousSurveillanceBackend.Core.Model;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
+using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
+using System;
 
 namespace ContinuousSurveillanceBackend.Core.Services
 {
@@ -14,6 +19,13 @@ namespace ContinuousSurveillanceBackend.Core.Services
            return this._Persistence.CreateCamera( name, notRecording);
         }
 
+        public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
+        {
+            Camera camera = this.GetCameraById(cameraId);
+
+            onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
+        }
+
         public void RemoveCamera(string cameraId)
         {
             this._Persistence.RemoveCamera(cameraId);
@@ -22,6 +34,11 @@ namespace ContinuousSurveillanceBackend.Core.Services
         public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
         {
             this._Persistence.UpdateCamera(cameraId, name, recordMode);
+        }
+
+        public Camera GetCameraById(string cameraId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
