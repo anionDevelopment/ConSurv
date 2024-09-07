@@ -1,5 +1,5 @@
 ﻿using ContinuousSurveillanceBackend.Core.Model;
-using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 
 namespace ContinuousSurveillanceBackend.Core.Services

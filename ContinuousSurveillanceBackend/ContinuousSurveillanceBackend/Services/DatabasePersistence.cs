@@ -24,14 +24,11 @@ namespace ContinuousSurveillanceBackend.Core.Services
         }
 
         #region AccessDatabase
-        private void AccessDatabase(Action<DatabaseContext> action)
-        {
-            this.AccessDatabase((database) =>
-            {
-                action(database);
-                return new object();
-            });
-        }
+        private void AccessDatabase(Action<DatabaseContext> action) => this.AccessDatabase((database) =>
+                                                                                {
+                                                                                    action(database);
+                                                                                    return new object();
+                                                                                });
         private T AccessDatabase<T>(Func<DatabaseContext, T> func)
         {
             lock (_Lock)
@@ -47,15 +44,12 @@ namespace ContinuousSurveillanceBackend.Core.Services
                 }
             }
         }
-        public void RunTransaction(params Action<MySqlCommand>[] actions)
-        {
-            this.RunTransaction(actions.Select<Action<MySqlCommand>, Func<MySqlCommand, object>>(action => (command) =>
-            {
-                action(command);
-                return null;
-            }
+        public void RunTransaction(params Action<MySqlCommand>[] actions) => this.RunTransaction(actions.Select<Action<MySqlCommand>, Func<MySqlCommand, object>>(action => (command) =>
+                                                                                      {
+                                                                                          action(command);
+                                                                                          return null;
+                                                                                      }
             ).ToArray());
-        }
         public T[] RunTransaction<T>(params Func<MySqlCommand, T>[] functions)
         {
             List<T> results = new List<T>();
@@ -102,39 +96,24 @@ namespace ContinuousSurveillanceBackend.Core.Services
         }
         #endregion
 
-        public string CreateCamera(string name, NoRecording notRecording)
-        {
-            throw new System.NotImplementedException();
-        }
+        public string CreateCamera(string name, NoRecording notRecording) => throw new System.NotImplementedException();
 
-        public void RemoveCamera(string cameraId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void RemoveCamera(string cameraId) => throw new System.NotImplementedException();
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void UpdateCamera(string cameraId, string name, RecordMode recordMode) => throw new System.NotImplementedException();
 
-        public bool IsAvailable()
-        {
-            return this.AccessDatabase((databaseContext) =>
-            {
-                try
-                {
-                    return databaseContext.Database.CanConnect();
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
+        public bool IsAvailable() => this.AccessDatabase((databaseContext) =>
+                                              {
+                                                  try
+                                                  {
+                                                      return databaseContext.Database.CanConnect();
+                                                  }
+                                                  catch
+                                                  {
+                                                      return false;
+                                                  }
+                                              });
 
-        public void Dispose()
-        {
-            this._DatabaseContext.Dispose();
-        }
+        public void Dispose() => this._DatabaseContext.Dispose();
     }
 }

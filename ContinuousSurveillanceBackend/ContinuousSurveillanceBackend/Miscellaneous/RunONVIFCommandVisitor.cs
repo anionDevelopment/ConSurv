@@ -1,6 +1,6 @@
 ﻿using ContinuousSurveillanceBackend.Core.Model;
-using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
-using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
 using System;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
@@ -16,14 +16,8 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
             this._Camera = camera;
         }
 
-        public void Handle(Zoom zoom)
-        {
-            throw new NotImplementedException();
-        }
+        public void Handle(Zoom zoom) => throw new NotImplementedException();
 
-        public void Handle(Move move)
-        {
-            throw new NotImplementedException();
-        }
+        public void Handle(Move move) => throw new NotImplementedException();
     }
 }

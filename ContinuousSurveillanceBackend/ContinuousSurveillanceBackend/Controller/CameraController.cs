@@ -1,5 +1,5 @@
 ﻿using ContinuousSurveillanceBackend.Core.Constants;
-using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
 using ContinuousSurveillanceBackend.Core.Model.DTOs;
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using ContinuousSurveillanceBackend.Core.Services;
@@ -31,19 +31,13 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(GetStream)}/{{{nameof(cameraId)}}}")]
-        public IActionResult GetStream([FromRoute] string cameraId, [FromQuery] string resolution)
-        {
-            throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
-        }
+        public IActionResult GetStream([FromRoute] string cameraId, [FromQuery] string resolution) => throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
 
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [Route($"{nameof(CreateCamera)}")]
-        public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO)
-        {
-            return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording()));
-        }
+        public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO) => this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording()));
 
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
@@ -65,6 +59,8 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             return this.Ok();
         }
 
+        #region ONVIF-specific
+
         [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -74,5 +70,8 @@ namespace ContinuousSurveillanceBackend.Core.Controller
             this._CameraService.RunONVIFCommand(cameraId, onvifCommand);
             return this.Ok();
         }
+
+        #endregion
+
     }
 }

@@ -44,10 +44,7 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
-        public IActionResult Login([FromHeader] string username, [FromHeader] string password)
-        {
-            return this.Ok(this._AuthenticationService.Login(username, password));
-        }
+        public IActionResult Login([FromHeader] string username, [FromHeader] string password) => this.Ok(this._AuthenticationService.Login(username, password));
 
         [Authenticate]
         [HttpPut]
@@ -63,9 +60,6 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
         [Route(nameof(GetRoles))]
-        public IActionResult GetRoles()
-        {
-            return this.Ok(this._AuthenticationService.GetRoles(this.User));
-        }
+        public IActionResult GetRoles() => this.Ok(this._AuthenticationService.GetRoles(this.User));
     }
 }

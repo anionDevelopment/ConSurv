@@ -1,9 +1,8 @@
 using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
-﻿using ContinuousSurveillanceBackend.Core.Miscellaneous;
+using ContinuousSurveillanceBackend.Core.Miscellaneous;
 using ContinuousSurveillanceBackend.Core.Model;
-using ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF;
-using ContinuousSurveillanceBackend.Core.Model.RecordingModes;
 using System;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
 
 namespace ContinuousSurveillanceBackend.Core.Services
 {
@@ -14,10 +13,7 @@ namespace ContinuousSurveillanceBackend.Core.Services
         {
             this._Persistence = persistence;
         }
-        public string CreateCamera(string name, NoRecording notRecording)
-        {
-           return this._Persistence.CreateCamera( name, notRecording);
-        }
+        public string CreateCamera(string name, NoRecording notRecording) => this._Persistence.CreateCamera(name, notRecording);
 
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
@@ -26,19 +22,10 @@ namespace ContinuousSurveillanceBackend.Core.Services
             onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
         }
 
-        public void RemoveCamera(string cameraId)
-        {
-            this._Persistence.RemoveCamera(cameraId);
-        }
+        public void RemoveCamera(string cameraId) => this._Persistence.RemoveCamera(cameraId);
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
-        {
-            this._Persistence.UpdateCamera(cameraId, name, recordMode);
-        }
+        public void UpdateCamera(string cameraId, string name, RecordMode recordMode) => this._Persistence.UpdateCamera(cameraId, name, recordMode);
 
-        public Camera GetCameraById(string cameraId)
-        {
-            throw new NotImplementedException();
-        }
+        public Camera GetCameraById(string cameraId) => throw new NotImplementedException();
     }
 }

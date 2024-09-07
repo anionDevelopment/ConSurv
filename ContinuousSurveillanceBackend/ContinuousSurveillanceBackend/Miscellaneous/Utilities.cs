@@ -4,10 +4,9 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 {
     internal static class Utilities
     {
-        internal static GRYEnvironment GetEnvironmentTargetType()
-        {
+        internal static GRYEnvironment GetEnvironmentTargetType() =>
 #if Development
-            return Development.Instance;
+            Development.Instance;
 #elif QualityCheck
             return QualityCheck.Instance;
 #elif Productive
@@ -15,6 +14,6 @@ namespace ContinuousSurveillanceBackend.Core.Miscellaneous
 #else
             throw new System.Collections.Generic.KeyNotFoundException("Unknown environmenttargettype.");
 #endif
-        }
+
     }
 }

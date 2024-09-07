@@ -1,4 +1,7 @@
-﻿namespace ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes
+﻿using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo;
+using ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
+
+namespace ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes
 {
     public abstract class VideoType
     {

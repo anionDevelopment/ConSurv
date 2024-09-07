@@ -57,10 +57,7 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
             }
         }
 
-        private void CameraManagementLoop(Camera camera)
-        {
-            camera.RecordingMode.Accept(new CameraManagementLoopVisitor(this._Logger, camera, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
-        }
+        private void CameraManagementLoop(Camera camera) => camera.RecordingMode.Accept(new CameraManagementLoopVisitor(this._Logger, camera, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
         public decimal CalculateAvailableCamerasRatio()
         {
             if (this._Cameras.Count == 0)
@@ -72,14 +69,8 @@ namespace ContinuousSurveillanceBackend.Core.BackgroundServices
                 return Math.Round(this._Cameras.Count(camera => camera.IsAvailable()) / (decimal)this._Cameras.Count, 2);
             }
         }
-        public override void Dispose()
-        {
-            this._AvailableCamerasRatioMeter.Dispose();
-        }
+        public override void Dispose() => this._AvailableCamerasRatioMeter.Dispose();
 
-        public ISet<Camera> GetAllCameras()
-        {
-            return this._Cameras.ToHashSet();
-        }
+        public ISet<Camera> GetAllCameras() => this._Cameras.ToHashSet();
     }
 }

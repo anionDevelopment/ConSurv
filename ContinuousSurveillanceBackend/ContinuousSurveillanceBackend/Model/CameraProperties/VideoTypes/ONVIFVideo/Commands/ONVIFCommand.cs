@@ -1,4 +1,4 @@
-﻿namespace ContinuousSurveillanceBackend.Core.Model.CameraProperties.ONVIF
+﻿namespace ContinuousSurveillanceBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands
 {
     public abstract class ONVIFCommand
     {
