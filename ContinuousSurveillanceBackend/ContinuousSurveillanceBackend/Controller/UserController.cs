@@ -33,18 +33,18 @@ namespace ContinuousSurveillanceBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route(nameof(CreateUser))]
-        public IActionResult CreateUser([FromHeader] string username, [FromHeader] string password)
+        public IActionResult CreateUser([FromHeader] string user, [FromHeader] string password)
         {
-            User user = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(username, this._AuthenticationService.Hash(password), out _, this._TimeService);
-            this._AuthenticationService.AddUser(user);
-            this._AuthenticationService.EnsureUserHasRole(user.Id, this._AuthenticationService.GetRoleByName(Constants.CodeUnitSpecificConstants.UserNameAdmin).Id);
+            User user2 = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(user, this._AuthenticationService.Hash(password),  this._TimeService);
+            this._AuthenticationService.AddUser(user2);
+            this._AuthenticationService.EnsureUserHasRole(user2.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UserNameAdmin).Id);
             return this.Ok();
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
-        public IActionResult Login([FromHeader] string username, [FromHeader] string password) => this.Ok(this._AuthenticationService.Login(username, password));
+        public IActionResult Login([FromHeader] string user, [FromHeader] string password) => this.Ok(this._AuthenticationService.Login(user, password));
 
         [Authenticate]
         [HttpPut]

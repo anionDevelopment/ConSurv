@@ -33,9 +33,10 @@ using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.APIServer.Services.Cred;
 using GRYLibrary.Core.APIServer.Services.CredC;
 using GRYLibrary.Core.APIServer.MidT.Auth;
-using GRYLibrary.Core.APIServer.Services.Auth;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using GRYLibrary.Core.APIServer.Services.Auth.R;
+using GRYLibrary.Core.APIServer.Services.Init;
 
 namespace ContinuousSurveillanceBackend.Core
 {
@@ -129,15 +130,14 @@ namespace ContinuousSurveillanceBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IUserAuthorizationService>(sp => sp.GetRequiredService<IRoleBasedAuthorizationService>());
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationService>(sp => sp.GetRequiredService<IUserAuthorizationService>());
 
-
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
-
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerService, CameraSchedulerService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMaintenanceRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForLoggingMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
 
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
 
@@ -151,7 +151,9 @@ namespace ContinuousSurveillanceBackend.Core
             };
             apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
             {
-                Initialize(functionalInformationForWebApplication.WebApplication.Services.GetService<IAuthenticationService>(), functionalInformationForWebApplication.WebApplication.Services.GetService<ITimeService>());
+                IInitializationService initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
+                initializationService.Initialize();
+
                 ICameraSchedulerService someBackgroundService = functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraSchedulerService>();
                 functionalInformationForWebApplication.PreRun = () =>
                 {
@@ -166,31 +168,5 @@ namespace ContinuousSurveillanceBackend.Core
                 functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
             };
         });
-        public static void Initialize(IAuthenticationService authenticationService, ITimeService timeService)
-        {
-            if (!authenticationService.UserExistsByName(CodeUnitSpecificConstants.UserNameAdmin))
-            {
-                authenticationService.EnsureRoleExists(CodeUnitSpecificConstants.UserGroupUser);
-                Role userRole = authenticationService.GetRoleByName(CodeUnitSpecificConstants.UserGroupUser);
-
-                authenticationService.EnsureRoleExists(CodeUnitSpecificConstants.UserGroupCameraManagers);
-                Role cameraManagerRole = authenticationService.GetRoleByName(CodeUnitSpecificConstants.UserGroupCameraManagers);
-                cameraManagerRole.InheritedRoles.Add(userRole);
-                authenticationService.UpdateRole(cameraManagerRole);
-
-                authenticationService.EnsureRoleExists(CodeUnitSpecificConstants.UserNameAdmin);
-                Role adminRole = authenticationService.GetRoleByName(CodeUnitSpecificConstants.UserNameAdmin);
-                adminRole.InheritedRoles.Add(cameraManagerRole);
-                adminRole.InheritedRoles.Add(userRole);
-                authenticationService.UpdateRole(adminRole);
-
-                string adminUserName = "admin";
-                string password = adminUserName;//initial password
-
-                User adminUser = User.CreateNewUser("admin", authenticationService.Hash(password), out _, timeService);
-                authenticationService.AddUser(adminUser);
-                authenticationService.EnsureUserHasRole(adminUser.Id, adminRole.Id);
-            }
-        }
     }
 }
