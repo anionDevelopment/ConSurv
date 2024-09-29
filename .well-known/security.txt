@@ -1,7 +1,7 @@
 # If you would like to report a security issue
 # you may report it to:
 Contact: mailto:marius.goecke@gmail.com
-Expires: 2029-12-31T23:59:59.999
+Expires: 2030-01-01T00:00:00.000
 Encryption: https://raw.githubusercontent.com/anionDev/anionDev/main/PublicKeys/PGP-Key.txt
 Preferred-Languages: en, de
-Canonical: https://raw.githubusercontent.com/anionDev/ContinuousSurveillance/main/.well-known/security.txt
+Canonical: https://raw.githubusercontent.com/anionDev/ContinuousSurveillance/refs/heads/main/.well-known/security.txt
