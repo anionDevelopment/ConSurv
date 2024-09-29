@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cps:codeunit
     xmlns:cps="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/tree/main/Conventions/RepositoryStructure/CommonProjectStructure"
-    codeunitspecificationversion="2.8.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/raw/v2.8.0/Conventions/RepositoryStructure/CommonProjectStructure/codeunit.xsd" enabled="true">
+    codeunitspecificationversion="2.9.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/raw/v2.9.0/Conventions/RepositoryStructure/CommonProjectStructure/codeunit.xsd" enabled="true">
     <cps:name>ContinuousSurveillance</cps:name>
     <cps:version>0.1.0</cps:version>
+    <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
+    <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
     <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"
         throwexceptionifcodeunitfilecannotbevalidated="true" developmentState="Active Development"
         description="ContinuousSurveillance is an IP-cam-management-system." />
