@@ -65,6 +65,7 @@
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.7.18" />
+        <PackageReference Include="GRYLibrary" Version="0.12.107" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
           <PrivateAssets>all</PrivateAssets>
@@ -87,8 +88,5 @@
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>
