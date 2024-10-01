@@ -4,11 +4,11 @@
     codeunitspecificationversion="2.9.1"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/raw/v2.9.1/Conventions/RepositoryStructure/CommonProjectStructure/codeunit.xsd" enabled="true">
     <cps:name>ContinuousSurveillanceFrontend</cps:name>
-    <cps:version>0.1.0</cps:version>
+    <cps:version>0.0.1</cps:version>
     <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
     <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
     <cps:properties codeunithastestablesourcecode="true" codeunithasupdatabledependencies="true"
-        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Active Development"
+        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only"
         description="ContinuousSurveillanceBackend is the frontend for ContinuousSurveillance.">
         <cps:testsettings minimalcodecoverageinpercent="1" />
         <cps:pipelinedemands>

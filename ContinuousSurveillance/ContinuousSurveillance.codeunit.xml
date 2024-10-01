@@ -8,7 +8,7 @@
     <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
     <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
     <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"
-        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Active Development"
+        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only"
         description="ContinuousSurveillance is an IP-cam-management-system." />
     <cps:dependentcodeunits>
         <cps:dependentcodeunit>ContinuousSurveillanceBackend</cps:dependentcodeunit>

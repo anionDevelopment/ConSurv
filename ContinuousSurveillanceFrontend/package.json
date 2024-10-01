@@ -1,6 +1,6 @@
 {
   "name": "continuous-surveillance",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "scripts": {
     "build": "npm run build-QualityCheck",
     "build-Development": "ng build --configuration Development",
@@ -10,7 +10,7 @@
     "test-Development": "ng test --configuration Development --browsers ChromeHeadless --code-coverage --watch false",
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless --code-coverage --watch false",
     "test-Productive": "ng test --configuration Productive --browsers ChromeHeadless --code-coverage --watch false",
-    "generate-api-client": "openapi --input ./Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/APISpecification/ContinuousSurveillanceBackend.latest.api.json --output ./src/app/generated/continuous-surveillance-backend --client angular",
+    "generate-api-client": "openapi-generator-cli generate -g typescript-angular -i ./Other/Resources/DependentCodeUnits/ContinuousSurveillanceBackend/APISpecification/ContinuousSurveillanceBackend.latest.api.json -o ./src/app/generated/continuous-surveillance-backend",
     "start": "ng serve --configuration Development --proxy-config DevelopmentProxy.config.json"
   },
   "private": true,
