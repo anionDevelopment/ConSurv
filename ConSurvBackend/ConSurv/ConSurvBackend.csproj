@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Authors>Marius Göcke</Authors>
+        <Version>0.0.1</Version>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
+        <SelfContained>false</SelfContained>
+        <IsPackable>false</IsPackable>
+        <PreserveCompilationContext>false</PreserveCompilationContext>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+        <Copyright>Copyright © 2024 Marius Göcke</Copyright>
+        <Description>ConSurvBackend is the backend for ConSurv.</Description>
+        <PackageProjectUrl>https://github.com/anionDev/ConSurv</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/anionDev/ConSurv.git</RepositoryUrl>
+        <RootNamespace>ConSurvBackend.Core</RootNamespace>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+        <Nullable>disable</Nullable>
+        <Configurations>Development;QualityCheck;Productive</Configurations>
+        <IsTestProject>false</IsTestProject>
+        <LangVersion>11.0</LangVersion>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>..\Other\Artifacts\BuildResult_DotNet_win-x64</OutputPath>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32Bit>false</Prefer32Bit>
+        <SignAssembly>True</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>True</DelaySign>
+        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;IDE0017</NoWarn>
+        <WarningsAsErrors>NU1605</WarningsAsErrors>
+        <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackend.sarif</ErrorLog>
+        <OutputType>Exe</OutputType>
+        <DocumentationFile>..\Other\Artifacts\MetaInformation\ConSurvBackend.xml</DocumentationFile>
+        <StartupObject>ConSurvBackend.Core.Program</StartupObject>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Development'">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <Optimize>false</Optimize>
+        <DefineConstants>TRACE;DEBUG;Development</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='QualityCheck'">
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <Optimize>false</Optimize>
+        <DefineConstants>TRACE;QualityCheck</DefineConstants>
+        <ErrorReport>none</ErrorReport>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Productive'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <Optimize>true</Optimize>
+        <DefineConstants>Productive</DefineConstants>
+        <ErrorReport>none</ErrorReport>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Database\Datatypes\**" />
+      <EmbeddedResource Remove="Database\Datatypes\**" />
+      <None Remove="Database\Datatypes\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
+        <PackageReference Include="ExtendedXmlSerializer" Version="3.7.18" />
+        <PackageReference Include="GRYLibrary" Version="0.12.108" />
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+        <PackageReference Include="OpenTelemetry" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.7.0-alpha.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.7.0-alpha.1" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+        <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.8" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="NJsonSchema" Version="11.0.2" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
+        <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+        <PackageReference Include="System.Reactive" Version="6.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+    </ItemGroup>
+</Project>

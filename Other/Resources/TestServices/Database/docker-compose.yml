@@ -2,10 +2,10 @@ version: '3.2'
 
 services:
 
-  continuoussurveillancebackend_database:
-    # connectionstring: "Server=continuoussurveillancebackend_database; Port=3306; Database=ContinuousSurveillanceBackendDatabase; Uid=user; Pwd=pa55w0rd;"
+  consurvbackend_database:
+    # connectionstring: "Server=consurvbackend_database; Port=3306; Database=ConSurvBackendDatabase; Uid=user; Pwd=pa55w0rd;"
     image: mariadb:11.1.2
-    container_name: 'continuoussurveillancebackend_database'
+    container_name: 'consurvbackend_database'
     ports:
       - "3306:3306"
     volumes:
@@ -14,12 +14,12 @@ services:
       MARIADB_USER: user
       MARIADB_PASSWORD: pa55w0rd
       MARIADB_ROOT_PASSWORD: R00tpa55w0rd
-      MARIADB_DATABASE: ContinuousSurveillanceBackendDatabase
+      MARIADB_DATABASE: ConSurvBackendDatabase
 
-  continuoussurveillancebackend_database_administration:
+  consurvbackend_database_administration:
     image: adminer:4.8.1
-    container_name: 'continuoussurveillancebackend_database_administration'
+    container_name: 'consurvbackend_database_administration'
     ports:
       - 8080:8080
     depends_on:
-      - continuoussurveillancebackend_database
+      - consurvbackend_database

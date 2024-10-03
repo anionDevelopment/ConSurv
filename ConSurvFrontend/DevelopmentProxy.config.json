@@ -1,0 +1,6 @@
+{
+    "/API/": {
+        "target": "https://consurvbackend.test.local:443",
+        "secure": false
+    }
+}

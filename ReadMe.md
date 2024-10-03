@@ -1,8 +1,8 @@
-﻿# ContinuousSurveillance
+﻿# ConSurv
 
 ## Purpose
 
-ContinuousSurveillance is an IP-cam-management-system.
+ConSurv (abbreviation for "Continuous surveillance") is an IP-cam-management-system.
 
 ## Functions
 
