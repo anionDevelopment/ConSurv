@@ -8,6 +8,7 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using IAuthenticationService = GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService;
 
 namespace ConSurvBackend.Core.Controller
@@ -60,6 +61,11 @@ namespace ConSurvBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
         [Route(nameof(GetRoles))]
-        public IActionResult GetRoles() => this.Ok(this._AuthenticationService.GetRoles(this.User));
+        public IActionResult GetRoles() => this.Ok(GetUser().Roles);
+
+        private User GetUser()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
