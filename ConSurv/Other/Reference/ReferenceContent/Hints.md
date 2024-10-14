@@ -12,10 +12,6 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 - `reportgenerator`
 - `scriptcollection`
 
-To create a release the following tools are also required:
-
-- `gh`
-
 ## IDE
 
 The recommended IDE for this codeunit is [Visual Studio Code](https://code.visualstudio.com/).

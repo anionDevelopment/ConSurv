@@ -2,7 +2,16 @@
 
 ## Requirements
 
-TODO
+The following tools from the [tools-list](https://github.com/anionDev/ScriptCollection/blob/main/ScriptCollection/Other/Reference/ReferenceContent/Articles/RequirementsForCommonProjectStructure.md#Tools) are required to build this code-unit:
+
+- `docfx`
+- `git`
+- `gitversion`
+- `ng`
+- `npm`
+- `python`
+- `reportgenerator`
+- `scriptcollection`
 
 ## IDE
 
