@@ -22,8 +22,8 @@ def common_tasks():
     additional_arguments_file = t.get_additionalargumentsfile_from_commandline_arguments(cmd_args, None)
     t.replace_version_in_packagejson_file(GeneralUtilities.resolve_relative_path("../package.json", folder_of_current_file), codeunit_version)
     t.standardized_tasks_do_common_tasks(file, codeunit_version, verbosity, build_environment, True, additional_arguments_file, False, cmd_args)
-    sc.run_program("npm", "run generate-api-client", GeneralUtilities.resolve_relative_path("..", os.path.dirname(file)))
-    t.run_with_epew("npm", "install", codeunit_folder, verbosity=verbosity)
+    t.do_npm_install(codeunit_folder, verbosity=verbosity)
+    sc.run_program("npm", "run generate-api-client", codeunit_folder)
 
 
 if __name__ == "__main__":

@@ -45,7 +45,10 @@ namespace ConSurvBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
-        public IActionResult Login([FromHeader] string user, [FromHeader] string password) => this.Ok(this._AuthenticationService.Login(user, password));
+        public IActionResult Login([FromHeader] string user, [FromHeader] string password)
+        {
+            return this.Ok(this._AuthenticationService.Login(user, password));
+        }
 
         [Authenticate]
         [HttpPut]
@@ -61,7 +64,10 @@ namespace ConSurvBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
         [Route(nameof(GetRoles))]
-        public IActionResult GetRoles() => this.Ok(GetUser().Roles);
+        public IActionResult GetRoles()
+        {
+            return this.Ok(GetUser().Roles);
+        }
 
         private User GetUser()
         {

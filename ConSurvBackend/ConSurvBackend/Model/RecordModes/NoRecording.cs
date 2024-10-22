@@ -3,9 +3,15 @@
     public class NoRecording : RecordMode
     {
 
-        public override T Accept<T>(IRecordModeVisitor<T> visitor) => visitor.Handle(this);
+        public override T Accept<T>(IRecordModeVisitor<T> visitor)
+        {
+            return visitor.Handle(this);
+        }
 
-        public override void Accept(IRecordModeVisitor visitor) => visitor.Handle(this);
+        public override void Accept(IRecordModeVisitor visitor)
+        {
+            visitor.Handle(this);
+        }
 
         public override bool Equals(object obj)
         {
@@ -16,8 +22,14 @@
             return true;
         }
 
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
-        public override string ToString() => this.GetType().ToString();
+        public override string ToString()
+        {
+            return this.GetType().ToString();
+        }
     }
 }

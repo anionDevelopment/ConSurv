@@ -13,7 +13,10 @@ namespace ConSurvBackend.Core.Services
         {
             this._Persistence = persistence;
         }
-        public string CreateCamera(string name, NoRecording notRecording) => this._Persistence.CreateCamera(name, notRecording);
+        public string CreateCamera(string name, NoRecording notRecording)
+        {
+            return this._Persistence.CreateCamera(name, notRecording);
+        }
 
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
@@ -22,10 +25,19 @@ namespace ConSurvBackend.Core.Services
             onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
         }
 
-        public void RemoveCamera(string cameraId) => this._Persistence.RemoveCamera(cameraId);
+        public void RemoveCamera(string cameraId)
+        {
+            this._Persistence.RemoveCamera(cameraId);
+        }
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode) => this._Persistence.UpdateCamera(cameraId, name, recordMode);
+        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
+        {
+            this._Persistence.UpdateCamera(cameraId, name, recordMode);
+        }
 
-        public Camera GetCameraById(string cameraId) => throw new NotImplementedException();
+        public Camera GetCameraById(string cameraId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

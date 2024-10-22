@@ -14,7 +14,14 @@ namespace ConSurvBackend.Core.Model
         public SoundType SoundType { get; set; }
         public RecordMode RecordingMode { get; set; }
 
-        public bool IsAvailable() => this.GetCurrentRecordingInformation() is not Unavailable;
-        public RecordingState GetCurrentRecordingInformation() => throw new NotImplementedException();
+        public bool IsAvailable()
+        {
+            return this.GetCurrentRecordingInformation() is not Unavailable;
+        }
+
+        public RecordingState GetCurrentRecordingInformation()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

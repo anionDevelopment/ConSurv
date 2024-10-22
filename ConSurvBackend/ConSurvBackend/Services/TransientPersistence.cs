@@ -22,7 +22,11 @@ namespace ConSurvBackend.Core.Services
             return newCamera.Id;
         }
 
-        public void RemoveCamera(string cameraId) => this._Cameras.Remove(cameraId);
+        public void RemoveCamera(string cameraId)
+        {
+            this._Cameras.Remove(cameraId);
+        }
+
         public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
         {
             var updatedCamera = new Camera()
@@ -35,8 +39,14 @@ namespace ConSurvBackend.Core.Services
             this._Cameras[cameraId] = updatedCamera;
         }
 
-        public void Dispose() => GUtilities.NoOperation();
+        public void Dispose()
+        {
+            GUtilities.NoOperation();
+        }
 
-        public bool IsAvailable() => throw new System.NotImplementedException();
+        public bool IsAvailable()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

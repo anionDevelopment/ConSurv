@@ -17,8 +17,14 @@ namespace ConSurvBackend.Core.Miscellaneous
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
         }
 
-        public void Handle(NoRecording noRecording) => this._Camera.GetCurrentRecordingInformation().Accept(new CameraManagementLoopNoRecordingVisitor(this._Logger, this._Camera));
+        public void Handle(NoRecording noRecording)
+        {
+            this._Camera.GetCurrentRecordingInformation().Accept(new CameraManagementLoopNoRecordingVisitor(this._Logger, this._Camera));
+        }
 
-        public void Handle(RecordAlways recordAlways) => this._Camera.GetCurrentRecordingInformation().Accept(new CameraManagementLoopRecordAlwaysVisitor(this._Logger, this._Camera, this._CodeUnitSpecificConfiguration));
+        public void Handle(RecordAlways recordAlways)
+        {
+            this._Camera.GetCurrentRecordingInformation().Accept(new CameraManagementLoopRecordAlwaysVisitor(this._Logger, this._Camera, this._CodeUnitSpecificConfiguration));
+        }
     }
 }

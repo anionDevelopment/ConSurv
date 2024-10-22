@@ -1,6 +1,7 @@
 ﻿using GRYLibrary.Core.APIServer.CommonRoutes;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
-using GRYLibrary.Core.APIServer.Mid.DLog;
+using GRYLibrary.Core.APIServer.Mid.M05DLog;
+using GRYLibrary.Core.APIServer.MidT.Aut;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Services.CredC;

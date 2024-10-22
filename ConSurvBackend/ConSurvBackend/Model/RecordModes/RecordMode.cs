@@ -7,7 +7,10 @@ namespace ConSurvBackend.Core.Model.RecordingModes
         public abstract T Accept<T>(IRecordModeVisitor<T> visitor);
         public abstract void Accept(IRecordModeVisitor visitor);
 
-        public override bool Equals(object obj) => this.Equals(obj as RecordMode);
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as RecordMode);
+        }
 
         public bool Equals(RecordMode other)
         {
@@ -22,9 +25,15 @@ namespace ConSurvBackend.Core.Model.RecordingModes
             return true;
         }
 
-        public override int GetHashCode() => this.ToString().GetHashCode();
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
 
-        public override string ToString() => this.GetType().ToString();
+        public override string ToString()
+        {
+            return this.GetType().ToString();
+        }
     }
     public interface IRecordModeVisitor<T>
     {

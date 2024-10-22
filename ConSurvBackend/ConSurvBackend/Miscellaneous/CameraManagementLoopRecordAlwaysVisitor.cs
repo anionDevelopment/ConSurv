@@ -20,10 +20,19 @@ namespace ConSurvBackend.Core.Miscellaneous
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
         }
 
-        public void Handle(CurrentlyRecording currentlyRecording) => GUtilities.NoOperation();
+        public void Handle(CurrentlyRecording currentlyRecording)
+        {
+            GUtilities.NoOperation();
+        }
 
-        public void Handle(Idle idle) => throw new NotImplementedException();//TODO start camera using folder and length from _CodeUnitSpecificConfiguration
+        public void Handle(Idle idle)
+        {
+            throw new NotImplementedException();//TODO start camera using folder and length from _CodeUnitSpecificConfiguration
+        }
 
-        public void Handle(Unavailable unavailable) => this._Logger.Log($"Can not start record on camera {this._Camera.Id} because it is not available.", LogLevel.Warning);
+        public void Handle(Unavailable unavailable)
+        {
+            this._Logger.Log($"Can not start record on camera {this._Camera.Id} because it is not available.", LogLevel.Warning);
+        }
     }
 }

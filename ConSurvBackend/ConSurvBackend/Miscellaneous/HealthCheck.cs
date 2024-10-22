@@ -21,7 +21,9 @@ namespace ConSurvBackend.Core.Miscellaneous
             this._Persistence = persistence;
             this._CameraSchedulerService = cameraSchedulerService;
         }
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default) => Tools.CheckHealthAsync(this._Logger, () =>
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        {
+            return Tools.CheckHealthAsync(this._Logger, () =>
                                                                                                                                                {
                                                                                                                                                    IList<string> messages = new List<string>();
                                                                                                                                                    HealthStatus result = HealthStatus.Healthy;
@@ -37,5 +39,6 @@ namespace ConSurvBackend.Core.Miscellaneous
                                                                                                                                                    return (result, messages);
 
                                                                                                                                                }, context, cancellationToken);
+        }
     }
 }

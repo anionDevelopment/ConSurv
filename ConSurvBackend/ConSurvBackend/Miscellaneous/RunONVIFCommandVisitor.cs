@@ -16,8 +16,14 @@ namespace ConSurvBackend.Core.Miscellaneous
             this._Camera = camera;
         }
 
-        public void Handle(Zoom zoom) => throw new NotImplementedException();
+        public void Handle(Zoom zoom)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void Handle(Move move) => throw new NotImplementedException();
+        public void Handle(Move move)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,6 +9,7 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 - `gitversion`
 - `ng`
 - `npm`
+- `openapi-generator-cli`
 - `python`
 - `reportgenerator`
 - `scriptcollection`

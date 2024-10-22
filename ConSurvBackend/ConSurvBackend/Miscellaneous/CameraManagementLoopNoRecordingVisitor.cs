@@ -23,8 +23,14 @@ namespace ConSurvBackend.Core.Miscellaneous
             throw new NotImplementedException();//TODO stop camera
         }
 
-        public void Handle(Idle idle) => GUtilities.NoOperation();
+        public void Handle(Idle idle)
+        {
+            GUtilities.NoOperation();
+        }
 
-        public void Handle(Unavailable unavailable) => GUtilities.NoOperation();
+        public void Handle(Unavailable unavailable)
+        {
+            GUtilities.NoOperation();
+        }
     }
 }

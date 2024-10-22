@@ -16,13 +16,11 @@ using ConSurvBackend.Core.Miscellaneous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using GRYLibrary.Core.APIServer.MidT.RLog;
-using GRYLibrary.Core.APIServer.Mid.DLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.EntityFrameworkCore;
 using ConSurvBackend.Core.Database.Contexts;
 using GRYLibrary.Core.APIServer.Mid.AuthS;
-using GRYLibrary.Core.APIServer.Mid.Auth;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
@@ -30,19 +28,23 @@ using System.IO;
 using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
-using GRYLibrary.Core.APIServer.Services.Cred;
 using GRYLibrary.Core.APIServer.Services.CredC;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
 using GRYLibrary.Core.APIServer.Services.Init;
+using GRYLibrary.Core.APIServer.Mid.AutS;
+using GRYLibrary.Core.APIServer.Mid.M05DLog;
+using GRYLibrary.Core.APIServer.MidT.Aut;
 
 namespace ConSurvBackend.Core
 {
     internal class Program
     {
-        internal static int Main(string[] commandlineArguments) => Tools.RunAPIServer<CodeUnitSpecificCommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), DNWAPICUUtilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, (apiServerConfiguration) =>
+        internal static int Main(string[] commandlineArguments)
+        {
+            return Tools.RunAPIServer<CodeUnitSpecificCommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), DNWAPICUUtilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, (apiServerConfiguration) =>
         {
             apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
             {
@@ -168,5 +170,6 @@ namespace ConSurvBackend.Core
                 functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
             };
         });
+        }
     }
 }
