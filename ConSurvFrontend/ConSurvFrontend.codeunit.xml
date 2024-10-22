@@ -7,16 +7,14 @@
     <cps:version>0.0.1</cps:version>
     <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
     <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
-    <cps:properties codeunithastestablesourcecode="true" codeunithasupdatabledependencies="true"
-        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only"
-        description="ConSurvBackend is the frontend for ConSurv.">
+    <cps:properties codeunithastestablesourcecode="true" codeunithasupdatabledependencies="true" throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only" description="ConSurvBackend is the frontend for ConSurv.">
         <cps:testsettings minimalcodecoverageinpercent="1" />
         <cps:pipelinedemands>
         </cps:pipelinedemands>
         <cps:updatesettings>
-            <cps:ignoreddependencies>     
+            <cps:ignoreddependencies>
             </cps:ignoreddependencies>
-        </cps:updatesettings>        
+        </cps:updatesettings>
     </cps:properties>
     <cps:dependentcodeunits>
         <cps:dependentcodeunit>ConSurvBackend</cps:dependentcodeunit>

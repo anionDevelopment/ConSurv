@@ -7,9 +7,7 @@
     <cps:version>0.1.0</cps:version>
     <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
     <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
-    <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"
-        throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only"
-        description="ConSurv is an IP-cam-management-system." />
+    <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"  throwexceptionifcodeunitfilecannotbevalidated="true" developmentstate="Maintenance-updates only" description="ConSurv is an IP-cam-management-system." />
     <cps:dependentcodeunits>
         <cps:dependentcodeunit>ConSurvBackend</cps:dependentcodeunit>
         <cps:dependentcodeunit>ConSurvFrontend</cps:dependentcodeunit>
