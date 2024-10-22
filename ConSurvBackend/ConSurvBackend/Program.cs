@@ -37,6 +37,7 @@ using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 
 namespace ConSurvBackend.Core
 {
@@ -49,6 +50,7 @@ namespace ConSurvBackend.Core
             apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
             {
                 string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
+                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTPS();//TODO remove this line when the grylib-update is deployed where this will be executed internally.
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
