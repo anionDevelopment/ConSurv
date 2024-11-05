@@ -25,7 +25,7 @@ export class LoginFieldComponent {
 
   login() {
     if (this.form.valid) {
-      this.userService.aPIV0UserControllerLoginPut(this.usernameForm.value, this.passwordForm.value).subscribe(() => {
+      this.userService.aPIV1UserControllerLoginPut(this.usernameForm.value, this.passwordForm.value).subscribe(() => {
         this.router.navigate(['user'], { relativeTo: this.route });
       })
     }

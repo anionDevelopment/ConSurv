@@ -1,6 +1,6 @@
 ## @
 
-The version of the OpenAPI document: v0.0.1
+The version of the OpenAPI document: v1.0.0
 
 ### Building
 

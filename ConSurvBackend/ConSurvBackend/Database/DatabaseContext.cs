@@ -5,7 +5,7 @@ using GRYLibrary.Core.Misc.Migration;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
-namespace ConSurvBackend.Core.Database.Contexts
+namespace ConSurvBackend.Core.Database
 {
     public sealed class DatabaseContext : DbContext
     {
@@ -13,7 +13,7 @@ namespace ConSurvBackend.Core.Database.Contexts
         private readonly IGeneralLogger _Logger;
         private readonly ITimeService _TimeService;
         private readonly IDatabaseManager _DatabaseManager;
-        public  MySqlConnection Connection { get;private set; }
+        public MySqlConnection Connection { get; private set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager) : base(options)
         {
@@ -27,7 +27,6 @@ namespace ConSurvBackend.Core.Database.Contexts
         private void Initialize()
         {
             this.Connection.Open();
-
             GRYMigrator migrator = new GRYMigrator(this._Logger, this._TimeService, this.Connection, this._DatabaseManager.GetAllMigrations(), this._DatabaseManager.GetGenericDatabaseInteractor());
             migrator.InitializeDatabaseAndMigrateIfRequired();
         }

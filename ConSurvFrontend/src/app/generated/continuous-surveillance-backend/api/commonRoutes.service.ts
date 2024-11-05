@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v0.0.1 API documentation
+ * ConSurvBackend v1.0.0 API documentation
  * ConSurvBackend is the backend for ConSurv.
  *
  * 

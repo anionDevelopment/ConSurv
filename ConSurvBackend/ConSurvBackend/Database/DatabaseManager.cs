@@ -4,7 +4,7 @@ using GRYLibrary.Core.Misc.Migration;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ConSurvBackend.Core.Database.Contexts
+namespace ConSurvBackend.Core.Database
 {
     public class DatabaseManager : IDatabaseManager
     {

@@ -1,5 +1,4 @@
-﻿using ConSurvBackend.Core.Database.Contexts;
-using ConSurvBackend.Core.Model.RecordingModes;
+﻿using ConSurvBackend.Core.Model.RecordingModes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Data;
+using ConSurvBackend.Core.Database;
 
 namespace ConSurvBackend.Core.Services
 {
