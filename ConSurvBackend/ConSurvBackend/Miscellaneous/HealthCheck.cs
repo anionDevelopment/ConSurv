@@ -24,21 +24,21 @@ namespace ConSurvBackend.Core.Miscellaneous
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             return Tools.CheckHealthAsync(this._Logger, () =>
-                                                                                                                                               {
-                                                                                                                                                   IList<string> messages = new List<string>();
-                                                                                                                                                   HealthStatus result = HealthStatus.Healthy;
+            {
+                IList<string> messages = new List<string>();
+                HealthStatus result = HealthStatus.Healthy;
 
-                                                                                                                                                   foreach (var camera in this._CameraSchedulerService.GetAllCameras())
-                                                                                                                                                   {
-                                                                                                                                                       Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => camera.IsAvailable(), ref result, messages, true, false);
-                                                                                                                                                       if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))
-                                                                                                                                                       { return abortResult; }
-                                                                                                                                                   }
+                foreach (var camera in this._CameraSchedulerService.GetAllCameras())
+                {
+                    Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => camera.IsAvailable(), ref result, messages, true, false);
+                    if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))
+                    { return abortResult; }
+                }
 
-                                                                                                                                                   Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true, true);
-                                                                                                                                                   return (result, messages);
+                Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true, true);
+                return (result, messages);
 
-                                                                                                                                               }, context, cancellationToken);
+            }, context, cancellationToken);
         }
     }
 }

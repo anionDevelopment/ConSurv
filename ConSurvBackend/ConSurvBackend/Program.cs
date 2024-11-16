@@ -50,7 +50,6 @@ namespace ConSurvBackend.Core
             apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
             {
                 string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
-                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTPS();//TODO remove this line when the grylib-update is deployed where this will be executed internally.
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
@@ -145,13 +144,7 @@ namespace ConSurvBackend.Core
 
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
 
-                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();
-
-                functionalInformation.WebApplicationBuilder.Services.AddOpenTelemetry().WithMetrics(builder =>
-                {
-                    builder.AddMeter(CodeUnitSpecificConstants.AvailableCamerasRatioMeterName);
-                    builder.AddPrometheusExporter();
-                });
+                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();               
             };
             apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
             {
@@ -167,9 +160,6 @@ namespace ConSurvBackend.Core
                 {
                     someBackgroundService.Stop().Wait();
                 };
-
-                functionalInformationForWebApplication.WebApplication.MapHealthChecks(GRYLibrary.Core.APIServer.Utilities.Constants.UsualHealthCheckEndpoint);
-                functionalInformationForWebApplication.WebApplication.UseOpenTelemetryPrometheusScrapingEndpoint(GRYLibrary.Core.APIServer.Utilities.Constants.UsualMetricsEndpoint);
             };
         });
         }

@@ -12,5 +12,6 @@ namespace ConSurvBackend.Core.Services
         void RemoveCamera(string cameraId);
         void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand);
         Camera GetCameraById(string cameraId);
+        double GetRateOfAvailableCameras();
     }
 }

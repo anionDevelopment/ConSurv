@@ -9,5 +9,7 @@
         public const string UserGroupUser= "Users";
         public const string AvailableCamerasRatioMeterName = "AvailableCamerasRatio";
         public const string WebControllerRoute = "Web";
+        public const string BusinessMetricsPrefix = $"{GeneralConstants.CodeUnitName}_Business_";
+        public const string MetricsNameAvailableCamerasRate = $"{BusinessMetricsPrefix}_AvailableCamerasRate";
     }
 }
