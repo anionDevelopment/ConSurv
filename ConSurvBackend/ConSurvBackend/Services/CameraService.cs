@@ -39,5 +39,20 @@ namespace ConSurvBackend.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public double GetRateOfAvailableCameras()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Register(string adminUsername, string initialAdminPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UserWithNameExists(string adminUsername)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

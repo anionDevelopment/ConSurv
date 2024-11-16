@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ConSurvBackend.Tests.TestUtilities;
 using ConSurvBackend.Core.Database;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ConSurvBackend.Tests.Testcases.Database.Migration
 {

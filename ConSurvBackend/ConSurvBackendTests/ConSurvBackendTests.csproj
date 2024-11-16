@@ -15,7 +15,7 @@
         <RepositoryUrl>https://github.com/anionDev/CommonProjectStructureExamples.git</RepositoryUrl>
         <RootNamespace>ConSurvBackend.Tests</RootNamespace>
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
         <Configurations>Development;QualityCheck;Productive</Configurations>
         <IsTestProject>true</IsTestProject>
         <LangVersion>11.0</LangVersion>
@@ -56,6 +56,7 @@
         <ErrorReport>none</ErrorReport>
     </PropertyGroup>
     <ItemGroup>
+        <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
         <ProjectReference Include="..\ConSurvBackend\ConSurvBackend.csproj" />
         <PackageReference Include="coverlet.collector" Version="6.0.2">
             <PrivateAssets>all</PrivateAssets>
@@ -65,24 +66,24 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="0.12.121" />
-        <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="17.11.1" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
         <PackageReference Include="Moq" Version="4.20.72" />
         <PackageReference Include="MSTest.TestAdapter" Version="3.6.3" />
         <PackageReference Include="MSTest.TestFramework" Version="3.6.3" />
         <PackageReference Include="NJsonSchema" Version="11.0.2" />
         <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
-        <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.1" />
+        <PackageReference Include="prometheus-net" Version="8.2.1" />
+        <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
     </ItemGroup>
     <ItemGroup>
       <None Update="TestUtilities\Constants\GeneralConstants.tt">

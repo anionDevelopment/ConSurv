@@ -6,6 +6,7 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 
 - `docfx`
 - `dotnet`
+- `ffmpeg`
 - `git`
 - `gitversion`
 - `python`

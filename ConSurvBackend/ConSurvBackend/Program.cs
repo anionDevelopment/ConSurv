@@ -13,8 +13,6 @@ using GRYLibrary.Core.APIServer.ExecutionModes;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using ConSurvBackend.Core.Miscellaneous;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -24,7 +22,6 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
-using OpenTelemetry.Metrics;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.APIServer.Services.CredC;
@@ -36,7 +33,6 @@ using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
 using ConSurvBackend.Core.Database;
 
 namespace ConSurvBackend.Core
@@ -134,6 +130,7 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationService>(sp => sp.GetRequiredService<IUserAuthorizationService>());
 
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerService, CameraSchedulerService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);

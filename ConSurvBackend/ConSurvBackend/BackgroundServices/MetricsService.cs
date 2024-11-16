@@ -2,13 +2,10 @@
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Prometheus;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConSurvBackend.Core.BackgroundServices
 {
@@ -21,7 +18,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this.Enabled = true;
             this._CameraService = cameraService;
             this.AdditionalDelay = TimeSpan.FromMinutes(1);
-            this.MetricAvailableCamerasRate = Metrics.CreateGauge(CodeUnitSpecificConstants.MetricsNameAvailableCamerasRate, "Amount of existing datasets");
+            this.MetricAvailableCamerasRate = Metrics.CreateGauge(CodeUnitSpecificConstants.MetricsNameAvailableCamerasRate, "Rate of available cameras");
         }
 
         public void CalculateHealthAndMetrics()

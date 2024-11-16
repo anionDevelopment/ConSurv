@@ -16,11 +16,13 @@ namespace ConSurvBackend.Core.Services
     public sealed class DatabasePersistence : IPersistence
     {
         private readonly DatabaseContext _DatabaseContext;
+        private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
         private readonly Semaphore _Semaphore = new Semaphore();
-        public DatabasePersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager)
+        public DatabasePersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, ISQLProvider sQLProvider)
         {
             this._DatabaseContext = new DatabaseContext(options, logger, timeService, databaseManager);
+            this._SQLProvider = sQLProvider;
         }
 
         #region AccessDatabase

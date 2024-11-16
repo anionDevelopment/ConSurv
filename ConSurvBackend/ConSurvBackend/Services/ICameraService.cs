@@ -13,5 +13,7 @@ namespace ConSurvBackend.Core.Services
         void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand);
         Camera GetCameraById(string cameraId);
         double GetRateOfAvailableCameras();
+        string Register(string adminUsername, string initialAdminPassword);
+        bool UserWithNameExists(string adminUsername);
     }
 }

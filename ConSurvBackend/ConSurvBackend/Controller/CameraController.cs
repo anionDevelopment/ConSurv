@@ -36,7 +36,7 @@ namespace ConSurvBackend.Core.Controller
             throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
         }
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [Route($"{nameof(CreateCamera)}")]
@@ -45,7 +45,7 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording()));
         }
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(RemoveCamera)}/{{{nameof(cameraId)}}}")]
@@ -55,7 +55,7 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(UpdateCamera)}")]
@@ -67,7 +67,7 @@ namespace ConSurvBackend.Core.Controller
 
         #region ONVIF-specific
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupCameraManagers)]
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(RunONVIFCommand)}/{nameof(cameraId)}")]

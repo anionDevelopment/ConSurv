@@ -30,7 +30,7 @@ namespace ConSurvBackend.Core.Controller
             this._TimeService = timeService;
         }
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupAdmin)]
+        [Authorize(CodeUnitSpecificConstants.RolenameAdmins)]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route(nameof(CreateUser))]
@@ -38,7 +38,7 @@ namespace ConSurvBackend.Core.Controller
         {
             User user2 = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(user, this._AuthenticationService.Hash(password),  this._TimeService);
             this._AuthenticationService.AddUser(user2);
-            this._AuthenticationService.EnsureUserHasRole(user2.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UserNameAdmin).Id);
+            this._AuthenticationService.EnsureUserHasRole(user2.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UsernameAdmin).Id);
             return this.Ok();
         }
 
