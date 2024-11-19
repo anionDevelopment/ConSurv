@@ -1,13 +1,13 @@
-﻿using ConSurvBackend.Core.Model.RecordingModes;
+﻿using ConSurvBackend.Core.Model;
 using GRYLibrary.Core.APIServer.Services;
 
 namespace ConSurvBackend.Core.Services
 {
     public interface IPersistence : IExternalService
     {
-        /// <returns>Returns the id of the created camera</returns>
-        string CreateCamera(string name, NoRecording notRecording);
-        void UpdateCamera(string cameraId, string name, RecordMode recordMode);
+        void CreateCamera(Camera camera);
+        void UpdateCamera(Camera camera);
         void RemoveCamera(string cameraId);
+        bool UserWithNameExists(string username);
     }
 }

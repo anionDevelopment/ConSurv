@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.BackgroundServices;
+﻿using ConSurvBackend.Core.Model;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -14,12 +14,12 @@ namespace ConSurvBackend.Core.Miscellaneous
     {
         private readonly IGeneralLogger _Logger;
         private readonly IPersistence _Persistence;
-        private readonly ICameraSchedulerService _CameraSchedulerService;
-        public HealthCheck(IGeneralLogger logger, IPersistence persistence, ICameraSchedulerService cameraSchedulerService)
+        private readonly ICameraService _CameraService;
+        public HealthCheck(IGeneralLogger logger, IPersistence persistence, ICameraService cameraSchedulerService)
         {
             this._Logger = logger;
             this._Persistence = persistence;
-            this._CameraSchedulerService = cameraSchedulerService;
+            this._CameraService = cameraSchedulerService;
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -28,7 +28,7 @@ namespace ConSurvBackend.Core.Miscellaneous
                 IList<string> messages = new List<string>();
                 HealthStatus result = HealthStatus.Healthy;
 
-                foreach (var camera in this._CameraSchedulerService.GetAllCameras())
+                foreach (Camera camera in this._CameraService.GetAllCameras())
                 {
                     Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => camera.IsAvailable(), ref result, messages, true, false);
                     if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))

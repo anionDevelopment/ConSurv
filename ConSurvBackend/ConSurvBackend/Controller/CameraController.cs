@@ -1,7 +1,6 @@
 ﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
 using ConSurvBackend.Core.Model.DTOs;
-using ConSurvBackend.Core.Model.RecordingModes;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
@@ -39,10 +38,10 @@ namespace ConSurvBackend.Core.Controller
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [Route($"{nameof(CreateCamera)}")]
+        [Route(nameof(CreateCamera))]
         public IActionResult CreateCamera([FromBody] CreateCameraDTO createCameraDTO)
         {
-            return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name, new NoRecording()));
+            return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name));
         }
 
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]

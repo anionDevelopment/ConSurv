@@ -1,6 +1,6 @@
-﻿namespace ConSurvBackend.Core.Model.MoveDirections
+﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections
 {
-    public class MoveRight : MoveDirection
+    public class MoveLeft : MoveDirection
     {
         public override void Accept(IMoveDirectionVisitor visitor)
         {

@@ -1,7 +1,10 @@
 ﻿using ConSurvBackend.Core.Model;
-using ConSurvBackend.Core.Model.RecordingModes;
+using ExtendedXmlSerializer;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Services.Trans;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core.Services
@@ -9,17 +12,28 @@ namespace ConSurvBackend.Core.Services
     public sealed class TransientPersistence : IPersistence
     {
         private readonly IDictionary<string, Camera> _Cameras = new Dictionary<string, Camera>();
-        public string CreateCamera(string name, NoRecording notRecording)
-        {
-            var newCamera = new Camera()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                RecordingMode = notRecording,
+        private readonly IAuthenticationServicePersistence<User> _TransientAuthenticationServicePersistence;
 
-            };
-            this._Cameras.Add(newCamera.Id, newCamera);
-            return newCamera.Id;
+        public TransientPersistence(IAuthenticationServicePersistence<User> transientAuthenticationServicePersistence)
+        {
+            this._TransientAuthenticationServicePersistence = transientAuthenticationServicePersistence;
+            this._Cameras = new Dictionary<string, Camera>();
+            this.Initialize();
+        }
+
+        private void Initialize()
+        {
+            this.Reset();
+        }
+
+        public void Reset()
+        {
+            this._Cameras.Clear();
+        }
+
+        public void CreateCamera(Camera camera)
+        {
+            this._Cameras[camera.Id]=camera;
         }
 
         public void RemoveCamera(string cameraId)
@@ -27,16 +41,10 @@ namespace ConSurvBackend.Core.Services
             this._Cameras.Remove(cameraId);
         }
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
+        public void UpdateCamera(Camera camera)
         {
-            var updatedCamera = new Camera()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                RecordingMode = recordMode,
-
-            };
-            this._Cameras[cameraId] = updatedCamera;
+          
+            this._Cameras[camera.Id] = camera;
         }
 
         public void Dispose()
@@ -46,7 +54,12 @@ namespace ConSurvBackend.Core.Services
 
         public bool IsAvailable()
         {
-            throw new System.NotImplementedException();
+            return true;
+        }
+
+        public bool UserWithNameExists(string username)
+        {
+         return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace ConSurvBackend.Core.Model.ZoomDirections
+﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections
 {
-    public class ZoomOut : ZoomDirection
+    public class ZoomIn : ZoomDirection
     {
         public override void Accept(IZoomDirectionVisitor visitor)
         {

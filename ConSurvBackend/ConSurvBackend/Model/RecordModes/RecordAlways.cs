@@ -2,6 +2,7 @@
 {
     public class RecordAlways : RecordMode
     {
+
         public override T Accept<T>(IRecordModeVisitor<T> visitor)
         {
             return visitor.Handle(this);

@@ -25,7 +25,7 @@ namespace ConSurvBackend.Tests
                 Name = "MyCamera",
             };
             string cameraId = Guid.NewGuid().ToString();
-            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording())).Returns(cameraId);
+            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name)).Returns(cameraId);
             CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object);
 
             // act
@@ -35,7 +35,7 @@ namespace ConSurvBackend.Tests
             OkObjectResult okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(cameraId, (string)okObjectResult.Value);
-            cameraServiceMock.Verify(mock => mock.CreateCamera(cameraDTO.Name, new Core.Model.RecordingModes.NoRecording()));
+            cameraServiceMock.Verify(mock => mock.CreateCamera(cameraDTO.Name));
             cameraServiceMock.VerifyNoOtherCalls();
         }
     }

@@ -1,6 +1,6 @@
-﻿using ConSurvBackend.Core.Model.ZoomDirections;
+﻿using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
 
-namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands
+namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands
 {
     public class Zoom : ONVIFCommand
     {

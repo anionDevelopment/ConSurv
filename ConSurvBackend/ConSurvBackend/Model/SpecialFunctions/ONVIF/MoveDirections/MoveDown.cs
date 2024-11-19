@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.MoveDirections
+﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections
 {
     public class MoveDown : MoveDirection
     {

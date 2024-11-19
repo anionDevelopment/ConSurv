@@ -66,7 +66,7 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(GetRoles))]
         public IActionResult GetRoles()
         {
-            return this.Ok(GetUser().Roles);
+            return this.Ok(this.GetUser().Roles);
         }
 
         private User GetUser()

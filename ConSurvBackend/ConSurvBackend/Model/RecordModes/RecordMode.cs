@@ -32,7 +32,7 @@ namespace ConSurvBackend.Core.Model.RecordingModes
 
         public override string ToString()
         {
-            return this.GetType().ToString();
+            return this.GetType().Name;
         }
     }
     public interface IRecordModeVisitor<T>

@@ -74,8 +74,8 @@
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="NJsonSchema" Version="11.0.2" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
+        <PackageReference Include="NJsonSchema" Version="11.1.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
@@ -87,6 +87,9 @@
         <EmbeddedResource Include="Database\SQL\**">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Remove="C:\Users\user\.nuget\packages\system.diagnostics.diagnosticsource\9.0.0\contentFiles\any\net8.0\ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />

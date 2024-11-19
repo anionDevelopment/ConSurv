@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.ZoomDirections
+﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections
 {
     public abstract class ZoomDirection
     {

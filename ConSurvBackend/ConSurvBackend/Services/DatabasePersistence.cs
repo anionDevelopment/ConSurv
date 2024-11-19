@@ -1,5 +1,4 @@
-﻿using ConSurvBackend.Core.Model.RecordingModes;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Misc;
@@ -10,6 +9,7 @@ using System.Linq;
 using System;
 using System.Data;
 using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Model;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -106,7 +106,7 @@ namespace ConSurvBackend.Core.Services
         }
         #endregion
 
-        public string CreateCamera(string name, NoRecording notRecording)
+        public void CreateCamera(Camera camera)
         {
             throw new System.NotImplementedException();
         }
@@ -116,7 +116,7 @@ namespace ConSurvBackend.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
+        public void UpdateCamera(Camera camera)
         {
             throw new System.NotImplementedException();
         }
@@ -124,21 +124,32 @@ namespace ConSurvBackend.Core.Services
         public bool IsAvailable()
         {
             return this.AccessDatabase((databaseContext) =>
-                                              {
-                                                  try
-                                                  {
-                                                      return databaseContext.Database.CanConnect();
-                                                  }
-                                                  catch
-                                                  {
-                                                      return false;
-                                                  }
-                                              });
+            {
+                try
+                {
+                    return databaseContext.Database.CanConnect();
+                }
+                catch
+                {
+                    return false;
+                }
+            });
         }
 
         public void Dispose()
         {
             this._DatabaseContext.Dispose();
+        }
+
+        public bool UserWithNameExists(string userName)
+        {
+            return this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptUserWithNameExists();
+                cmd.Parameters.Add(new MySqlParameter("UserName", userName));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            })[0];
         }
     }
 }

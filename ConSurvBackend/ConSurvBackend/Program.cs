@@ -8,10 +8,8 @@ using ConSurvBackend.Core.Services;
 using ConSurvBackend.Core.BackgroundServices;
 using GRYLibrary.Core.APIServer.CommonRoutes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
-using GRYLibrary.Core.Misc.FilePath;
 using GRYLibrary.Core.APIServer.ExecutionModes;
 using GRYLibrary.Core.APIServer.Utilities;
-using GRYLibrary.Core.Logging.GRYLogger;
 using ConSurvBackend.Core.Miscellaneous;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
@@ -24,7 +22,6 @@ using System;
 using System.IO;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
-using GRYLibrary.Core.APIServer.Services.CredC;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -34,6 +31,8 @@ using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ConSurvBackend.Core
 {
@@ -49,8 +48,8 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
-                initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
-                initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
+                // initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
+                // initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                 initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation = new CommonRoutesInformation()
                 {
@@ -61,16 +60,6 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
                 bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                 bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings = new CameraSchedulerServiceSettings()
-                {
-                    Enabled = runServices,
-                    LogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString($"./{nameof(CameraSchedulerService)}.log"), verbose),
-                };
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CameraSchedulerServiceSettings = new CameraSchedulerServiceSettings()
-                {
-                    VideoLength = TimeSpan.FromMinutes(10),
-                    StorageFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings"),
-                };
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthenticationConfiguration()
                 {
                     RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
@@ -78,10 +67,9 @@ namespace ConSurvBackend.Core
                     },
                 };
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AuthorizationConfiguration();
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CookieServiceConfiguration = new CookieServiceConfiguration()
-                {
-                    CookieName = GeneralConstants.CodeUnitName,
-                };
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(10);
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TargetFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings");
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
                 {
                     NotLoggedRoutes = new HashSet<string>()
@@ -115,9 +103,6 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                 }
 
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, CookieService>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICookieServiceConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CookieServiceConfiguration);
-
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
@@ -130,9 +115,11 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationService>(sp => sp.GetRequiredService<IUserAuthorizationService>());
 
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerService, CameraSchedulerService>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraSchedulerServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.SomeBackgroundServiceSettings);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraService, CameraService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMaintenanceRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForLoggingMiddleware);
@@ -141,21 +128,21 @@ namespace ConSurvBackend.Core
 
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
 
-                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();               
+                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();
             };
             apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
             {
                 IInitializationService initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
                 initializationService.Initialize();
 
-                ICameraSchedulerService someBackgroundService = functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraSchedulerService>();
+                IMetricsService metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
                 functionalInformationForWebApplication.PreRun = () =>
                 {
-                    someBackgroundService.StartAsync();
+                    metricsService.StartAsync();
                 };
                 functionalInformationForWebApplication.PostRun = () =>
                 {
-                    someBackgroundService.Stop().Wait();
+                    metricsService.Stop().Wait();
                 };
             };
         });

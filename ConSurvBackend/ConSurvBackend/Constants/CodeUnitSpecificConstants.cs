@@ -8,9 +8,8 @@
         public const string RolenameModerators = "CameraManagers";
         public const string RolenameUsers = "Users";
         public const string UserGroupUser= "Users";
-        public const string AvailableCamerasRatioMeterName = "AvailableCamerasRatio";
         public const string WebControllerRoute = "Web";
-        public const string BusinessMetricsPrefix = $"{GeneralConstants.CodeUnitName}_Business_";
+        public const string BusinessMetricsPrefix = $"{GeneralConstants.CodeUnitName}_Business";
         public const string MetricsNameAvailableCamerasRate = $"{BusinessMetricsPrefix}_AvailableCamerasRate";
     }
 }

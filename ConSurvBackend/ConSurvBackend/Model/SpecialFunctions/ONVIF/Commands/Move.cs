@@ -1,6 +1,6 @@
-﻿using ConSurvBackend.Core.Model.MoveDirections;
+﻿using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
 
-namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands
+namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands
 {
     public class Move : ONVIFCommand
     {

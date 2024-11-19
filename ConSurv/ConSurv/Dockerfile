@@ -14,11 +14,12 @@ RUN mkdir /Workspace && \
 
 WORKDIR /Workspace/Other/EntryPoint
 
+#Install .NET and ffmpeg
 RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-8.0
+    apt-get install -y dotnet-sdk-8.0 ffmpeg
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_win-x64 /Workspace/Application/Backend
 

@@ -6,5 +6,9 @@ namespace ConSurvBackend.Core.Services
     {
         public SQLProvider() : base("ConSurvBackend.Core.Database.SQL") { }
 
+        public string GetScriptUserWithNameExists()
+        {
+            return this.LoadSQLScript("UserWithNameExists");
+        }
     }
 }

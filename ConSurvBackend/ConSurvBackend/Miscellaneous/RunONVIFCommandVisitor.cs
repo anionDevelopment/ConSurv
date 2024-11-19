@@ -1,8 +1,6 @@
 ﻿using ConSurvBackend.Core.Model;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.ONVIFVideo.Commands;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using System;
-using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core.Miscellaneous
 {
@@ -12,7 +10,6 @@ namespace ConSurvBackend.Core.Miscellaneous
 
         public RunONVIFCommandVisitor(Camera camera)
         {
-            GUtilities.AssertCondition(camera.VideoType is ONVIF, "ONVIF-commands can only be executed on camers whose camera-type is ONVIF.");
             this._Camera = camera;
         }
 
