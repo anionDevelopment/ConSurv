@@ -10,11 +10,8 @@
  */
 
 
-export interface UpdateCameraDTO { 
-    cameraId?: string | null;
+export interface CreateCameraDTO { 
     name?: string | null;
-    soundType?: object;
     videoType?: object;
-    recordMode?: object;
 }
 

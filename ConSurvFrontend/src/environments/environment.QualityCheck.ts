@@ -3,5 +3,5 @@ export const environment = {
     production: false,
     development: false,
     environmentName: "QualityCheck",
-    baseURL: "https://consurvbackend.test.local:443"
+    API_BASE_PATH: "https://consurvbackend.test.local:443"
 };

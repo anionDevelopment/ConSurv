@@ -3,5 +3,5 @@ export const environment = {
     production: undefined,
     development: undefined,
     environmentName: undefined,
-    baseURL: undefined
+    API_BASE_PATH: undefined
 };

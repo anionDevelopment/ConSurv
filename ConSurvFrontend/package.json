@@ -10,8 +10,8 @@
     "test-Development": "ng test --configuration Development --browsers ChromeHeadless --code-coverage --watch false",
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless --code-coverage --watch false",
     "test-Productive": "ng test --configuration Productive --browsers ChromeHeadless --code-coverage --watch false",
-    "generate-api-client": "openapi-generator-cli generate -g typescript-angular -i ./Other/Resources/DependentCodeUnits/ConSurvBackend/APISpecification/ConSurvBackend.latest.api.json -o ./src/app/generated/continuous-surveillance-backend",
-    "start": "ng serve --configuration Development --proxy-config DevelopmentProxy.config.json"
+    "generate-api-client": "openapi-generator-cli generate -g typescript-angular -i ./Other/Resources/DependentCodeUnits/ConSurvBackend/APISpecification/ConSurvBackend.latest.api.json -o ./src/app/generated/con-surv-backend",
+    "start": "ng serve --configuration Development"
   },
   "private": true,
   "dependencies": {
