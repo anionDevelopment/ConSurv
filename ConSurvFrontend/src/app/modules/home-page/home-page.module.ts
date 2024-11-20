@@ -10,9 +10,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ThemeSwitchComponent } from './theme-switch/theme-switch.component';
+import { BackendURLUpdaterInterceptor } from 'src/app/interceptors/backend-urlupdater.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,13 @@ import { ThemeSwitchComponent } from './theme-switch/theme-switch.component';
   exports: [
     HomePageComponent,
     ThemeSwitchComponent,
-  ]
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BackendURLUpdaterInterceptor,
+      multi: true,
+    }
+  ],
 })
 export class HomePageModule { }

@@ -24,11 +24,13 @@ import { BackendURLUpdaterInterceptor } from './interceptors/backend-urlupdater.
     UserAreaModule,
     BrowserAnimationsModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: BackendURLUpdaterInterceptor,
-    multi: true,
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BackendURLUpdaterInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

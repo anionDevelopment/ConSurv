@@ -1,6 +1,10 @@
 {
-    "/API/": {
+    "/API/**": {
         "target": "https://consurvbackend.test.local:443",
-        "secure": false
+        "secure": true,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/API": ""
+        }
     }
 }

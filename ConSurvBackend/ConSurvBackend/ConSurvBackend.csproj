@@ -89,9 +89,6 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Content Remove="C:\Users\user\.nuget\packages\system.diagnostics.diagnosticsource\9.0.0\contentFiles\any\net8.0\ILLink\ILLink.Descriptors.LibraryBuild.xml" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
+      <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>

@@ -105,10 +105,22 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "Development": {
-              "browserTarget": "ConSurvFrontend:build:Development"
+              "browserTarget": "ConSurvFrontend:build:Development",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.Development.ts"
+                }
+              ]
             },
             "QualityCheck": {
-              "browserTarget": "ConSurvFrontend:build:QualityCheck"
+              "browserTarget": "ConSurvFrontend:build:QualityCheck",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.QualityCheck.ts"
+                }
+              ]
             },
             "Production": {
               "browserTarget": "ConSurvFrontend:build:Production"
