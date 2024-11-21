@@ -22,7 +22,7 @@ export class LoginFormComponent {
     console.log("username: " + username);
     const password: string = this.form.get('password')!.value;
     this.userService.aPIV1UserControllerLoginPut(username, password).subscribe(() => {
-      //TODO redirect to /user
+      //TODO redirect to /user/dashboard
     });
   }
 }
