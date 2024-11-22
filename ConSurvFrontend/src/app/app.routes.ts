@@ -1,0 +1,24 @@
+import { Routes } from '@angular/router';
+import { HomePageComponent } from './modules/home-page/home-page/home-page.component';
+import { UserDashboardComponent } from './modules/user-area/user-dashboard/user-dashboard.component';
+import { AdminDashboardComponent } from './modules/admin-area/admin-dashboard/admin-dashboard.component';
+import { authenticationCheckGuard } from './guards/authentication-check.guard';
+import { HintNotFoundComponent } from './modules/home-page/hint-not-found/hint-not-found.component';
+import { UserSettingsComponent } from './modules/user-area/user-settings/user-settings.component';
+import { CameraComponent } from './modules/user-area/camera/camera.component';
+import { CamerasListComponent } from './modules/user-area/cameras-list/cameras-list.component';
+import { UsersListComponent } from './modules/admin-area/users-list/users-list.component';
+import { UserComponent } from './modules/admin-area/user/user.component';
+
+export const routes: Routes = [
+    { path: '', component: HomePageComponent },
+    { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'admin/settings', component: AdminDashboardComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'admin/users', component: UsersListComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'admin/user', component: UserComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'user/dashboard', component: UserDashboardComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'user/settings', component: UserSettingsComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'user/cameras', component: CamerasListComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'user/camera', component: CameraComponent, canActivate: [authenticationCheckGuard] },
+    { path: '**', component: HintNotFoundComponent },
+];

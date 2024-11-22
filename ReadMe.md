@@ -8,26 +8,28 @@ ConSurv (abbreviation for "Continuous surveillance") is an IP-cam-management-sys
 
 TODO
 
-## Installation
+## Contribue
 
-### Container-image
+Contributions are always welcome.
 
-TODO
+This product has the contribution-requirements defines by [DefaultOpenSourceContributionProcess](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/Contributing/DefaultOpenSourceContributionProcess/DefaultOpenSourceContributionProcess.md).
 
-## Usage
+## Repository-structure
 
-TODO
+This product uses the [CommonProjectStructure](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/RepositoryStructure/CommonProjectStructure/CommonProjectStructure.md) as repository-structure.
 
-## Repository structure
+## Branching-system
 
-TODO
+This product follows the [GitFlowSimplified](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/BranchingSystem/GitFlowSimplified/GitFlowSimplified.md)-branching-system.
 
-## Contributing
+## Image-properties
 
-Feel free to contribute to this project.
-The usual way to contribute is to create a new branch, develop and then finally (when the build-pipeline/-script is also running again) create a pull-request to merge the branch back to the main-branch.
-When you create a pull-request you agree that your changes will be published under the [current license](./License.txt).
+The image-artifacts of this product must fulfill the image-properties defined by [DefaultImageUsabilityRequirements](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/ImageProperties/DefaultImageUsabilityRequirements/DefaultImageUsabilityRequirements.md).
+
+## Versioning
+
+This product follows the [SemVerPractise](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/Versioning/SemVerPractise/SemVerPractise.md)-versioning-system.
 
 ## License
 
-See [License.txt](./License.txt).
+See [License.txt](./License.txt) for license-information.

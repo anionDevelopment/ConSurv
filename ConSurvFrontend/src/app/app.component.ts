@@ -1,23 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Theme } from './modules/home-page/theme-switch/ThemeMode';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterOutlet } from '@angular/router';
+import { HomePageModule } from './modules/home-page/home-page.module';
+import { UserAreaModule } from './modules/user-area/user-area.module';
+import { AdminAreaModule } from './modules/admin-area/admin-area.module';
 
 @Component({
   selector: 'app-root',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterOutlet,
+    HomePageModule,
+    UserAreaModule,
+    AdminAreaModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'ConSurvFrontend';
-
-  darkThemeSelected: boolean = true;
-
-  themeChanged(newTheme: Theme): void {
-    if (newTheme == Theme.Light) {
-      this.darkThemeSelected = false;
-    } else if (newTheme == Theme.Dark) {
-      this.darkThemeSelected = true;
-    } else {
-      throw Error(`Unknown theme-mode-value: ${newTheme}`);
-    }
-  }
+  title = 'ConSurv';
 }

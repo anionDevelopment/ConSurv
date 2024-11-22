@@ -1,41 +1,40 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomePageComponent } from './home-page/home-page.component';
-import { LoginFieldComponent } from './login-field/login-field.component';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { HintNotAuthenticatedComponent } from './hint-not-authenticated/hint-not-authenticated.component';
+import { HintNotAuthorizedComponent } from './hint-not-authorized/hint-not-authorized.component';
+import { HintNotFoundComponent } from './hint-not-found/hint-not-found.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { HttpClientModule } from '@angular/common/http';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { ThemeSwitchComponent } from './theme-switch/theme-switch.component';
+import { MatInputModule } from '@angular/material/input';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { HomePageComponent } from './home-page/home-page.component';
+
+
 
 @NgModule({
   declarations: [
+    HintNotAuthenticatedComponent,
+    HintNotAuthenticatedComponent,
+    HintNotFoundComponent,
     HomePageComponent,
-    LoginFieldComponent,
-    ThemeSwitchComponent,
+    LoginFormComponent,
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
-    MatButtonToggleModule,
-    MatInputModule,
-    MatCardModule,
-    MatIconModule,
-    FormsModule,
-    MatButtonModule,
-    BrowserModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   exports: [
-    HomePageComponent,
-    ThemeSwitchComponent,
   ]
 })
 export class HomePageModule { }
