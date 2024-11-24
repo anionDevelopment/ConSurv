@@ -33,6 +33,8 @@ using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using ExtendedXmlSerializer.ExtensionModel;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 
 namespace ConSurvBackend.Core
 {
@@ -45,6 +47,7 @@ namespace ConSurvBackend.Core
             apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
             {
                 string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
+                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
@@ -63,7 +66,7 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthenticationConfiguration()
                 {
                     RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
-                            Regex.Escape("/API/Other/Resources/APISpecification/")+"*",
+                            @$"^/API/Other/Resources/APISpecification/*",
                     },
                 };
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AuthorizationConfiguration();
@@ -76,11 +79,12 @@ namespace ConSurvBackend.Core
                     {
                             @$"^/favicon\.ico$",
                             @$"^/Web/.*$",
+                            @$"^/API/Other/Resources/APISpecification/*",
                     },
                     MaximalLengthofResponseBodies = 50,
                 };
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
-                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
+                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
@@ -125,8 +129,14 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForLoggingMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
-
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
+
+                functionalInformation.WebApplicationBuilder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                }));
 
                 ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();
             };

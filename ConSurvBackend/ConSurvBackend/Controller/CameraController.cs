@@ -26,7 +26,7 @@ namespace ConSurvBackend.Core.Controller
             this._CameraService = cameraService;
         }
 
-        [Authorize(CodeUnitSpecificConstants.UserGroupUser)]
+        [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(GetStream)}/{{{nameof(cameraId)}}}")]

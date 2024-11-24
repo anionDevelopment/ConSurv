@@ -30,5 +30,6 @@ COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
 RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh
 
 HEALTHCHECK CMD curl --insecure --fail https://localhost:443/Backend/API/Other/Maintenance/HealthCheck
+#TODO add frontend to healthcheck
 
 ENTRYPOINT ["./EntryPoint.sh"]

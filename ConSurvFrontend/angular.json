@@ -94,7 +94,8 @@
             },
             "Development": {
               "buildTarget": "ConSurvFrontend:build:Development"
-            }
+            },
+            "options": {}
           },
           "defaultConfiguration": "QualityCheck"
         },
@@ -136,7 +137,8 @@
               "src/guards/**/*.ts",
               "src/interceptors/**/*.ts",
               "src/modules/**/*.ts",
-              "src/services/**/*.ts"
+              "src/services/**/*.ts",
+              "src/static/**/*.ts"
             ]
           }
         }
