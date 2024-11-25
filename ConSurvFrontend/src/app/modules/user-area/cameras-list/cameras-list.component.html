@@ -2,7 +2,7 @@
     <app-user-area-container>
         cameras
         <br />
-        <button mat-button *ngIf="userIdAdmin">
+        <button mat-button *ngIf="userIdAdmin" (click)="addCamera()">
             <mat-icon>add</mat-icon>
         </button>
     </app-user-area-container>

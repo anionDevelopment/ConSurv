@@ -45,7 +45,7 @@ export class UserAreaContainerComponent {
         return "Settings";
       }
       default: {
-        throw new Error('Unknown urlSegment: ' + urlSegment);
+        throw new Error('Unknown urlSegment: "' + urlSegment + '"');
       }
     }
   }

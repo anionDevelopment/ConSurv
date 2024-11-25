@@ -12,8 +12,12 @@ export class StorageService {
   public static readonly keyUserIsAdmin: string = 'userIsAdmin';
   constructor() { }
 
-  public setAccessToken(value: string): void {
-    sessionStorage.setItem(StorageService.keyAccessToken, value);
+  public setAccessToken(value: string | null): void {
+    if (value) {
+      sessionStorage.setItem(StorageService.keyAccessToken, value);
+    } else {
+      sessionStorage.removeItem(StorageService.keyAccessToken);
+    }
   }
 
   public getAccessToken(): string {

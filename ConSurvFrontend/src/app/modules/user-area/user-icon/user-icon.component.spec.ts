@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserIconComponent } from './user-icon.component';
+import { UserDataService } from '../../../services/user-data.service';
+import { UserService } from '../../../generated/con-surv-backend';
 
 describe('UserIconComponent', () => {
   let component: UserIconComponent;
@@ -8,9 +10,20 @@ describe('UserIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserIconComponent]
-    })
-    .compileComponents();
+      declarations: [
+        UserIconComponent,
+      ],
+      providers: [
+        {
+          provide: UserDataService,
+          useValue: {}
+        },
+        {
+          provide: UserService,
+          useValue: {}
+        }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserIconComponent);
     component = fixture.componentInstance;

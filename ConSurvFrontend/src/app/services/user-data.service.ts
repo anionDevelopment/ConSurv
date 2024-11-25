@@ -8,12 +8,15 @@ import { Observable, first, map, mergeMap, of, switchMap, tap } from 'rxjs';
 })
 export class UserDataService {
   private loaded: boolean = false;
+
   loadUserData(): Observable<void> {
     return this.ensureLoaded();
   }
+
   unloadUserData() {
     this.storageService.setUserName(null);
     this.storageService.setUserId(null);
+    this.storageService.setAccessToken(null);
     this.storageService.setUserIsAdmin(false);
   }
 

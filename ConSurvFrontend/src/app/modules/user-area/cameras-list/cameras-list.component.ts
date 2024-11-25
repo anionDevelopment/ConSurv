@@ -15,4 +15,7 @@ export class CamerasListComponent {
       this.userIdAdmin = isAdmin;
     });
   }
+  addCamera() {
+    throw new Error('Method not implemented.');
+  }
 }

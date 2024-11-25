@@ -36,7 +36,7 @@ import { FrameWorkComponent } from './frame-work/frame-work.component';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   exports: [
     FooterComponent,

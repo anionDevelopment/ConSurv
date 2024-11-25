@@ -1,5 +1,5 @@
 import { environment } from "../../environments/environment";
-import { version } from '../../../package.json';
+import packageInfo from '../../../package.json';
 export class Settings {
     public static getAPIUrl(): string {
         if (environment.apiUrl) {
@@ -26,6 +26,6 @@ export class Settings {
         return "ConSurv";
     }
     public static getAppVersion(): string {
-        return version;
+        return packageInfo.version;
     }
 }
