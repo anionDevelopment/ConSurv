@@ -1,14 +1,17 @@
 ﻿using GRYLibrary.Core.APIServer.CommonRoutes;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
+using GRYLibrary.Core.APIServer.Mid.AuthS;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using GRYLibrary.Core.APIServer.MidT.Auth;
+using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.MidT.RLog;
+using GRYLibrary.Core.APIServer.Services.CredH;
 using System;
 
 namespace ConSurvBackend.Core.Configuration
 {
-    public class CodeUnitSpecificConfiguration : ISupportRequestLoggingMiddleware//, ISupportAuthenticationMiddleware//, ISupportAuthorizationMiddleware
+    public class CodeUnitSpecificConfiguration : ISupportRequestLoggingMiddleware, ISupportExceptionManagerMiddleware, ISupportAuthenticationMiddleware//, ISupportAuthorizationMiddleware
     {
         public ICommonRoutesInformation CommonRoutesInformation { get; set; }
         public IMaintenanceRoutesInformation MaintenanceRoutesInformation { get; set; }
@@ -17,11 +20,13 @@ namespace ConSurvBackend.Core.Configuration
         public string DatabaseConnectionString { get; set; }
         public IAuthorizationConfiguration AuthorizationConfiguration { get; set; }
         public IAuthorizationConfiguration ConfigurationForAuthorizationMiddleware { get { return this.AuthorizationConfiguration; } }
-        public IAuthenticationConfiguration AuthenticationConfiguration { get; set; }
+        public IAuthSConfiguration AuthenticationConfiguration { get; set; }
         public IAuthenticationConfiguration ConfigurationForAuthenticationMiddleware { get { return this.AuthenticationConfiguration; } }
         public string TargetFolder { get; set; }
         public TimeSpan VideoLength { get; set; }
-        public bool TimeInUTC{ get; set; }
+        public bool TimeInUTC { get; set; }
 
+        public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
+        public IHeaderServiceConfiguration HeaderServiceConfiguration { get;  set; }
     }
 }

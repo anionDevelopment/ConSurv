@@ -14,11 +14,13 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { FooterComponent } from "./footer/footer.component";
+import { FrameWorkComponent } from './frame-work/frame-work.component';
 
 
 
 @NgModule({
   declarations: [
+    FrameWorkComponent,
     FooterComponent,
     HintNotAuthenticatedComponent,
     HintNotAuthenticatedComponent,
@@ -37,6 +39,8 @@ import { FooterComponent } from "./footer/footer.component";
     MatIconModule
   ],
   exports: [
+    FooterComponent,
+    FrameWorkComponent,
   ]
 })
 export class HomePageModule { }

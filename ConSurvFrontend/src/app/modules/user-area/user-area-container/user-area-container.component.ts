@@ -1,0 +1,56 @@
+import { NonNullAssert } from '@angular/compiler';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserDataService } from '../../../services/user-data.service';
+
+@Component({
+  selector: 'app-user-area-container',
+  standalone: false,
+  templateUrl: './user-area-container.component.html',
+  styleUrl: './user-area-container.component.scss'
+})
+export class UserAreaContainerComponent {
+  activeSite: string;
+  userIsAdmin: boolean;
+  constructor(private router: Router, userDataService: UserDataService) {
+    this.activeSite = this.getSiteTitle(this.router.url.split('/').pop()!);
+    this.userIsAdmin = userDataService.userIsAdmin();
+  }
+  onDashboardClick() {
+    this.router.navigate(['user', 'dashboard']);
+  }
+  onCamerasClick() {
+    this.router.navigate(['user', 'cameras']);
+  }
+  onCameraClick() {
+    this.router.navigate(['user', 'camera']);
+  }
+  onSettingsClick() {
+    this.router.navigate(['user', 'settings']);
+  }
+  onAdminAreaClick() {
+    this.router.navigate(['admin', 'dashboard']);
+  }
+  getSiteTitle(urlSegment: string): string {
+    switch (urlSegment) {
+      case "admin": {
+        return "Admin-Area";
+      }
+      case "dashboard": {
+        return "Dashboard";
+      }
+      case "cameras": {
+        return "Cameras";
+      }
+      case "camera": {
+        return "Camera";
+      }
+      case "settings": {
+        return "Settings";
+      }
+      default: {
+        throw new Error('Unknown urlSegment: ' + urlSegment);
+      }
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../../generated/con-surv-backend';
+import { Router } from '@angular/router';
+import { UserDataService } from '../../../services/user-data.service';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-login-form',
@@ -10,7 +13,7 @@ import { UserService } from '../../../generated/con-surv-backend';
 })
 export class LoginFormComponent {
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private userDataService: UserDataService, private router: Router, private storageService: StorageService) {
   }
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -19,10 +22,15 @@ export class LoginFormComponent {
 
   public login(): void {
     const username: string = this.form.get('username')!.value;
-    console.log("username: " + username);
     const password: string = this.form.get('password')!.value;
-    this.userService.aPIV1UserControllerLoginPut(username, password).subscribe(() => {
-      //TODO redirect to /user/dashboard
-    });
+    this.userService.aPIV1UserControllerLoginPut(username, password).subscribe((a: any) => {
+      this.storageService.setAccessToken(a.value!);
+      this.userDataService.loadUserData().subscribe(() => {
+        this.router.navigate(['user', 'dashboard']);
+      });
+    },
+      (error: any) => {
+        console.error(error);
+      });
   }
 }

@@ -1,0 +1,28 @@
+.layout {
+    width: 100%;
+  
+    display: grid;
+    grid:
+      "header" auto
+      "main" 1fr
+      "footer" auto
+      / 1fr;
+  }
+  
+  .header {
+     grid-area: header;
+ }
+  .main { 
+    grid-area: main;
+ }
+  .footer { 
+    grid-area: footer; 
+        position: absolute;
+        bottom: 0;
+      }
+  .center {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

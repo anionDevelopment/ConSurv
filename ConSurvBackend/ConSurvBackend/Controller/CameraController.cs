@@ -26,6 +26,7 @@ namespace ConSurvBackend.Core.Controller
             this._CameraService = cameraService;
         }
 
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -35,6 +36,7 @@ namespace ConSurvBackend.Core.Controller
             throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
         }
 
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -44,6 +46,7 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this._CameraService.CreateCamera(createCameraDTO.Name));
         }
 
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
@@ -54,6 +57,7 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]

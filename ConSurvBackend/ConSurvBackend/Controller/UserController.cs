@@ -1,14 +1,15 @@
 ﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Miscellaneous;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using IAuthenticationService = GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService;
 
 namespace ConSurvBackend.Core.Controller
@@ -30,18 +31,6 @@ namespace ConSurvBackend.Core.Controller
             this._TimeService = timeService;
         }
 
-        [Authorize(CodeUnitSpecificConstants.RolenameAdmins)]
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
-        [Route(nameof(CreateUser))]
-        public IActionResult CreateUser([FromHeader] string user, [FromHeader] string password)
-        {
-            User user2 = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(user, this._AuthenticationService.Hash(password),  this._TimeService);
-            this._AuthenticationService.AddUser(user2);
-            this._AuthenticationService.EnsureUserHasRole(user2.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UsernameAdmin).Id);
-            return this.Ok();
-        }
-
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
@@ -51,12 +40,26 @@ namespace ConSurvBackend.Core.Controller
         }
 
         [Authenticate]
+        [Authorize(CodeUnitSpecificConstants.RolenameAdmins)]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
+        [Route(nameof(CreateUser))]
+        public IActionResult CreateUser([FromHeader] string user, [FromHeader] string password)
+        {
+            User typedUser = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(user, this._AuthenticationService.Hash(password), this._TimeService);
+            this._AuthenticationService.AddUser(typedUser);
+            this._AuthenticationService.EnsureUserHasRole(typedUser.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UsernameAdmin).Id);
+            return this.Ok();
+        }
+
+        [Authenticate]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route(nameof(Logout))]
         public IActionResult Logout()
         {
-            this._AuthenticationService.Logout(this.User);
+            string currentlyUsedAccessToken =(string) this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName];
+            this._AuthenticationService.Logout(currentlyUsedAccessToken);
             return this.Ok();
         }
 
@@ -69,9 +72,18 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this.GetUser().Roles);
         }
 
+        [Authenticate]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
+        [Route(nameof(GetUserInformation))]
+        public IActionResult GetUserInformation()
+        {
+            return this.Ok(Utilities.GetUserInformation(this.GetUser()));
+        }
+
         private User GetUser()
         {
-            throw new NotImplementedException();
+            return Tools.GetUser(this.User, this._AuthenticationService);
         }
     }
 }

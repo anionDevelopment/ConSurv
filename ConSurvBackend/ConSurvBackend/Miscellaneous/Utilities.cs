@@ -1,5 +1,9 @@
-﻿using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Model;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using System;
+using System.Linq;
 
 namespace ConSurvBackend.Core.Miscellaneous
 {
@@ -16,6 +20,11 @@ namespace ConSurvBackend.Core.Miscellaneous
 #else
             throw new System.Collections.Generic.KeyNotFoundException("Unknown environmenttargettype.");
 #endif
+        }
+
+        internal static UserInformation GetUserInformation(User user)
+        {
+            return new UserInformation(user.Id,user.Name,user.GetAllRoles().Where(r=>r.Name==CodeUnitSpecificConstants.RolenameAdmins).Any());
         }
 
         internal static string GetVideoTargetFile(string folder,string cameraId, bool timeInUTC)

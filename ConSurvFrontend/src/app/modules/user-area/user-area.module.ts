@@ -5,6 +5,15 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { CamerasListComponent } from './cameras-list/cameras-list.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { UserAreaContainerComponent } from './user-area-container/user-area-container.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { HomePageModule } from '../home-page/home-page.module';
+import { MatIconModule } from '@angular/material/icon';
+import { UserIconComponent } from './user-icon/user-icon.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -12,12 +21,21 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   declarations: [
     CameraComponent,
     CamerasListComponent,
+    UserIconComponent,
+    UserAreaContainerComponent,
     UserDashboardComponent,
     UserSettingsComponent,
   ],
   imports: [
     CommonModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatTooltipModule,
+    HomePageModule,
+    MatIconModule,
     MatSidenavModule,
+    MatButtonModule,
+    MatTabsModule,
   ]
 })
 export class UserAreaModule { }

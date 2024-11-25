@@ -1,10 +1,7 @@
 ﻿using ConSurvBackend.Core.Model;
-using ExtendedXmlSerializer;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core.Services

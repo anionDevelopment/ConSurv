@@ -1,0 +1,28 @@
+<section class="layout">
+    <div class="sidebar">
+
+        <div class="drawer">
+            <button mat-button [disabled]="activeSite=='Dashboard'"
+                (click)="onDashboardClick()">{{getSiteTitle("dashboard")}}</button>
+            <button mat-button [disabled]="activeSite=='Cameras'"
+                (click)="onCamerasClick()">{{getSiteTitle("cameras")}}</button>
+            <button mat-button [disabled]="activeSite=='Camera'"
+                (click)="onCameraClick()">{{getSiteTitle("camera")}}</button>
+            <button mat-button [disabled]="activeSite=='Settings'"
+                (click)="onSettingsClick()">{{getSiteTitle("settings")}}</button>
+            <button mat-button [disabled]="false" (click)="onAdminAreaClick()">{{getSiteTitle("admin")}}</button>
+            <!--TODO add link to admin bashboard if the user is admin-->
+        </div>
+    </div>
+    <div class="body">
+
+        <div class="header">
+            <h1>{{activeSite}}</h1>
+            <app-user-icon class="user-icon"></app-user-icon>
+        </div>
+        <mat-divider></mat-divider>
+        <div>
+            <ng-content></ng-content>
+        </div>
+    </div>
+</section>
