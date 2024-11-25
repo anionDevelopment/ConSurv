@@ -24,7 +24,8 @@ namespace ConSurvBackend.Core.Miscellaneous
 
         internal static UserInformation GetUserInformation(User user)
         {
-            return new UserInformation(user.Id,user.Name,user.GetAllRoles().Where(r=>r.Name==CodeUnitSpecificConstants.RolenameAdmins).Any());
+            bool isAdmin = user.GetAllRoles().Where(r => r.Name == CodeUnitSpecificConstants.RolenameAdmins).Any();
+            return new UserInformation(user.Id,user.Name,isAdmin);
         }
 
         internal static string GetVideoTargetFile(string folder,string cameraId, bool timeInUTC)

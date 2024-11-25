@@ -11,11 +11,15 @@ import { Router } from '@angular/router';
   styleUrl: './user-icon.component.scss'
 })
 export class UserIconComponent {
-  userId: string;
-  userName: string;
+  userId: string | null = null;
+  userName: string | null = null;
   constructor(private userDataService: UserDataService, private storageService: StorageService, private router: Router, private userService: UserService) {
-    this.userId = userDataService.getUserId();
-    this.userName = userDataService.getUserName();
+    userDataService.getUserId().subscribe(userId => {
+      this.userId = userId;
+    });
+    userDataService.getUserName().subscribe(userName => {
+      this.userName = userName;
+    });
   }
   logout() {
     this.userService.aPIV1UserControllerLogoutPut(this.storageService.getAccessToken()).subscribe(() => {

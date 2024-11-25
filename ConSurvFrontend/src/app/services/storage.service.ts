@@ -25,6 +25,15 @@ export class StorageService {
       throw Error("AccessToken is not available.");
     }
   }
+  public hasAccessToken(): boolean {
+    const result: string | null = sessionStorage.getItem(StorageService.keyAccessToken);
+    if (result) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
   public removeAccessToken(): void {
     sessionStorage.removeItem(StorageService.keyAccessToken);
@@ -66,7 +75,7 @@ export class StorageService {
     }
   }
   public setUserIsAdmin(value: boolean | null): void {
-    if (value) {
+    if (value != null) {
       sessionStorage.setItem(StorageService.keyUserIsAdmin, value.toString());
     } else {
       sessionStorage.removeItem(StorageService.keyUserIsAdmin);

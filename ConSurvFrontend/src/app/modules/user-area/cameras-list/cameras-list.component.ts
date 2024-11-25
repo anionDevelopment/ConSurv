@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserDataService } from '../../../services/user-data.service';
 
 @Component({
   selector: 'app-cameras-list',
@@ -8,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class CamerasListComponent {
 
+  userIdAdmin: boolean | null = null;
+  constructor(userDataService: UserDataService) {
+    userDataService.userIsAdmin().subscribe((isAdmin) => {
+      this.userIdAdmin = isAdmin;
+    });
+  }
 }

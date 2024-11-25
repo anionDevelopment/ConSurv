@@ -11,19 +11,18 @@ import { UserDataService } from '../../../services/user-data.service';
 })
 export class UserAreaContainerComponent {
   activeSite: string;
-  userIsAdmin: boolean;
+  userIsAdmin: boolean | null = null;
   constructor(private router: Router, userDataService: UserDataService) {
     this.activeSite = this.getSiteTitle(this.router.url.split('/').pop()!);
-    this.userIsAdmin = userDataService.userIsAdmin();
+    userDataService.userIsAdmin().subscribe((isAdmin) => {
+      this.userIsAdmin = isAdmin;
+    });
   }
   onDashboardClick() {
     this.router.navigate(['user', 'dashboard']);
   }
   onCamerasClick() {
     this.router.navigate(['user', 'cameras']);
-  }
-  onCameraClick() {
-    this.router.navigate(['user', 'camera']);
   }
   onSettingsClick() {
     this.router.navigate(['user', 'settings']);
@@ -41,9 +40,6 @@ export class UserAreaContainerComponent {
       }
       case "cameras": {
         return "Cameras";
-      }
-      case "camera": {
-        return "Camera";
       }
       case "settings": {
         return "Settings";

@@ -10,8 +10,10 @@ import { UserDataService } from '../../../services/user-data.service';
   styleUrl: './user-dashboard.component.scss'
 })
 export class UserDashboardComponent {
-  userName: string;
+  userName: string | null = null;
   constructor(userDataService: UserDataService) {
-    this.userName = userDataService.getUserName();
+    userDataService.getUserName().subscribe(userName => {
+      this.userName = userName;
+    });
   }
 }

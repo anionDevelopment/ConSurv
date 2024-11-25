@@ -1,21 +1,15 @@
 import { Injectable } from '@angular/core';
 import { UserService } from '../generated/con-surv-backend';
 import { StorageService } from './storage.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, first, map, mergeMap, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
+  private loaded: boolean = false;
   loadUserData(): Observable<void> {
-    console.log("x1");
-    return this.userService.aPIV1UserControllerGetUserInformationGet(this.storageService.getAccessToken()).pipe(
-      tap((value: any) => {
-        this.storageService.setUserName(value.name);
-        this.storageService.setUserId(value.id);
-        this.storageService.setUserIsAdmin(value.isAdmin);
-      }
-      ));
+    return this.ensureLoaded();
   }
   unloadUserData() {
     this.storageService.setUserName(null);
@@ -26,31 +20,46 @@ export class UserDataService {
   constructor(private userService: UserService, private storageService: StorageService) {
   }
 
-  getUserId(): string {
-    return this.storageService.getUserId();
+  getUserId(): Observable<string> {
+    return this.ensureLoaded().pipe(map(() => {
+      return this.storageService.getUserId();
+    }));
   }
 
-  getUserName(): string {
-    return this.storageService.getUserName();
+  getUserName(): Observable<string> {
+    return this.ensureLoaded().pipe(map(() => {
+      return this.storageService.getUserName();
+    }));
   }
 
   userIsLoggedIn(): boolean {
-    try {
-      if (this.getUserId()) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch {
-      return false;
-    }
+    return this.storageService.hasAccessToken();
   }
 
-  userIsAdmin(): boolean {
-    try {
-      return this.storageService.getUserIsAdmin();
-    } catch {
-      return false;
+  userIsAdmin(): Observable<boolean> {
+    return this.ensureLoaded().pipe(map(() => {
+      try {
+        return this.storageService.getUserIsAdmin();
+      } catch {
+        return false;
+      }
+    }));
+
+  }
+  ensureLoaded(): Observable<void> {
+    let pipe: Observable<any>;
+    if (this.loaded) {
+      pipe = of(null);//null is required here because otherwise first() will throw a 'no elements in sequence'-error
+    } else {
+      pipe = this.userService.aPIV1UserControllerGetUserInformationGet(this.storageService.getAccessToken()).pipe(
+        tap((value: any) => {
+          this.storageService.setUserName(value.name);
+          this.storageService.setUserId(value.id);
+          this.storageService.setUserIsAdmin(value.isAdmin);
+          this.loaded = true;
+        }
+        ));
     }
+    return pipe.pipe(first());
   }
 }

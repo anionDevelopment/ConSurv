@@ -10,7 +10,7 @@
         {
             this.Id = id;
             this.Name = name;
-            this.IsAdmin = this.IsAdmin;
+            this.IsAdmin = isAdmin;
         }
     }
 }

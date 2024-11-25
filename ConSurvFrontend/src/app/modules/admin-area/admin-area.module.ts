@@ -8,6 +8,13 @@ import { AdminAreaContainerComponent } from './admin-area-container/admin-area-c
 import { HomePageModule } from '../home-page/home-page.module';
 import { UserAreaModule } from '../user-area/user-area.module';
 import { FrameWorkComponent } from "../home-page/frame-work/frame-work.component";
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 
@@ -21,6 +28,13 @@ import { FrameWorkComponent } from "../home-page/frame-work/frame-work.component
   ],
   imports: [
     CommonModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatTabsModule,
     HomePageModule,
     UserAreaModule,
   ]
