@@ -1,4 +1,5 @@
 ﻿using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
+using ConSurvBackend.Core.Model.DTOs;
 using System;
 
 namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes
@@ -13,6 +14,7 @@ namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes
         public abstract byte[] GetPreview(Camera camera, IRTSPManager rtspManager);
         public abstract void Accept(IVideoTypeVisitor visitor);
         public abstract T Accept<T>(IVideoTypeVisitor<T> visitor);
+        public abstract VideoTypeDTO ToDTO();
     }
     public interface IVideoTypeVisitor
     {

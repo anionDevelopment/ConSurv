@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConSurvBackend.Core.Model.DTOs;
+using System;
 
 namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo
 {
@@ -30,5 +31,13 @@ namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo
             rtspManager.StopRecording(camera.Id);
         }
 
+        public override VideoTypeDTO ToDTO()
+        {
+            return new RTSPStreamDTO()
+            {
+                VideoType = this.GetType().Name,
+                StreamURL = this.StreamURL,
+            };
+        }
     }
 }

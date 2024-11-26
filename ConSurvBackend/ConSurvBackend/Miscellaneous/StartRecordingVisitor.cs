@@ -25,7 +25,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             {
                 if (this._Camera.GetCurrentRecordingInformation() is Unavailable)
                 {
-                    this._Log.Log($"Can not start recording of camera {this._Camera.Name} because the camera is not available.");
+                    this._Log.Log($"Camera {this._Camera.Name} is not available.");
                 }
                 else
                 {

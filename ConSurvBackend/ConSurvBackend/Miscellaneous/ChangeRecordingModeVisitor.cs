@@ -1,7 +1,7 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Model;
 using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
-using ConSurvBackend.Core.Model.RecordingModes;
+using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.Logging.GRYLogger;
 

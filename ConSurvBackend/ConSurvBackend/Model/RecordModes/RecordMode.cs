@@ -1,6 +1,7 @@
-﻿using System;
+﻿using ConSurvBackend.Core.Model.DTOs;
+using System;
 
-namespace ConSurvBackend.Core.Model.RecordingModes
+namespace ConSurvBackend.Core.Model.RecordModes
 {
     public abstract class RecordMode : IEquatable<RecordMode>
     {
@@ -33,6 +34,15 @@ namespace ConSurvBackend.Core.Model.RecordingModes
         public override string ToString()
         {
             return this.GetType().Name;
+        }
+
+        public RecordModeDTO ToDTO()
+        {
+
+            return new RecordModeDTO()
+            {
+                RecordMode = this.GetType().Name,
+            };
         }
     }
     public interface IRecordModeVisitor<T>

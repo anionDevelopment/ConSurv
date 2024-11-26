@@ -1,4 +1,4 @@
-using ConSurvBackend.Core.Model.RecordingModes;
+using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Miscellaneous;
 using ConSurvBackend.Core.Model;
 using System;
@@ -37,7 +37,7 @@ namespace ConSurvBackend.Core.Services
         }
         public string CreateCamera(string name)
         {
-            Camera camera = new Camera(Guid.NewGuid().ToString(), name, this._Log, this._RTSPManager, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration);
+            Camera camera = new Camera(Guid.NewGuid().ToString(), name);
             this._Cameras[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
             return camera.Id;

@@ -1,0 +1,22 @@
+<mat-dialog-content>
+    <p>some content</p>
+    <form [formGroup]="form" (ngSubmit)="save()">
+
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input type="text" matInput placeholder="Example: Entrance-camera" formControlName="name">
+        </mat-form-field>
+
+        <br />
+
+        <mat-form-field>
+            <mat-label>RTSP-Stream-URL</mat-label>
+            <input type="text" matInput placeholder="Example: rtsp://example.com" formControlName="rtspstreamurl">
+        </mat-form-field>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()" cdkFocusInitial>Cancel</button>
+    <button mat-button (click)="save()">Save</button>
+</mat-dialog-actions>

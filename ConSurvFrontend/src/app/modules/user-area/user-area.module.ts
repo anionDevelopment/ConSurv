@@ -14,6 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserIconComponent } from './user-icon/user-icon.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { RecordModeIndicatorComponent } from "./record-mode-indicator/record-mode-indicator.component";
+import { RecordStateIndicatorComponent } from './record-state-indicator/record-state-indicator.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { EditCameraDialogComponent } from './edit-camera-dialog/edit-camera-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -21,18 +30,27 @@ import { MatMenuModule } from '@angular/material/menu';
   declarations: [
     CameraComponent,
     CamerasListComponent,
+    EditCameraDialogComponent,
     UserIconComponent,
     UserAreaContainerComponent,
     UserDashboardComponent,
     UserSettingsComponent,
+    RecordModeIndicatorComponent,
+    RecordStateIndicatorComponent,
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
     MatDividerModule,
     MatMenuModule,
     MatTooltipModule,
+    MatInputModule,
+    MatDialogModule,
     HomePageModule,
     MatIconModule,
+    MatTableModule,
     MatSidenavModule,
     MatButtonModule,
     MatTabsModule,

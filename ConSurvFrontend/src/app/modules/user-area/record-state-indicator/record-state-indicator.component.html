@@ -1,0 +1,14 @@
+<ng-container [ngSwitch]="true">
+    <ng-container *ngSwitchCase="recordState!.recordingState=='CurrentlyRecording'">
+        <mat-icon matTooltip="Currently recording">radio_button_checked</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchCase="recordState!.recordingState =='Idle'">
+        <mat-icon matTooltip="Idle">radio_button_unchecked</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchCase="recordState!.recordingState =='Unavailable'">
+        <mat-icon matTooltip="Not available">block</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        <mat-icon matTooltip="Record-mode not available">question_mark</mat-icon>
+    </ng-container>
+</ng-container>

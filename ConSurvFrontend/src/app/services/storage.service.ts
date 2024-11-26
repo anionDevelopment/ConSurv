@@ -10,6 +10,7 @@ export class StorageService {
   public static readonly keyUserName: string = 'userName';
   public static readonly keyUserId: string = 'userId';
   public static readonly keyUserIsAdmin: string = 'userIsAdmin';
+  public static readonly keyUserIsModerator: string = 'userIsModerator';
   constructor() { }
 
   public setAccessToken(value: string | null): void {
@@ -43,7 +44,7 @@ export class StorageService {
     sessionStorage.removeItem(StorageService.keyAccessToken);
   }
 
-  public setUserName(value: string | null): void {
+  public setUserName(value: string | null | undefined): void {
     if (value) {
       sessionStorage.setItem(StorageService.keyUserName, value);
     } else {
@@ -61,7 +62,7 @@ export class StorageService {
     }
   }
 
-  public setUserId(value: string | null): void {
+  public setUserId(value: string | null | undefined): void {
     if (value) {
       sessionStorage.setItem(StorageService.keyUserId, value);
     } else {
@@ -78,14 +79,14 @@ export class StorageService {
       throw Error("UserId is not available.");
     }
   }
-  public setUserIsAdmin(value: boolean | null): void {
-    if (value != null) {
+
+  public setUserIsAdmin(value: boolean | null | undefined): void {
+    if (value != null && value != undefined) {
       sessionStorage.setItem(StorageService.keyUserIsAdmin, value.toString());
     } else {
       sessionStorage.removeItem(StorageService.keyUserIsAdmin);
     }
   }
-
   public getUserIsAdmin(): boolean {
     const result: string | null = sessionStorage.getItem(StorageService.keyUserIsAdmin);
     if (result) {
@@ -93,6 +94,23 @@ export class StorageService {
     }
     else {
       throw Error("UserIsAdmin is not available.");
+    }
+  }
+
+  public setUserIsModerator(value: boolean | null | undefined): void {
+    if (value != null && value != undefined) {
+      sessionStorage.setItem(StorageService.keyUserIsModerator, value.toString());
+    } else {
+      sessionStorage.removeItem(StorageService.keyUserIsModerator);
+    }
+  }
+  public getUserIsModerator(): boolean {
+    const result: string | null = sessionStorage.getItem(StorageService.keyUserIsModerator);
+    if (result) {
+      return (result === 'true');;
+    }
+    else {
+      throw Error("UserIsModerator is not available.");
     }
   }
 }

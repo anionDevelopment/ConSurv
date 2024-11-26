@@ -1,5 +1,5 @@
 ﻿using ConSurvBackend.Core.Model;
-using ConSurvBackend.Core.Model.RecordingModes;
+using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using System.Collections.Generic;
 

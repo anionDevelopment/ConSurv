@@ -1,5 +1,5 @@
 ﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Model;
+using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using System;
@@ -22,13 +22,14 @@ namespace ConSurvBackend.Core.Miscellaneous
 #endif
         }
 
-        internal static UserInformation GetUserInformation(User user)
+        internal static UserInformationDTO GetUserInformation(User user)
         {
             bool isAdmin = user.GetAllRoles().Where(r => r.Name == CodeUnitSpecificConstants.RolenameAdmins).Any();
-            return new UserInformation(user.Id,user.Name,isAdmin);
+            bool isModerator = user.GetAllRoles().Where(r => r.Name == CodeUnitSpecificConstants.RolenameModerators).Any();
+            return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
 
-        internal static string GetVideoTargetFile(string folder,string cameraId, bool timeInUTC)
+        internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC)
         {
             DateTime dateTime;
             if (timeInUTC)

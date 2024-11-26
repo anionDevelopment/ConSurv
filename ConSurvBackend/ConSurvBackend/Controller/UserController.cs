@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Miscellaneous;
+using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
@@ -58,9 +59,17 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(Logout))]
         public IActionResult Logout()
         {
-            string currentlyUsedAccessToken =(string) this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName];
+            string currentlyUsedAccessToken = (string)this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName];
             this._AuthenticationService.Logout(currentlyUsedAccessToken);
             return this.Ok();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [Route(nameof(TokenIsValid))]
+        public IActionResult TokenIsValid([FromHeader] string accessToken)
+        {
+            return this.Ok(this._AuthenticationService.AccessTokenIsValid(accessToken));
         }
 
         [Authenticate]
@@ -74,7 +83,7 @@ namespace ConSurvBackend.Core.Controller
 
         [Authenticate]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInformationDTO))]
         [Route(nameof(GetUserInformation))]
         public IActionResult GetUserInformation()
         {

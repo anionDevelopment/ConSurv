@@ -11,8 +11,13 @@ encoder.ts
 git_push.sh
 index.ts
 model/accessToken.ts
-model/createCameraDTO.ts
+model/cameraDTO.ts
 model/models.ts
+model/oNVIFCommandDTO.ts
+model/recordModeDTO.ts
+model/recordingStateDTO.ts
 model/updateCameraDTO.ts
+model/userInformationDTO.ts
+model/videoTypeDTO.ts
 param.ts
 variables.ts

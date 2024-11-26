@@ -1,9 +1,18 @@
-﻿namespace ConSurvBackend.Core.Model.RecordingStates
+﻿using ConSurvBackend.Core.Model.DTOs;
+
+namespace ConSurvBackend.Core.Model.RecordingStates
 {
     public abstract class RecordingState
     {
         public abstract T Accept<T>(IRecordingStateVisitor<T> visitor);
         public abstract void Accept(IRecordingStateVisitor visitor);
+        public  RecordingStateDTO ToDTO()
+        {
+            return new RecordingStateDTO()
+            {
+                RecordingState = this.GetType().Name,
+            };
+        }
     }
     public interface IRecordingStateVisitor<T>
     {

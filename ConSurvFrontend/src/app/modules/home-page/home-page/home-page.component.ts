@@ -12,8 +12,10 @@ import { Router } from '@angular/router';
 })
 export class HomePageComponent {
   constructor(userDataService: UserDataService, router: Router) {
-    if (userDataService.userIsLoggedIn()) {
-      router.navigate(['user', 'dashboard']);
-    }
+    userDataService.userIsLoggedIn().subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        router.navigate(['user', 'dashboard']);
+      }
+    });
   }
 }

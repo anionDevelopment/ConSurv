@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import { UserDataService } from '../../../services/user-data.service';
+import { CameraDTO, CameraService } from '../../../generated/con-surv-backend';
+import { StorageService } from '../../../services/storage.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { EditCameraDialogComponent } from '../edit-camera-dialog/edit-camera-dialog.component';
 
 @Component({
   selector: 'app-cameras-list',
@@ -9,13 +14,45 @@ import { UserDataService } from '../../../services/user-data.service';
 })
 export class CamerasListComponent {
 
-  userIdAdmin: boolean | null = null;
-  constructor(userDataService: UserDataService) {
-    userDataService.userIsAdmin().subscribe((isAdmin) => {
-      this.userIdAdmin = isAdmin;
+  userIdModerator: boolean | null = null;
+  cameras: CameraDTO[] = [];
+  displayedColumns: string[] = ["name", "mode", "state"];
+  constructor(userDataService: UserDataService, private cameraService: CameraService, private storageService: StorageService, private router: Router, private matDialog: MatDialog) {
+    userDataService.userIsModerator().subscribe((isModerator) => {
+      this.userIdModerator = isModerator;
+      const newColumnsList = [...this.displayedColumns];
+      newColumnsList.push("options");
+      this.displayedColumns = newColumnsList;
+    });
+    this.cameraService.aPIV1CameraControllerCamerasGet(this.storageService.getAccessToken()).subscribe((cameras => {
+      this.cameras = cameras;
+    }));
+  }
+
+  addCamera() {
+    this.cameraService.aPIV1CameraControllerCreateCameraPost(this.storageService.getAccessToken()).subscribe((cameraId) => {
+      this.cameraService.aPIV1CameraControllerCameraCameraIdGet(cameraId, this.storageService.getAccessToken()).subscribe((camera) => {
+        const newCameraList = [...this.cameras];
+        newCameraList.push(camera)
+        this.cameras = newCameraList;
+      });
     });
   }
-  addCamera() {
+
+  removeCamera(camera: CameraDTO) {
     throw new Error('Method not implemented.');
   }
+
+  editCamera(camera: CameraDTO) {
+    const dialogRef = this.matDialog.open(EditCameraDialogComponent, {
+      data: {
+        camera: camera,
+      },
+    });
+  }
+
+  onCameraClick(camera: CameraDTO) {
+    this.router.navigate(["user", "camera"], { queryParams: { cameraId: camera.cameraId } });
+  }
+
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserService } from '../generated/con-surv-backend';
+import { UserInformationDTO, UserService } from '../generated/con-surv-backend';
 import { StorageService } from './storage.service';
 import { Observable, first, map, mergeMap, of, switchMap, tap } from 'rxjs';
 
@@ -18,6 +18,7 @@ export class UserDataService {
     this.storageService.setUserId(null);
     this.storageService.setAccessToken(null);
     this.storageService.setUserIsAdmin(false);
+    this.storageService.setUserIsModerator(false);
   }
 
   constructor(private userService: UserService, private storageService: StorageService) {
@@ -35,8 +36,12 @@ export class UserDataService {
     }));
   }
 
-  userIsLoggedIn(): boolean {
-    return this.storageService.hasAccessToken();
+  userIsLoggedIn(): Observable<boolean> {
+    if (this.storageService.hasAccessToken()) {
+      return this.userService.aPIV1UserControllerTokenIsValidGet(this.storageService.getAccessToken());
+    } else {
+      return of(false);
+    }
   }
 
   userIsAdmin(): Observable<boolean> {
@@ -47,18 +52,29 @@ export class UserDataService {
         return false;
       }
     }));
-
   }
+
+  userIsModerator(): Observable<boolean> {
+    return this.ensureLoaded().pipe(map(() => {
+      try {
+        return this.storageService.getUserIsModerator();
+      } catch {
+        return false;
+      }
+    }));
+  }
+
   ensureLoaded(): Observable<void> {
     let pipe: Observable<any>;
     if (this.loaded) {
       pipe = of(null);//null is required here because otherwise first() will throw a 'no elements in sequence'-error
     } else {
       pipe = this.userService.aPIV1UserControllerGetUserInformationGet(this.storageService.getAccessToken()).pipe(
-        tap((value: any) => {
+        tap((value: UserInformationDTO) => {
           this.storageService.setUserName(value.name);
           this.storageService.setUserId(value.id);
           this.storageService.setUserIsAdmin(value.isAdmin);
+          this.storageService.setUserIsModerator(value.isModerator);
           this.loaded = true;
         }
         ));
