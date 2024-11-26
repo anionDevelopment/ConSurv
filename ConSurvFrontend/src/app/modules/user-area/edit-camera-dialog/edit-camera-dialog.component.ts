@@ -21,12 +21,18 @@ export class EditCameraDialogComponent {
     const data: any = inject<CameraDTO>(MAT_DIALOG_DATA);
     this.cameraData = data.camera;
     this.form.get('name')!.setValue(this.cameraData.name);
-    this.form.get('rtspstreamurl')!.setValue(this.cameraData.videoType!.streamURL || '');
+    //this.form.get('rtspstreamurl')!.setValue(this.cameraData.videoType!.streamURL || '');
   }
   save() {
     this.cameraService.aPIV1CameraControllerUpdateCameraPost(this.storageService, {
       cameraId: this.cameraData.cameraId,
-      videoType: null,//TODO
+      name: this.form.get('name')!.value,
+      recordMode: {
+        //TODO set values from dialog
+      },
+      videoType: {
+        //TODO set values from dialog
+      },
     });
     this.dialogRef.close();
   }
