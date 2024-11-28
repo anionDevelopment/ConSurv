@@ -21,8 +21,7 @@
             <ng-container matColumnDef="state">
                 <th mat-header-cell *matHeaderCellDef> State </th>
                 <td mat-cell *matCellDef="let element">
-                    <app-record-state-indicator
-                        [recordState]="element.currentRecordingState"></app-record-state-indicator>
+                    <app-record-state-indicator [recordState]="element.recordState"></app-record-state-indicator>
                 </td>
             </ng-container>
             <ng-container matColumnDef="options">

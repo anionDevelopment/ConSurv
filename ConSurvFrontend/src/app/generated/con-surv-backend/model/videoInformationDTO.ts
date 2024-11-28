@@ -9,7 +9,8 @@
  */
 
 
-export interface VideoTypeDTO { 
-    videoType?: string | null;
+export interface VideoInformationDTO { 
+    streamURL?: string | null;
+    isONVIFCamera?: boolean;
 }
 

@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RecordModeDTO } from '../../../generated/con-surv-backend';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-record-mode-indicator',
@@ -10,4 +11,5 @@ import { RecordModeDTO } from '../../../generated/con-surv-backend';
 export class RecordModeIndicatorComponent {
   @Input()
   recordMode: RecordModeDTO | null = null;
+
 }

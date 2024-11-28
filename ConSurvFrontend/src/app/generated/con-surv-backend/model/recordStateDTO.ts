@@ -9,7 +9,7 @@
  */
 
 
-export interface RecordingStateDTO { 
-    recordingState?: string | null;
+export interface RecordStateDTO { 
+    recordState?: string | null;
 }
 

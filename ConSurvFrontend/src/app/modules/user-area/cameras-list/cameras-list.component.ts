@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { UserDataService } from '../../../services/user-data.service';
-import { CameraDTO, CameraService } from '../../../generated/con-surv-backend';
+import { CameraDTO, CameraService, RecordModeDTO } from '../../../generated/con-surv-backend';
 import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EditCameraDialogComponent } from '../edit-camera-dialog/edit-camera-dialog.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cameras-list',
@@ -17,6 +18,7 @@ export class CamerasListComponent {
   userIdModerator: boolean | null = null;
   cameras: CameraDTO[] = [];
   displayedColumns: string[] = ["name", "mode", "state"];
+  recordMode$: Observable<RecordModeDTO> | null = null;
   constructor(userDataService: UserDataService, private cameraService: CameraService, private storageService: StorageService, private router: Router, private matDialog: MatDialog) {
     userDataService.userIsModerator().subscribe((isModerator) => {
       this.userIdModerator = isModerator;
@@ -48,6 +50,10 @@ export class CamerasListComponent {
       data: {
         camera: camera,
       },
+    });
+    dialogRef.afterClosed().subscribe((updatedCamera: CameraDTO) => {
+      var newList: CameraDTO[] = [...this.cameras];
+      this.cameras = newList;
     });
   }
 

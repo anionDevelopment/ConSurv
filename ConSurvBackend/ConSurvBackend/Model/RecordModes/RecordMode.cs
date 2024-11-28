@@ -49,10 +49,12 @@ namespace ConSurvBackend.Core.Model.RecordModes
     {
         T Handle(NoRecording noRecording);
         T Handle(RecordAlways recordAlways);
+        T Handle(RecordOnMovements recordOnMovements);
     }
     public interface IRecordModeVisitor
     {
         void Handle(NoRecording noRecording);
         void Handle(RecordAlways recordAlways);
+        void Handle(RecordOnMovements recordOnMovements);
     }
 }

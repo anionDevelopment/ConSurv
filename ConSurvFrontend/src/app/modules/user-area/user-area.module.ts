@@ -21,8 +21,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EditCameraDialogComponent } from './edit-camera-dialog/edit-camera-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -44,6 +45,8 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     MatFormFieldModule,
     MatDividerModule,
+    MatCheckboxModule,
+    MatSelectModule,
     MatMenuModule,
     MatTooltipModule,
     MatInputModule,

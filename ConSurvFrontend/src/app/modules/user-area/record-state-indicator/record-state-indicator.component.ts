@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RecordingStateDTO } from '../../../generated/con-surv-backend';
+import { RecordStateDTO as RecordStateDTO } from '../../../generated/con-surv-backend';
 
 @Component({
   selector: 'app-record-state-indicator',
@@ -9,5 +9,5 @@ import { RecordingStateDTO } from '../../../generated/con-surv-backend';
 })
 export class RecordStateIndicatorComponent {
   @Input()
-  recordState: RecordingStateDTO | null = null;
+  recordState: RecordStateDTO | null = null;
 }

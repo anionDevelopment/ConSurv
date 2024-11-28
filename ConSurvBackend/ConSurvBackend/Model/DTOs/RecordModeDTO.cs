@@ -1,5 +1,4 @@
 ﻿using ConSurvBackend.Core.Model.RecordModes;
-using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using System;
 
 namespace ConSurvBackend.Core.Model.DTOs
@@ -14,6 +13,7 @@ namespace ConSurvBackend.Core.Model.DTOs
             {
                 nameof(NoRecording) => this.LoadNoRecording(),
                 nameof(RecordAlways) => this.LoadRecordAlways(),
+                nameof(RecordOnMovements) => this.LoadRecordOnMovements(),
                 _ => throw new NotSupportedException($"Unsupported {nameof(this.RecordMode)}: '{this.RecordMode}'"),
             };
         }
@@ -28,6 +28,12 @@ namespace ConSurvBackend.Core.Model.DTOs
         private RecordAlways LoadRecordAlways()
         {
             RecordAlways result = new RecordAlways();
+            //TODO set properties
+            return result;
+        }
+        private RecordOnMovements LoadRecordOnMovements()
+        {
+            RecordOnMovements result = new RecordOnMovements();
             //TODO set properties
             return result;
         }

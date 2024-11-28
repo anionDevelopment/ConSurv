@@ -7,16 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { VideoTypeDTO } from './videoTypeDTO';
-import { RecordingStateDTO } from './recordingStateDTO';
 import { RecordModeDTO } from './recordModeDTO';
+import { RecordStateDTO } from './recordStateDTO';
+import { VideoInformationDTO } from './videoInformationDTO';
 
 
 export interface CameraDTO { 
     cameraId?: string | null;
     name?: string | null;
-    videoType?: VideoTypeDTO;
+    videoInformation?: VideoInformationDTO;
     recordMode?: RecordModeDTO;
-    currentRecordingState?: RecordingStateDTO;
+    recordState?: RecordStateDTO;
 }
 

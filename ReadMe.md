@@ -8,6 +8,30 @@ ConSurv (abbreviation for "Continuous surveillance") is an IP-cam-management-sys
 
 TODO
 
+## Not implemented features
+
+- Video-Recording must be implemented.
+- Video-Viewing must be implemented.
+- Video-Preview must be implemented.
+- Video-Change-detection must be implemented.
+- Video-blacken must be implemented.
+- Video-control must be implemented.
+- Smatphone-app must be implemented.
+- Texts must be translated.
+- OpenID-Login must be configurable.
+- Group-membership of users must be changeable.
+- Design (including logo/favicon/dark-mode) must be implemented.
+
+## Development
+
+## Run locally
+
+First: Run `scbuildcodeunits`.
+Then, create an entry into your local `hosts`-file to make the domain `consurv.test.local` get resolved to `127.0.0.1`.
+To run the backend locally see its [ReadMe-file](./ConSurvBackend/ReadMe.md).
+To run the frontend locally see its [ReadMe-file](./ConSurvFrontend/ReadMe.md).
+To be able to make ConSurv accessable in a webbrowser run `task StartDevelopmentReverseProxy` (or shorter: `task sdrpu`) and then just open `https://consurv.test.local`.
+
 ## Contribue
 
 Contributions are always welcome.

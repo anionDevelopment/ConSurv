@@ -9,7 +9,7 @@ using System.Linq;
 using System;
 using System.Data;
 using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Model;
+using ConSurvBackend.Core.Model.Base;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -150,6 +150,11 @@ namespace ConSurvBackend.Core.Services
                 using MySqlDataReader reader = cmd.ExecuteReader();
                 return reader.HasRows;
             })[0];
+        }
+
+        public IDictionary<string, Camera> GetAllCameras()
+        {
+            throw new NotImplementedException();
         }
     }
 }

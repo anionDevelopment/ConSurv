@@ -1,8 +1,7 @@
 ﻿using ConSurvBackend.Core.Configuration;
-using ConSurvBackend.Core.Model;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
+using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
-using GRYLibrary.Core.Exceptions;
+using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.Logging.GRYLogger;
 
 namespace ConSurvBackend.Core.Miscellaneous
@@ -24,19 +23,17 @@ namespace ConSurvBackend.Core.Miscellaneous
 
         public void Handle(NoRecording noRecording/*new recording mode*/)
         {
-            this._Camera.VideoType.Accept(new StopRecordingVisitor(this._Camera, this._RTSPManager, this._Log));
+            this._RTSPManager.EnsureNotRecording(this._Camera.Id);
         }
 
         public void Handle(RecordAlways recordAlways/*new recording mode*/)
         {
-            if (this._Camera.VideoType == null)
-            {
-                throw new BadRequestException($"Can not start recording because the videotype is undefined.");
-            }
-            else
-            {
-                this._Camera.VideoType.Accept(new StartRecordingVisitor(this._Camera, this._RTSPManager, this._Log, this._CodeUnitSpecificConfiguration));
-            }
+            this._RTSPManager.EnsureRecordingAsync(this._Camera, this._CodeUnitSpecificConfiguration.TargetFolder, this._CodeUnitSpecificConfiguration.VideoLength, this._CodeUnitSpecificConfiguration.TimeInUTC);
+        }
+
+        public void Handle(RecordOnMovements recordOnMovements)
+        {
+            this._RTSPManager.EnsureRecordingOnMovementsAsync(this._Camera, this._CodeUnitSpecificConfiguration.TargetFolder, this._CodeUnitSpecificConfiguration.VideoLength, this._CodeUnitSpecificConfiguration.TimeInUTC);
         }
     }
 }

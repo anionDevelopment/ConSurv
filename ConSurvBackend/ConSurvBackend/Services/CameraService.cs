@@ -1,6 +1,4 @@
-using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Miscellaneous;
-using ConSurvBackend.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +6,10 @@ using ConSurvBackend.Core.Configuration;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Exceptions;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using ConSurvBackend.Core.Model.Base;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -22,7 +20,6 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly IAuthenticationService<User> _AuthenticationService;
         private readonly IPersistence _Persistence;
-        private readonly IDictionary<string, Camera> _Cameras = new Dictionary<string, Camera>();
         private readonly ITimeService _TimeService;
         private readonly IRTSPManager _RTSPManager;
         public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IAuthenticationService<User> authenticationService)
@@ -35,10 +32,11 @@ namespace ConSurvBackend.Core.Services
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             //TODO load persisted cameras and start recording if necessary
         }
-        public string CreateCamera(string name)
+        public string CreateCamera(string name, string streamURL)
         {
             Camera camera = new Camera(Guid.NewGuid().ToString(), name);
-            this._Cameras[camera.Id] = camera;
+            camera.VideoInformation.StreamURL = streamURL;
+            this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
             return camera.Id;
         }
@@ -46,7 +44,7 @@ namespace ConSurvBackend.Core.Services
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
             Camera camera = this.GetCameraById(cameraId);
-            if (camera.IsONVIFCamera)
+            if (camera.VideoInformation.IsONVIFCamera)
             {
                 onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
             }
@@ -63,17 +61,15 @@ namespace ConSurvBackend.Core.Services
             this._Persistence.RemoveCamera(cameraId);
         }
 
-        public void UpdateCamera(string cameraId, string name, RecordMode recordMode)
+        public void UpdateCamera(Camera camera)
         {
-            Camera camera = this.GetCameraById(cameraId);
-            camera.Name = name;
-            camera.RecordingMode = recordMode;
             this._Persistence.UpdateCamera(camera);
+            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, _RTSPManager, _Log, _CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
         }
 
         public Camera GetCameraById(string cameraId)
         {
-            if (this._Cameras.TryGetValue(cameraId, out Camera? value))
+            if (this.GetAllCameras().TryGetValue(cameraId, out Camera? value))
             {
                 return value;
             }
@@ -85,13 +81,13 @@ namespace ConSurvBackend.Core.Services
 
         public double GetRateOfAvailableCameras()
         {
-            if (this._Cameras.Count == 0)
+            if (this.GetAllCameras().Count == 0)
             {
                 return 0;
             }
             else
             {
-                return this._Cameras.Where(kvp => kvp.Value.IsAvailable()).Count() / this._Cameras.Count;
+                return this.GetAllCameras().Where(kvp => kvp.Value.IsAvailable()).Count() / this.GetAllCameras().Count;
             }
         }
 
@@ -110,9 +106,9 @@ namespace ConSurvBackend.Core.Services
             return this._Persistence.UserWithNameExists(username);
         }
 
-        public IEnumerable<Camera> GetAllCameras()
+        public IDictionary<string, Camera> GetAllCameras()
         {
-            return this._Cameras.Values;
+            return _Persistence.GetAllCameras();
         }
     }
 }

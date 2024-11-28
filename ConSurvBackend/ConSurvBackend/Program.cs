@@ -29,12 +29,12 @@ using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Mid.Ex;
 using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.Services.CredH;
+using GRYLibrary.Core.APIServer.Mid.AutS;
 
 namespace ConSurvBackend.Core
 {
@@ -51,8 +51,8 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
-                 initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
-                // initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
+                initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
+                initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                 initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);
                 initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForExceptionManagerMiddleware = new ExceptionManagerConfiguration();
@@ -65,14 +65,14 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
                 bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                 bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
-                
+
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
                 {
                     RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
                             @$"^/API/Other/Resources/APISpecification/*",
                     },
                 };
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AuthorizationConfiguration();
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(10);
@@ -110,7 +110,14 @@ namespace ConSurvBackend.Core
                 {
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                 }
-
+                if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development)
+                {
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
+                }
+                else
+                {
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
+                }
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
@@ -125,7 +132,6 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, HeaderService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraService, CameraService>();
@@ -136,6 +142,8 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthSConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthenticationMiddleware);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAutSRConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
 

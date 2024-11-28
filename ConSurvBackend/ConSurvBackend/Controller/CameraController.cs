@@ -43,7 +43,7 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(CreateCamera))]
         public IActionResult CreateCamera()
         {
-            return this.Ok(this._CameraService.CreateCamera("New camera"));
+            return this.Ok(this._CameraService.CreateCamera("New camera", "rtsp://mycamera.example.com/stream"));
         }
 
         [Authenticate]
@@ -59,17 +59,17 @@ namespace ConSurvBackend.Core.Controller
 
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route(nameof(UpdateCamera))]
         public IActionResult UpdateCamera([FromBody] UpdateCameraDTO updateCameraDTO)
         {
-            this._CameraService.UpdateCamera(updateCameraDTO.CameraId, updateCameraDTO.Name, updateCameraDTO.RecordMode.ToRecordMode());
+            this._CameraService.UpdateCamera(updateCameraDTO.ToCamera());
             return this.Ok();
         }
 
         [Authenticate]
-        [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CameraDTO))]
         [Route($"{nameof(Camera)}/{{{nameof(cameraId)}}}")]
@@ -85,7 +85,8 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(Cameras))]
         public IActionResult Cameras()
         {
-            return this.Ok(this._CameraService.GetAllCameras().Select(camera => camera.ToDTO()));
+            var result = this._CameraService.GetAllCameras().Select(camera => camera.Value.ToDTO()).ToList();
+            return this.Ok(result);
         }
 
         #region ONVIF-specific

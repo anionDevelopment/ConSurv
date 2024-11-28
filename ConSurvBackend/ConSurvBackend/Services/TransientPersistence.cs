@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model;
+﻿using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using System.Collections.Generic;
@@ -57,6 +57,11 @@ namespace ConSurvBackend.Core.Services
         public bool UserWithNameExists(string username)
         {
          return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
+        }
+
+        public IDictionary<string, Camera> GetAllCameras()
+        {
+            return _Cameras;
         }
     }
 }
