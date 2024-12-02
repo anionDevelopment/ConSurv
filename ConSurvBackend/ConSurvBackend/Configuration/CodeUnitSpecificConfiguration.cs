@@ -14,11 +14,13 @@ namespace ConSurvBackend.Core.Configuration
 {
     public class CodeUnitSpecificConfiguration : ISupportRequestLoggingMiddleware, ISupportExceptionManagerMiddleware, ISupportAuthenticationMiddleware, ISupportAuthorizationMiddleware
     {
+        public bool RegistrationIsEnabled { get; set; }
+        public bool LoginIsEnabled { get; set; }
+        public string DatabaseConnectionString { get; set; }
         public ICommonRoutesInformation CommonRoutesInformation { get; set; }
         public IMaintenanceRoutesInformation MaintenanceRoutesInformation { get; set; }
         public IDRequestLoggingConfiguration ConfigurationForDLoggingMiddleware { get; set; }
         public IRequestLoggingConfiguration ConfigurationForLoggingMiddleware { get { return this.ConfigurationForDLoggingMiddleware; } }
-        public string DatabaseConnectionString { get; set; }
         public IAutSRConfiguration AuthorizationConfiguration { get; set; }
         public IAuthorizationConfiguration ConfigurationForAuthorizationMiddleware { get { return this.AuthorizationConfiguration; } }
         public IAuthSConfiguration AuthenticationConfiguration { get; set; }
@@ -26,7 +28,6 @@ namespace ConSurvBackend.Core.Configuration
         public string TargetFolder { get; set; }
         public TimeSpan VideoLength { get; set; }
         public bool TimeInUTC { get; set; }
-
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
         public IHeaderServiceConfiguration HeaderServiceConfiguration { get;  set; }
     }

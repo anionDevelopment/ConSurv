@@ -109,7 +109,10 @@ namespace ConSurvBackend.Core
                 else
                 {
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
-                }
+                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
+     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
+             }
                 if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development)
                 {
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
@@ -119,12 +122,9 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
                 }
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
 
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
-
+             
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRoleBasedAuthorizationService, StaticRoleBasedUserAuthorizationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IUserAuthorizationService>(sp => sp.GetRequiredService<IRoleBasedAuthorizationService>());
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationService>(sp => sp.GetRequiredService<IUserAuthorizationService>());
@@ -146,22 +146,13 @@ namespace ConSurvBackend.Core
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
-
-                functionalInformation.WebApplicationBuilder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-                {
-                    builder.WithOrigins("http://localhost:4200")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                }));
-
-                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();
             };
             apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
             {
-                IInitializationService initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
+                IInitializationService? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
                 initializationService.Initialize();
 
-                IMetricsService metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
+                IMetricsService? metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
                 functionalInformationForWebApplication.PreRun = () =>
                 {
                     metricsService.StartAsync();
