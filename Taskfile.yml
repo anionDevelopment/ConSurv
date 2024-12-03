@@ -1,18 +1,66 @@
-version: "3"
-#TODO generate this file by tasks defined in workspace file
-tasks:
-  StartDevelopmentReverseProxy:
-    aliases:
-      - sdrpu
-    desc: "Start development-reverse-proxy"
-    dir: Other/Resources/LocalTestServices/ReverseProxy
-    cmds:
-      - docker compose -p developmentreverseproxy up --force-recreate -d
+version: '3'
 
-  StopDevelopmentReverseProxy:
-    aliases:
-      - sdrpd
-    desc: "Stop development-reverse-proxy"
-    dir: Other/Resources/LocalTestServices/ReverseProxy
+tasks:
+
+  BaseBuildAllCodeunits:
+    desc: "Base: Build all codeunits"
+    dir: "."
     cmds:
-      - docker compose -p developmentreverseproxy down
+      - scbuildcodeunits {{.CLI_ARGS}}
+    aliases:
+      - basebuildallcodeunits
+      - bb
+
+  BaseExampleStart:
+    desc: "Base: Example start"
+    dir: "./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
+    cmds:
+      - python StartExample.py {{.CLI_ARGS}}
+    aliases:
+      - baseexamplestart
+      - beu
+
+  BaseExampleStop:
+    desc: "Base: Example stop"
+    dir: "./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
+    cmds:
+      - python StopExample.py {{.CLI_ARGS}}
+    aliases:
+      - baseexamplestop
+      - bed
+
+  LocaltestserviceDatabaseStart:
+    desc: "LocalTestService: Database start"
+    dir: "./Other/Resources/LocalTestServices/Database"
+    cmds:
+      - python Start.py {{.CLI_ARGS}}
+    aliases:
+      - localtestservicedatabasestart
+      - ldu
+
+  LocaltestserviceDatabaseStop:
+    desc: "LocalTestService: Database stop"
+    dir: "./Other/Resources/LocalTestServices/Database"
+    cmds:
+      - python Stop.py {{.CLI_ARGS}}
+    aliases:
+      - localtestservicedatabasestop
+      - ldd
+
+  LocaltestserviceReverseProxyStart:
+    desc: "LocalTestService: Reverse-proxy start"
+    dir: "./Other/Resources/LocalTestServices/ReverseProxy"
+    cmds:
+      - python Start.py {{.CLI_ARGS}}
+    aliases:
+      - localtestservicereverseproxystart
+      - lru
+
+  LocaltestserviceReverseProxyStop:
+    desc: "LocalTestService: Reverse-proxy stop"
+    dir: "./Other/Resources/LocalTestServices/ReverseProxy"
+    cmds:
+      - python Stop.py {{.CLI_ARGS}}
+    aliases:
+      - localtestservicereverseproxystop
+      - lrd

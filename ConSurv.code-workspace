@@ -22,91 +22,87 @@
 		"tasks": [
 			{
 				"label": "Base: Build all codeunits",
-				"command": "SCBuildCodeunits",
-				"args": [
-					"--buildenvironment",
-					"Development"
-				],
+				"command": "scbuildcodeunits",
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}",
+					"cwd": "${workspaceFolder}"
 				},
 				"aliases": [
 					"bb"
 				]
 			},
 			{
-				"label": "Base: Start example",
+				"label": "Base: Example start",
 				"command": "python StartExample.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile",
+					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
 				},
 				"aliases": [
 					"beu"
 				]
 			},
 			{
-				"label": "Base: Stop example",
+				"label": "Base: Example stop",
 				"command": "python StopExample.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile",
+					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
 				},
 				"aliases": [
 					"bed"
 				]
 			},
 			{
-				"label": "LocalTestService: Start database",
+				"label": "LocalTestService: Database start",
 				"command": "python Start.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database",
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database"
 				},
 				"aliases": [
 					"ldu"
 				]
 			},
 			{
-				"label": "LocalTestService: Stop database",
+				"label": "LocalTestService: Database stop",
 				"command": "python Stop.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database",
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database"
 				},
 				"aliases": [
 					"ldd"
 				]
 			},
 			{
-				"label": "LocalTestService: Start reverse-proxy",
+				"label": "LocalTestService: Reverse-proxy start",
 				"command": "python Start.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy",
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy"
 				},
 				"aliases": [
 					"lru"
 				]
 			},
 			{
-				"label": "LocalTestService: Stop reverse-proxy",
+				"label": "LocalTestService: Reverse-proxy stop",
 				"command": "python Stop.py",
 				"args": [],
 				"type": "shell",
 				"options": {
-					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy",
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy"
 				},
 				"aliases": [
 					"lrd"
 				]
-			},
+			}
 		]
 	},
 	"launch": {
@@ -126,14 +122,14 @@
 		"files.exclude": {
 			".coverage": true,
 			"TestResults": true,
-			".vs": true,
+			".vs": true
 		},
 		"spellright.language": [
-			"en",
+			"en"
 		],
 		"spellright.documentTypes": [
 			"markdown",
-			"plaintext",
-		],
+			"plaintext"
+		]
 	}
 }
