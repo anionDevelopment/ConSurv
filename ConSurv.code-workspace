@@ -21,7 +21,7 @@
 		"version": "2.0.0",
 		"tasks": [
 			{
-				"label": "Build all codeunits",
+				"label": "Base: Build all codeunits",
 				"command": "SCBuildCodeunits",
 				"args": [
 					"--buildenvironment",
@@ -31,16 +31,82 @@
 				"options": {
 					"cwd": "${workspaceFolder}",
 				},
+				"aliases": [
+					"bb"
+				]
 			},
 			{
-				"label": "ConSurv: Run example",
-				"command": "python RunExample.py",
+				"label": "Base: Start example",
+				"command": "python StartExample.py",
 				"args": [],
 				"type": "shell",
 				"options": {
 					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile",
 				},
-			}
+				"aliases": [
+					"beu"
+				]
+			},
+			{
+				"label": "Base: Stop example",
+				"command": "python StopExample.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile",
+				},
+				"aliases": [
+					"bed"
+				]
+			},
+			{
+				"label": "LocalTestService: Start database",
+				"command": "python Start.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database",
+				},
+				"aliases": [
+					"ldu"
+				]
+			},
+			{
+				"label": "LocalTestService: Stop database",
+				"command": "python Stop.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/Database",
+				},
+				"aliases": [
+					"ldd"
+				]
+			},
+			{
+				"label": "LocalTestService: Start reverse-proxy",
+				"command": "python Start.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy",
+				},
+				"aliases": [
+					"lru"
+				]
+			},
+			{
+				"label": "LocalTestService: Stop reverse-proxy",
+				"command": "python Stop.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/Other/Resources/LocalTestServices/ReverseProxy",
+				},
+				"aliases": [
+					"lrd"
+				]
+			},
 		]
 	},
 	"launch": {
@@ -56,7 +122,7 @@
 		]
 	},
 	"settings": {
-		"window.title": "${dirty} ${rootName}", // see https://code.visualstudio.com/updates/v1_10#_configurable-window-title
+		"window.title": "${dirty} ${rootName}",
 		"files.exclude": {
 			".coverage": true,
 			"TestResults": true,

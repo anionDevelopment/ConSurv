@@ -3,6 +3,10 @@ from ScriptCollection.GeneralUtilities import GeneralUtilities
 from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjectStructure
 
 
+def generate_tasks():
+    pass  # TODO
+
+
 def prepare_build_codeunits():
     t = TasksForCommonProjectStructure()
     current_file = str(Path(__file__).absolute())

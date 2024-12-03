@@ -1,7 +1,6 @@
-version: '3'
-
+version: "3"
+#TODO generate this file by tasks defined in workspace file
 tasks:
-
   StartDevelopmentReverseProxy:
     aliases:
       - sdrpu
