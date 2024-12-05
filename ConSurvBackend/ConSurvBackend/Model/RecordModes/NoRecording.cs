@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.RecordingModes
+﻿namespace ConSurvBackend.Core.Model.RecordModes
 {
     public class NoRecording : RecordMode
     {

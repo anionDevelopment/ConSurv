@@ -9,6 +9,7 @@ import { AdminAreaModule } from './modules/admin-area/admin-area.module';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -1,5 +1,4 @@
 using ConSurvBackend.Core.Controller;
-using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Misc;
@@ -8,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 
-namespace ConSurvBackend.Tests
+namespace ConSurvBackend.Tests.Testcases
 {
     [TestClass]
     public class CameraControllerTests
@@ -20,22 +19,18 @@ namespace ConSurvBackend.Tests
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
             Mock<ICameraService> cameraServiceMock = new Mock<ICameraService>(MockBehavior.Strict);
-            CreateCameraDTO cameraDTO = new CreateCameraDTO()
-            {
-                Name = "MyCamera",
-            };
             string cameraId = Guid.NewGuid().ToString();
-            cameraServiceMock.Setup(mock => mock.CreateCamera(cameraDTO.Name)).Returns(cameraId);
+            cameraServiceMock.Setup(mock => mock.CreateCamera("New camera")).Returns(cameraId);
             CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object);
 
             // act
-            IActionResult actualResult = controller.CreateCamera(cameraDTO);
+            IActionResult actualResult = controller.CreateCamera();
 
             // assert
             OkObjectResult okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(cameraId, (string)okObjectResult.Value);
-            cameraServiceMock.Verify(mock => mock.CreateCamera(cameraDTO.Name));
+            cameraServiceMock.Verify(mock => mock.CreateCamera("New camera"));
             cameraServiceMock.VerifyNoOtherCalls();
         }
     }

@@ -1,11 +1,13 @@
-﻿using System;
+﻿using ConSurvBackend.Core.Model.Base;
+using System;
 
-namespace ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo
+namespace ConSurvBackend.Core.Services
 {
     public interface IRTSPManager
     {
-        byte[] GetPreview(string id, string streamURL);
-        public void StartRecordingAsync(string cameraId, string streamURL, string targetFolder, TimeSpan videoLength, bool timeInUTC);
-        internal void StopRecording(string cameraId);
+        public byte[] GetPreview(string id, string streamURL);
+        public void EnsureRecordingAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC);
+        public void EnsureNotRecording(string cameraId);
+        public void EnsureRecordingOnMovementsAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC);
     }
 }

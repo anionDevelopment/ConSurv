@@ -1,0 +1,14 @@
+<ng-container [ngSwitch]="recordMode">
+    <ng-container *ngSwitchCase='"NoRecording"'>
+        <mat-icon matTooltip="No recording">videocam_off</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchCase='"RecordAlways"'>
+        <mat-icon matTooltip="Record always">videocam</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchCase='"RecordOnMovements"'>
+        <mat-icon matTooltip="Record on movements">emergency_recording</mat-icon>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        <mat-icon matTooltip="Record-mode not available">question_mark</mat-icon>
+    </ng-container>
+</ng-container>

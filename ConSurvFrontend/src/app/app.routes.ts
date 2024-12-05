@@ -9,11 +9,12 @@ import { CameraComponent } from './modules/user-area/camera/camera.component';
 import { CamerasListComponent } from './modules/user-area/cameras-list/cameras-list.component';
 import { UsersListComponent } from './modules/admin-area/users-list/users-list.component';
 import { UserComponent } from './modules/admin-area/user/user.component';
+import { AdminSettingsComponent } from './modules/admin-area/admin-settings/admin-settings.component';
 
 export const routes: Routes = [
     { path: '', component: HomePageComponent },
     { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [authenticationCheckGuard] },
-    { path: 'admin/settings', component: AdminDashboardComponent, canActivate: [authenticationCheckGuard] },
+    { path: 'admin/settings', component: AdminSettingsComponent, canActivate: [authenticationCheckGuard] },
     { path: 'admin/users', component: UsersListComponent, canActivate: [authenticationCheckGuard] },
     { path: 'admin/user', component: UserComponent, canActivate: [authenticationCheckGuard] },
     { path: 'user/dashboard', component: UserDashboardComponent, canActivate: [authenticationCheckGuard] },

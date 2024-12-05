@@ -1,5 +1,6 @@
-﻿using ConSurvBackend.Core.Model;
+﻿using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.Services;
+using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -9,5 +10,6 @@ namespace ConSurvBackend.Core.Services
         void UpdateCamera(Camera camera);
         void RemoveCamera(string cameraId);
         bool UserWithNameExists(string username);
+        IDictionary<string,Camera> GetAllCameras();
     }
 }

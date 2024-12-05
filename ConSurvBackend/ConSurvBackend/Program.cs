@@ -24,15 +24,17 @@ using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
 using GRYLibrary.Core.APIServer.Services.Init;
-using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Mid.Ex;
+using GRYLibrary.Core.APIServer.MidT.Exception;
+using GRYLibrary.Core.APIServer.Services.CredH;
+using GRYLibrary.Core.APIServer.Mid.AutS;
 
 namespace ConSurvBackend.Core
 {
@@ -45,12 +47,15 @@ namespace ConSurvBackend.Core
             apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
             {
                 string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
+                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                 initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                 initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
-                // initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
-                // initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
+                initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
+                initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
+                initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);
                 initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForExceptionManagerMiddleware = new ExceptionManagerConfiguration();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation = new CommonRoutesInformation()
                 {
                     ContactLink = $"https://information.{domain}/Products/{GeneralConstants.CodeUnitName}/Contact",
@@ -60,13 +65,15 @@ namespace ConSurvBackend.Core
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
                 bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                 bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthenticationConfiguration()
+
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
                 {
                     RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
-                            Regex.Escape("/API/Other/Resources/APISpecification/")+"*",
+                            @$"^/API/Other/Resources/APISpecification/*",
                     },
                 };
-                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AuthorizationConfiguration();
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
+                initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(10);
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TargetFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings");
@@ -76,11 +83,12 @@ namespace ConSurvBackend.Core
                     {
                             @$"^/favicon\.ico$",
                             @$"^/Web/.*$",
+                            @$"^/API/Other/Resources/APISpecification/*",
                     },
                     MaximalLengthofResponseBodies = 50,
                 };
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
-                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
+                initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
@@ -101,41 +109,50 @@ namespace ConSurvBackend.Core
                 else
                 {
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
+                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
+     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
+             }
+                if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development)
+                {
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
                 }
-
+                else
+                {
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
+                }
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
 
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
-
+             
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRoleBasedAuthorizationService, StaticRoleBasedUserAuthorizationService<User>>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IUserAuthorizationService>(sp => sp.GetRequiredService<IRoleBasedAuthorizationService>());
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationService>(sp => sp.GetRequiredService<IUserAuthorizationService>());
 
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, HeaderService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
-                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraService, CameraService>();
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHeaderServiceConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICommonRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMaintenanceRoutesInformation>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForLoggingMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDRequestLoggingConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthSConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthenticationMiddleware);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAutSRConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration);
+                functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
                 functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
-
                 functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
-
-                ServiceProvider serviceProvider = functionalInformation.WebApplicationBuilder.Services.BuildServiceProvider();
             };
             apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
             {
-                IInitializationService initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
+                IInitializationService? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
                 initializationService.Initialize();
 
-                IMetricsService metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
+                IMetricsService? metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
                 functionalInformationForWebApplication.PreRun = () =>
                 {
                     metricsService.StartAsync();

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.CameraProperties.VideoTypes.RTSPStreamVideo;
+﻿using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Generic;
@@ -28,13 +28,13 @@ namespace ConSurvBackend.Core.Services
             this._Log = log;
         }
 
-        public void StartRecordingAsync(string cameraId, string streamURL, string targetFolder, TimeSpan videoLength, bool timeInUTC)
+        public void EnsureRecordingAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
         {
-            Thread thread = new Thread(() => this.RecordLoop(cameraId, streamURL, targetFolder, videoLength, timeInUTC));
+            Thread thread = new Thread(() => this.RecordLoop(camera.Id, camera.VideoInformation.StreamURL, targetFolder, videoLength, timeInUTC));
             thread.Start();
         }
 
-        public void StopRecording(string cameraId)
+        public void EnsureNotRecording(string cameraId)
         {
             lock (cameraId)
             {
@@ -63,6 +63,7 @@ namespace ConSurvBackend.Core.Services
                 {
                     lock (cameraId)
                     {
+                        //TODO check if camera is available
                         process = new Process();
                         if (this.GetRecordInformation(cameraId).Enabled)
                         {
@@ -132,6 +133,11 @@ namespace ConSurvBackend.Core.Services
             {
                 GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(tempFile);
             }
+        }
+
+        public void EnsureRecordingOnMovementsAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

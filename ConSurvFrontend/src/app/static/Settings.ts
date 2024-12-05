@@ -1,5 +1,5 @@
 import { environment } from "../../environments/environment";
-
+import packageInfo from '../../../package.json';
 export class Settings {
     public static getAPIUrl(): string {
         if (environment.apiUrl) {
@@ -21,5 +21,11 @@ export class Settings {
         } else {
             throw Error("environment.production is not defined.");
         }
+    }
+    public static getAppName(): string {
+        return "ConSurv";
+    }
+    public static getAppVersion(): string {
+        return packageInfo.version;
     }
 }

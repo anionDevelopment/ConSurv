@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model;
+﻿using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using System;
 

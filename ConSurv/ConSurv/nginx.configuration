@@ -23,13 +23,13 @@ http {
 
     server {
         listen 8080;
-        location /API/ {
+        location /Backend/ {
             proxy_set_header Accept-Encoding "";
             proxy_pass https://127.0.0.1:443;
         }
         location / {
             index /index.html;
-        root /Workspace/Application/Frontend/WebApplicationFiles;
+            root /Workspace/Application/Frontend/WebApplicationFiles;
         }
     }
 }
