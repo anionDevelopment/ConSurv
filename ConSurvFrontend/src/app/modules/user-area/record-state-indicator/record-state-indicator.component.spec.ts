@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecordStateIndicatorComponent } from './record-state-indicator.component';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('RecordStateIndicatorComponent', () => {
   let component: RecordStateIndicatorComponent;
@@ -8,12 +9,19 @@ describe('RecordStateIndicatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RecordStateIndicatorComponent]
-    })
-      .compileComponents();
+      imports: [
+        MatIconModule,
+      ],
+      declarations: [
+        RecordStateIndicatorComponent,
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RecordStateIndicatorComponent);
     component = fixture.componentInstance;
+    component.recordState = {
+      recordState: "Idle",
+    };
     fixture.detectChanges();
   });
 

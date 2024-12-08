@@ -36,8 +36,7 @@ describe('FrameWorkComponent', () => {
       providers: [
       ]
 
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FrameWorkComponent);
     component = fixture.componentInstance;

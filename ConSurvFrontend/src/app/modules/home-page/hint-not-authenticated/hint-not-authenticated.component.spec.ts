@@ -17,7 +17,6 @@ describe('HintNotAuthenticatedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-
       imports: [
         CommonModule,
         NoopAnimationsModule,

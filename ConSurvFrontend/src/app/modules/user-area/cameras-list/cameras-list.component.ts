@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDataService } from '../../../services/user-data.service';
 import { CameraDTO, CameraService, RecordModeDTO } from '../../../generated/con-surv-backend';
 import { StorageService } from '../../../services/storage.service';
@@ -13,14 +13,16 @@ import { Observable } from 'rxjs';
   templateUrl: './cameras-list.component.html',
   styleUrl: './cameras-list.component.scss'
 })
-export class CamerasListComponent {
+export class CamerasListComponent implements OnInit {
 
   userIdModerator: boolean | null = null;
   cameras: CameraDTO[] = [];
   displayedColumns: string[] = ["name", "mode", "state"];
   recordMode$: Observable<RecordModeDTO> | null = null;
-  constructor(userDataService: UserDataService, private cameraService: CameraService, private storageService: StorageService, private router: Router, private matDialog: MatDialog) {
-    userDataService.userIsModerator().subscribe((isModerator) => {
+  constructor(private userDataService: UserDataService, private cameraService: CameraService, private storageService: StorageService, private router: Router, private matDialog: MatDialog) {
+  }
+  ngOnInit(): void {
+    this.userDataService.userIsModerator().subscribe((isModerator) => {
       this.userIdModerator = isModerator;
       const newColumnsList = [...this.displayedColumns];
       newColumnsList.push("options");
