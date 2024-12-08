@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CameraDTO, CameraService, UpdateCameraDTO } from '../../../generated/con-surv-backend';
 import { FormControl, FormGroup } from '@angular/forms';
 import { StorageService } from '../../../services/storage.service';
-import { switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-edit-camera-dialog',
@@ -28,7 +28,9 @@ export class EditCameraDialogComponent {
     this.form.get('name')!.setValue(this.cameraData.name);
     this.form.get('rtspstreamurl')!.setValue(this.cameraData.videoInformation!.streamURL);
     this.form.get('isonvifcamera')!.setValue(this.cameraData.videoInformation!.isONVIFCamera);
-    this.form.get('recordmode')!.setValue(this.cameraData.recordMode);
+    console.log("c");
+    console.log(this.cameraData.recordMode!.recordMode);
+    this.form.get('recordmode')!.setValue(this.cameraData.recordMode!.recordMode);
   }
 
   save() {
@@ -43,10 +45,15 @@ export class EditCameraDialogComponent {
         isONVIFCamera: this.form.get('isonvifcamera')!.value,
       },
     };
-    this.cameraService.aPIV1CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(switchMap(() => {
-      return this.cameraService.aPIV1CameraControllerCameraCameraIdGet(updated.cameraId!, this.storageService.getAccessToken());
-    })).subscribe(() => {
-      this.dialogRef.close(updated);
+    this.cameraService.aPIV1CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(
+      switchMap(() => {
+        const result: Observable<CameraDTO> = this.cameraService.aPIV1CameraControllerCameraCameraIdGet(updated.cameraId!, this.storageService.getAccessToken());
+        return result;
+      })
+    ).subscribe((cameraDTO: CameraDTO) => {
+      console.log("x");
+      console.log(cameraDTO);
+      this.dialogRef.close(cameraDTO);
     });
   }
 

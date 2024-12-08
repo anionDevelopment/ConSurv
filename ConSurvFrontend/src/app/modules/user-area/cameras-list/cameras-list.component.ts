@@ -31,6 +31,7 @@ export class CamerasListComponent implements OnInit {
     this.cameraService.aPIV1CameraControllerCamerasGet(this.storageService.getAccessToken()).subscribe((cameras => {
       this.cameras = cameras;
     }));
+    console.log(this.cameras);
   }
 
   addCamera() {
@@ -54,8 +55,16 @@ export class CamerasListComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((updatedCamera: CameraDTO) => {
-      var newList: CameraDTO[] = [...this.cameras];
+      var newList: CameraDTO[] = [];
+      this.cameras.forEach(camera => {
+        if (camera.cameraId === updatedCamera.cameraId) {
+          newList.push(updatedCamera);
+        } else {
+          newList.push(camera);
+        }
+      });
       this.cameras = newList;
+      console.log(this.cameras);
     });
   }
 

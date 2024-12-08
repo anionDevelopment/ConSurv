@@ -4,9 +4,9 @@
     {
         public string CameraId { get; set; }
         public string Name { get; set; }
-        public VideoInformationDTO VideoInformation { get; set; }
-        public RecordModeDTO RecordMode { get; set; }
-        public RecordStateDTO RecordState { get; set; }
+        public VideoInformationDTO VideoInformationDTO { get; set; }
+        public RecordModeDTO RecordModeDTO { get; set; }
+        public RecordStateDTO RecordStateDTO { get; set; }
 
     }
 }

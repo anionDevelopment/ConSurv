@@ -61,7 +61,7 @@ namespace ConSurvBackend.Core.Services
 
         public IDictionary<string, Camera> GetAllCameras()
         {
-            return _Cameras;
+            return this._Cameras;
         }
     }
 }

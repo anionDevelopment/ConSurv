@@ -30,7 +30,7 @@ namespace ConSurvBackend.Core.Miscellaneous
 
                 foreach (Camera camera in this._CameraService.GetAllCameras().Values)
                 {
-                    Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => camera.IsAvailable(), ref result, messages, true, false);
+                    Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => this._CameraService.IsAvailable(camera), ref result, messages, true, false);
                     if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))
                     { return abortResult; }
                 }

@@ -27,12 +27,11 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, './coverage/con-surv-frontend'),
       subdir: '.',
       reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
+        { type: 'cobertura', dir: './Other/Artifacts/TestCoverage' }
       ]
     },
     reporters: ['progress', 'kjhtml'],
     browsers: ['Chrome'],
-    restartOnFileChange: true,
+    restartOnFileChange: false,
   });
 };

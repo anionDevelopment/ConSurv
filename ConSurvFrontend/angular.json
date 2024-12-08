@@ -110,6 +110,7 @@
             "Development": {}
           },
           "options": {
+            "codeCoverage": true,
             "polyfills": [
               "zone.js",
               "zone.js/testing"

@@ -37,6 +37,16 @@ namespace ConSurvBackend.Core.Controller
         }
 
         [Authenticate]
+        [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}")]
+        public IActionResult GetPreview([FromRoute] string cameraId, [FromQuery] string resolution)
+        {
+            return File(_CameraService.GetPreview(_CameraService.GetCameraById(cameraId)), "image/jpeg");//TODO implement ability to set the resolution
+        }
+
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -75,7 +85,7 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(Camera)}/{{{nameof(cameraId)}}}")]
         public IActionResult Camera([FromRoute] string cameraId)
         {
-            return this.Ok(this._CameraService.GetCameraById(cameraId).ToDTO());
+            return this.Ok(this._CameraService.ToDTO(this._CameraService.GetCameraById(cameraId)));
         }
 
         [Authenticate]
@@ -85,7 +95,7 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(Cameras))]
         public IActionResult Cameras()
         {
-            var result = this._CameraService.GetAllCameras().Select(camera => camera.Value.ToDTO()).ToList();
+            var result = this._CameraService.GetAllCameras().Select(camera => this._CameraService.ToDTO(camera.Value)).ToList();
             return this.Ok(result);
         }
 

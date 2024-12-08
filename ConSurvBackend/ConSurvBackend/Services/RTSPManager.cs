@@ -77,7 +77,7 @@ namespace ConSurvBackend.Core.Services
 
                     process.StartInfo.FileName = "ffmpeg";
                     string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, cameraId, timeInUTC);
-                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile));
+                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
                     process.StartInfo.Arguments = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -vcodec copy -acodec copy {targetFile}";
                     //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                     process.Start();
@@ -90,7 +90,7 @@ namespace ConSurvBackend.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    //TODO
+                    this._Log.Log(ex, $"Error while record-loop for camera with id '{cameraId}'.");
                     Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage
                 }
 
@@ -121,13 +121,16 @@ namespace ConSurvBackend.Core.Services
             {
                 using (Process process = new Process())
                 {
-
                     process.StartInfo.FileName = "ffmpeg";
                     process.StartInfo.Arguments = $"-i {streamURL} -vframes 1 {tempFile}";
                     process.Start();
                     process.WaitForExit();
                 }
                 return File.ReadAllBytes(tempFile);
+            }
+            catch
+            {
+                throw new NotImplementedException();//TODO return something like a preview-not-available-dummy-picture loaded from internal resources
             }
             finally
             {

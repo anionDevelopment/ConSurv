@@ -19,11 +19,11 @@ RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-8.0 ffmpeg
+    apt-get install -y dotnet-sdk-9.0 ffmpeg
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_win-x64 /Workspace/Application/Backend
 
-ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_Website /Workspace/Application/Frontend/WebApplicationFiles
+ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplication /Workspace/Application/Frontend/WebApplicationFiles
 COPY ConSurv/nginx.configuration /Workspace/Application/Frontend
 
 COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
