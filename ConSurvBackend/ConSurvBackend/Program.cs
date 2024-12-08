@@ -49,12 +49,12 @@ namespace ConSurvBackend.Core
                 string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                 initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
-                initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
-                initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
                 initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                 initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                 initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);
                 initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
+                initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
+                initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForExceptionManagerMiddleware = new ExceptionManagerConfiguration();
                 initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation = new CommonRoutesInformation()
                 {
