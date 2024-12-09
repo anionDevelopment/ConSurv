@@ -79,6 +79,7 @@
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
+		<PackageReference Include="GRYLibrary" Version="0.12.122" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Database\Migrations\**">
@@ -87,8 +88,5 @@
         <EmbeddedResource Include="Database\SQL\**">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>
