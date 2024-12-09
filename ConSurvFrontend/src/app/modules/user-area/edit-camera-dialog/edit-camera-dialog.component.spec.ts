@@ -65,11 +65,13 @@ describe('EditCameraDialogComponent', () => {
           useValue: {
             camera: {
               name: "cameraname",
-              videoInformation: {
+              videoInformationDTO: {
                 streamURL: "rtsp://example.com/stream",
                 isONVIFCamera: true,
               },
-              recordMode: null,
+              recordModeDTO: {
+                recordMode: "NoRecording"
+              },
             },
           },
         },

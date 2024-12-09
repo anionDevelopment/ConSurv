@@ -10,4 +10,5 @@ import { RecordStateDTO as RecordStateDTO } from '../../../generated/con-surv-ba
 export class RecordStateIndicatorComponent {
   @Input()
   recordState: RecordStateDTO | null = null;
+
 }

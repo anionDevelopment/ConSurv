@@ -14,7 +14,7 @@ import { VideoInformationDTO } from './videoInformationDTO';
 export interface UpdateCameraDTO { 
     cameraId?: string | null;
     name?: string | null;
-    videoInformation?: VideoInformationDTO;
-    recordMode?: RecordModeDTO;
+    videoInformationDTO?: VideoInformationDTO;
+    recordModeDTO?: RecordModeDTO;
 }
 

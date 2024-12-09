@@ -57,6 +57,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\ConSurvBackend\ConSurvBackend.csproj" />
+        <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
         <PackageReference Include="coverlet.collector" Version="6.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -83,7 +84,6 @@
         <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.122" />
     </ItemGroup>
     <ItemGroup>
       <None Update="TestUtilities\Constants\GeneralConstants.tt">

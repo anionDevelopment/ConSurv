@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ConSurvBackend.Core.Controller
 {
@@ -26,14 +27,32 @@ namespace ConSurvBackend.Core.Controller
             this._CameraService = cameraService;
         }
 
+        [HttpGet("Test")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Test()
+        {
+            Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return File(System.IO.File.OpenRead("C:\\Users\\user\\Desktop\\example0.ts" ), "application/octet-stream", enableRangeProcessing: true);
+        }
+
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(GetStream)}/{{{nameof(cameraId)}}}")]
-        public IActionResult GetStream([FromRoute] string cameraId, [FromQuery] string resolution)
+        public IActionResult GetStream([FromRoute] string cameraId)
         {
-            throw new NotImplementedException();//see https://stackoverflow.com/a/69986391/3905529
+            throw new NotImplementedException();
+            //see https://stackoverflow.com/a/69986391/3905529
+            // or https://stackoverflow.com/questions/2245040/how-can-i-display-an-rtsp-video-stream-in-a-web-page
+            // or https://stackoverflow.com/questions/1735933/streaming-via-rtsp-or-rtp-in-html5
+            // or https://stackoverflow.com/questions/31948604/handling-receiving-live-video-webcam-stream-from-webrtc-or-any-browser-based-c
+            // or https://stackoverflow.com/questions/71034124/how-to-serve-video-file-stream-from-asp-net-core-6-minimal-api
+            // or https://stackoverflow.com/questions/31766623/stream-video-content-through-web-api-2
+            // or https://stackoverflow.com/questions/49618810/net-core-2-0-web-api-for-video-streaming-from-filestream?rq=3
+            // or https://stackoverflow.com/questions/23011302/best-approach-to-get-rtsp-streaming-into-web-browser-from-ip-camera
+            // or https://stackoverflow.com/questions/26999595/what-steps-are-needed-to-stream-rtsp-from-ffmpeg
+            // or https://stackoverflow.com/questions/69899709/forwarding-rtsp-stream-from-ip-camera-to-browser-in-asp-net-core
         }
 
         [Authenticate]
@@ -41,9 +60,9 @@ namespace ConSurvBackend.Core.Controller
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}")]
-        public IActionResult GetPreview([FromRoute] string cameraId, [FromQuery] string resolution)
+        public IActionResult GetPreview([FromRoute] string cameraId)
         {
-            return File(_CameraService.GetPreview(_CameraService.GetCameraById(cameraId)), "image/jpeg");//TODO implement ability to set the resolution
+            return this.File(this._CameraService.GetPreview(this._CameraService.GetCameraById(cameraId)), "image/jpeg");
         }
 
         [Authenticate]
@@ -58,7 +77,7 @@ namespace ConSurvBackend.Core.Controller
 
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
-        [HttpPost]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         [Route($"{nameof(RemoveCamera)}/{{{nameof(cameraId)}}}")]
         public IActionResult RemoveCamera([FromRoute] string cameraId)

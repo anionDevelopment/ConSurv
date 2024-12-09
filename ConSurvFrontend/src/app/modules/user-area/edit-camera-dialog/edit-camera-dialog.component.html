@@ -19,10 +19,10 @@
         <mat-checkbox formControlName="isonvifcamera">Can receive ONVIF-commands.</mat-checkbox>
 
         <br />
-        <app-record-mode-indicator [recordMode]="form.get('recordmode')!.value"></app-record-mode-indicator>
+        <app-record-mode-indicator [recordMode$]="recordmode$"></app-record-mode-indicator>
         <mat-form-field>
             <mat-label>Record-mode</mat-label>
-            <mat-select formControlName="recordmode">
+            <mat-select formControlName="recordmodeselect">
                 <mat-option value="NoRecording">No recording</mat-option>
                 <mat-option value="RecordAlways">Record always</mat-option>
                 <mat-option value="RecordOnMovements">Record on movements</mat-option>
