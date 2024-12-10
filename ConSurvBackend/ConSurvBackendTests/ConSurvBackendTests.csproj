@@ -83,7 +83,7 @@
         <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.122" />
+        <PackageReference Include="GRYLibrary" Version="0.12.125" />
     </ItemGroup>
     <ItemGroup>
       <None Update="TestUtilities\Constants\GeneralConstants.tt">
