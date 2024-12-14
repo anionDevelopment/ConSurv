@@ -38,7 +38,7 @@ namespace ConSurvBackend.Core.Services
         {
             lock (camera.Id)
             {
-                if (_RecordingProcesses.ContainsKey(camera.Id))
+                if (this._RecordingProcesses.ContainsKey(camera.Id))
                 {
                     RecordInformation ri = this.GetRecordInformation(camera);
                     this.SetRecordInformation(camera, new RecordInformation(false, ri.Process));

@@ -31,8 +31,8 @@ namespace ConSurvBackend.Core.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Test()
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return File(System.IO.File.OpenRead("C:\\Users\\user\\Desktop\\example0.ts" ), "application/octet-stream", enableRangeProcessing: true);
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return this.File(System.IO.File.OpenRead("C:\\Users\\user\\Desktop\\example0.ts" ), "application/octet-stream", enableRangeProcessing: true);
         }
 
         [Authenticate]

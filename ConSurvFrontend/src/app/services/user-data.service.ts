@@ -9,6 +9,9 @@ import { Observable, first, map, mergeMap, of, switchMap, tap } from 'rxjs';
 export class UserDataService {
   private loaded: boolean = false;
 
+  constructor(private userService: UserService, private storageService: StorageService) {
+  }
+
   loadUserData(): Observable<void> {
     return this.ensureLoaded();
   }
@@ -19,9 +22,6 @@ export class UserDataService {
     this.storageService.setAccessToken(null);
     this.storageService.setUserIsAdmin(false);
     this.storageService.setUserIsModerator(false);
-  }
-
-  constructor(private userService: UserService, private storageService: StorageService) {
   }
 
   getUserId(): Observable<string> {

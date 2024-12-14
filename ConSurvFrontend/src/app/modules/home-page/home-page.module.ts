@@ -23,7 +23,7 @@ import { FrameWorkComponent } from './frame-work/frame-work.component';
     FrameWorkComponent,
     FooterComponent,
     HintNotAuthenticatedComponent,
-    HintNotAuthenticatedComponent,
+    HintNotAuthorizedComponent,
     HintNotFoundComponent,
     HomePageComponent,
     LoginFormComponent,

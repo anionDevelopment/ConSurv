@@ -16,7 +16,7 @@ export class AdminAreaContainerComponent {
   onDashboardClick() {
     this.router.navigate(['admin', 'dashboard']);
   }
-  onCamerasClick() {
+  onUsersClick() {
     this.router.navigate(['admin', 'users']);
   }
   onSettingsClick() {

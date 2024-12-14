@@ -25,8 +25,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 
-
-
 @NgModule({
   declarations: [
     CameraComponent,
@@ -51,12 +49,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatTooltipModule,
     MatInputModule,
     MatDialogModule,
-    HomePageModule,
     MatIconModule,
     MatTableModule,
     MatSidenavModule,
     MatButtonModule,
     MatTabsModule,
+    HomePageModule,
   ]
 })
 export class UserAreaModule { }
