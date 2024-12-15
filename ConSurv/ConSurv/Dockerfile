@@ -19,7 +19,7 @@ RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-9.0 ffmpeg
+    apt-get install -y dotnet-runtime-9.0 ffmpeg
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_win-x64 /Workspace/Application/Backend
 
