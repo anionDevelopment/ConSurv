@@ -1,6 +1,4 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
-using ConSurvBackend.Core.Model.RecordModes;
-using ConSurvBackend.Core.Model.RecordStates;
+﻿using ConSurvBackend.Core.Model.RecordModes;
 using System;
 
 namespace ConSurvBackend.Core.Model.Base

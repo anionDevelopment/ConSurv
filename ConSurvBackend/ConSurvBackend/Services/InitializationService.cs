@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
@@ -15,14 +16,16 @@ namespace ConSurvBackend.Core.Services
         private readonly ICameraService _CameraService;
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly IGeneralLogger _GeneralLogger;
+        private readonly IExampleDataCreator _ExampleDataCreator;
 
-        public InitializationService(GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, ITimeService timeService, IApplicationConstants<CodeUnitSpecificConstants> constants)
+        public InitializationService(GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, ITimeService timeService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator)
         {
             this._AuthenticationService = authenticationService;
             this._TimeService = timeService;
             this._Constants = constants;
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
+            this._ExampleDataCreator = exampleDataCreator;
         }
 
         public void Initialize()
@@ -50,6 +53,10 @@ namespace ConSurvBackend.Core.Services
                 string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
                 this._AuthenticationService.EnsureUserHasRole(adminUserId, adminsRole.Id);
 
+                if (this._Constants.Environment is Development)
+                {
+                    this._ExampleDataCreator.AddExampleData();
+                }
             }
             this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
         }
