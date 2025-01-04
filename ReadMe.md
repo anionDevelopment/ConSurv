@@ -2,25 +2,25 @@
 
 ## Purpose
 
-ConSurv (abbreviation for "Continuous surveillance") is an IP-cam-management-system.
+`ConSurv` (abbreviation for "Continuous surveillance") is an IP-camera-management-system.
 
-## Functions
+## Features
 
-TODO
+- Capturing any RTSP-stream.
 
 ## Not implemented features
 
 - Video-Recording must be implemented.
-- Video-Viewing must be implemented.
-- Video-Preview must be implemented.
-- Video-Change-detection must be implemented.
+- Live-Video-Viewing in the browser must be implemented.
+- Motion-detection must be implemented.
 - Video-blacken must be implemented.
-- Video-control must be implemented.
-- Smatphone-app must be implemented.
+- Video-control using ONVIF-commands for cameras which supports ONVIF must be implemented.
+- Smartphone-app which does all features from the user-area must be implemented.
 - Texts must be translated.
 - OpenID-Login must be configurable.
 - Group-membership of users must be changeable.
 - Design (including logo/favicon/dark-mode) must be implemented.
+- Transport-encryption for streams must be possible.
 
 ## Development
 
