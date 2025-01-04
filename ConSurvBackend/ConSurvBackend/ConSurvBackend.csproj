@@ -9,7 +9,7 @@
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>false</PreserveCompilationContext>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-        <Copyright>Copyright © 2024 Marius Göcke</Copyright>
+        <Copyright>Copyright © 2025 Marius Göcke</Copyright>
         <Description>ConSurvBackend is the backend for ConSurv.</Description>
         <PackageProjectUrl>https://github.com/anionDev/ConSurv</PackageProjectUrl>
         <RepositoryUrl>https://github.com/anionDev/ConSurv.git</RepositoryUrl>
@@ -60,6 +60,7 @@
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.8.0" />
+        <PackageReference Include="GRYLibrary" Version="0.12.128" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
           <PrivateAssets>all</PrivateAssets>
@@ -79,7 +80,6 @@
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.125" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Database\Migrations\**">
