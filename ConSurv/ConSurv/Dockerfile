@@ -15,12 +15,12 @@ RUN mkdir /Workspace && \
 
 WORKDIR /Workspace/Other/EntryPoint
 
-#Install .NET
+#Install .NET and ffmpeg
 RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y aspnetcore-runtime-9.0
+    apt-get install -y aspnetcore-runtime-9.0 ffmpeg
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_linux-x64 /Workspace/Application/Backend
 ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplication /Workspace/Application/Frontend/WebApplicationFiles
