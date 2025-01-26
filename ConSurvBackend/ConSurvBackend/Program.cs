@@ -10,7 +10,6 @@ using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.ExecutionModes;
 using GRYLibrary.Core.APIServer.Utilities;
 using ConSurvBackend.Core.Miscellaneous;
-using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,6 @@ using System.Collections.Generic;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Mid.M05DLog;
-using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Database;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
@@ -39,16 +37,17 @@ using GRYLibrary.Core.Misc.ConsoleApplication;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Verbs;
 using ConSurvBackend.Core.Mode;
+using GRYLibrary.Core.APIServer.MidT.RLog;
+using GRYLibrary.Core.APIServer.MidT.Aut;
+using ConSurvBackend.Core.Controller;
 
 namespace ConSurvBackend.Core
 {
-
-
     internal class Program
     {
         internal static int Main(string[] commandlineArguments)
         {
-            return RunAPIServer<RunNormalCommandlineParameter, CodeUnitSpecificConfiguration, CodeUnitSpecificConfiguration>(CodeUnitSpecificConstants.ProductName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Core.Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments);
+            return RunAPIServer<RunNormalCommandlineParameter, CodeUnitSpecificConfiguration, CodeUnitSpecificConfiguration>(CodeUnitSpecificConstants.ProductName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments);
         }
         internal static int RunAPIServer<GCodeUnitSpecificCommandlineParameter, GCodeUnitSpecificConstants, GCodeUnitSpecificConfiguration>(string codeUnitName, string codeUnitDescription, Version3 codeUnitVersion, GRYEnvironment environmentTargetType, ExecutionMode executionMode, string[] commandlineArguments)
             where GCodeUnitSpecificConfiguration : new()
@@ -57,18 +56,23 @@ namespace ConSurvBackend.Core
         {
             GRYConsoleApplication<GCodeUnitSpecificCommandlineParameter> consoleApp = new GRYConsoleApplication<GCodeUnitSpecificCommandlineParameter>(
                 new VerbParser<RunNormalCommandlineParameter, RunManualCommandlineParameter>(
-                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, RunNormalCommandlineParameter>.CreateMain((configuration) =>
+                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>.CreateMain((configuration) =>
                     {
-                        Configure(new NormalMode());
+                        APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> config = configuration;
+                        Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> configureAction = Configure(new NormalMode());
+                        configureAction(config);
                     }),
-                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, RunManualCommandlineParameter>.CreateMain((configuration) =>
+                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>.CreateMain(( configuration) =>
                     {
-                        Configure(new ManualMode(configuration.CommandlineParameter.AdminPassword, configuration.CommandlineParameter.CameraAddresses));
+                        APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> config = configuration;
+                        RunManualCommandlineParameter cmdArguments = (RunManualCommandlineParameter)configuration.CommandlineParameter;
+                        Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> configureAction = Configure(new ManualMode(cmdArguments.AdminPassword, cmdArguments.CameraAddresses));
+                        configureAction(config);
                     })
                 ), codeUnitName, codeUnitVersion.ToString(), codeUnitDescription, true, executionMode, environmentTargetType, true);
             return consoleApp.Main(commandlineArguments);
         }
-        internal static Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, RunNormalCommandlineParameter>> Configure(BaseMode mode)
+        internal static Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> Configure(BaseMode mode)
         {
             return (apiServerConfiguration) =>
             {
@@ -76,8 +80,9 @@ namespace ConSurvBackend.Core
                 {
                     //TODO configure regarding to mode-parameter
                     string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
+                    initializationInformation.ApplicationConstants.KnownTypes.Add(typeof(CameraController));//TODO check if this line can be removed
+                    initializationInformation.ApplicationConstants.KnownTypes.Add(typeof(UserController));//TODO check if this line can be removed
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                     initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                     initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);
@@ -101,6 +106,14 @@ namespace ConSurvBackend.Core
                                 @$"^/API/Other/Resources/APISpecification/*",
                         },
                     };
+                    if (IsRunningInContainer())
+                    {
+                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
+                    }
+                    else
+                    {
+                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
+                    }
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
@@ -192,6 +205,11 @@ namespace ConSurvBackend.Core
                     };
                 };
             };
+        }
+
+        private static bool IsRunningInContainer()
+        {
+            return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
     }
 }

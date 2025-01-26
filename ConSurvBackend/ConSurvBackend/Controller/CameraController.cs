@@ -27,14 +27,6 @@ namespace ConSurvBackend.Core.Controller
             this._CameraService = cameraService;
         }
 
-        [HttpGet("Test")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Test()
-        {
-            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return this.File(System.IO.File.OpenRead("C:\\Users\\user\\Desktop\\example0.ts" ), "application/octet-stream", enableRangeProcessing: true);
-        }
-
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
