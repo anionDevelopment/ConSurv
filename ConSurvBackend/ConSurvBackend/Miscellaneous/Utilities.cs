@@ -42,5 +42,10 @@ namespace ConSurvBackend.Core.Miscellaneous
             }
             return $"{folder}/{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
         }
+
+        public static bool IsRunningInContainer()
+        {
+            return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInContainer"));
+        }
     }
 }

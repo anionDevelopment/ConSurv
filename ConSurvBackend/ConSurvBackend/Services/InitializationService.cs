@@ -1,4 +1,5 @@
-﻿using ConSurvBackend.Core.Constants;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
@@ -6,29 +7,28 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConSurvBackend.Core.Services
 {
-    public class InitializationService : IInitializationService
+    public class InitializationService : IInitializationService<CommandlineParameter>
     {
-        private readonly GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService _AuthenticationService;
-        private readonly ITimeService _TimeService;
+        private readonly IAuthenticationService _AuthenticationService;
         private readonly ICameraService _CameraService;
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly IGeneralLogger _GeneralLogger;
         private readonly IExampleDataCreator _ExampleDataCreator;
 
-        public InitializationService(GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, ITimeService timeService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator)
         {
             this._AuthenticationService = authenticationService;
-            this._TimeService = timeService;
             this._Constants = constants;
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
             this._ExampleDataCreator = exampleDataCreator;
         }
 
-        public void Initialize()
+        public void Initialize(CommandlineParameter commandlineParameter)
         {
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
@@ -49,9 +49,19 @@ namespace ConSurvBackend.Core.Services
                 adminsRole.InheritedRoles.Add(moderatorsRole);
                 this._AuthenticationService.UpdateRole(adminsRole);
 
-                string initialAdminPassword = CodeUnitSpecificConstants.UsernameAdmin;//only initial password. must be changed on production
+                string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                 string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
                 this._AuthenticationService.EnsureUserHasRole(adminUserId, adminsRole.Id);
+
+                if (commandlineParameter.InitialCameraAddresses != null)
+                {
+                    uint counter = 0;
+                    foreach (var initialCameraAddress in commandlineParameter.InitialCameraAddresses.OrderBy(x => x))
+                    {
+                        counter = counter + 1;
+                        _CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
+                    }
+                }
 
                 if (this._Constants.Environment is Development)
                 {

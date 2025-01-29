@@ -32,14 +32,10 @@ using GRYLibrary.Core.APIServer.Mid.Ex;
 using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.Services.CredH;
 using GRYLibrary.Core.APIServer.Mid.AutS;
-using GRYLibrary.Core.APIServer;
-using GRYLibrary.Core.Misc.ConsoleApplication;
-using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.APIServer.Verbs;
-using ConSurvBackend.Core.Mode;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Controller;
+using GRYLibrary.Core.Misc.ConsoleApplication;
 
 namespace ConSurvBackend.Core
 {
@@ -47,34 +43,7 @@ namespace ConSurvBackend.Core
     {
         internal static int Main(string[] commandlineArguments)
         {
-            return RunAPIServer<RunNormalCommandlineParameter, CodeUnitSpecificConfiguration, CodeUnitSpecificConfiguration>(CodeUnitSpecificConstants.ProductName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments);
-        }
-        internal static int RunAPIServer<GCodeUnitSpecificCommandlineParameter, GCodeUnitSpecificConstants, GCodeUnitSpecificConfiguration>(string codeUnitName, string codeUnitDescription, Version3 codeUnitVersion, GRYEnvironment environmentTargetType, ExecutionMode executionMode, string[] commandlineArguments)
-            where GCodeUnitSpecificConfiguration : new()
-            where GCodeUnitSpecificConstants : new()
-            where GCodeUnitSpecificCommandlineParameter : class, IAPIServerCommandlineParameter, new()
-        {
-            GRYConsoleApplication<GCodeUnitSpecificCommandlineParameter> consoleApp = new GRYConsoleApplication<GCodeUnitSpecificCommandlineParameter>(
-                new VerbParser<RunNormalCommandlineParameter, RunManualCommandlineParameter>(
-                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>.CreateMain((configuration) =>
-                    {
-                        APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> config = configuration;
-                        Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> configureAction = Configure(new NormalMode());
-                        configureAction(config);
-                    }),
-                    APIServer<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>.CreateMain(( configuration) =>
-                    {
-                        APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> config = configuration;
-                        RunManualCommandlineParameter cmdArguments = (RunManualCommandlineParameter)configuration.CommandlineParameter;
-                        Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> configureAction = Configure(new ManualMode(cmdArguments.AdminPassword, cmdArguments.CameraAddresses));
-                        configureAction(config);
-                    })
-                ), codeUnitName, codeUnitVersion.ToString(), codeUnitDescription, true, executionMode, environmentTargetType, true);
-            return consoleApp.Main(commandlineArguments);
-        }
-        internal static Action<APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> Configure(BaseMode mode)
-        {
-            return (apiServerConfiguration) =>
+            return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, (apiServerConfiguration) =>
             {
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
                 {
@@ -106,7 +75,7 @@ namespace ConSurvBackend.Core
                                 @$"^/API/Other/Resources/APISpecification/*",
                         },
                     };
-                    if (IsRunningInContainer())
+                    if (Miscellaneous.Utilities.IsRunningInContainer())
                     {
                         initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                     }
@@ -147,6 +116,7 @@ namespace ConSurvBackend.Core
                             Tools.ConnectToDatabaseWrapper(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions => { sqlOptions.CommandTimeout(120); }), GeneralLogger.NoLog(), GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
                         }, ServiceLifetime.Singleton);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<Model.User>>(sp => sp.GetRequiredService<IPersistence>());
                     }
                     else
                     {
@@ -185,14 +155,14 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthenticationMiddleware);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAutSRConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>, InitializationService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IExampleDataCreator, ExampleDataCreator>();
                     functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
-                    IInitializationService? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>();
-                    initializationService.Initialize();
+                    IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>>();
+                    initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
                     IMetricsService? metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
                     functionalInformationForWebApplication.PreRun = () =>
@@ -204,12 +174,7 @@ namespace ConSurvBackend.Core
                         metricsService.Stop().Wait();
                     };
                 };
-            };
-        }
-
-        private static bool IsRunningInContainer()
-        {
-            return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
+            });
         }
     }
 }
