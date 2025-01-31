@@ -166,17 +166,61 @@ namespace ConSurvBackend.Core.Services
 
         public ISet<Role> GetAllRoles()
         {
-            throw new NotImplementedException();
+            ISet<Role> roles = this.RunTransaction((command) =>
+            {
+                ISet<Role> rolesInternal = new HashSet<Role>();
+                command.CommandText = this._SQLProvider.GetScriptGetAllRoles();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string id = reader.GetString(0);
+                        string name = reader.GetString(1);
+                        rolesInternal.Add(new Role() { Id = id, Name = name });
+                    }
+                    reader.Close();
+                    return rolesInternal;
+                };
+            })[0];
+            foreach (Role role in roles)
+            {
+                this.EnrichWithInheritedRoles(role);
+            }
+            return roles;
+        }
+
+        private void EnrichWithInheritedRoles(Role role)
+        {
+            //TODO load inherited roles transitively
         }
 
         public void AddRole(Role role)
         {
-            throw new NotImplementedException();
+            this.RunTransaction((command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptInsertRole();
+                command.Prepare();
+                command.Parameters.Add(new MySqlParameter("Id", role.Id));
+                command.Parameters.Add(new MySqlParameter("Name", role.Name));
+                command.ExecuteNonQuery();
+            }, (command) =>
+            {
+                //TODO add inherited roles
+            });
         }
 
         public void UpdateRole(Role role)
         {
-            throw new NotImplementedException();
+            this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptUpdateRole();
+                cmd.Parameters.Add(new MySqlParameter("Id", role.Id));
+                cmd.Parameters.Add(new MySqlParameter("Name", role.Name));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+            }, (cmd) =>
+            {
+                //TODO update inherited roles
+            });
         }
 
         public void DeleteRoleByName(string roleName)
@@ -189,24 +233,132 @@ namespace ConSurvBackend.Core.Services
             throw new NotImplementedException();
         }
 
-        public void AddUser(Model.User newUser)
+        public void AddUser(Model.User user)
         {
-            throw new NotImplementedException();
+            this.RunTransaction((command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptAddUser();
+                command.Parameters.Add(new MySqlParameter("Id", user.Id));
+                command.Parameters.Add(new MySqlParameter("Name", user.Name));
+                command.Parameters.Add(new MySqlParameter("PasswordHash", user.PasswordHash));
+                command.Parameters.Add(new MySqlParameter("EMailAddress", user.EMailAddress));
+                command.Parameters.Add(new MySqlParameter("UserIsActivated", user.UserIsActivated));
+                command.Parameters.Add(new MySqlParameter("UserIsLocked", user.UserIsLocked));
+                command.Parameters.Add(new MySqlParameter("RegistrationMoment", user.RegistrationMoment));
+                command.Parameters.Add(new MySqlParameter("TOTPActivated", user.TOTP.IsActicated));
+                command.Parameters.Add(new MySqlParameter("TOTPSecretKey", user.TOTP.SecretKey));
+                command.Prepare();
+                command.ExecuteNonQuery();
+            });
         }
 
         public bool UserWithIdExists(string userId)
         {
-            throw new NotImplementedException();
+            return this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptUserWithIdExists();
+                cmd.Parameters.Add(new MySqlParameter(nameof(userId), userId));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            })[0];
         }
 
         public Model.User GetUserById(string userId)
         {
-            throw new NotImplementedException();
+            Model.User result = this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetUserById();
+                cmd.Parameters.Add(new MySqlParameter("Id", userId));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    Model.User user = new Model.User();
+                    user.Id = userId;
+                    user.Name = reader.GetString(1);
+                    user.PasswordHash = reader.GetString(2);
+                    user.EMailAddress = this.ConvertValue<string>(reader["EMailAddress"]);
+                    user.UserIsActivated = reader.GetBoolean(4);
+                    user.UserIsLocked = reader.GetBoolean(5);
+                    user.RegistrationMoment = reader.GetDateTime(6);
+                    return user;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"No user found with id '{userId}'");
+                }
+            })[0];
+            this.EnrichWhichAccessToken(result);
+            this.EnrichWhichTOTPToken(result);
+            return result;
+        }
+        private void EnrichWhichTOTPToken(User result)
+        {
+            //TODO
+        }
+
+        private void EnrichWhichAccessToken(User user)
+        {
+            this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetAllAccessTokenForUser();
+                cmd.Parameters.Add(new MySqlParameter("UserId", user.Id));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        user.AccessToken.Add(new AccessToken()
+                        {
+                            Value = reader.GetString(0),
+                            ExpiredMoment = reader.GetDateTime(1),
+                            OwnerUserId = user.Id
+                        });
+                    }
+                }
+            });
+        }
+
+        private T? ConvertValue<T>(object value)
+        {
+            if (value == null || value == DBNull.Value)
+            {
+                return default(T);
+            }
+            else
+            {
+                return (T)value;
+            }
         }
 
         public Model.User GetUserByName(string userName)
         {
-            throw new NotImplementedException();
+            Model.User result = this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetUserByName();
+                cmd.Parameters.Add(new MySqlParameter("Name", userName));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    Model.User user = new Model.User();
+                    user.Id = reader.GetString(0);
+                    user.Name = reader.GetString(1);
+                    user.PasswordHash = reader.GetString(2);
+                    user.EMailAddress = this.ConvertValue<string>(reader["EMailAddress"]);
+                    user.UserIsActivated = reader.GetBoolean(4);
+                    user.UserIsLocked = reader.GetBoolean(5);
+                    user.RegistrationMoment = reader.GetDateTime(6);
+                    return user;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"No user found with username '{userName}'");
+                }
+            })[0];
+            this.EnrichWhichAccessToken(result);
+            this.EnrichWhichTOTPToken(result);
+            return result;
         }
 
         public void RemoveUser(string userId)
@@ -216,12 +368,25 @@ namespace ConSurvBackend.Core.Services
 
         public bool RoleExists(string roleName)
         {
-            throw new NotImplementedException();
+            return this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptRoleExists();
+                cmd.Parameters.Add(new MySqlParameter("RoleName", roleName));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            })[0];
         }
 
         public void AddRoleToUser(string userId, string roleId)
         {
-            throw new NotImplementedException();
+            this.RunTransaction((command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptAddRoleToUser();
+                command.Prepare();
+                command.Parameters.Add(new MySqlParameter("UserId", userId));
+                command.Parameters.Add(new MySqlParameter("RoleId", roleId));
+                command.ExecuteNonQuery();
+            });
         }
 
         public void RemoveRoleFromUser(string userId, string roleId)
@@ -231,12 +396,19 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserHasRole(string userId, string roleId)
         {
-            throw new NotImplementedException();
+            return this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptUserHasRole();
+                cmd.Parameters.Add(new MySqlParameter("UserId", userId));
+                cmd.Parameters.Add(new MySqlParameter("RoleId", roleId));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            })[0];
         }
 
         public Model.User GetUserByAccessToken(string accessToken)
         {
-            throw new NotImplementedException();
+            return this.GetUserById(this.GetAccessToken(accessToken).OwnerUserId);
         }
 
         public void UpdateUser(Model.User user)

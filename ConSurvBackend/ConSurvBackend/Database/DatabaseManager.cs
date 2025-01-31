@@ -9,7 +9,7 @@ namespace ConSurvBackend.Core.Database
     public class DatabaseManager : IDatabaseManager
     {
         private readonly MariaDBDatabaseInteractor _MariaDBDatabaseInteractor = new MariaDBDatabaseInteractor();
-        private readonly IList<MigrationInstance> _Migrations = GRYMigrator.LoadMigrationsFromResources(Assembly.GetExecutingAssembly(), "ConSurvBackend.Core.Database.Migrations.");
+        private readonly IList<MigrationInstance> _Migrations = GRYMigrator.LoadMigrationsFromResources(Assembly.GetExecutingAssembly(), "ConSurvBackend.Core.Resources.Database.Migrations.");
         public IList<MigrationInstance> GetAllMigrations()
         {
             return this._Migrations;
