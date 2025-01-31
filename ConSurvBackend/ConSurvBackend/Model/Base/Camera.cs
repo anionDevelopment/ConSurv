@@ -1,6 +1,4 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
-using ConSurvBackend.Core.Model.RecordModes;
-using ConSurvBackend.Core.Model.RecordStates;
+﻿using ConSurvBackend.Core.Model.RecordModes;
 using System;
 
 namespace ConSurvBackend.Core.Model.Base
@@ -20,30 +18,6 @@ namespace ConSurvBackend.Core.Model.Base
             this.RecordMode = new NoRecording();
         }
 
-        public bool IsAvailable()
-        {
-            return this.GetCurrentRecordingInformation() is not Unavailable;
-        }
-
-        public RecordState GetCurrentRecordingInformation()
-        {
-            return new Idle();//TODO
-        }
-        internal void EnsureIsRecording()
-        {
-            if (this.RecordMode is not RecordAlways)
-            {
-                this.RecordMode = new RecordAlways();
-            }
-        }
-        internal void EnsureIsNotRecording()
-        {
-            if (this.RecordMode is not RecordAlways)
-            {
-                this.RecordMode = new NoRecording();
-            }
-        }
-
         public override bool Equals(object? obj)
         {
             return obj is Camera camera &&
@@ -55,16 +29,5 @@ namespace ConSurvBackend.Core.Model.Base
             return HashCode.Combine(this.Id);
         }
 
-        internal CameraDTO ToDTO()
-        {
-            return new CameraDTO()
-            {
-                CameraId = this.Id,
-                Name = this.Name,
-                RecordMode = this.RecordMode.ToDTO(),
-                VideoInformation = this.VideoInformation.ToDTO(),
-                RecordState = this.GetCurrentRecordingInformation().ToDTO(),
-            };
-        }
     }
 }

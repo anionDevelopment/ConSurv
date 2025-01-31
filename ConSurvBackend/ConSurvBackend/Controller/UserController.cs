@@ -59,7 +59,12 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(Logout))]
         public IActionResult Logout()
         {
-            string currentlyUsedAccessToken = (string)this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName];
+            if ((!this.HttpContext.Items.ContainsKey(AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName)) ||
+                (this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName] == null))
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            string currentlyUsedAccessToken = (string)this.HttpContext.Items[AuthenticationMiddleware.CurrentlyUsedAccessTokenInformationName]!;
             this._AuthenticationService.Logout(currentlyUsedAccessToken);
             return this.Ok();
         }
@@ -89,6 +94,8 @@ namespace ConSurvBackend.Core.Controller
         {
             return this.Ok(Utilities.GetUserInformation(this.GetUser()));
         }
+
+        //TODO there must be functions for an admin to grant the read-right (=>role: user) or the update-right (=>role: moderator) to certain cameras only.
 
         private User GetUser()
         {

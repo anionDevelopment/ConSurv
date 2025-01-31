@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CameraDTO, CameraService } from '../../../generated/con-surv-backend';
-import { Observable, Subject, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { StorageService } from '../../../services/storage.service';
 
 @Component({

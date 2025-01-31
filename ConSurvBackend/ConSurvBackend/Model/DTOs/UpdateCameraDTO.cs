@@ -6,8 +6,8 @@ namespace ConSurvBackend.Core.Model.DTOs
     {
         public string CameraId { get; set; }
         public string Name { get; set; }
-        public VideoInformationDTO VideoInformation { get; set; }
-        public RecordModeDTO RecordMode { get; set; }
+        public VideoInformationDTO VideoInformationDTO { get; set; }
+        public RecordModeDTO RecordModeDTO { get; set; }
 
         internal Camera ToCamera()
         {
@@ -15,8 +15,8 @@ namespace ConSurvBackend.Core.Model.DTOs
             {
                 Id = this.CameraId,
                 Name = this.Name,
-                VideoInformation = this.VideoInformation.ToVideoInformation(),
-                RecordMode= this.RecordMode.ToRecordMode(),
+                VideoInformation = this.VideoInformationDTO.ToVideoInformation(),
+                RecordMode= this.RecordModeDTO.ToRecordMode(),
             };
         }
     }

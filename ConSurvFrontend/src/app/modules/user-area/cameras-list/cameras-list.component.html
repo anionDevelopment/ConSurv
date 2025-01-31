@@ -8,20 +8,23 @@
             </ng-container>
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let element"><span class="link" (click)="onCameraClick(element)">
-                        {{element.name}}</span>
+                <td mat-cell *matCellDef="let element">
+                    <span class="link" (click)="onCameraClick(element)">
+                        {{element.name}}
+                    </span>
                 </td>
             </ng-container>
             <ng-container matColumnDef="mode">
                 <th mat-header-cell *matHeaderCellDef> Mode </th>
                 <td mat-cell *matCellDef="let element">
-                    <app-record-mode-indicator [recordMode]="element.recordMode"></app-record-mode-indicator>
+                    <app-record-mode-indicator
+                        [recordMode$]="recordModes.get(element.cameraId)!"></app-record-mode-indicator>
                 </td>
             </ng-container>
             <ng-container matColumnDef="state">
                 <th mat-header-cell *matHeaderCellDef> State </th>
                 <td mat-cell *matCellDef="let element">
-                    <app-record-state-indicator [recordState]="element.recordState"></app-record-state-indicator>
+                    <app-record-state-indicator [recordState]="element.recordStateDTO"></app-record-state-indicator>
                 </td>
             </ng-container>
             <ng-container matColumnDef="options">
@@ -39,5 +42,6 @@
         <button mat-button *ngIf="userIdModerator" (click)="addCamera()">
             <mat-icon>add</mat-icon>
         </button>
+
     </app-user-area-container>
 </app-frame-work>

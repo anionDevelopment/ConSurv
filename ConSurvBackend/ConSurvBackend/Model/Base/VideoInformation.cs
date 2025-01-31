@@ -11,7 +11,7 @@ namespace ConSurvBackend.Core.Model.Base
 
         public byte[] GetPreview(Camera camera, IRTSPManager rtspManager)
         {
-            return rtspManager.GetPreview(camera.Id, this.StreamURL);
+            return rtspManager.GetPreview(camera);
         }
 
 

@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": ".",
-			"name": "Entire project"
+			"name": "Entire repository"
 		},
 		{
 			"path": "./ConSurv",
@@ -53,6 +53,18 @@
 				},
 				"aliases": [
 					"bed"
+				]
+			},
+			{
+				"label": "Debug: Frontend",
+				"command": "npm run start",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/ConSurvFrontend"
+				},
+				"aliases": [
+					"df"
 				]
 			},
 			{

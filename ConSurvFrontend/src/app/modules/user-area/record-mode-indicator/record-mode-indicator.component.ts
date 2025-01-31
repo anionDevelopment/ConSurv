@@ -10,6 +10,6 @@ import { Observable, of } from 'rxjs';
 })
 export class RecordModeIndicatorComponent {
   @Input()
-  recordMode: RecordModeDTO | null = null;
+  recordMode$!: Observable<RecordModeDTO>;
 
 }

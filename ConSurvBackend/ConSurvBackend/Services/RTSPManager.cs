@@ -10,6 +10,8 @@ namespace ConSurvBackend.Core.Services
 {
     public class RTSPManager : IRTSPManager
     {
+        private readonly Dictionary<string, RecordInformation> _RecordingProcesses = new Dictionary<string, RecordInformation>();
+        private readonly IGRYLog _Log;
         private record RecordInformation
         {
             public bool Enabled;
@@ -21,8 +23,6 @@ namespace ConSurvBackend.Core.Services
                 this.Process = process;
             }
         }
-        private readonly Dictionary<string, RecordInformation> _RecordingProcesses = new Dictionary<string, RecordInformation>();
-        private readonly IGRYLog _Log;
         public RTSPManager(IGRYLog log)
         {
             this._Log = log;
@@ -30,44 +30,48 @@ namespace ConSurvBackend.Core.Services
 
         public void EnsureRecordingAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
         {
-            Thread thread = new Thread(() => this.RecordLoop(camera.Id, camera.VideoInformation.StreamURL, targetFolder, videoLength, timeInUTC));
+            Thread thread = new Thread(() => this.RecordLoop(camera, camera.VideoInformation.StreamURL, targetFolder, videoLength, timeInUTC));
             thread.Start();
         }
 
-        public void EnsureNotRecording(string cameraId)
+        public void EnsureNotRecording(Camera camera)
         {
-            lock (cameraId)
+            lock (camera.Id)
             {
-                RecordInformation ri = this.GetRecordInformation(cameraId);
-                this.SetRecordInformation(cameraId, new RecordInformation(false, ri.Process));
-                if (ri.Process != null)
+                if (this._RecordingProcesses.ContainsKey(camera.Id))
                 {
-                    if (!ri.Process.HasExited)
+                    RecordInformation ri = this.GetRecordInformation(camera);
+                    this.SetRecordInformation(camera, new RecordInformation(false, ri.Process));
+                    if (ri.Process != null)
                     {
-                        this.TerminateProcessClean(ri.Process);
+                        if (!ri.Process.HasExited)
+                        {
+                            this.TerminateProcessClean(ri.Process);
+                        }
                     }
                 }
             }
         }
+
         internal void TerminateProcessClean(Process p)
         {
             p.StandardInput.Close();
         }
 
-        private void RecordLoop(string cameraId, string streamURL, string targetFolder, TimeSpan videoLength, bool timeInUTC)
+        private void RecordLoop(Camera camera, string streamURL, string targetFolder, TimeSpan videoLength, bool timeInUTC)
         {
-            while (this.GetRecordInformation(cameraId).Enabled)
+            while (this.GetRecordInformation(camera).Enabled)
             {
                 Process? process = null;
                 try
                 {
-                    lock (cameraId)
+                    lock (camera.Id)
                     {
                         //TODO check if camera is available
                         process = new Process();
-                        if (this.GetRecordInformation(cameraId).Enabled)
+                        if (this.GetRecordInformation(camera).Enabled)
                         {
-                            this.SetRecordInformation(cameraId, new RecordInformation(true, process));
+                            this.SetRecordInformation(camera, new RecordInformation(true, process));
                         }
                         else
                         {
@@ -76,21 +80,21 @@ namespace ConSurvBackend.Core.Services
                     }
 
                     process.StartInfo.FileName = "ffmpeg";
-                    string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, cameraId, timeInUTC);
-                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile));
+                    string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC);
+                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
                     process.StartInfo.Arguments = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -vcodec copy -acodec copy {targetFile}";
                     //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                     process.Start();
                     process.WaitForExit();
-                    lock (cameraId)
+                    lock (camera.Id)
                     {
                         process.Dispose();
-                        this.SetRecordInformation(cameraId, new RecordInformation(true, null));
+                        this.SetRecordInformation(camera, new RecordInformation(true, null));
                     }
                 }
                 catch (Exception ex)
                 {
-                    //TODO
+                    this._Log.Log(ex, $"Error while record-loop for camera with id '{camera.Id}'.");
                     Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage
                 }
 
@@ -99,35 +103,38 @@ namespace ConSurvBackend.Core.Services
 
         #region thread safe record information access
 
-        private void SetRecordInformation(string cameraId, RecordInformation recordInformation)
+        private void SetRecordInformation(Camera camera, RecordInformation recordInformation)
         {
-            lock (cameraId)
+            lock (camera.Id)
             {
-                this._RecordingProcesses[cameraId] = recordInformation;
+                this._RecordingProcesses[camera.Id] = recordInformation;
             }
         }
-        private RecordInformation GetRecordInformation(string cameraId)
+        private RecordInformation GetRecordInformation(Camera camera)
         {
-            lock (cameraId)
+            lock (camera.Id)
             {
-                return this._RecordingProcesses[cameraId];
+                return this._RecordingProcesses[camera.Id];
             }
         }
 
-        public byte[] GetPreview(string id, string streamURL)
+        public byte[] GetPreview(Camera camera)
         {
             string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
             try
             {
                 using (Process process = new Process())
                 {
-
                     process.StartInfo.FileName = "ffmpeg";
-                    process.StartInfo.Arguments = $"-i {streamURL} -vframes 1 {tempFile}";
+                    process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 {tempFile}";
                     process.Start();
                     process.WaitForExit();
                 }
                 return File.ReadAllBytes(tempFile);
+            }
+            catch
+            {
+                throw new NotImplementedException();//TODO return something like a preview-not-available-dummy-picture loaded from internal resources
             }
             finally
             {
@@ -135,10 +142,12 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+
         public void EnsureRecordingOnMovementsAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
         {
             throw new NotImplementedException();
         }
+
         #endregion
     }
 }

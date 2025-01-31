@@ -10,6 +10,9 @@ using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.RecordModes;
+using ConSurvBackend.Core.Model.RecordStates;
+using ConSurvBackend.Core.Model.DTOs;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -40,7 +43,28 @@ namespace ConSurvBackend.Core.Services
             this._Persistence.CreateCamera(camera);
             return camera.Id;
         }
+        public byte[] GetPreview(Camera camera)
+        {
+            //TODO check permission
+            return camera.VideoInformation.GetPreview(camera, this._RTSPManager);
+        }
 
+        public bool IsAvailable(Camera camera)
+        {
+            return this.GetCurrentRecordingInformation(camera) is not Unavailable;
+        }
+
+        public RecordState GetCurrentRecordingInformation(Camera camera)
+        {
+            try
+            {
+                return new Idle();//TODO
+            }
+            catch
+            {
+                return new Unavailable();
+            }
+        }
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
             Camera camera = this.GetCameraById(cameraId);
@@ -56,19 +80,22 @@ namespace ConSurvBackend.Core.Services
 
         public void RemoveCamera(string cameraId)
         {
+            //TODO check permission
             Camera camera = this.GetCameraById(cameraId);
-            camera.EnsureIsNotRecording();
+            camera.RecordMode = new NoRecording();
             this._Persistence.RemoveCamera(cameraId);
         }
 
         public void UpdateCamera(Camera camera)
         {
+            //TODO check permission
             this._Persistence.UpdateCamera(camera);
-            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, _RTSPManager, _Log, _CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
+            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager, this._Log, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
         }
 
         public Camera GetCameraById(string cameraId)
         {
+            //TODO check permission
             if (this.GetAllCameras().TryGetValue(cameraId, out Camera? value))
             {
                 return value;
@@ -87,7 +114,7 @@ namespace ConSurvBackend.Core.Services
             }
             else
             {
-                return this.GetAllCameras().Where(kvp => kvp.Value.IsAvailable()).Count() / this.GetAllCameras().Count;
+                return this.GetAllCameras().Where(kvp => this.IsAvailable(kvp.Value)).Count() / this.GetAllCameras().Count;
             }
         }
 
@@ -95,7 +122,7 @@ namespace ConSurvBackend.Core.Services
         {
             lock (_LockObject)
             {
-                User newUser = User.CreateNewUser(username, password == null ? null : this._AuthenticationService.Hash(password), this._TimeService);
+                User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
                 this._AuthenticationService.AddUserTyped(newUser);
                 return newUser.Id;
             }
@@ -108,7 +135,19 @@ namespace ConSurvBackend.Core.Services
 
         public IDictionary<string, Camera> GetAllCameras()
         {
-            return _Persistence.GetAllCameras();
+            //TODO check permission
+            return this._Persistence.GetAllCameras();
+        }
+        public CameraDTO ToDTO(Camera camera)
+        {
+            return new CameraDTO()
+            {
+                CameraId = camera.Id,
+                Name = camera.Name,
+                RecordModeDTO = camera.RecordMode.ToDTO(),
+                VideoInformationDTO = camera.VideoInformation.ToDTO(),
+                RecordStateDTO = this.GetCurrentRecordingInformation(camera).ToDTO(),
+            };
         }
     }
 }

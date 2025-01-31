@@ -5,7 +5,8 @@ namespace ConSurvBackend.Core.Services
 {
     public class RTSPManagerMock : IRTSPManager
     {
-        public void EnsureNotRecording(string cameraId)
+
+        public void EnsureNotRecording(Camera camera)
         {
             //TODO pretend real camera-behavior-handling
         }
@@ -20,9 +21,8 @@ namespace ConSurvBackend.Core.Services
             //TODO pretend real camera-behavior-handling
         }
 
-        public byte[] GetPreview(string id, string streamURL)
+        public byte[] GetPreview(Camera camera)
         {
-            //TODO pretend real camera-behavior-handling
             throw new NotImplementedException();
         }
     }

@@ -1,7 +1,9 @@
 <app-frame-work>
     <div *ngIf="(currentCamera$ | async) as camera">
-        Camera-id: {{camera.cameraId}}
-        <!--TODO add camera-content (information, preview, etc.-->
+        <div *ngIf="camera!=null" class="cameracontent">
+            Camera-id: {{camera.cameraId}}
+            <!--TODO add camera-content (information, preview, etc.-->
+        </div>
     </div>
     <!--TODO add unhappy-path-->
 </app-frame-work>

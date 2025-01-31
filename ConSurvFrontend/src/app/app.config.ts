@@ -6,7 +6,6 @@ import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-br
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BASE_PATH } from './generated/con-surv-backend/variables';
-import { environment } from '../environments/environment';
 import { logInterceptor } from './interceptors/log.interceptor';
 import { Settings } from './static/Settings';
 

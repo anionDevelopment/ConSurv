@@ -10,6 +10,8 @@ using System;
 using System.Data;
 using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Model.Base;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -29,10 +31,10 @@ namespace ConSurvBackend.Core.Services
         private void AccessDatabase(Action<DatabaseContext> action)
         {
             this.AccessDatabase((database) =>
-                                                                                {
-                                                                                    action(database);
-                                                                                    return new object();
-                                                                                });
+            {
+                action(database);
+                return new object();
+            });
         }
 
         private T AccessDatabase<T>(Func<DatabaseContext, T> func)
@@ -53,10 +55,10 @@ namespace ConSurvBackend.Core.Services
         public void RunTransaction(params Action<MySqlCommand>[] actions)
         {
             this.RunTransaction(actions.Select<Action<MySqlCommand>, Func<MySqlCommand, object>>(action => (command) =>
-                                                                                      {
-                                                                                          action(command);
-                                                                                          return null;
-                                                                                      }
+            {
+                action(command);
+                return null;
+            }
             ).ToArray());
         }
 
@@ -153,6 +155,111 @@ namespace ConSurvBackend.Core.Services
         }
 
         public IDictionary<string, Camera> GetAllCameras()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, Model.User> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISet<Role> GetAllRoles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRole(Role role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateRole(Role role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteRoleByName(string roleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AccessTokenExists(string accessToken, out Model.User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddUser(Model.User newUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UserWithIdExists(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Model.User GetUserById(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Model.User GetUserByName(string userName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RoleExists(string roleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRoleToUser(string userId, string roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRoleFromUser(string userId, string roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UserHasRole(string userId, string roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Model.User GetUserByAccessToken(string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateUser(Model.User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AccessToken GetAccessToken(string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAccessToken(string userId, AccessToken newAccessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAccessToken(string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISet<AccessToken> GetAllAccessTokenOfUser(string userId)
         {
             throw new NotImplementedException();
         }

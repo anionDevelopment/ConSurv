@@ -10,17 +10,13 @@ import { UserDataService } from '../../../services/user-data.service';
 })
 export class AdminAreaContainerComponent {
   activeSite: string;
-  userIsAdmin: boolean | null = null;
-  constructor(private router: Router, userDataService: UserDataService) {
+  constructor(private router: Router) {
     this.activeSite = this.getSiteTitle(this.router.url.split('/').pop()!);
-    userDataService.userIsAdmin().subscribe((isAdmin => {
-      this.userIsAdmin = isAdmin;
-    }));
   }
   onDashboardClick() {
     this.router.navigate(['admin', 'dashboard']);
   }
-  onCamerasClick() {
+  onUsersClick() {
     this.router.navigate(['admin', 'users']);
   }
   onSettingsClick() {

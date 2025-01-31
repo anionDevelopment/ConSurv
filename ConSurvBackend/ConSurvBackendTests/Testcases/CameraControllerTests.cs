@@ -20,7 +20,7 @@ namespace ConSurvBackend.Tests.Testcases
             Mock<IPersistence> persistence = new Mock<IPersistence>();
             Mock<ICameraService> cameraServiceMock = new Mock<ICameraService>(MockBehavior.Strict);
             string cameraId = Guid.NewGuid().ToString();
-            cameraServiceMock.Setup(mock => mock.CreateCamera("New camera")).Returns(cameraId);
+            cameraServiceMock.Setup(mock => mock.CreateCamera("New camera", "rtsp://mycamera.example.com/stream")).Returns(cameraId);
             CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object);
 
             // act
@@ -30,7 +30,7 @@ namespace ConSurvBackend.Tests.Testcases
             OkObjectResult okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(cameraId, (string)okObjectResult.Value);
-            cameraServiceMock.Verify(mock => mock.CreateCamera("New camera"));
+            cameraServiceMock.Verify(mock => mock.CreateCamera("New camera", "rtsp://mycamera.example.com/stream"));
             cameraServiceMock.VerifyNoOtherCalls();
         }
     }

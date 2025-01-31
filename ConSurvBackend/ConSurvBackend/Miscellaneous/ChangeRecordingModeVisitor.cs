@@ -23,7 +23,7 @@ namespace ConSurvBackend.Core.Miscellaneous
 
         public void Handle(NoRecording noRecording/*new recording mode*/)
         {
-            this._RTSPManager.EnsureNotRecording(this._Camera.Id);
+            this._RTSPManager.EnsureNotRecording(this._Camera);
         }
 
         public void Handle(RecordAlways recordAlways/*new recording mode*/)

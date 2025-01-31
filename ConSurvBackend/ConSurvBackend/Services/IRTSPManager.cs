@@ -5,9 +5,9 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IRTSPManager
     {
-        public byte[] GetPreview(string id, string streamURL);
+        public byte[] GetPreview(Camera camera);
         public void EnsureRecordingAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC);
-        public void EnsureNotRecording(string cameraId);
+        public void EnsureNotRecording(Camera camera);
         public void EnsureRecordingOnMovementsAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC);
     }
 }
