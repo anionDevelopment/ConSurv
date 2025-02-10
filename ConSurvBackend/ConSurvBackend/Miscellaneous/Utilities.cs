@@ -2,6 +2,7 @@
 using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using System;
 using System.Linq;
 
@@ -29,18 +30,20 @@ namespace ConSurvBackend.Core.Miscellaneous
             return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
 
-        internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC)
+        internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC,ITimeService timeService)
         {
             DateTime dateTime;
             if (timeInUTC)
             {
-                dateTime = DateTime.UtcNow;
+                dateTime = timeService.GetCurrentTimeInUTC();
             }
             else
             {
-                dateTime = DateTime.Now;
+                dateTime = timeService.GetCurrentTime();
             }
-            return $"{folder}/{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
+            string result= $"{folder}/{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
+            result = result.Replace("\\", "/");
+            return result;
         }
 
         public static bool IsRunningInContainer()

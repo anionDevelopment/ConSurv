@@ -29,7 +29,7 @@
         <SignAssembly>True</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
         <DelaySign>True</DelaySign>
-        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;IDE0017</NoWarn>
+        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;IDE0017;IDE0034</NoWarn>
         <WarningsAsErrors>NU1605</WarningsAsErrors>
         <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackend.sarif</ErrorLog>
         <OutputType>Exe</OutputType>
@@ -70,6 +70,7 @@
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.2.efcore.9.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="9.0.1" />
+        <PackageReference Include="SIPSorcery" Version="8.0.9" />
         <PackageReference Include="System.Collections.Immutable" Version="9.0.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.1" />
@@ -81,9 +82,9 @@
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     </ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\**">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
-	</ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\**">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>

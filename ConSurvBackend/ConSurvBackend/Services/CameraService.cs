@@ -20,29 +20,36 @@ namespace ConSurvBackend.Core.Services
     {
         private static readonly object _LockObject = new object();
         private readonly IGRYLog _Log;
-        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly IAuthenticationService<User> _AuthenticationService;
         private readonly IPersistence _Persistence;
         private readonly ITimeService _TimeService;
         private readonly IRTSPManager _RTSPManager;
-        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IAuthenticationService<User> authenticationService)
+        private readonly IRandomnessProvider _RandomnessProvider;
+        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService,  IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider)
         {
             this._Persistence = persistence;
             this._Log = log;
             this._RTSPManager = rtspManager;
             this._TimeService = timeService;
             this._AuthenticationService = authenticationService;
-            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
+            this._RandomnessProvider = randomnessProvider;
             //TODO load persisted cameras and start recording if necessary
         }
         public string CreateCamera(string name, string streamURL)
         {
-            Camera camera = new Camera(Guid.NewGuid().ToString(), name);
+            Camera camera = new Camera(this.GetId(), name);
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
+            _Log.Log($"Created camera {camera.Id}.");
             return camera.Id;
         }
+
+        private string GetId()
+        {
+            return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
+        }
+
         public byte[] GetPreview(Camera camera)
         {
             //TODO check permission
@@ -90,7 +97,7 @@ namespace ConSurvBackend.Core.Services
         {
             //TODO check permission
             this._Persistence.UpdateCamera(camera);
-            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager, this._Log, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration));
+            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
         }
 
         public Camera GetCameraById(string cameraId)

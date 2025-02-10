@@ -1,6 +1,5 @@
 ﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Model
 {

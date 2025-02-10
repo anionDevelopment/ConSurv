@@ -10,7 +10,6 @@ namespace ConSurvBackend.Core.Services
         void CreateCamera(Camera camera);
         void UpdateCamera(Camera camera);
         void RemoveCamera(string cameraId);
-        bool UserWithNameExists(string username);
         IDictionary<string,Camera> GetAllCameras();
     }
 }

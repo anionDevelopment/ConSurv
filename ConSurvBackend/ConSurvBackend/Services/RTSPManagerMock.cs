@@ -5,25 +5,30 @@ namespace ConSurvBackend.Core.Services
 {
     public class RTSPManagerMock : IRTSPManager
     {
-
+        //TODO pretend real camera-behavior-handling
         public void EnsureNotRecording(Camera camera)
         {
             //TODO pretend real camera-behavior-handling
         }
 
-        public void EnsureRecordingAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
+        public void EnsureRecordingAlwaysAsync(Camera camera)
         {
             //TODO pretend real camera-behavior-handling
         }
 
-        public void EnsureRecordingOnMovementsAsync(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
+        public void EnsureRecordingOnMovementsAsync(Camera camera)
         {
             //TODO pretend real camera-behavior-handling
         }
 
-        public byte[] GetPreview(Camera camera)
+        public (bool success, byte[] picture) GetPreview(Camera camera)
         {
-            throw new NotImplementedException();
+           throw new NotImplementedException();//TODO return (true, mock-picture)
+        }
+
+        public bool IsAvailable(Camera camera)
+        {
+            return true;
         }
     }
 }
