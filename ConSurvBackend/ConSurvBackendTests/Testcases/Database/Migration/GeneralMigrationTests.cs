@@ -1,5 +1,4 @@
 ﻿using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Misc.Migration;
 using GRYLibrary.Core.Misc;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ConSurvBackend.Tests.TestUtilities;
 using ConSurvBackend.Core.Database;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
 
 namespace ConSurvBackend.Tests.Testcases.Database.Migration
 {

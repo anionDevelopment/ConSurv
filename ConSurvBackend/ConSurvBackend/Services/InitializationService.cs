@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
@@ -59,7 +60,10 @@ namespace ConSurvBackend.Core.Services
                     foreach (var initialCameraAddress in commandlineParameter.InitialCameraAddresses.OrderBy(x => x))
                     {
                         counter = counter + 1;
-                        _CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
+                       var cameraId= this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
+                      var  camera= this._CameraService.GetCameraById(cameraId);
+                        camera.RecordMode = new RecordAlways();
+                        this._CameraService.UpdateCamera(camera);
                     }
                 }
 

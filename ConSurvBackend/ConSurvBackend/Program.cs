@@ -19,7 +19,6 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using System.Collections.Generic;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
@@ -35,7 +34,7 @@ using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Controller;
-using GRYLibrary.Core.Misc.ConsoleApplication;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
 
 namespace ConSurvBackend.Core
 {
@@ -142,6 +141,7 @@ namespace ConSurvBackend.Core
 
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, HeaderService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRandomnessProvider>(new RandomnessProvider(new Random(42)));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
