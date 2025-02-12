@@ -6,4 +6,6 @@ export * from './maintenanceRoutes.service';
 import { MaintenanceRoutesService } from './maintenanceRoutes.service';
 export * from './user.service';
 import { UserService } from './user.service';
-export const APIS = [CameraService, CommonRoutesService, MaintenanceRoutesService, UserService];
+export * from './webSocket.service';
+import { WebSocketService } from './webSocket.service';
+export const APIS = [CameraService, CommonRoutesService, MaintenanceRoutesService, UserService, WebSocketService];

@@ -693,6 +693,18 @@
           }
         }
       }
+    },
+    "/API/v1/WebSocketController/videoStream": {
+      "get": {
+        "tags": [
+          "WebSocket"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {

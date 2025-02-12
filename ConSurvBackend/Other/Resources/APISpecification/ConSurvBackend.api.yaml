@@ -508,3 +508,10 @@ paths:
           description: OK
       tags:
       - User
+  /API/v1/WebSocketController/videoStream:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - WebSocket
