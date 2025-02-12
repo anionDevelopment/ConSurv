@@ -2,7 +2,7 @@
   "profiles": {
     "ConSurvBackend": {
       "commandName": "Project",
-      "commandLineArgs": "RunServer"
+      "commandLineArgs": "RunServer --InitialAdminPassword admin"
     }
   }
 }

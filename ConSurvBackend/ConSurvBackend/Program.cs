@@ -19,7 +19,6 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System;
 using System.IO;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.APIServer.Services.TS;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using System.Collections.Generic;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
@@ -35,7 +34,7 @@ using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Controller;
-using GRYLibrary.Core.Misc.ConsoleApplication;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
 
 namespace ConSurvBackend.Core
 {
@@ -75,14 +74,7 @@ namespace ConSurvBackend.Core
                                 @$"^/API/Other/Resources/APISpecification/*",
                         },
                     };
-                    if (Miscellaneous.Utilities.IsRunningInContainer())
-                    {
-                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
-                    }
-                    else
-                    {
-                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
-                    }
+                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
@@ -92,14 +84,12 @@ namespace ConSurvBackend.Core
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
-                                @$"^/favicon\.ico$",
-                                @$"^/Web/.*$",
-                                @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/favicon\.ico$",
+                            @$"^/API/Other/Resources/APISpecification/*",
                         },
                         MaximalLengthofResponseBodies = 50,
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
@@ -142,6 +132,7 @@ namespace ConSurvBackend.Core
 
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICredentialsProvider, HeaderService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRandomnessProvider>(new RandomnessProvider(new Random(42)));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();

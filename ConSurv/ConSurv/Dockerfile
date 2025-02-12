@@ -26,7 +26,7 @@ ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_linux-x
 ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplication /Workspace/Application/Frontend/WebApplicationFiles
 COPY Other/Resources/DevelopmentCertificate/ConSurvDevelopmentCertificate.crt /Workspace/Other/Certificates
 COPY Other/Resources/DevelopmentCertificate/ConSurvDevelopmentCertificate.key /Workspace/Other/Certificates
-COPY ConSurv/nginx.configuration /Workspace/Application/Frontend
+COPY ConSurv/nginx.conf /Workspace/Application/Frontend
 
 COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
 RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh

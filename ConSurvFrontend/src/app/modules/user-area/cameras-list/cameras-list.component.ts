@@ -17,7 +17,7 @@ export class CamerasListComponent implements OnInit {
 
   userIdModerator: boolean | null = null;
   cameras: CameraDTO[] = [];
-  displayedColumns: string[] = ["name", "mode", "state"];
+  displayedColumns: string[] = ["preview", "name", "mode", "state"];
   recordModes: Map<string, BehaviorSubject<RecordModeDTO>> = new Map<string, BehaviorSubject<RecordModeDTO>>();
   constructor(private userDataService: UserDataService, private cameraService: CameraService, private storageService: StorageService, private router: Router, private matDialog: MatDialog) {
   }

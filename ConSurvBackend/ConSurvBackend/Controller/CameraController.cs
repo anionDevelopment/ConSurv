@@ -6,8 +6,23 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SIPSorcery.Media;
+using SIPSorcery.Net;
+using SIPSorceryMedia.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
+using SIPSorcery.SIP.App;
+using SIPSorcery.SIP;
+using System.Threading;
+using WebSocketSharp.Server;
+using System.Collections.Concurrent;
+using System.Text.Json;
 
 namespace ConSurvBackend.Core.Controller
 {
@@ -25,6 +40,7 @@ namespace ConSurvBackend.Core.Controller
             this._Persistence = persistence;
             this._CameraService = cameraService;
         }
+      
 
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
@@ -44,16 +60,21 @@ namespace ConSurvBackend.Core.Controller
             // or https://stackoverflow.com/questions/23011302/best-approach-to-get-rtsp-streaming-into-web-browser-from-ip-camera
             // or https://stackoverflow.com/questions/26999595/what-steps-are-needed-to-stream-rtsp-from-ffmpeg
             // or https://stackoverflow.com/questions/69899709/forwarding-rtsp-stream-from-ip-camera-to-browser-in-asp-net-core
+            // or https://github.com/sipsorcery-org/sipsorcery/issues/408
+            // or https://stackoverflow.com/questions/4241992/video-streaming-over-websockets-using-javascript
+            // or https://anzal.hashnode.dev/a-beginners-guide-to-rtsp-streaming-with-websockets-using-nodejs-and-ffmpeg
+
         }
 
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}")]
-        public IActionResult GetPreview([FromRoute] string cameraId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(byte[]))]
+        [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}/{{{nameof(maximalHeight)}}}/{{{nameof(maximalWidth)}}}")]
+        public IActionResult GetPreview([FromRoute] string cameraId, [FromRoute] uint? maximalHeight, [FromRoute] uint? maximalWidth)
         {
-            return this.File(this._CameraService.GetPreview(this._CameraService.GetCameraById(cameraId)), "image/jpeg");
+            return this.Ok(this._CameraService.GetPreview(this._CameraService.GetCameraById(cameraId), maximalHeight, maximalWidth));
         }
 
         [Authenticate]
