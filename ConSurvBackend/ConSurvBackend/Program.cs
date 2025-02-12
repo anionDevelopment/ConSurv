@@ -74,14 +74,7 @@ namespace ConSurvBackend.Core
                                 @$"^/API/Other/Resources/APISpecification/*",
                         },
                     };
-                    if (Miscellaneous.Utilities.IsRunningInContainer())
-                    {
-                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
-                    }
-                    else
-                    {
-                        initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
-                    }
+                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
@@ -91,14 +84,12 @@ namespace ConSurvBackend.Core
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
-                                @$"^/favicon\.ico$",
-                                @$"^/Web/.*$",
-                                @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/favicon\.ico$",
+                            @$"^/API/Other/Resources/APISpecification/*",
                         },
                         MaximalLengthofResponseBodies = 50,
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = initializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetProcolVisitor(domain));
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;

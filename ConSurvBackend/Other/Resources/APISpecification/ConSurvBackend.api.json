@@ -46,7 +46,7 @@
         }
       }
     },
-    "/API/v1/CameraController/GetPreview/{cameraId}": {
+    "/API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}": {
       "get": {
         "tags": [
           "Camera"
@@ -61,6 +61,24 @@
             }
           },
           {
+            "name": "maximalHeight",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "maximalWidth",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "X-AccessToken",
             "in": "header",
             "description": "Access Token",
@@ -72,7 +90,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
           }
         }
       }

@@ -2,6 +2,9 @@
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.ExecutePrograms.WaitingStates;
@@ -12,16 +15,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
-    public class RTSPManager : IRTSPManager
+    public sealed class RTSPManager : IRTSPManager,IDisposable
     {
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly Dictionary<string/*cameraid*/, RecordInformation> _RecordingProcesses = new Dictionary<string, RecordInformation>();
         private readonly IGRYLog _Log;
         private readonly ITimeService _TimeService;
+        private readonly IApplicationConstants _Constants;
         private record RecordInformation
         {
             public bool Enabled;
@@ -39,11 +44,14 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService)
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants)
+
         {
             this._Log = log;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._TimeService = timeService;
+
+            _Constants = constants;
         }
 
         #region public functions
@@ -52,28 +60,31 @@ namespace ConSurvBackend.Core.Services
         {
             try
             {
-                return this.GetPreview(camera).success;
+                return this.GetPreview(camera, default, default).success;
             }
             catch
             {
                 return false;
             }
         }
-        public (bool success, byte[] picture) GetPreview(Camera camera)
+        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
             lock (camera.Id)
             {
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
                 try
                 {
+                    uint maximalHeightValue = maximalHeight ?? 75;
+                    uint maximalWidthValue = maximalWidth ?? 100;
                     using (Process process = new Process())
                     {
                         process.StartInfo.FileName = "ffmpeg";
-                        process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 {tempFile}";
+                        process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
                         process.StartInfo.RedirectStandardInput = true;//prevent output to console
                         process.StartInfo.RedirectStandardError = true;//prevent output to console
                         process.Start();
                         process.WaitForExit();
+                        GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
                     }
                     return (true, File.ReadAllBytes(tempFile));
                 }
@@ -252,6 +263,10 @@ namespace ConSurvBackend.Core.Services
             {
                 this._RecordingProcesses[camera.Id].Thread = null;
             }
+        }
+        public void Dispose()
+        {
+            //TODO call EnsureNotRecording for all cameras
         }
     }
 }

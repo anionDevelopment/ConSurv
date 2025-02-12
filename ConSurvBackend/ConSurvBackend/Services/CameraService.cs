@@ -49,11 +49,11 @@ namespace ConSurvBackend.Core.Services
         {
             return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
         }
-
-        public byte[] GetPreview(Camera camera)
+		
+        public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
             //TODO check permission
-            return camera.VideoInformation.GetPreview(camera, this._RTSPManager);
+            return camera.VideoInformation.GetPreview(camera, this._RTSPManager,maximalHeight,maximalWidth);
         }
 
         public bool IsAvailable(Camera camera)

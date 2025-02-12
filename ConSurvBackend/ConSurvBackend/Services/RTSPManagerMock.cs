@@ -21,7 +21,7 @@ namespace ConSurvBackend.Core.Services
             //TODO pretend real camera-behavior-handling
         }
 
-        public (bool success, byte[] picture) GetPreview(Camera camera)
+        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
            throw new NotImplementedException();//TODO return (true, mock-picture)
         }

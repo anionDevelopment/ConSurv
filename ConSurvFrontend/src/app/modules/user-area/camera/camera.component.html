@@ -3,6 +3,8 @@
         <div *ngIf="camera!=null" class="cameracontent">
             Camera-id: {{camera.cameraId}}
             <!--TODO add camera-content (information, preview, etc.-->
+            <!--<video #videoElement autoplay playsinline></video>-->
+            <video id="videoElement" controls autoplay></video>
         </div>
     </div>
     <!--TODO add unhappy-path-->

@@ -14,6 +14,6 @@ namespace ConSurvBackend.Core.Configuration
         public string? InitialAdminPassword { get; set; }
 
         [Option(nameof(InitialCameraAddresses), Required = false)]
-        public IEnumerable<string>? InitialCameraAddresses { get; set; }
+        public IEnumerable<string> InitialCameraAddresses { get; set; }
     }
 }

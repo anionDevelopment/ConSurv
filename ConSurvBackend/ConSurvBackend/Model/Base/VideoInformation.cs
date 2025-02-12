@@ -9,12 +9,11 @@ namespace ConSurvBackend.Core.Model.Base
         public bool IsONVIFCamera { get; internal set; }//probably ptz command is meant here
         //TODO add possibility to blacken a polygon from the video
 
-        public byte[] GetPreview(Camera camera, IRTSPManager rtspManager)
+        public byte[] GetPreview(Camera camera, IRTSPManager rtspManager, uint? maximalHeight, uint? maximalWidth)
         {
-            return rtspManager.GetPreview(camera).picture;
+            return rtspManager.GetPreview(camera,  maximalHeight,  maximalWidth).picture;
         }
-
-
+		
         public VideoInformationDTO ToDTO()
         {
             VideoInformationDTO result = new VideoInformationDTO()

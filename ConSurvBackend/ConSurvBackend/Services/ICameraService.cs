@@ -2,6 +2,7 @@
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
@@ -12,7 +13,7 @@ namespace ConSurvBackend.Core.Services
         public string CreateCamera(string name, string streamURL);
         public bool IsAvailable(Camera camera);
         public RecordState GetCurrentRecordingInformation(Camera camera);
-        public byte[] GetPreview(Camera camera);
+        public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth);
         public void UpdateCamera(Camera camera);
         public void RemoveCamera(string cameraId);
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand);

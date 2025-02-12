@@ -65,6 +65,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
         <PackageReference Include="GRYLibrary" Version="0.12.134" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="17.13.0" />
