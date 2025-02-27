@@ -1,6 +1,7 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
@@ -44,10 +45,12 @@ namespace ConSurvBackend.Core.Services
             }
         }
         public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants)
+
         {
             this._Log = log;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._TimeService = timeService;
+
             _Constants = constants;
         }
 
@@ -68,7 +71,6 @@ namespace ConSurvBackend.Core.Services
         {
             lock (camera.Id)
             {
-                //TODO implement cache because otherwise this function is to slow
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
                 try
                 {
@@ -76,23 +78,17 @@ namespace ConSurvBackend.Core.Services
                     uint maximalWidthValue = maximalWidth ?? 100;
                     using (Process process = new Process())
                     {
-                        bool verbose = _Constants.Environment is Development;
                         process.StartInfo.FileName = "ffmpeg";
                         process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
-                        process.StartInfo.RedirectStandardInput = !verbose;
-                        process.StartInfo.RedirectStandardError = !verbose;
+                        process.StartInfo.RedirectStandardInput = true;//prevent output to console
+                        process.StartInfo.RedirectStandardError = true;//prevent output to console
                         process.Start();
                         process.WaitForExit();
                         GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
-                        if (process.ExitCode != 0)
-                        {
-                            int i = 4;
-
-                        }
                     }
                     return (true, File.ReadAllBytes(tempFile));
                 }
-                catch(Exception e)
+                catch
                 {
                     throw new NotImplementedException();//TODO return something like (false, preview-not-available-dummy-picture)
                 }
@@ -268,7 +264,6 @@ namespace ConSurvBackend.Core.Services
                 this._RecordingProcesses[camera.Id].Thread = null;
             }
         }
-
         public void Dispose()
         {
             //TODO call EnsureNotRecording for all cameras

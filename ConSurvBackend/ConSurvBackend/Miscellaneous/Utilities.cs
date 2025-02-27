@@ -29,7 +29,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             bool isModerator = user.GetAllRoles().Where(r => r.Name == CodeUnitSpecificConstants.RolenameModerators).Any();
             return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
-
+		
         internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC, ITimeService timeService)
         {
             DateTime dateTime;
@@ -45,11 +45,10 @@ namespace ConSurvBackend.Core.Miscellaneous
             result = result.Replace("\\", "/");
             return result;
         }
+		
         internal static bool IsRunningInContainer()
         {
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
-        }
-
+		}
     }
-
 }
