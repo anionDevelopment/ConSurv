@@ -515,3 +515,10 @@ paths:
           description: OK
       tags:
       - WebSocket
+  /API/ws2/wsStream:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - WebSocket2

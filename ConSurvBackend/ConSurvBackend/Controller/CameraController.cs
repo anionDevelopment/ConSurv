@@ -63,6 +63,7 @@ namespace ConSurvBackend.Core.Controller
             // or https://github.com/sipsorcery-org/sipsorcery/issues/408
             // or https://stackoverflow.com/questions/4241992/video-streaming-over-websockets-using-javascript
             // or https://anzal.hashnode.dev/a-beginners-guide-to-rtsp-streaming-with-websockets-using-nodejs-and-ffmpeg
+            // or https://stackoverflow.com/questions/64934740/websocket-connection-with-authorization-header
 
         }
 

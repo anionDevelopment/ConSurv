@@ -56,7 +56,7 @@
 				]
 			},
 			{
-				"label": "Debug: Frontend",
+				"label": "Run: Frontend",
 				"command": "npm run start",
 				"args": [],
 				"type": "shell",
@@ -64,7 +64,7 @@
 					"cwd": "${workspaceFolder}/ConSurvFrontend"
 				},
 				"aliases": [
-					"df"
+					"rf"
 				]
 			},
 			{

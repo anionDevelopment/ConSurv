@@ -705,6 +705,18 @@
           }
         }
       }
+    },
+    "/API/ws2/wsStream": {
+      "get": {
+        "tags": [
+          "WebSocket2"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {

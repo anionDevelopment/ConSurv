@@ -57,6 +57,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\ConSurvBackend\ConSurvBackend.csproj" />
+        <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -66,7 +67,6 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.135" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="17.13.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />

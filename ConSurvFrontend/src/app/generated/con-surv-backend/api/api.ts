@@ -8,4 +8,6 @@ export * from './user.service';
 import { UserService } from './user.service';
 export * from './webSocket.service';
 import { WebSocketService } from './webSocket.service';
-export const APIS = [CameraService, CommonRoutesService, MaintenanceRoutesService, UserService, WebSocketService];
+export * from './webSocket2.service';
+import { WebSocket2Service } from './webSocket2.service';
+export const APIS = [CameraService, CommonRoutesService, MaintenanceRoutesService, UserService, WebSocketService, WebSocket2Service];

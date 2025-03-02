@@ -76,19 +76,24 @@ namespace ConSurvBackend.Core.Services
                 {
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
+                    bool logToConsole = _Constants.Environment is Development;
                     using (Process process = new Process())
                     {
                         process.StartInfo.FileName = "ffmpeg";
                         process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
-                        process.StartInfo.RedirectStandardInput = true;//prevent output to console
-                        process.StartInfo.RedirectStandardError = true;//prevent output to console
+                        process.StartInfo.RedirectStandardInput = !logToConsole;//prevent output to console
+                        process.StartInfo.RedirectStandardError = !logToConsole;//prevent output to console
                         process.Start();
                         process.WaitForExit();
+                        if (process.ExitCode != 0)
+                        {
+                            int i = 3;
+                        }
                         GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
                     }
                     return (true, File.ReadAllBytes(tempFile));
                 }
-                catch
+                catch(Exception e)
                 {
                     throw new NotImplementedException();//TODO return something like (false, preview-not-available-dummy-picture)
                 }

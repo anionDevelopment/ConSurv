@@ -35,6 +35,7 @@ using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Controller;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
+using Microsoft.AspNetCore.Builder;
 
 namespace ConSurvBackend.Core
 {
@@ -57,6 +58,7 @@ namespace ConSurvBackend.Core
                     initializationInformation.ApplicationConstants.LoggingMiddleware = typeof(DRequestLoggingMiddleware);
                     initializationInformation.ApplicationConstants.CommonRoutesHostInformation = new HostCommonRoutes();
                     initializationInformation.ApplicationConstants.HostMaintenanceInformation = new HostMaintenanceRoutes();
+                    initializationInformation.ApplicationConstants.UseWebSockets = true;
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForExceptionManagerMiddleware = new ExceptionManagerConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CommonRoutesInformation = new CommonRoutesInformation()
                     {
@@ -152,6 +154,14 @@ namespace ConSurvBackend.Core
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
+                    /*
+                    functionalInformationForWebApplication.WebApplication.UseWebSockets(new WebSocketOptions
+                    {
+                        KeepAliveInterval = TimeSpan.FromMinutes(2)
+                    });
+                    functionalInformationForWebApplication.WebApplication.UseRouting();
+                    */
+                   // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
                     IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>>();
                     initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 

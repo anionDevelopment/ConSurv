@@ -61,7 +61,6 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.8.0" />
         <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.135" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
           <PrivateAssets>all</PrivateAssets>
@@ -87,5 +86,49 @@
         <EmbeddedResource Include="Resources\**">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Resources - Copy\Database\Migrations\Migration000001.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\AddRoleToUser.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\AddUser.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetAllAccessTokenForUser.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetAllRoles.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetUserById.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetUserByName.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\InsertRole.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\RoleExists.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\UpdateRole.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserHasRole.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserWithIdExists.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserWithNameExists.sql">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>
