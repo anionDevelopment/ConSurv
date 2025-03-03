@@ -88,47 +88,6 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Resources - Copy\Database\Migrations\Migration000001.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\AddRoleToUser.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\AddUser.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetAllAccessTokenForUser.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetAllRoles.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetUserById.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\GetUserByName.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\InsertRole.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\RoleExists.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\UpdateRole.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserHasRole.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserWithIdExists.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Resources - Copy\Database\SQL\UserWithNameExists.sql">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="E:\Data\Clouds\Google\Documents\Projects\LRPC\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>

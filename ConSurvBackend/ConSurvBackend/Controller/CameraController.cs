@@ -6,23 +6,8 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SIPSorcery.Media;
-using SIPSorcery.Net;
-using SIPSorceryMedia.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Logging;
-using SIPSorcery.SIP.App;
-using SIPSorcery.SIP;
-using System.Threading;
-using WebSocketSharp.Server;
-using System.Collections.Concurrent;
-using System.Text.Json;
 
 namespace ConSurvBackend.Core.Controller
 {

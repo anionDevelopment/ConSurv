@@ -2,7 +2,6 @@
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services

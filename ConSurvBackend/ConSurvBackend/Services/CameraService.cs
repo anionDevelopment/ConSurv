@@ -2,11 +2,9 @@ using ConSurvBackend.Core.Miscellaneous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConSurvBackend.Core.Configuration;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Exceptions;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using ConSurvBackend.Core.Model.Base;
@@ -41,7 +39,7 @@ namespace ConSurvBackend.Core.Services
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
-            _Log.Log($"Created camera {camera.Id}.");
+            this._Log.Log($"Created camera {camera.Id}.");
             return camera.Id;
         }
 
@@ -49,7 +47,7 @@ namespace ConSurvBackend.Core.Services
         {
             return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
         }
-		
+        
         public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
             //TODO check permission

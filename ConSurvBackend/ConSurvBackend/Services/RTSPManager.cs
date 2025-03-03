@@ -3,7 +3,6 @@ using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.ExecutePrograms;
@@ -15,18 +14,19 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reactive.Disposables;
 using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
-    public sealed class RTSPManager : IRTSPManager,IDisposable
+    public sealed class RTSPManager : IRTSPManager, IDisposable
     {
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly Dictionary<string/*cameraid*/, RecordInformation> _RecordingProcesses = new Dictionary<string, RecordInformation>();
         private readonly IGRYLog _Log;
         private readonly ITimeService _TimeService;
         private readonly IApplicationConstants _Constants;
+        private readonly IProcessManager _ProcessManager;
+
         private record RecordInformation
         {
             public bool Enabled;
@@ -44,14 +44,14 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants)
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IProcessManager processManager)
 
         {
             this._Log = log;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._TimeService = timeService;
-
-            _Constants = constants;
+            this._Constants = constants;
+            this._ProcessManager = processManager;
         }
 
         #region public functions
@@ -69,6 +69,7 @@ namespace ConSurvBackend.Core.Services
         }
         public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
+            return (false, null);//TODO remove this line
             lock (camera.Id)
             {
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
@@ -76,7 +77,7 @@ namespace ConSurvBackend.Core.Services
                 {
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
-                    bool logToConsole = _Constants.Environment is Development;
+                    bool logToConsole = this._Constants.Environment is Development;
                     using (Process process = new Process())
                     {
                         process.StartInfo.FileName = "ffmpeg";
@@ -93,7 +94,7 @@ namespace ConSurvBackend.Core.Services
                     }
                     return (true, File.ReadAllBytes(tempFile));
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new NotImplementedException();//TODO return something like (false, preview-not-available-dummy-picture)
                 }
@@ -186,7 +187,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StartToRecordAlways(Camera camera)
         {
-            _Log.Log($"Start recording on camera {camera.Id}");
+            this._Log.Log($"Start recording on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is RecordAlways);
             this._RecordingProcesses[camera.Id] = new RecordInformation(true, null, null, camera, camera.RecordMode);
 
@@ -197,7 +198,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StartToRecordOnMovements(Camera camera)
         {
-            _Log.Log($"Start recording movements on camera {camera.Id}");
+            this._Log.Log($"Start recording movements on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is RecordOnMovements);
             this._RecordingProcesses[camera.Id] = new RecordInformation(true, null, null, camera, camera.RecordMode);
 
@@ -206,7 +207,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StopRecording(Camera camera)
         {
-            _Log.Log($"Stop recording on camera {camera.Id}");
+            this._Log.Log($"Stop recording on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is NoRecording);
             this.TerminateProcess(this._RecordingProcesses[camera.Id].Process._Process!);
         }
@@ -241,6 +242,7 @@ namespace ConSurvBackend.Core.Services
                         }
                         //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                     }
+                    this._ProcessManager.RegisterProcess(process._Process);
                     process.Run();
                     lock (camera.Id)
                     {

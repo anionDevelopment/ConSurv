@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CameraDTO, CameraService } from '../../../generated/con-surv-backend';
 import { Observable, of, switchMap } from 'rxjs';
 import { StorageService } from '../../../services/storage.service';
-import { FactoryTarget } from '@angular/compiler';
 
 @Component({
   selector: 'app-camera',
@@ -24,39 +23,17 @@ export class CameraComponent implements OnInit {
         return of(null);
       }
     }));
-    this.mediaSource = new MediaSource();
-    this.sourceBuffer = this.mediaSource.addSourceBuffer('video/mp2t; codecs="avc1.42E01E, mp4a.40.2"');
-    this.socket = new WebSocket('wss://consurv.test.local:443/API/ws2/wsStream');
-    this.socket.binaryType = 'arraybuffer';
   }
   /*
   processing: boolean = false;
   queue: ArrayBuffer[] = [];
   */
-  private mediaSource: MediaSource;
-  private sourceBuffer: SourceBuffer;
+  private mediaSource: MediaSource | null = null;
+  private sourceBuffer: SourceBuffer | null = null;
   private queue: Uint8Array[] = [];
-  private socket: WebSocket;
+  private socket: WebSocket | null = null;
   private processing: boolean = false;
 
-
-  connectWebSocket() {
-
-    this.socket.onmessage = (event) => {
-      const data = new Uint8Array(event.data);
-      this.queue.push(data);
-      this.appendNext();
-    };
-
-    this.socket.onclose = () => console.log('WebSocket geschlossen');
-  }
-
-  appendNext() {
-    if (!this.sourceBuffer || this.sourceBuffer.updating || this.queue.length === 0) {
-      return;
-    }
-    this.sourceBuffer.appendBuffer(this.queue.shift()!);
-  }
 
   ngOnInit(): void {
 
@@ -67,15 +44,62 @@ export class CameraComponent implements OnInit {
         // or https://stackoverflow.com/questions/8980858/streaming-video-to-web-browser
 
 
-        const video = document.getElementById('video') as HTMLVideoElement;
 
-        video.src = URL.createObjectURL(this.mediaSource);
 
-        this.mediaSource.addEventListener('sourceopen', () => {
-          this.sourceBuffer.addEventListener('updateend', () => this.appendNext());
 
-          this.connectWebSocket();
+        const mediaSource = new MediaSource();
+        const video = document.getElementById('videoElement') as HTMLVideoElement;
+        video.src = URL.createObjectURL(mediaSource);
+
+        mediaSource.addEventListener("sourceopen", () => {
+          const sourceBuffer = mediaSource.addSourceBuffer('video/mp2t; codecs="avc1.42E01E, mp4a.40.2"');
+          const ws = new WebSocket("wss://consurv.test.local:443/API/ws2/wsStream");
+
+          ws.onopen = () => {
+            console.log('WebSocket verbunden');
+          }
+          ws.binaryType = "arraybuffer";
+          ws.addEventListener("message", (event) => {
+            console.log('message');
+            //console.log(event);
+            sourceBuffer.appendBuffer(new Uint8Array(event.data));
+          });
         });
+
+        /*
+        this.mediaSource = new MediaSource();
+        this.socket = new WebSocket('wss://consurv.test.local:443/API/ws2/wsStream');
+        this.socket.binaryType = 'arraybuffer';
+        this.socket.onopen = () => {
+          console.log('WebSocket verbunden');
+          const video = document.getElementById('videoElement') as HTMLVideoElement;
+
+          video.src = URL.createObjectURL(this.mediaSource!);
+
+          this.mediaSource!.addEventListener('sourceopen', () => {
+            //this.sourceBuffer.addEventListener('updateend', () => this.appendNext());
+            console.log("onsourceopen");
+
+
+
+            this.sourceBuffer = this.mediaSource!.addSourceBuffer("video/mp4; codecs=\"avc1.640028, mp4a.40.2\"");
+            this.socket!.onmessage = (event) => {
+              const data = new Uint8Array(event.data);
+              console.log("onmessage");
+              this.queue.push(data);
+              if (!this.sourceBuffer || this.sourceBuffer.updating || !this.queue.length) {
+                console.log("Skipping processQueue: sourceBuffer missing or busy.");
+                return;
+              }
+              console.log("append");
+              this.sourceBuffer.appendBuffer(this.queue.shift()!);
+            };
+
+            //   this.socket.onclose = () => console.log('WebSocket geschlossen');
+
+          });
+        };
+*/
 
         /*
                 if (Hls.isSupported()) {

@@ -1,13 +1,10 @@
 ﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,56 +16,51 @@ namespace ConSurvBackend.Core.Controller
     {
         public const string ControllerRoute = $"{ServerConfiguration.APIRoutePrefix}/v{GeneralConstants.CodeUnitMajorVersion}/{nameof(WebSocketController)}";
 
-        private readonly string rtspUrl = "rtsp://tpuser:GgrechuH_fzing655f@192.168.1.141/stream1";  // Deine RTSP-URL
-
+        private readonly string rtspUrl = "rtsp://192.168.1.141/stream1";
+        private readonly IProcessManager _ProcessManager;
+        public WebSocketController(IProcessManager processManager)
+        {
+            this._ProcessManager = processManager;
+        }
         [HttpGet("videoStream")]
         public async Task GetVideoStream()
         {
-            if (HttpContext.WebSockets.IsWebSocketRequest)
+            if (this.HttpContext.WebSockets.IsWebSocketRequest)
             {
-                var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                await HandleWebSocketAsync(webSocket);
+                var webSocket = await this.HttpContext.WebSockets.AcceptWebSocketAsync();
+                await this.HandleWebSocketAsync(webSocket);
             }
             else
             {
-                HttpContext.Response.StatusCode = 400; // Bad Request
+                this.HttpContext.Response.StatusCode = 400;
             }
         }
 
         private async Task HandleWebSocketAsync(WebSocket webSocket)
         {
-            // Start FFmpeg als Subprozess und leite seine Ausgabe zu uns weiter
             Process ffmpegProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "ffmpeg",
-                    Arguments = $"-i {rtspUrl} -f image2pipe -vcodec mjpeg -acodec aac -ar 44100 -ac 1 pipe:1",
+                    Arguments = $"-i {this.rtspUrl} -f image2pipe -vcodec mjpeg -acodec aac -ar 44100 -ac 1 pipe:1",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 }
             };
-
+            this._ProcessManager.RegisterProcess(ffmpegProcess);
             ffmpegProcess.Start();
 
-            byte[] buffer = new byte[4096]; // Buffer für Video- und Audiodaten
-
-            // WebSocket-Nachricht senden, solange der FFmpeg-Prozess Daten liefert
+            byte[] buffer = new byte[4096];
             try
             {
-                while (true)
+                while (!ffmpegProcess.HasExited)
                 {
-                    int bytesRead = await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+                    int bytesRead = await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(buffer);
                     if (bytesRead > 0)
                     {
-                        // Sende die Daten über WebSocket
                         await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, bytesRead), WebSocketMessageType.Binary, true, CancellationToken.None);
-                    }
-                    else
-                    {
-                        // Wenn FFmpeg keine Daten mehr liefert, beenden wir den Stream
-                        break;
                     }
                 }
             }
