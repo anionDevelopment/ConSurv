@@ -61,7 +61,7 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.8.0" />
         <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
-        <PackageReference Include="GRYLibrary" Version="0.12.135" />
+        <PackageReference Include="GRYLibrary" Version="0.12.139" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
           <PrivateAssets>all</PrivateAssets>
@@ -81,7 +81,7 @@
         <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.2" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\**">
