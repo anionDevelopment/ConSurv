@@ -34,7 +34,7 @@ export class CameraComponent implements OnInit {
   private socket: WebSocket | null = null;
   private processing: boolean = false;
 
-
+  private sourceBufferReady = true;
   ngOnInit(): void {
 
     this.currentCamera$.subscribe((currentCamera) => {
@@ -52,7 +52,8 @@ export class CameraComponent implements OnInit {
         video.src = URL.createObjectURL(mediaSource);
 
         mediaSource.addEventListener("sourceopen", () => {
-          const sourceBuffer = mediaSource.addSourceBuffer('video/mp2t; codecs="avc1.42E01E, mp4a.40.2"');
+          //const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028, mp4a.40.2"');
+          this. sourceBuffer = mediaSource.addSourceBuffer('video/mp2t; codecs="avc1.640028, mp4a.40.2"');
           const ws = new WebSocket("wss://consurv.test.local:443/API/ws2/wsStream");
 
           ws.onopen = () => {
@@ -60,10 +61,17 @@ export class CameraComponent implements OnInit {
           }
           ws.binaryType = "arraybuffer";
           ws.addEventListener("message", (event) => {
-            console.log('message');
+            console.log('message+'+event.data.byteLength.toString());
             //console.log(event);
-            sourceBuffer.appendBuffer(new Uint8Array(event.data));
+            this.sourceBuffer!.appendBuffer(new Uint8Array(event.data));
           });
+
+          this.sourceBuffer!.addEventListener("updateend", () => {
+            this.sourceBufferReady = true;
+            if (this.queue.length > 0) {
+              this.processQueue();
+            }
+        });
         });
 
         /*
@@ -173,8 +181,14 @@ export class CameraComponent implements OnInit {
     });
   }
 
+   processQueue() :void{
+    if (this.sourceBufferReady && this.queue.length > 0) {
+      this.sourceBufferReady = false;
+      this. sourceBuffer!.appendBuffer(this.queue!.shift()!);
+    }
+}
 
-  processQueue(): void {
+  processQueue2(): void {
     if (!this.sourceBuffer || !this.queue.length || this.sourceBuffer.updating) {
       console.log("Skipping processQueue: sourceBuffer missing or busy.");
       return;

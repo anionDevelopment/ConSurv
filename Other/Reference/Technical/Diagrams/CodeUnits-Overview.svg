@@ -1,0 +1,55 @@
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="402px" preserveAspectRatio="none" style="width:737px;height:402px;background:#FFFFFF;" version="1.1" viewBox="0 0 737 402" width="737px" zoomAndPan="magnify">
+  <ns0:title>CodeUnits of ConSurv</ns0:title>
+  <ns0:defs />
+  <ns0:g>
+    <ns0:text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="149.3311" x="287.2102" y="24.5332">CodeUnits of ConSurv</ns0:text>
+    <ns0:g class="entity" data-entity="ConSurv" data-source-line="3" data-uid="ent0002" id="entity_ConSurv">
+      <ns0:rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="94.4688" x="289.5" y="45.6094" />
+      <ns0:rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="363.9688" y="50.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="361.9688" y="52.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="361.9688" y="56.6094" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54.4688" x="304.5" y="80.1426">ConSurv</ns0:text>
+    </ns0:g>
+    <ns0:g class="entity" data-entity="ConSurvNote" data-source-line="5" data-uid="ent0003" id="entity_ConSurvNote">
+      <ns0:path d="M6,164.6094 L6,190.9609 A0,0 0 0 0 6,190.9609 L282.7534,190.9609 A0,0 0 0 0 282.7534,190.9609 L282.7534,174.6094 L272.7534,164.6094 L170.41,164.6094 L294.84,93.6094 L162.41,164.6094 L6,164.6094 A0,0 0 0 0 6,164.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:path d="M272.7534,164.6094 L272.7534,174.6094 L282.7534,174.6094 L272.7534,164.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="255.7534" x="12" y="183.1045">ConSurv is an IP-cam-management-system.</ns0:text>
+    </ns0:g>
+    <ns0:g class="entity" data-entity="ConSurvBackend" data-source-line="9" data-uid="ent0005" id="entity_ConSurvBackend">
+      <ns0:rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.9512" x="262" y="261.6094" />
+      <ns0:rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="390.9512" y="266.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="388.9512" y="268.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="388.9512" y="272.6094" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.9512" x="277" y="296.1426">ConSurvBackend</ns0:text>
+    </ns0:g>
+    <ns0:g class="entity" data-entity="ConSurvBackendNote" data-source-line="11" data-uid="ent0006" id="entity_ConSurvBackendNote">
+      <ns0:path d="M193.5,369.6094 L193.5,395.9609 A0,0 0 0 0 193.5,395.9609 L479.6987,395.9609 A0,0 0 0 0 479.6987,395.9609 L479.6987,379.6094 L469.6987,369.6094 L340.5,369.6094 L336.5,310.0894 L332.5,369.6094 L193.5,369.6094 A0,0 0 0 0 193.5,369.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:path d="M469.6987,369.6094 L469.6987,379.6094 L479.6987,379.6094 L469.6987,369.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="265.1987" x="199.5" y="388.1045">ConSurvBackend is the backend for ConSurv.</ns0:text>
+    </ns0:g>
+    <ns0:g class="entity" data-entity="ConSurvFrontend" data-source-line="15" data-uid="ent0008" id="entity_ConSurvFrontend">
+      <ns0:rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="150.5029" x="390" y="153.6094" />
+      <ns0:rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="520.5029" y="158.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="518.5029" y="160.6094" />
+      <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="518.5029" y="164.6094" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110.5029" x="405" y="188.1426">ConSurvFrontend</ns0:text>
+    </ns0:g>
+    <ns0:g class="entity" data-entity="ConSurvFrontendNote" data-source-line="17" data-uid="ent0009" id="entity_ConSurvFrontendNote">
+      <ns0:path d="M446,272.6094 L446,298.9609 A0,0 0 0 0 446,298.9609 L730.7515,298.9609 A0,0 0 0 0 730.7515,298.9609 L730.7515,282.6094 L720.7515,272.6094 L578.47,272.6094 L492.19,201.6094 L570.47,272.6094 L446,272.6094 A0,0 0 0 0 446,272.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:path d="M720.7515,272.6094 L720.7515,282.6094 L730.7515,282.6094 L720.7515,272.6094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="263.7515" x="452" y="291.1045">ConSurvBackend is the frontend for ConSurv.</ns0:text>
+    </ns0:g>
+    <ns0:g class="link" data-entity-1="ConSurv" data-entity-2="ConSurvBackend" data-source-line="21" data-uid="lnk11" id="link_ConSurv_ConSurvBackend">
+      <ns0:path d="M336.5,93.9194 C336.5,135.0794 336.5,214.1894 336.5,255.3294" fill="none" id="ConSurv-to-ConSurvBackend" style="stroke:#181818;stroke-width:1;" />
+      <ns0:polygon fill="#181818" points="336.5,261.3294,340.5,252.3294,336.5,256.3294,332.5,252.3294,336.5,261.3294" style="stroke:#181818;stroke-width:1;" />
+    </ns0:g>
+    <ns0:g class="link" data-entity-1="ConSurv" data-entity-2="ConSurvFrontend" data-source-line="22" data-uid="lnk12" id="link_ConSurv_ConSurvFrontend">
+      <ns0:path d="M364.49,93.6094 C385.98,111.2694 410.8942,131.7403 432.4842,149.4803" fill="none" id="ConSurv-to-ConSurvFrontend" style="stroke:#181818;stroke-width:1;" />
+      <ns0:polygon fill="#181818" points="437.12,153.2894,432.7057,144.4852,433.2568,150.1151,427.6269,150.6662,437.12,153.2894" style="stroke:#181818;stroke-width:1;" />
+    </ns0:g>
+    <ns0:g class="link" data-entity-1="ConSurvFrontend" data-entity-2="ConSurvBackend" data-source-line="23" data-uid="lnk13" id="link_ConSurvFrontend_ConSurvBackend">
+      <ns0:path d="M437.51,201.6094 C416.02,219.2694 391.1058,239.7403 369.5158,257.4803" fill="none" id="ConSurvFrontend-to-ConSurvBackend" style="stroke:#181818;stroke-width:1;" />
+      <ns0:polygon fill="#181818" points="364.88,261.2894,374.3731,258.6662,368.7432,258.1151,369.2943,252.4852,364.88,261.2894" style="stroke:#181818;stroke-width:1;" />
+    </ns0:g>
+  </ns0:g>
+</ns0:svg>

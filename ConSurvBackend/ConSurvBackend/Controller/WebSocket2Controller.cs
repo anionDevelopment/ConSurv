@@ -16,7 +16,9 @@ namespace ConSurvBackend.Core.Controller
         // private const string FFmpegCommand = "-i \"rtsp://192.168.1.141/stream1\" -c:v libx264 -preset veryfast -crf 23 -c:a aac -f hls -";
         //private const string FFmpegCommand = "-rtsp_transport tcp -fflags nobuffer -i \"rtsp://192.168.1.141/stream1\" -f mpegts -b:v 1000k -bf 0 pipe:1";
         //private const string FFmpegCommand = "-rtsp_transport tcp -fflags nobuffer -i \"rtsp://192.168.1.141/stream1\" -f mpegts -c:v h264 -an -codec:a aac -strict -2 -b:v 1000k -bf 0 pipe:1";
-        private const string FFmpegCommand = "-rtsp_transport tcp -fflags nobuffer -i \"rtsp://192.168.1.141/stream1\" -f mpegts -b:v 1000k -bf 0 pipe:1";//sending
+        //private const string FFmpegCommand = "-rtsp_transport tcp -fflags nobuffer -i \"rtsp://192.168.1.141/stream1\" -f mpegts -b:v 1000k -bf 0 pipe:1";//sending
+        //private const string FFmpegCommand = "-rtsp_transport tcp -fflags nobuffer -i \"rtsp://192.168.1.141/stream1\" -c:v libx264 -preset ultrafast -tune zerolatency -profile:v high -level 4.2 -pix_fmt yuv420p -c:a aac -b:a 128k -f mpegts pipe:1";
+        private const string FFmpegCommand = "-rtsp_transport tcp -i rtsp://192.168.1.141/stream1 -c:v libx264 -preset ultrafast -tune zerolatency -profile:v high -level 4.2 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags frag_keyframe+empty_moov -f mp4 pipe:1";
 
         private readonly IGeneralLogger _Logger;
         public WebSocket2Controller(IGeneralLogger logger)
@@ -68,7 +70,7 @@ namespace ConSurvBackend.Core.Controller
                 int bytesRead = await ffmpegOutput.ReadAsync(buffer);
                 if (bytesRead > 0)
                 {
-                    this._Logger.Log($"read {bytesRead} bytes...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    //this._Logger.Log($"read {bytesRead} bytes...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, bytesRead), WebSocketMessageType.Binary, true, CancellationToken.None);
                 }
             }
