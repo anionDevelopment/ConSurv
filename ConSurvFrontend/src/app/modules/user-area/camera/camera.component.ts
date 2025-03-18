@@ -54,7 +54,7 @@ export class CameraComponent implements OnInit {
         mediaSource.addEventListener("sourceopen", () => {
           //const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028, mp4a.40.2"');
           this. sourceBuffer = mediaSource.addSourceBuffer('video/mp2t; codecs="avc1.640028, mp4a.40.2"');
-          const ws = new WebSocket("wss://consurv.test.local:443/API/ws2/wsStream");
+          const ws = new WebSocket("wss://consurv.test.local:443/API/ws2/wsStream");//C:\Temp\x.m3u8
 
           ws.onopen = () => {
             console.log('WebSocket verbunden');
