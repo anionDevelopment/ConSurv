@@ -98,7 +98,7 @@ info:
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
   title: ConSurvBackend v1.0.0 API documentation
   version: v1.0.0
-openapi: 3.0.1
+openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:
     get:
@@ -156,6 +156,13 @@ paths:
           description: OK
       tags:
       - CommonRoutes
+  /API/hls/x.m3u8:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Streaming
   /API/v1/CameraController/Camera/{cameraId}:
     get:
       parameters:
@@ -508,17 +515,3 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/WebSocketController/videoStream:
-    get:
-      responses:
-        '200':
-          description: OK
-      tags:
-      - WebSocket
-  /API/ws2/wsStream:
-    get:
-      responses:
-        '200':
-          description: OK
-      tags:
-      - WebSocket2

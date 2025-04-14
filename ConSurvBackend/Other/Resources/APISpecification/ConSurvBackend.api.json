@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "ConSurvBackend v1.0.0 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
@@ -462,6 +462,18 @@
         }
       }
     },
+    "/API/hls/x.m3u8": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/API/v1/UserController/Login": {
       "put": {
         "tags": [
@@ -690,30 +702,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/API/v1/WebSocketController/videoStream": {
-      "get": {
-        "tags": [
-          "WebSocket"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/API/ws2/wsStream": {
-      "get": {
-        "tags": [
-          "WebSocket2"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }

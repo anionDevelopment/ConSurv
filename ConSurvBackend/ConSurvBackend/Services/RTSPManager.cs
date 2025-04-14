@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using ConSurvBackend.Core.Miscellaneous;
+using GRYLibrary.Core.APIServer.Services.Res;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -26,16 +28,17 @@ namespace ConSurvBackend.Core.Services
         private readonly ITimeService _TimeService;
         private readonly IApplicationConstants _Constants;
         private readonly IProcessManager _ProcessManager;
+        private readonly IGeneralResourceLoader _GeneralResourceLoader;
 
         private record RecordInformation
         {
             public bool Enabled;
-            public ExternalProgramExecutor? Process;
+            public Process? Process;
             public Thread? Thread;
             public Camera Camera;
             public RecordMode LastSetRecordMode;
 
-            public RecordInformation(bool enabled, ExternalProgramExecutor? process, Thread? thread, Camera camera, RecordMode lastSetRecordMode)
+            public RecordInformation(bool enabled, Process? process, Thread? thread, Camera camera, RecordMode lastSetRecordMode)
             {
                 this.Enabled = enabled;
                 this.Process = process;
@@ -44,7 +47,7 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IProcessManager processManager)
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IProcessManager processManager, IGeneralResourceLoader generalResourceLoader)
 
         {
             this._Log = log;
@@ -52,6 +55,7 @@ namespace ConSurvBackend.Core.Services
             this._TimeService = timeService;
             this._Constants = constants;
             this._ProcessManager = processManager;
+            this._GeneralResourceLoader = generalResourceLoader;
         }
 
         #region public functions
@@ -69,7 +73,6 @@ namespace ConSurvBackend.Core.Services
         }
         public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
-            return (false, null);//TODO remove this line
             lock (camera.Id)
             {
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
@@ -78,25 +81,18 @@ namespace ConSurvBackend.Core.Services
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
-                    using (Process process = new Process())
+                    using ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}");
+                    process.Run();
+                    if (process.ExitCode != 0)
                     {
-                        process.StartInfo.FileName = "ffmpeg";
-                        process.StartInfo.Arguments = $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
-                        process.StartInfo.RedirectStandardInput = !logToConsole;//prevent output to console
-                        process.StartInfo.RedirectStandardError = !logToConsole;//prevent output to console
-                        process.Start();
-                        process.WaitForExit();
-                        if (process.ExitCode != 0)
-                        {
-                            int i = 3;
-                        }
-                        GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
+                        _Log.LogProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines, LogLevel.Warning);
                     }
+                    GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
                     return (true, File.ReadAllBytes(tempFile));
                 }
                 catch (Exception e)
                 {
-                    throw new NotImplementedException();//TODO return something like (false, preview-not-available-dummy-picture)
+                    return (false, _GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg"));
                 }
                 finally
                 {
@@ -134,7 +130,7 @@ namespace ConSurvBackend.Core.Services
             {
                 if (!this.IsNotRecording(camera))
                 {
-                    if (this._RecordingProcesses.TryGetValue(camera.Id, out RecordInformation? value) && value.Process != null && value.Process._Process != null)
+                    if (this._RecordingProcesses.TryGetValue(camera.Id, out RecordInformation? value) && value.Process != null)
                     {
                         this.StopRecording(camera);
                     }
@@ -209,7 +205,7 @@ namespace ConSurvBackend.Core.Services
         {
             this._Log.Log($"Stop recording on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is NoRecording);
-            this.TerminateProcess(this._RecordingProcesses[camera.Id].Process._Process!);
+            this.TerminateProcess(this._RecordingProcesses[camera.Id].Process);
         }
 
         #endregion
@@ -228,27 +224,24 @@ namespace ConSurvBackend.Core.Services
                 {
                     string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC, this._TimeService);
                     GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
-                    ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}");
+                    Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null);
                     lock (camera.Id)
                     {
                         GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
                         this._RecordingProcesses[camera.Id].Process = process;
-                        process.LogObject = GeneralLogger.NoLogAsGRYLog();
-
-                        process.Configuration.WaitingState = new RunSynchronously();
                         if (!this.IsAvailable(camera))
                         {
                             //TODO throw exception or try again later
                         }
                         //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                     }
-                    this._ProcessManager.RegisterProcess(process._Process);
-                    process.Run();
+                    this._ProcessManager.RegisterProcess(process);
+                    process.WaitForExit();
                     lock (camera.Id)
                     {
                         if (process.ExitCode != 0)
                         {
-                            this._Log.LogProgramOutput($"ffmpeg exited with exitcode {process.ExitCode}", process.AllStdOutLines, process.AllStdErrLines, LogLevel.Warning);
+                            this._Log.Log($"Record-process exited with exitcode {process.ExitCode}.", LogLevel.Warning);
                         }
                         process.Dispose();
                     }

@@ -7,7 +7,10 @@ using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.Misc.ConsoleApplication;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ConSurvBackend.Core.Services
@@ -31,6 +34,14 @@ namespace ConSurvBackend.Core.Services
 
         public void Initialize(CommandlineParameter commandlineParameter)
         {
+            this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
+            this.StartWatchDogProcess();
+            this.EnsureBusinessLogicIsInitialized(commandlineParameter);
+            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
+        }
+
+        private void EnsureBusinessLogicIsInitialized(CommandlineParameter commandlineParameter)
+        {
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
             {
@@ -49,7 +60,6 @@ namespace ConSurvBackend.Core.Services
                 adminsRole.InheritedRoles = new HashSet<Role>();
                 adminsRole.InheritedRoles.Add(moderatorsRole);
                 this._AuthenticationService.UpdateRole(adminsRole);
-
                 string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                 string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
                 this._AuthenticationService.EnsureUserHasRole(adminUserId, adminsRole.Id);
@@ -60,8 +70,8 @@ namespace ConSurvBackend.Core.Services
                     foreach (var initialCameraAddress in commandlineParameter.InitialCameraAddresses.OrderBy(x => x))
                     {
                         counter = counter + 1;
-                       var cameraId= this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
-                      var  camera= this._CameraService.GetCameraById(cameraId);
+                        var cameraId = this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
+                        var camera = this._CameraService.GetCameraById(cameraId);
                         camera.RecordMode = new RecordAlways();
                         this._CameraService.UpdateCamera(camera);
                     }
@@ -72,7 +82,16 @@ namespace ConSurvBackend.Core.Services
                     this._ExampleDataCreator.AddExampleData();
                 }
             }
-            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
+        }
+
+        private void StartWatchDogProcess()
+        {
+            var currentProcessId = Environment.ProcessId;
+            Process process = new Process();
+            process.StartInfo.FileName = "python";
+            process.StartInfo.Arguments = $"WatchAndTerminatesStartedProcesses.py -p {currentProcessId}";
+            process.StartInfo.WorkingDirectory = @"C:\Users\user\Downloads\ConSurv\Other\Scripts";
+            process.Start();
         }
     }
 }

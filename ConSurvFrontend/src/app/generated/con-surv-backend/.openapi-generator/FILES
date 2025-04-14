@@ -7,9 +7,8 @@ api/api.ts
 api/camera.service.ts
 api/commonRoutes.service.ts
 api/maintenanceRoutes.service.ts
+api/streaming.service.ts
 api/user.service.ts
-api/webSocket.service.ts
-api/webSocket2.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
