@@ -96,7 +96,7 @@ namespace ConSurvBackend.Core
              initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
              initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
          };
-         apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //initialization for every run
+         apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
          {
              IGeneralLogger logger = functionalInformation.Logger;
              bool runPersistent = functionalInformation.InitializationInformation.ApplicationConstants.Environment is not Development && functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
@@ -125,7 +125,7 @@ namespace ConSurvBackend.Core
              {
                  functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
              }
-             functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGeneralResourceLoader, ConSurvBackend.Core.Services.GeneralResourceLoader>();
+             functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGeneralResourceLoader, Services.GeneralResourceLoader>();
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
 
@@ -150,7 +150,7 @@ namespace ConSurvBackend.Core
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthenticationMiddleware);
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAutSRConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration);
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
-             functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>, InitializationService>();
+             functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService<CommandlineParameter>, InitializationService>();
              functionalInformation.WebApplicationBuilder.Services.AddSingleton<IExampleDataCreator, ExampleDataCreator>();
              functionalInformation.WebApplicationBuilder.Services.AddHealthChecks().AddCheck<HealthCheck>(nameof(HealthCheck));
          };
@@ -164,10 +164,10 @@ namespace ConSurvBackend.Core
              functionalInformationForWebApplication.WebApplication.UseRouting();
              */
              // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
-             IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>? initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>>();
+             IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter> initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>>();
              initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
-             IMetricsService? metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
+             IMetricsService metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
              functionalInformationForWebApplication.PreRun = () =>
              {
                  metricsService.StartAsync();

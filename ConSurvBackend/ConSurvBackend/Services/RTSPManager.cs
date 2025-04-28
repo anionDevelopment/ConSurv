@@ -6,8 +6,6 @@ using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.ExecutePrograms;
-using GRYLibrary.Core.ExecutePrograms.WaitingStates;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.Extensions.Logging;
 using System;

@@ -7,7 +7,6 @@ using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Misc.ConsoleApplication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,7 +34,7 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-            this.StartWatchDogProcess();
+            this.StartWatchDogProcess(_Constants.GetConfigurationFolder());
             this.EnsureBusinessLogicIsInitialized(commandlineParameter);
             this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
         }
@@ -84,13 +83,13 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
-        private void StartWatchDogProcess()
+        private void StartWatchDogProcess(string configurationFolder)
         {
             var currentProcessId = Environment.ProcessId;
             Process process = new Process();
-            process.StartInfo.FileName = "python";
-            process.StartInfo.Arguments = $"WatchAndTerminatesStartedProcesses.py -p {currentProcessId}";
-            process.StartInfo.WorkingDirectory = @"C:\Users\user\Downloads\ConSurv\Other\Scripts";
+            process.StartInfo.FileName = "scespoc";
+            process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./StartedProcesses.txt";
+            process.StartInfo.WorkingDirectory = configurationFolder;
             process.Start();
         }
     }
