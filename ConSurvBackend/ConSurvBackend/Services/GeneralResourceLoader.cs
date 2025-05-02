@@ -2,6 +2,6 @@
 {
     public class GeneralResourceLoader : GRYLibrary.Core.APIServer.Services.Res.GeneralResourceLoader
     {
-        public GeneralResourceLoader() : base("ConSurvBackend.Core.Resources") { }
+        public GeneralResourceLoader() : base("ConSurvBackend.Core.Resources", typeof(Program).Assembly) { }
     }
 }
