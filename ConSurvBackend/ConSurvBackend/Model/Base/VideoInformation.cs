@@ -13,7 +13,7 @@ namespace ConSurvBackend.Core.Model.Base
         {
             return rtspManager.GetPreview(camera,  maximalHeight,  maximalWidth).picture;
         }
-		
+        
         public VideoInformationDTO ToDTO()
         {
             VideoInformationDTO result = new VideoInformationDTO()

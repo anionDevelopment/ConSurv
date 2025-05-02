@@ -4,12 +4,16 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace ConSurvBackend.Core.Miscellaneous
 {
     internal static class Utilities
     {
+        public static readonly Encoding _Encoding = new UTF8Encoding(false);
         internal static GRYEnvironment GetEnvironmentTargetType()
         {
 #if Development
@@ -29,7 +33,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             bool isModerator = user.GetAllRoles().Where(r => r.Name == CodeUnitSpecificConstants.RolenameModerators).Any();
             return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
-		
+
         internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC, ITimeService timeService)
         {
             DateTime dateTime;
@@ -45,10 +49,34 @@ namespace ConSurvBackend.Core.Miscellaneous
             result = result.Replace("\\", "/");
             return result;
         }
-		
+
         internal static bool IsRunningInContainer()
         {
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
-		}
+        }
+
+        internal static Process GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess)
+        {
+            bool isDebug = false;
+#if Development
+            isDebug = true;
+#endif
+            Process process = new Process();
+            process.StartInfo.FileName = program;
+            process.StartInfo.Arguments = argument;
+            if (workingFolder != null)
+            {
+                process.StartInfo.WorkingDirectory = workingFolder;
+            }
+            configureProcess?.Invoke(process);
+            process.Start();
+            if (isDebug)
+            {
+                string processListFile = Path.Combine(configurationFolder, "StartedProcesses.txt");
+                GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processListFile);
+                GRYLibrary.Core.Misc.Utilities.AppendLineToFile(processListFile, process.Id.ToString(), _Encoding);
+            }
+            return process;
+        }
     }
 }
