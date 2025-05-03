@@ -64,14 +64,14 @@ namespace ConSurvBackend.Core.Services
         {
             try
             {
-                return this.GetPreview(camera, default, default, false, _Log).success;
+                return this.GetPreviewDirectlyFromCamera(camera, default, default, false, _Log).success;
             }
             catch
             {
                 return false;
             }
         }
-        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
+        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
         {
             lock (camera.Id)
             {
@@ -236,32 +236,32 @@ namespace ConSurvBackend.Core.Services
                 {
                     if (IsAvailable(camera))
                     {
-                    string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC, this._TimeService);
-                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
-                    Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null,_Log,"Start record always");
-                    lock (camera.Id)
-                    {
-                        GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
-                        this._RecordingProcesses[camera.Id].Process = process;
-                        if (!this.IsAvailable(camera))
+                        string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC, this._TimeService);
+                        GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
+                        Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null, _Log, "Start record always");
+                        lock (camera.Id)
                         {
-                            //TODO throw exception or try again later
+                            GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
+                            this._RecordingProcesses[camera.Id].Process = process;
+                            if (!this.IsAvailable(camera))
+                            {
+                                //TODO throw exception or try again later
+                            }
+                            //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                         }
-                        //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
-                    }
 
-                    //this._ProcessManager.RegisterProcess(process);
-                    process.WaitForExit();//wait for exit because this function will already be executed in a background-thread.
-                    /*
-                    lock (camera.Id)
-                    {
-                        if (process.ExitCode != 0)
+                        //this._ProcessManager.RegisterProcess(process);
+                        process.WaitForExit();//wait for exit because this function will already be executed in a background-thread.
+                        /*
+                        lock (camera.Id)
                         {
-                            this._Log.Log($"Record-process exited with exitcode {process.ExitCode}.", LogLevel.Warning);
+                            if (process.ExitCode != 0)
+                            {
+                                this._Log.Log($"Record-process exited with exitcode {process.ExitCode}.", LogLevel.Warning);
+                            }
+                            process.Dispose();
                         }
-                        process.Dispose();
-                    }
-                    */
+                        */
                     }
                     else
                     {

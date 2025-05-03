@@ -12,7 +12,7 @@ namespace ConSurvBackend.Core.Model.Base
 
         public byte[] GetPreview(Camera camera, IRTSPManager rtspManager, uint? maximalHeight, uint? maximalWidth,IGRYLog log)
         {
-            return rtspManager.GetPreview(camera,  maximalHeight,  maximalWidth,true,log).picture;
+            return rtspManager.GetPreviewDirectlyFromCamera(camera,  maximalHeight,  maximalWidth,true,log).picture;
         }
         
         public VideoInformationDTO ToDTO()
