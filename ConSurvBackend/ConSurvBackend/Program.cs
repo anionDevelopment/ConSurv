@@ -36,6 +36,8 @@ using GRYLibrary.Core.APIServer.MidT.Aut;
 using ConSurvBackend.Core.Controller;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Res;
+using GRYLibrary.Core.ExecutePrograms;
+using System.Threading;
 
 namespace ConSurvBackend.Core
 {
@@ -43,6 +45,36 @@ namespace ConSurvBackend.Core
     {
         internal static int Main(string[] commandlineArguments)
         {
+            Thread.Sleep(TimeSpan.FromSeconds(1.1));
+            var currentTime = GRYLibrary.Core.Misc.Utilities.GetNow();
+            var cameraFolder = "C:/Temp/output";
+            string videoOutputFolder = $"{cameraFolder}/Video/{currentTime.Year}/{currentTime.Month:00}/{currentTime.Day:00}/{currentTime.Hour:00}-{currentTime.Minute:00}-{currentTime.Second:00}";
+            string pictureOutputFolder = $"{cameraFolder}/Snapshots";
+            GUtilities.EnsureDirectoryDoesNotExist(cameraFolder);
+            GUtilities.EnsureDirectoryExists(videoOutputFolder);
+            GUtilities.EnsureDirectoryExists(pictureOutputFolder);
+            string drawTextFilter = "drawtext=text='%{localtime\\:%y-%m-%d %H-%M-%S}':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=10:y=10";
+            var argument = "-y -rtsp_transport tcp -i rtsp://192.168.1.141/stream1"
+                + $" -filter_complex \"[0:v]{drawTextFilter}[inputvideo];[inputvideo]split=2[temp1][video];[temp1]fps=1,split[frame]\""
+                + $" -map \"[video]\" -c:v libx264 -c:a aac -f segment -segment_time 60 -segment_format mp4 {videoOutputFolder}/video_%03d.mp4"
+                + $" -map \"[frame]\" {pictureOutputFolder}/LatestSnapshot_%02d.jpg"
+            ;
+            argument = argument.Replace("rtsp://192.168.1.141/stream1", "rtsp://user:password@192.168.1.141/stream1");
+            var p = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
+            {
+                Program = "ffmpeg",
+                Argument = argument
+            });
+            p.LogObject = GeneralLogger.CreateUsingConsole();
+            p.Run();
+            p.WaitUntilTerminated();
+            var stdOut = p.AllStdOutLines;
+            var stdErr = p.AllStdErrLines;
+            var file = @"C:\Users\user\Desktop\output.txt";
+            File.WriteAllText(file, string.Empty);
+            File.AppendAllLines(file, stdOut);
+            File.AppendAllLines(file, stdErr);
+            int i = 0;
             GRYLibrary.Core.Misc.Utilities.DarkModeEnabled = false;
             return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {

@@ -234,39 +234,40 @@ namespace ConSurvBackend.Core.Services
             {
                 try
                 {
-                    if (IsAvailable(camera))
+                    lock (camera.Id)
                     {
-                        string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC, this._TimeService);
-                        GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
-                        Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null, _Log, "Start record always");
-                        lock (camera.Id)
+                        if (IsAvailable(camera))
                         {
-                            GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
-                            this._RecordingProcesses[camera.Id].Process = process;
-                            if (!this.IsAvailable(camera))
-                            {
-                                //TODO throw exception or try again later
-                            }
+                            targetFolder = Path.Combine(targetFolder, camera.Id).Replace("\\", "/");
+                            //string targetFile = Miscellaneous.Utilities.GetVideoTargetFile( camera.Id, timeInUTC, this._TimeService);
+                            GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(targetFolder);
+                            ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", $"-rtsp_transport tcp -i {streamURL}"
+                                + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolder}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""
+                                + $" -map 0:v -vf fps=1/3 -q:v 2 -update 1 {targetFolder}/LatestSnapshot.jpg"
+                                + $" -f mpegts pipe:1", null, _Constants.GetConfigurationFolder(), null, _Log, "Start record always");
+                            //some kind of working: 
+                            /*
+                                         var argument = "-rtsp_transport tcp -i rtsp://192.168.1.141/stream1"
+                + " -filter_complex \"[0:v]drawtext=text='%{localtime\\:%y-%m-%d-%H-%M-%S}':fontcolor=white:fontsize=24:x=10:y=10[v];[v]split=2[v1][v2];[v1]fps=1,split[frame]\""
+                + " -map \"[frame]\" C:/Temp/output/frame_%03d.jpg"
+                + " -map \"[v2]\" -c:v libx264 -c:a aac -f segment -segment_time 30 -segment_format mp4 C:/Temp/output/video_%03d.mp4"
+                             */
+                            //HINT: use https://ffmpeg.org/ffmpeg-formats.html#tee "The tee muxer can be used to write the same data to several outputs, such as files or streams. It can be used, for example, to stream a video over a network and save it to disk at the same time."
                             //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
-                        }
-
-                        //this._ProcessManager.RegisterProcess(process);
-                        process.WaitForExit();//wait for exit because this function will already be executed in a background-thread.
-                        /*
-                        lock (camera.Id)
-                        {
+                            //see https://stackoverflow.com/questions/71633262/ffmpeg-create-timestamp-based-on-actual-creation-time
+                            GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
+                            this._RecordingProcesses[camera.Id].Process = process._Process;
+                            process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {
-                                this._Log.Log($"Record-process exited with exitcode {process.ExitCode}.", LogLevel.Warning);
+                                _Log.Log(GRYLog.FormatProgramOutput($"Process for recording camera {camera.Id} exited due to a problem: ", process.AllStdOutLines, process.AllStdErrLines), LogLevel.Warning);
                             }
-                            process.Dispose();
                         }
-                        */
-                    }
-                    else
-                    {
-                        this._Log.Log($"Camera '{camera.Id}' ({camera.VideoInformation.StreamURL}) is not available.", LogLevel.Warning);
-                        Thread.Sleep(TimeSpan.FromMinutes(1));
+                        else
+                        {
+                            this._Log.Log($"Camera '{camera.Id}' ({camera.VideoInformation.StreamURL}) is not available.", LogLevel.Warning);
+                            Thread.Sleep(TimeSpan.FromMinutes(1));
+                        }
                     }
                 }
                 catch (Exception ex)

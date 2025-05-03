@@ -37,7 +37,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
 
-        internal static string GetVideoTargetFile(string folder, string cameraId, bool timeInUTC, ITimeService timeService)
+        internal static string GetVideoTargetFile( string cameraId, bool timeInUTC, ITimeService timeService)
         {
             DateTime dateTime;
             if (timeInUTC)
@@ -48,7 +48,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             {
                 dateTime = timeService.GetCurrentTime();
             }
-            string result = $"{folder}/{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
+            string result = $"{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
             result = result.Replace("\\", "/");
             return result;
         }
@@ -58,7 +58,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-        internal static Process GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess,IGRYLog log,string purpose)
+        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess,IGRYLog log,string purpose)
         {
             bool verbose = false;//can be changed to true temporary for debugging purposes
             bool isDebug = false;
@@ -106,7 +106,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             process.OutputDataReceived += (sender, args) => stdOutHandler(sender, args);
             process.ErrorDataReceived += (sender, args) => stdErrHandler(sender, args);
             */
-            return e._Process;
+            return e;
         }
     }
 }
