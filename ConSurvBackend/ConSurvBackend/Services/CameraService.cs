@@ -23,7 +23,7 @@ namespace ConSurvBackend.Core.Services
         private readonly ITimeService _TimeService;
         private readonly IRTSPManager _RTSPManager;
         private readonly IRandomnessProvider _RandomnessProvider;
-        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService,  IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider)
+        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider)
         {
             this._Persistence = persistence;
             this._Log = log;
@@ -47,11 +47,11 @@ namespace ConSurvBackend.Core.Services
         {
             return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
         }
-        
+
         public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
             //TODO check permission
-            return camera.VideoInformation.GetPreview(camera, this._RTSPManager,maximalHeight,maximalWidth);
+            return camera.VideoInformation.GetPreview(camera, this._RTSPManager, maximalHeight, maximalWidth, _Log);
         }
 
         public bool IsAvailable(Camera camera)

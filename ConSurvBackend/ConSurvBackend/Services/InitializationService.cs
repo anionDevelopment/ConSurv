@@ -34,7 +34,6 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-            this.StartWatchDogProcess(_Constants.GetConfigurationFolder());
             this.EnsureBusinessLogicIsInitialized(commandlineParameter);
             this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
         }
@@ -78,6 +77,7 @@ namespace ConSurvBackend.Core.Services
 
                 if (this._Constants.Environment is Development)
                 {
+                    this.StartWatchDogProcess(_Constants.GetConfigurationFolder());
                     this._ExampleDataCreator.AddExampleData();
                 }
             }

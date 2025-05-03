@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Miscellaneous;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Diagnostics;
@@ -18,25 +19,20 @@ namespace ConSurvBackend.Core.Controller
         // Methode, um den FFmpeg-Prozess zu starten
 
         private readonly IApplicationConstants _ApplicationConstants;
-        public StreamingController(IApplicationConstants applicationConstants)
+        private readonly IGRYLog _Log;
+        public StreamingController(IApplicationConstants applicationConstants, IGRYLog log)
         {
             _ApplicationConstants = applicationConstants;
+            _Log = log;
         }
         private void StartFFmpegProcess(string filename)
         {
             string outputPath = Path.Combine(this._HLSFolder, filename);
-
             string ffmpegArgs = $"-i {this._rtspUrl} -c:v libx264 -preset ultrafast -tune zerolatency " +
                                 "-c:a aac -b:a 128k -ac 2 " +
                                 "-f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments " +
                                 $"{outputPath}.m3u8";
-
-            Process ffmpeg = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgs, null, _ApplicationConstants.GetConfigurationFolder(), p =>
-            {
-                p.OutputDataReceived += (sender, args) => Console.WriteLine(args.Data);
-                p.ErrorDataReceived += (sender, args) => Console.WriteLine(args.Data);
-            });
-
+            Process ffmpeg = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgs, null, _ApplicationConstants.GetConfigurationFolder(), p => { },_Log,"Client wants to stream");
             ffmpeg.BeginOutputReadLine();
             ffmpeg.BeginErrorReadLine();
             ffmpeg.WaitForExit();

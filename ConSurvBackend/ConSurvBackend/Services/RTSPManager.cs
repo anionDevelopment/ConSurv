@@ -15,6 +15,8 @@ using System.IO;
 using System.Threading;
 using ConSurvBackend.Core.Miscellaneous;
 using GRYLibrary.Core.APIServer.Services.Res;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.Exceptions;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -62,14 +64,14 @@ namespace ConSurvBackend.Core.Services
         {
             try
             {
-                return this.GetPreview(camera, default, default).success;
+                return this.GetPreview(camera, default, default, false, _Log).success;
             }
             catch
             {
                 return false;
             }
         }
-        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
+        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
         {
             lock (camera.Id)
             {
@@ -80,16 +82,28 @@ namespace ConSurvBackend.Core.Services
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
                     using ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}");
+                    process.LogObject = GeneralLogger.NoLogAsGRYLog();
                     process.Run();
                     if (process.ExitCode != 0)
                     {
-                        _Log.LogProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines, LogLevel.Warning);
+                        throw new InternalAlgorithmException(GRYLog.FormatProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines));
                     }
-                    GRYLibrary.Core.Misc.Utilities.AssertCondition(process.ExitCode == 0);
                     return (true, File.ReadAllBytes(tempFile));
                 }
                 catch (Exception e)
                 {
+                    if (logFail)
+                    {
+                        bool verbose = false;//can be changed to true temporary for debugging purposes
+                        if (verbose)
+                        {
+                            log.LogException(e, $"Error while generating preview for camera with id '{camera.Id}'.", LogLevel.Warning);
+                        }
+                        else
+                        {
+                            log.Log($"Error while generating preview for camera with id '{camera.Id}'.", LogLevel.Warning);
+                        }
+                    }
                     return (false, _GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg"));
                 }
                 finally
@@ -220,9 +234,11 @@ namespace ConSurvBackend.Core.Services
             {
                 try
                 {
+                    if (IsAvailable(camera))
+                    {
                     string targetFile = Miscellaneous.Utilities.GetVideoTargetFile(targetFolder, camera.Id, timeInUTC, this._TimeService);
                     GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(Path.GetDirectoryName(targetFile)!);
-                    Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null);
+                    Process process = Utilities.GetBackgroundProcess("ffmpeg", $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}", null, _Constants.GetConfigurationFolder(), null,_Log,"Start record always");
                     lock (camera.Id)
                     {
                         GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
@@ -233,8 +249,10 @@ namespace ConSurvBackend.Core.Services
                         }
                         //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                     }
-                    this._ProcessManager.RegisterProcess(process);
-                    process.WaitForExit();
+
+                    //this._ProcessManager.RegisterProcess(process);
+                    process.WaitForExit();//wait for exit because this function will already be executed in a background-thread.
+                    /*
                     lock (camera.Id)
                     {
                         if (process.ExitCode != 0)
@@ -243,11 +261,18 @@ namespace ConSurvBackend.Core.Services
                         }
                         process.Dispose();
                     }
+                    */
+                    }
+                    else
+                    {
+                        this._Log.Log($"Camera '{camera.Id}' ({camera.VideoInformation.StreamURL}) is not available.", LogLevel.Warning);
+                        Thread.Sleep(TimeSpan.FromMinutes(1));
+                    }
                 }
                 catch (Exception ex)
                 {
-                    this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", LogLevel.Warning, ex, null);
-                    Thread.Sleep(TimeSpan.FromSeconds(0.5));//prevent hig cpu-usage
+                    this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", LogLevel.Error, ex, null);
+                    Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage
                 }
                 finally
                 {
