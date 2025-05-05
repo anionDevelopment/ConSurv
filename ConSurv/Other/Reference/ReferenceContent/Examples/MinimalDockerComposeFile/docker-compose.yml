@@ -8,6 +8,8 @@ services:
       - "./Volumes/Data:/Workspace/Data"
       - "./Volumes/Configuration:/Workspace/Configuration"
       - "./Volumes/Logs:/Workspace/Logs"
+    environment:
+      - A=b
     ports:
       - 443:443
 

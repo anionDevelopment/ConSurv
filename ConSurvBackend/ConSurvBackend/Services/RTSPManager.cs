@@ -27,7 +27,6 @@ namespace ConSurvBackend.Core.Services
         private readonly IGRYLog _Log;
         private readonly ITimeService _TimeService;
         private readonly IApplicationConstants _Constants;
-        private readonly IProcessManager _ProcessManager;
         private readonly IGeneralResourceLoader _GeneralResourceLoader;
 
         private record RecordInformation
@@ -47,14 +46,13 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IProcessManager processManager, IGeneralResourceLoader generalResourceLoader)
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IGeneralResourceLoader generalResourceLoader)
 
         {
             this._Log = log;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._TimeService = timeService;
             this._Constants = constants;
-            this._ProcessManager = processManager;
             this._GeneralResourceLoader = generalResourceLoader;
         }
 
@@ -75,6 +73,7 @@ namespace ConSurvBackend.Core.Services
         {
             lock (camera.Id)
             {
+                // return (true,new byte[] { });
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
                 try
                 {
@@ -236,15 +235,30 @@ namespace ConSurvBackend.Core.Services
                 {
                     lock (camera.Id)
                     {
-                        if (IsAvailable(camera))
+                        bool addSleep = false;
+                        if (addSleep)
                         {
-                            targetFolder = Path.Combine(targetFolder, camera.Id).Replace("\\", "/");
-                            //string targetFile = Miscellaneous.Utilities.GetVideoTargetFile( camera.Id, timeInUTC, this._TimeService);
-                            GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(targetFolder);
+                            Thread.Sleep(TimeSpan.FromSeconds(1.1));
+                        }
+                        if (this.IsAvailable(camera))
+                        {
+                            if (_Constants.Environment is Development)
+                            {
+                                videoLength = TimeSpan.FromSeconds(20);
+                            }
+                            string targetFolderFinal = Path.Combine(targetFolder, camera.Id).Replace(@"\", "/");
+                            GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(targetFolderFinal);
+                            string targetFile = $"{targetFolderFinal}/{Utilities.GetVideoTargetFile(camera.Id, timeInUTC, this._TimeService)}";
+                            GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
+                            //TODO refactor this using filter_compley to also take a snapshot every 5 seconds
+                            string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
+                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, _Constants.GetConfigurationFolder(), null, _Log, $"Record camera {camera.Id}", true);
+                            /*
                             ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", $"-rtsp_transport tcp -i {streamURL}"
-                                + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolder}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""
-                                + $" -map 0:v -vf fps=1/3 -q:v 2 -update 1 {targetFolder}/LatestSnapshot.jpg"
+                                + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolderFinal}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""
+                                + $" -map 0:v -vf fps=1/3 -q:v 2 -update 1 {targetFolderFinal}/LatestSnapshot.jpg"
                                 + $" -f mpegts pipe:1", null, _Constants.GetConfigurationFolder(), null, _Log, "Start record always");
+                            */
                             //some kind of working: 
                             /*
                                          var argument = "-rtsp_transport tcp -i rtsp://192.168.1.141/stream1"
@@ -255,8 +269,8 @@ namespace ConSurvBackend.Core.Services
                             //HINT: use https://ffmpeg.org/ffmpeg-formats.html#tee "The tee muxer can be used to write the same data to several outputs, such as files or streams. It can be used, for example, to stream a video over a network and save it to disk at the same time."
                             //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
                             //see https://stackoverflow.com/questions/71633262/ffmpeg-create-timestamp-based-on-actual-creation-time
-                            GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
-                            this._RecordingProcesses[camera.Id].Process = process._Process;
+                            // GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
+                            // this._RecordingProcesses[camera.Id].Process = process._Process;
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {
@@ -266,7 +280,7 @@ namespace ConSurvBackend.Core.Services
                         else
                         {
                             this._Log.Log($"Camera '{camera.Id}' ({camera.VideoInformation.StreamURL}) is not available.", LogLevel.Warning);
-                            Thread.Sleep(TimeSpan.FromMinutes(1));
+                            Thread.Sleep(TimeSpan.FromSeconds(20));
                         }
                     }
                 }
@@ -277,16 +291,20 @@ namespace ConSurvBackend.Core.Services
                 }
                 finally
                 {
+                    /*
                     lock (camera.Id)
                     {
                         this._RecordingProcesses[camera.Id].Process = null;
                     }
+                    */
                 }
             }
+            /*
             lock (camera.Id)
             {
                 this._RecordingProcesses[camera.Id].Thread = null;
             }
+            */
         }
         public void Dispose()
         {

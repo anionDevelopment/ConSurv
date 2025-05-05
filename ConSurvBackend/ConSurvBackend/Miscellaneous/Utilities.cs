@@ -37,7 +37,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             return new UserInformationDTO(user.Id, user.Name, isAdmin, isModerator);
         }
 
-        internal static string GetVideoTargetFile( string cameraId, bool timeInUTC, ITimeService timeService)
+        internal static string GetVideoTargetFile(string cameraId, bool timeInUTC, ITimeService timeService)
         {
             DateTime dateTime;
             if (timeInUTC)
@@ -58,7 +58,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess,IGRYLog log,string purpose)
+        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess, IGRYLog log, string purpose, bool runSynchronous)
         {
             bool verbose = false;//can be changed to true temporary for debugging purposes
             bool isDebug = false;
@@ -71,11 +71,18 @@ namespace ConSurvBackend.Core.Miscellaneous
                 Program = program,
                 Argument = argument,
                 WorkingDirectory = workingDirectory,
-                
+
             });
-            log.Log($"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose})",Microsoft.Extensions.Logging.LogLevel.Information);
+            log.Log($"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose})", Microsoft.Extensions.Logging.LogLevel.Information);
             e.Configuration.Verbosity = verbose ? Verbosity.Verbose : Verbosity.Quiet;
-            e.Configuration.WaitingState = new RunAsynchronously();
+            if (runSynchronous)
+            {
+                e.Configuration.WaitingState = new RunSynchronously();
+            }
+            else
+            {
+                e.Configuration.WaitingState = new RunAsynchronously();
+            }
             e.Run();
             /*
             Process process = new Process();

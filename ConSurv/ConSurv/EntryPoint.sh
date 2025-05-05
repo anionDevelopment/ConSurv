@@ -1,7 +1,9 @@
 #!/bin/bash
 export IsRunningInContainer=true
 
-{ cd /Workspace/Application/Backend && dotnet ./ConSurvBackend.dll; } &
+echo "Running ConSurv with arguments: $@"
+
+{ cd /Workspace/Application/Backend && dotnet ./ConSurvBackend.dll "$@"; } &
 { cd /Workspace/Application/Frontend && nginx -c /Workspace/Application/Frontend/nginx.conf -g "daemon off;"; } &
 
 wait -n

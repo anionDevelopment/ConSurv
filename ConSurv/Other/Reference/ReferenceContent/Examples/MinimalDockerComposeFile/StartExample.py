@@ -4,7 +4,14 @@ from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjec
 
 
 def start_dockerfile_example():
-    TasksForCommonProjectStructure().start_dockerfile_example(str(Path(__file__).absolute()), 3, True, True, sys.argv)
+    current_file=str(Path(__file__).absolute())
+    env_file_name="ConSurv.env"
+    t:TasksForCommonProjectStructure=TasksForCommonProjectStructure()
+    t.ensure_env_file_is_generated(current_file,env_file_name,dict({
+        'A': 'v1',
+        'B': 'v2', 
+    }))
+    t.start_dockerfile_example(current_file, 3, True, True, sys.argv,env_file_name)
 
 
 if __name__ == "__main__":

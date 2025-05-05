@@ -1,9 +1,6 @@
-﻿using ConSurvBackend.Core.Miscellaneous;
-using GRYLibrary.Core.APIServer.Settings;
+﻿using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace ConSurvBackend.Core.Controller
