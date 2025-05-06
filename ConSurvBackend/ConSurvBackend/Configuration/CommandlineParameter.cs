@@ -2,13 +2,9 @@
 using GRYLibrary.Core.APIServer.Verbs;
 using System.Collections.Generic;
 
-namespace ConSurvBackend.Core.Configuration
-{
-    [Verb("Run", isDefault: true, HelpText = "Runs the server.")]
-    public  class CommandlineParameter : IAPIServerCommandlineParameter
+namespace ConSurvBackend.Core.Configuration { 
+    public  class CommandlineParameter : RunServer
     {
-        [Option(nameof(TestRun), Required = false, Default = false)]
-        public bool TestRun { get; set; }
 
         [Option(nameof(InitialAdminPassword), Required = false)]
         public string? InitialAdminPassword { get; set; }

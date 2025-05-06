@@ -34,12 +34,6 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-            this.EnsureBusinessLogicIsInitialized(commandlineParameter);
-            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
-        }
-
-        private void EnsureBusinessLogicIsInitialized(CommandlineParameter commandlineParameter)
-        {
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
             {
@@ -83,6 +77,7 @@ namespace ConSurvBackend.Core.Services
                     this._ExampleDataCreator.AddExampleData();
                 }
             }
+            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
         }
 
         private void StartWatchDogProcess(string configurationFolder)
