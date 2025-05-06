@@ -12,6 +12,8 @@ using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
+using GRYLibrary.Core.Logging.GRYLogger;
+using Microsoft.Extensions.Logging;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -21,10 +23,13 @@ namespace ConSurvBackend.Core.Services
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
         private readonly Semaphore _Semaphore = new Semaphore();
-        public DatabasePersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, ISQLProvider sQLProvider)
+        private readonly IGRYLog _Log;
+
+        public DatabasePersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, ISQLProvider sQLProvider, IGRYLog log)
         {
             this._DatabaseContext = new DatabaseContext(options, logger, timeService, databaseManager);
             this._SQLProvider = sQLProvider;
+            this._Log = log;
         }
 
         #region AccessDatabase
@@ -110,7 +115,14 @@ namespace ConSurvBackend.Core.Services
 
         public void CreateCamera(Camera camera)
         {
-            throw new System.NotImplementedException();
+            this.RunTransaction((command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptCreateCamera();
+                command.Parameters.Add(new MySqlParameter("Id", camera.Id));
+                command.Parameters.Add(new MySqlParameter("Name", camera.Name));
+                command.Parameters.Add(new MySqlParameter("Url", camera.VideoInformation.StreamURL));
+                command.ExecuteNonQuery();
+            });
         }
 
         public void RemoveCamera(string cameraId)
@@ -121,6 +133,32 @@ namespace ConSurvBackend.Core.Services
         public void UpdateCamera(Camera camera)
         {
             throw new System.NotImplementedException();
+        }
+
+        public IDictionary<string, Camera> GetAllCameras()
+        {
+            IDictionary<string, Camera> roles = this.RunTransaction((command) =>
+            {
+                IDictionary<string, Camera> cameraDictionary = new Dictionary<string, Camera>();
+                command.CommandText = this._SQLProvider.GetScriptGetAllCameras();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string id = reader.GetString(0);
+                        string name = reader.GetString(1);
+                        Camera camera = new Camera(id, name);
+                        camera.VideoInformation = new VideoInformation()
+                        {
+                            StreamURL = reader.GetString(2),
+                        };
+                        cameraDictionary[id] = camera;
+                    }
+                    reader.Close();
+                    return cameraDictionary;
+                };
+            })[0];
+            return roles;
         }
 
         public bool IsAvailable()
@@ -154,12 +192,7 @@ namespace ConSurvBackend.Core.Services
             })[0];
         }
 
-        public IDictionary<string, Camera> GetAllCameras()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<string, Model.User> GetAllUsers()
+        public IDictionary<string, User> GetAllUsers()
         {
             throw new NotImplementedException();
         }
@@ -199,7 +232,6 @@ namespace ConSurvBackend.Core.Services
             this.RunTransaction((command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptInsertRole();
-                command.Prepare();
                 command.Parameters.Add(new MySqlParameter("Id", role.Id));
                 command.Parameters.Add(new MySqlParameter("Name", role.Name));
                 command.ExecuteNonQuery();
@@ -228,12 +260,12 @@ namespace ConSurvBackend.Core.Services
             throw new NotImplementedException();
         }
 
-        public bool AccessTokenExists(string accessToken, out Model.User user)
+        public bool AccessTokenExists(string accessToken, out User user)
         {
             throw new NotImplementedException();
         }
 
-        public void AddUser(Model.User user)
+        public void AddUser(User user)
         {
             this.RunTransaction((command) =>
             {
@@ -247,7 +279,6 @@ namespace ConSurvBackend.Core.Services
                 command.Parameters.Add(new MySqlParameter("RegistrationMoment", user.RegistrationMoment));
                 command.Parameters.Add(new MySqlParameter("TOTPActivated", user.TOTP.IsActicated));
                 command.Parameters.Add(new MySqlParameter("TOTPSecretKey", user.TOTP.SecretKey));
-                command.Prepare();
                 command.ExecuteNonQuery();
             });
         }
@@ -263,9 +294,9 @@ namespace ConSurvBackend.Core.Services
             })[0];
         }
 
-        public Model.User GetUserById(string userId)
+        public User GetUserById(string userId)
         {
-            Model.User result = this.RunTransaction((cmd) =>
+            User result = this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserById();
                 cmd.Parameters.Add(new MySqlParameter("Id", userId));
@@ -273,7 +304,7 @@ namespace ConSurvBackend.Core.Services
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    Model.User user = new Model.User();
+                    User user = new User();
                     user.Id = userId;
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
@@ -331,9 +362,9 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
-        public Model.User GetUserByName(string userName)
+        public User GetUserByName(string userName)
         {
-            Model.User result = this.RunTransaction((cmd) =>
+            User result = this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserByName();
                 cmd.Parameters.Add(new MySqlParameter("Name", userName));
@@ -341,7 +372,7 @@ namespace ConSurvBackend.Core.Services
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    Model.User user = new Model.User();
+                    User user = new User();
                     user.Id = reader.GetString(0);
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
@@ -381,8 +412,8 @@ namespace ConSurvBackend.Core.Services
         {
             this.RunTransaction((command) =>
             {
+                this._Log.Log($"Adding role '{roleId}' to user '{userId}'", LogLevel.Information);
                 command.CommandText = this._SQLProvider.GetScriptAddRoleToUser();
-                command.Prepare();
                 command.Parameters.Add(new MySqlParameter("UserId", userId));
                 command.Parameters.Add(new MySqlParameter("RoleId", roleId));
                 command.ExecuteNonQuery();
@@ -406,12 +437,12 @@ namespace ConSurvBackend.Core.Services
             })[0];
         }
 
-        public Model.User GetUserByAccessToken(string accessToken)
+        public User GetUserByAccessToken(string accessToken)
         {
             return this.GetUserById(this.GetAccessToken(accessToken).OwnerUserId);
         }
 
-        public void UpdateUser(Model.User user)
+        public void UpdateUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -434,6 +465,30 @@ namespace ConSurvBackend.Core.Services
         public ISet<AccessToken> GetAllAccessTokenOfUser(string userId)
         {
             throw new NotImplementedException();
+        }
+
+        public Role GetRoleByName(string roleName)
+        {
+            Role result = this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetRoleByName();
+                cmd.Parameters.Add(new MySqlParameter("Name", roleName));
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    Role role = new Role();
+                    role.Id = roleName;
+                    role.Name = reader.GetString(0);
+                    this.EnrichWithInheritedRoles(role);
+                    return role;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"No user found with username '{roleName}'");
+                }
+            })[0];
+            return result;
         }
     }
 }

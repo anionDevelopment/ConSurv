@@ -8,6 +8,7 @@ using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Services.CredH;
+using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 
 namespace ConSurvBackend.Core.Configuration
@@ -30,5 +31,6 @@ namespace ConSurvBackend.Core.Configuration
         public bool TimeInUTC { get; set; }
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
         public IHeaderServiceConfiguration HeaderServiceConfiguration { get;  set; }
+        public GRYLogConfiguration AuditLogConfiguration { get; set; }
     }
 }

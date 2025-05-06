@@ -20,7 +20,7 @@ end note
 ConSurv .. ConSurvNote
 
 ConSurvFrontend --> ConSurvBackend
-ConSurv --> ConSurvBackend
 ConSurv --> ConSurvFrontend
+ConSurv --> ConSurvBackend
 
 @enduml

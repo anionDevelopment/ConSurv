@@ -66,7 +66,7 @@ namespace ConSurvBackend.Core.Miscellaneous
             isDebug = true;
 #endif
             string workingDirectory = workingFolder ?? Directory.GetCurrentDirectory();
-            var e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
+            ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
             {
                 Program = program,
                 Argument = argument,

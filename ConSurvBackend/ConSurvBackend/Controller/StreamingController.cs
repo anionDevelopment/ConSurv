@@ -18,8 +18,8 @@ namespace ConSurvBackend.Core.Controller
         private readonly IGRYLog _Log;
         public StreamingController(IApplicationConstants applicationConstants, IGRYLog log)
         {
-            _ApplicationConstants = applicationConstants;
-            _Log = log;
+            this._ApplicationConstants = applicationConstants;
+            this._Log = log;
         }
 
 
@@ -28,7 +28,7 @@ namespace ConSurvBackend.Core.Controller
         {
             string filename = "cam01.m3u8";
             //TODO check if filename is valid (...to prevent every kind of path-traversal-attacks etc.)
-            var filePath = Path.Combine(this._HLSFolder, filename);
+            string filePath = Path.Combine(this._HLSFolder, filename);
 
             //TODO read from disk
 

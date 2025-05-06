@@ -7,6 +7,7 @@
         string GetScriptGetAllAccessTokenForUser();
         string GetScriptGetAllRoles();
         string GetScriptGetUserById();
+        string GetScriptGetRoleByName();
         string GetScriptGetUserByName();
         string GetScriptInsertRole();
         string GetScriptRoleExists();
@@ -14,5 +15,7 @@
         string GetScriptUserHasRole();
         string GetScriptUserWithIdExists();
         string GetScriptUserWithNameExists();
+        string GetScriptGetAllCameras();
+        string GetScriptCreateCamera();
     }
 }

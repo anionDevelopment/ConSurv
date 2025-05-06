@@ -62,7 +62,7 @@ namespace ConSurvBackend.Core.Services
         {
             try
             {
-                return this.GetPreviewDirectlyFromCamera(camera, default, default, false, _Log).success;
+                return this.GetPreviewDirectlyFromCamera(camera, default, default, false, this._Log).success;
             }
             catch
             {
@@ -103,7 +103,7 @@ namespace ConSurvBackend.Core.Services
                             log.Log($"Error while generating preview for camera with id '{camera.Id}'.", LogLevel.Warning);
                         }
                     }
-                    return (false, _GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg"));
+                    return (false, this._GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg"));
                 }
                 finally
                 {
@@ -242,7 +242,7 @@ namespace ConSurvBackend.Core.Services
                         }
                         if (this.IsAvailable(camera))
                         {
-                            if (_Constants.Environment is Development)
+                            if (this._Constants.Environment is Development)
                             {
                                 videoLength = TimeSpan.FromSeconds(20);
                             }
@@ -252,7 +252,7 @@ namespace ConSurvBackend.Core.Services
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
                             //TODO refactor this using filter_compley to also take a snapshot every 5 seconds
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, _Constants.GetConfigurationFolder(), null, _Log, $"Record camera {camera.Id}", true);
+                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera {camera.Id}", true);
                             /*
                             ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", $"-rtsp_transport tcp -i {streamURL}"
                                 + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolderFinal}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""
@@ -274,7 +274,7 @@ namespace ConSurvBackend.Core.Services
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {
-                                _Log.Log(GRYLog.FormatProgramOutput($"Process for recording camera {camera.Id} exited due to a problem: ", process.AllStdOutLines, process.AllStdErrLines), LogLevel.Warning);
+                                this._Log.Log(GRYLog.FormatProgramOutput($"Process for recording camera {camera.Id} exited due to a problem: ", process.AllStdOutLines, process.AllStdErrLines), LogLevel.Warning);
                             }
                         }
                         else

@@ -22,5 +22,7 @@ namespace ConSurvBackend.Core.Services
         public bool UserWithNameExists(string username);
         public IDictionary<string, Camera> GetAllCameras();
         public CameraDTO ToDTO(Camera camera);
+        public void EnsureUserHasRole(string userId, string roleId);
+        public void EnsureUserDoesNotHaveRole(string userId, string roleId);
     }
 }
