@@ -34,16 +34,11 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-            this.StartWatchDogProcess(_Constants.GetConfigurationFolder());
-            this.EnsureBusinessLogicIsInitialized(commandlineParameter);
-            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
-        }
-
-        private void EnsureBusinessLogicIsInitialized(CommandlineParameter commandlineParameter)
-        {
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
             {
+                this._GeneralLogger.Log("Add admin-user...", Microsoft.Extensions.Logging.LogLevel.Information);
+
                 this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameUsers);
                 Role usersRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameUsers);
 
@@ -53,7 +48,6 @@ namespace ConSurvBackend.Core.Services
                 moderatorsRole.InheritedRoles.Add(usersRole);
                 this._AuthenticationService.UpdateRole(moderatorsRole);
 
-
                 this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameAdmins);
                 Role adminsRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameAdmins);
                 adminsRole.InheritedRoles = new HashSet<Role>();
@@ -61,8 +55,9 @@ namespace ConSurvBackend.Core.Services
                 this._AuthenticationService.UpdateRole(adminsRole);
                 string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                 string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
-                this._AuthenticationService.EnsureUserHasRole(adminUserId, adminsRole.Id);
+                _CameraService.EnsureUserHasRole(adminUserId, adminsRole.Id);
 
+                this._GeneralLogger.Log("Add initial cameras...", Microsoft.Extensions.Logging.LogLevel.Information);
                 if (commandlineParameter.InitialCameraAddresses != null)
                 {
                     uint counter = 0;
@@ -78,14 +73,17 @@ namespace ConSurvBackend.Core.Services
 
                 if (this._Constants.Environment is Development)
                 {
+                    this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
                     this._ExampleDataCreator.AddExampleData();
                 }
             }
+            this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
         }
 
         private void StartWatchDogProcess(string configurationFolder)
         {
-            var currentProcessId = Environment.ProcessId;
+            this._GeneralLogger.Log("Start watch-dog-process...", Microsoft.Extensions.Logging.LogLevel.Information);
+            int currentProcessId = Environment.ProcessId;
             Process process = new Process();
             process.StartInfo.FileName = "scespoc";
             process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./StartedProcesses.txt";

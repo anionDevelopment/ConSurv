@@ -112,7 +112,7 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(Cameras))]
         public IActionResult Cameras()
         {
-            var result = this._CameraService.GetAllCameras().Select(camera => this._CameraService.ToDTO(camera.Value)).ToList();
+            System.Collections.Generic.List<CameraDTO> result = this._CameraService.GetAllCameras().Select(camera => this._CameraService.ToDTO(camera.Value)).ToList();
             return this.Ok(result);
         }
 

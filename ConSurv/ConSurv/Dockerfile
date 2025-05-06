@@ -30,8 +30,11 @@ COPY ConSurv/nginx.conf /Workspace/Application/Frontend
 
 COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
 RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh
+COPY ConSurv/HealthCheck.sh /Workspace/Other/EntryPoint
+RUN chmod +x /Workspace/Other/EntryPoint/HealthCheck.sh
 
-HEALTHCHECK CMD curl --fail http://localhost:80/API/Other/Maintenance/HealthCheck
-#TODO add frontend to healthcheck
+HEALTHCHECK CMD ./HealthCheck.sh
+#TODO extract to script and add frontend to healthcheck
 
 ENTRYPOINT ["./EntryPoint.sh"]
+CMD []

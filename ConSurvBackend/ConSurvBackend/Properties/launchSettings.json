@@ -2,7 +2,7 @@
   "profiles": {
     "ConSurvBackend": {
       "commandName": "Project",
-      "commandLineArgs": "RunServer --InitialAdminPassword admin --InitialCameraAddresses rtsp://192.168.1.141/stream1"
+      "commandLineArgs": "Run --InitialAdminPassword admin"
     }
   }
 }

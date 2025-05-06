@@ -65,7 +65,7 @@ namespace ConSurvBackend.Core.Services
             return this._Cameras;
         }
 
-        public IDictionary<string, Model.User> GetAllUsers()
+        public IDictionary<string, User> GetAllUsers()
         {
             throw new System.NotImplementedException();
         }
@@ -90,12 +90,12 @@ namespace ConSurvBackend.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public bool AccessTokenExists(string accessToken, out Model.User? user)
+        public bool AccessTokenExists(string accessToken, out User? user)
         {
             throw new System.NotImplementedException();
         }
 
-        public void AddUser(Model.User newUser)
+        public void AddUser(User newUser)
         {
             throw new System.NotImplementedException();
         }
@@ -105,12 +105,12 @@ namespace ConSurvBackend.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public Model.User GetUserById(string userId)
+        public User GetUserById(string userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Model.User GetUserByName(string userName)
+        public User GetUserByName(string userName)
         {
             throw new System.NotImplementedException();
         }
@@ -140,12 +140,12 @@ namespace ConSurvBackend.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public Model.User GetUserByAccessToken(string accessToken)
+        public User GetUserByAccessToken(string accessToken)
         {
             throw new System.NotImplementedException();
         }
 
-        public void UpdateUser(Model.User user)
+        public void UpdateUser(User user)
         {
             throw new System.NotImplementedException();
         }
@@ -166,6 +166,11 @@ namespace ConSurvBackend.Core.Services
         }
 
         public ISet<AccessToken> GetAllAccessTokenOfUser(string userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Role GetRoleByName(string roleName)
         {
             throw new System.NotImplementedException();
         }

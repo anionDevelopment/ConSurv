@@ -16,14 +16,29 @@ namespace ConSurvBackend.Core.Services
             return this.LoadSQLScript("AddUser");
         }
 
+        public string GetScriptCreateCamera()
+        {
+            return this.LoadSQLScript("CreateCamera");
+        }
+
         public string GetScriptGetAllAccessTokenForUser()
         {
             return this.LoadSQLScript("GetAllAccessTokenForUser");
         }
 
+        public string GetScriptGetAllCameras()
+        {
+            return this.LoadSQLScript("GetAllCameras");
+        }
+
         public string GetScriptGetAllRoles()
         {
             return this.LoadSQLScript("GetAllRoles");
+        }
+
+        public string GetScriptGetRoleByName()
+        {
+            return this.LoadSQLScript("GetRoleByName");
         }
 
         public string GetScriptGetUserById()

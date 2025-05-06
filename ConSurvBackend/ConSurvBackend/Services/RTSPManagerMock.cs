@@ -1,4 +1,5 @@
 ﻿using ConSurvBackend.Core.Model.Base;
+using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 
 namespace ConSurvBackend.Core.Services
@@ -21,7 +22,7 @@ namespace ConSurvBackend.Core.Services
             //TODO pretend real camera-behavior-handling
         }
 
-        public (bool success, byte[] picture) GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
+        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth,bool logFail,IGRYLog log)
         {
            throw new NotImplementedException();//TODO return (true, mock-picture)
         }

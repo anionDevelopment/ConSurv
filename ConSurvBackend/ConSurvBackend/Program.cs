@@ -33,9 +33,11 @@ using GRYLibrary.Core.APIServer.Services.CredH;
 using GRYLibrary.Core.APIServer.Mid.AutS;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
-using ConSurvBackend.Core.Controller;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Res;
+using Microsoft.Extensions.Logging;
+using GRYLibrary.Core.Logging.GRYLogger;
+using GRYLibrary.Core.Misc.FilePath;
 
 namespace ConSurvBackend.Core
 {
@@ -43,15 +45,16 @@ namespace ConSurvBackend.Core
     {
         internal static int Main(string[] commandlineArguments)
         {
+            bool runPersistent = false;
             return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Miscellaneous.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {
-                apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) => //HINT initialization for first run (used when configuration-file not exists)
+                apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
-                    //TODO configure regarding to mode-parameter
+                    runPersistent = initializationInformation.ApplicationConstants.Environment is not Development && initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
+                    initializationInformation.InitialLogger.Log($"{nameof(initializationInformation.CommandlineParameter.InitialAdminPassword)}: \"{initializationInformation.CommandlineParameter.InitialAdminPassword}\"", LogLevel.Information);
+                    initializationInformation.InitialLogger.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
-                    initializationInformation.ApplicationConstants.KnownTypes.Add(typeof(CameraController));//TODO check if this line can be removed
-                    initializationInformation.ApplicationConstants.KnownTypes.Add(typeof(UserController));//TODO check if this line can be removed
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                     initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                     initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);
@@ -67,29 +70,35 @@ namespace ConSurvBackend.Core
                         TermsOfServiceLink = $"https://information.{domain}/Products/{GeneralConstants.CodeUnitName}/TermsOfService"
                     };
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration()
+                    {
+                        DatabaseConnectionString = "Server=consurv_database;Port=3306;Database=ConSurvDatabase;UID=root;PWD=R00tpa55w0rd;",
+                    };
                     bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
 
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
                     {
                         RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
-                                    @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/API/Other/Maintenance/HealthCheck$",
                         },
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(10);
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = TimeSpan.FromMinutes(5);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TargetFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings");
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./AuditLog.log"), true);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
-                                @$"^/favicon\.ico$",
-                                @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/favicon\.ico$",
+                            @$"^/API/Other/Resources/APISpecification/*",
                         },
-                        MaximalLengthofResponseBodies = 50,
+                        MaximalLengthOfResponseBodies = 50,
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
@@ -98,17 +107,20 @@ namespace ConSurvBackend.Core
                 };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
                 {
-                    IGeneralLogger logger = functionalInformation.Logger;
-                    bool runPersistent = functionalInformation.InitializationInformation.ApplicationConstants.Environment is not Development && functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
+                    functionalInformation.Logger.Log("Run initialization...");
+                    IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog")));
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
                     if (runPersistent)
                     {
                         functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                         {
-                            string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabaseConnectionString;
-                            Tools.ConnectToDatabaseWrapper(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions => { sqlOptions.CommandTimeout(120); }), GeneralLogger.NoLog(), GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
+                            string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
+                            Tools.ConnectToDatabaseWrapper(() => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions => { sqlOptions.CommandTimeout(120); }), functionalInformation.Logger, GUtilities.AdaptMariaDBSQLConnectionString(connectionString, true));
                         }, ServiceLifetime.Singleton);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
-                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<Model.User>>(sp => sp.GetRequiredService<IPersistence>());
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDatabaseManager, DatabaseManager>();
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<IPersistence>());
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, PersistentAuthenticationService>();
                     }
                     else
                     {
@@ -117,7 +129,7 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                     }
-                    if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development && false)//TODO remove "&& false"
+                    if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development)
                     {
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
                     }
@@ -137,7 +149,6 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRandomnessProvider>(new RandomnessProvider(new Random(42)));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IProcessManager, ProcessManager>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraService, CameraService>();
@@ -156,6 +167,8 @@ namespace ConSurvBackend.Core
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
+                    var logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
+                    logger.Log("Configure webapplication...", LogLevel.Information);
                     /*
                     functionalInformationForWebApplication.WebApplication.UseWebSockets(new WebSocketOptions
                     {
@@ -164,10 +177,10 @@ namespace ConSurvBackend.Core
                     functionalInformationForWebApplication.WebApplication.UseRouting();
                     */
                     // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
-                    IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter> initializationService = functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<ConSurvBackend.Core.Configuration.CommandlineParameter>>();
+                    IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                     initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
-                    IMetricsService metricsService = functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>();
+                    IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                     functionalInformationForWebApplication.PreRun = () =>
                     {
                         metricsService.StartAsync();

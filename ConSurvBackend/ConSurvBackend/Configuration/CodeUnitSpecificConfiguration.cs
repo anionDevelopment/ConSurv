@@ -8,6 +8,7 @@ using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Services.CredH;
+using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 
 namespace ConSurvBackend.Core.Configuration
@@ -16,7 +17,6 @@ namespace ConSurvBackend.Core.Configuration
     {
         public bool RegistrationIsEnabled { get; set; }
         public bool LoginIsEnabled { get; set; }
-        public string DatabaseConnectionString { get; set; }
         public ICommonRoutesInformation CommonRoutesInformation { get; set; }
         public IMaintenanceRoutesInformation MaintenanceRoutesInformation { get; set; }
         public IDRequestLoggingConfiguration ConfigurationForDLoggingMiddleware { get; set; }
@@ -30,5 +30,7 @@ namespace ConSurvBackend.Core.Configuration
         public bool TimeInUTC { get; set; }
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
         public IHeaderServiceConfiguration HeaderServiceConfiguration { get;  set; }
+        public IGRYLogConfiguration AuditLogConfiguration { get; set; }
+        public IDatabasePersistenceConfiguration DatabasePersistenceConfiguration { get; set; }
     }
 }

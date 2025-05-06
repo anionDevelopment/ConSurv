@@ -11,6 +11,7 @@ using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -22,8 +23,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistence _Persistence;
         private readonly ITimeService _TimeService;
         private readonly IRTSPManager _RTSPManager;
+        private readonly IAuditLog _AuditLog;
         private readonly IRandomnessProvider _RandomnessProvider;
-        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService,  IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider)
+        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog)
         {
             this._Persistence = persistence;
             this._Log = log;
@@ -31,6 +33,7 @@ namespace ConSurvBackend.Core.Services
             this._TimeService = timeService;
             this._AuthenticationService = authenticationService;
             this._RandomnessProvider = randomnessProvider;
+            this._AuditLog = auditLog;
             //TODO load persisted cameras and start recording if necessary
         }
         public string CreateCamera(string name, string streamURL)
@@ -39,7 +42,7 @@ namespace ConSurvBackend.Core.Services
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
-            this._Log.Log($"Created camera {camera.Id}.");
+            this._AuditLog.AuditLogger.Log($"Created camera {camera.Id}.", LogLevel.Information);
             return camera.Id;
         }
 
@@ -47,11 +50,11 @@ namespace ConSurvBackend.Core.Services
         {
             return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
         }
-        
+
         public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
         {
             //TODO check permission
-            return camera.VideoInformation.GetPreview(camera, this._RTSPManager,maximalHeight,maximalWidth);
+            return camera.VideoInformation.GetPreview(camera, this._RTSPManager, maximalHeight, maximalWidth, this._Log);
         }
 
         public bool IsAvailable(Camera camera)
@@ -89,6 +92,7 @@ namespace ConSurvBackend.Core.Services
             Camera camera = this.GetCameraById(cameraId);
             camera.RecordMode = new NoRecording();
             this._Persistence.RemoveCamera(cameraId);
+            this._AuditLog.AuditLogger.Log($"Removed camera {camera.Id}.", LogLevel.Information);
         }
 
         public void UpdateCamera(Camera camera)
@@ -96,6 +100,7 @@ namespace ConSurvBackend.Core.Services
             //TODO check permission
             this._Persistence.UpdateCamera(camera);
             camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
+            this._AuditLog.AuditLogger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done
         }
 
         public Camera GetCameraById(string cameraId)
@@ -129,6 +134,7 @@ namespace ConSurvBackend.Core.Services
             {
                 User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
                 this._AuthenticationService.AddUserTyped(newUser);
+                this._AuditLog.AuditLogger.Log($"User {newUser.Id} registered.", LogLevel.Information);
                 return newUser.Id;
             }
         }
@@ -153,6 +159,18 @@ namespace ConSurvBackend.Core.Services
                 VideoInformationDTO = camera.VideoInformation.ToDTO(),
                 RecordStateDTO = this.GetCurrentRecordingInformation(camera).ToDTO(),
             };
+        }
+
+        public void EnsureUserHasRole(string userId, string roleId)
+        {
+            this._AuthenticationService.EnsureUserHasRole(userId, roleId);
+            this._AuditLog.AuditLogger.Log($"Role {roleId} has been assigned to user {userId}.", LogLevel.Information);//TODO add information about why and by whom this was done
+        }
+
+        public void EnsureUserDoesNotHaveRole(string userId, string roleId)
+        {
+            this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
+            this._AuditLog.AuditLogger.Log($"Role {roleId} has been unassigned to user {userId}.", LogLevel.Information);//TODO add information about why and by whom this was done
         }
     }
 }
