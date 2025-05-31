@@ -19,8 +19,10 @@ if [[ -n "$InitialCameraAddresses" ]]; then
     argument="$argument --InitialCameraAddresses $InitialCameraAddresses"
 fi
 
-if [[ -n "$DoNotHostFrontend" ]]; then
-    #TODO start frontend only when DoNotHostFrontend is not set
+if [ -z ${DoNotHostFrontend+x} ]; then 
+    echo "Frontend will be started."; 
+else 
+    #TODO ensure that frontend will not be hosted
 fi
 
 { cd /Workspace/Application/Backend && dotnet ./ConSurvBackend.dll $argument; } &
