@@ -120,7 +120,9 @@ namespace ConSurvBackend.Core.Services
                 command.CommandText = this._SQLProvider.GetScriptCreateCamera();
                 command.Parameters.Add(new MySqlParameter("Id", camera.Id));
                 command.Parameters.Add(new MySqlParameter("Name", camera.Name));
-                command.Parameters.Add(new MySqlParameter("Url", camera.VideoInformation.StreamURL));
+                command.Parameters.Add(new MySqlParameter("StreamURL", camera.VideoInformation.StreamURL));
+                command.Parameters.Add(new MySqlParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
+                command.Parameters.Add(new MySqlParameter("Certificate", camera.VideoInformation.Certificate));
                 command.ExecuteNonQuery();
             });
         }
@@ -151,6 +153,8 @@ namespace ConSurvBackend.Core.Services
                         camera.VideoInformation = new VideoInformation()
                         {
                             StreamURL = reader.GetString(2),
+                            IsONVIFCamera = reader.GetBoolean(3),
+                            Certificate = reader.GetString(4),
                         };
                         cameraDictionary[id] = camera;
                     }

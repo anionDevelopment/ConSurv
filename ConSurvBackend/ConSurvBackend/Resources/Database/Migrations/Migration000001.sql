@@ -58,6 +58,8 @@ CREATE TABLE `Role_InheritedRoles` (
 CREATE TABLE `Cameras` (
     `Id` VARCHAR(256) not null,
     `Name` VARCHAR(256) not null,
-    `Url` VARCHAR(256) not null,
+    `StreamURL` VARCHAR(256) not null,
+    `IsONVIFCamera` BOOL not null,
+    `Certificate` VARCHAR(8192) null,
     CONSTRAINT `PK_Cameras` PRIMARY KEY (`Id`)
 ) CHARACTER SET=utf8mb4;

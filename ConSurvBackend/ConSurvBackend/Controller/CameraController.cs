@@ -116,6 +116,8 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(result);
         }
 
+        //TODO add option to download recorded videos
+
         #region ONVIF-specific
 
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]

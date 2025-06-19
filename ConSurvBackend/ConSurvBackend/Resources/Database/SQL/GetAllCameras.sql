@@ -1,2 +1,2 @@
 -- MariaDB-syntax
-select `Id`, `Name`, `URL` from Cameras;
+select `Id`, `Name`, `StreamURL`, `IsONVIFCamera`, `Certificate` from Cameras;
