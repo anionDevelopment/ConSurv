@@ -25,7 +25,18 @@
 
 ## Development
 
+## Additional information
+
+See the codeunit-specific information:
+
+- [ConSurvBackend](./ConSurvBackend/ReadMe.md)
+- [ConSurvFrontend](./ConSurvFrontend/ReadMe.md)
+- [ConSurvClient](./ConSurvClient/ReadMe.md)
+- [ConSurv](./ConSurvx/ReadMe.md)
+
 ## Run locally
+
+In short:
 
 Step 1:
 
@@ -41,12 +52,13 @@ Start ConSurv.
 
 If you just want to run ConSurv locally:
 
-- Run `task BaseExampleStart` (or shorter: `task beu`). This starts the ConSurv-backend and -frontend locally in a container.
+- Run `task BaseExampleStart` (or shorter: `task beu`). This starts the ConSurv-backend and -frontend locally in a container. (see the [ReadMe.md](./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile/ReadMe.md) for this example)
 
 If you want to debug the frontend or backend instead:
 
-- Start the backend in your IDE, see [ReadMe-file](./ConSurvBackend/ReadMe.md).
-- Start the frontend in your IDE, see [ReadMe-file](./ConSurvFrontend/ReadMe.md).
+- Create the dockernetwork `consurv_net` (by running `docker network create consurv_net`).
+- Start the backend in your IDE, see the [hints](./ConSurvBackend/Other/Reference/ReferenceContent/Hints.md) for developer.
+- Start the frontend in your IDE, see the [hints](./ConSurvFrontend/Other/Reference/ReferenceContent/Hints.md) for developer.
 - Run `task LocaltestserviceReverseProxyStart` (or shorter: `task lru`) to make the backend and frontend accessable on the same port.
 
 Step 3:

@@ -1,7 +1,5 @@
-# AngularProject-reference
+# ConSurvFrontend-reference
 
-TODO
+## Hints for developer
 
-Example picture:
-
-![Image not available](images/Example.png "Example picture")
+See the [hints](./Hints.md).

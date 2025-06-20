@@ -59,7 +59,9 @@ CREATE TABLE `Cameras` (
     `Id` VARCHAR(256) not null,
     `Name` VARCHAR(256) not null,
     `StreamURL` VARCHAR(256) not null,
-    `IsONVIFCamera` BOOL not null,
+    `IsONVIFCamera` tinyint(1) not null,
     `Certificate` VARCHAR(8192) null,
+    `RecordMode` tinyint(8) not null,
+    `Enabled` tinyint(1) not null,
     CONSTRAINT `PK_Cameras` PRIMARY KEY (`Id`)
 ) CHARACTER SET=utf8mb4;

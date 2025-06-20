@@ -2,9 +2,9 @@
 
 namespace ConSurvBackend.Core.Services
 {
-    public class SQLProvider : AbstractSQLProvider, ISQLProvider
+    public class SQLProviderService : AbstractSQLProvider, ISQLProvider
     {
-        public SQLProvider() : base("ConSurvBackend.Core.Resources.Database.SQL") { }
+        public SQLProviderService() : base("ConSurvBackend.Core.Resources.Database.SQL") { }
 
         public string GetScriptAddRoleToUser()
         {

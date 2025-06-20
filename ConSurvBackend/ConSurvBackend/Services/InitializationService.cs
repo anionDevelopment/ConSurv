@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Miscellaneous;
 using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
@@ -21,14 +22,18 @@ namespace ConSurvBackend.Core.Services
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly IGeneralLogger _GeneralLogger;
         private readonly IExampleDataCreator _ExampleDataCreator;
+        private readonly IRTSPManager _RTSPManager;
+        private readonly IStreamOrganizerService _StreamOrganizerService;
 
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService)
         {
             this._AuthenticationService = authenticationService;
             this._Constants = constants;
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
             this._ExampleDataCreator = exampleDataCreator;
+            this._RTSPManager = rtspManager;
+            this._StreamOrganizerService = streamOrganizerService;
         }
 
         public void Initialize(CommandlineParameter commandlineParameter)
@@ -67,7 +72,6 @@ namespace ConSurvBackend.Core.Services
                         var cameraId = this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
                         var camera = this._CameraService.GetCameraById(cameraId);
                         camera.RecordMode = new RecordAlways();
-                        this._CameraService.UpdateCamera(camera);
                     }
                 }
 
@@ -77,7 +81,25 @@ namespace ConSurvBackend.Core.Services
                     this._ExampleDataCreator.AddExampleData();
                 }
             }
+            this.OrganizeCameras();
+            this.StartCameras();
             this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
+        }
+
+        private void OrganizeCameras()
+        {
+            foreach (var camera in _CameraService.GetAllCameras().Values)
+            {
+                _StreamOrganizerService.OrganizeCamera(camera);
+            }
+        }
+
+        private void StartCameras()
+        {
+            foreach (var camera in _CameraService.GetAllCameras().Values)
+            {
+                camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
+            }
         }
 
         private void StartWatchDogProcess(string configurationFolder)

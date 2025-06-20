@@ -16,3 +16,5 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 ## IDE
 
 The recommended IDE for this code-unit is [Visual Studio](https://visualstudio.microsoft.com/).
+
+Start the project using the usual green debug-button in Visual Studio.

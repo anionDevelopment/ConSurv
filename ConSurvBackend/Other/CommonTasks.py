@@ -1,9 +1,36 @@
 import sys
 import os
 from pathlib import Path
+import zipfile
+import tarfile
 from ScriptCollection.ScriptCollectionCore import ScriptCollectionCore
 from ScriptCollection.GeneralUtilities import GeneralUtilities
 from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjectStructure
+
+
+@GeneralUtilities.check_arguments
+def ensure_mediamtx_is_available(t: TasksForCommonProjectStructure, target_folder: str) -> None:
+    def download_and_extract(osname: str, osname_in_github_asset: str, extension: str):
+        resource_name: str = f"MediaMTX_{osname}"
+        zip_filename: str = f"{resource_name}.{extension}"
+        t.ensure_file_from_github_assets_is_available_with_retry(target_folder, "bluenviron", "mediamtx", resource_name, zip_filename, lambda latest_version: f"mediamtx_{latest_version}_{osname_in_github_asset}_amd64.{extension}")
+        resource_folder: str = os.path.join(target_folder, "Other", "Resources", resource_name)
+        target_folder_extracted = os.path.join(resource_folder, "MediaMTX")
+        local_zip_file: str = os.path.join(resource_folder, f"{resource_name}.{extension}")
+        GeneralUtilities.ensure_folder_exists_and_is_empty(target_folder_extracted)
+        if extension == "zip":
+            with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
+                zip_ref.extractall(target_folder_extracted)
+        elif extension == "tar.gz":
+            with tarfile.open(local_zip_file, "r:gz") as tar:
+                tar.extractall(path=target_folder_extracted)
+        else:
+            raise ValueError(f"Unknown extension: \"{extension}\"")
+        GeneralUtilities.ensure_file_does_not_exist(local_zip_file)
+
+    download_and_extract("Windows", "windows", "zip")
+    download_and_extract("Linux", "linux", "tar.gz")
+    download_and_extract("MacOS", "darwin", "tar.gz")
 
 
 def common_tasks():
@@ -27,6 +54,7 @@ def common_tasks():
     t.set_constants_for_certificate_private_information(codeunit_folder)
     t.t4_transform(file, verbosity)
     t.update_year_for_dotnet_codeunit_in_common_scripts_file(file)
+    ensure_mediamtx_is_available(t, codeunit_folder)
 
 
 if __name__ == "__main__":

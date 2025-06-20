@@ -73,7 +73,7 @@ namespace ConSurvBackend.Core.Miscellaneous
                 WorkingDirectory = workingDirectory,
 
             });
-            log.Log($"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose})", Microsoft.Extensions.Logging.LogLevel.Information);
+            log.Log($"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose})", Microsoft.Extensions.Logging.LogLevel.Debug);
             e.Configuration.Verbosity = verbose ? Verbosity.Verbose : Verbosity.Quiet;
             if (runSynchronous)
             {

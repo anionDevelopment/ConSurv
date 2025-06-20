@@ -1,3 +1,5 @@
-# CCOTImplementationBitcoin reference
+# ConSurvBackend-reference
 
-TODO
+## Hints for developer
+
+See the [hints](./Hints.md).

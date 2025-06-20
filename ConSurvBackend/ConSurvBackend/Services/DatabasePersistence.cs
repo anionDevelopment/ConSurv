@@ -14,6 +14,7 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.Extensions.Logging;
+using ConSurvBackend.Core.Model.RecordModes;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -94,7 +95,8 @@ namespace ConSurvBackend.Core.Services
                                 commit = false;
                                 throw;
                             }
-                        };
+                        }
+                        ;
                     }
                 }
                 finally
@@ -123,6 +125,8 @@ namespace ConSurvBackend.Core.Services
                 command.Parameters.Add(new MySqlParameter("StreamURL", camera.VideoInformation.StreamURL));
                 command.Parameters.Add(new MySqlParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
                 command.Parameters.Add(new MySqlParameter("Certificate", camera.VideoInformation.Certificate));
+                command.Parameters.Add(new MySqlParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
+                command.Parameters.Add(new MySqlParameter("Enabled", camera.VideoInformation.Certificate));
                 command.ExecuteNonQuery();
             });
         }
@@ -156,11 +160,14 @@ namespace ConSurvBackend.Core.Services
                             IsONVIFCamera = reader.GetBoolean(3),
                             Certificate = reader.GetString(4),
                         };
+                        camera.RecordMode = RecordMode.FromNumberToInstance(reader.GetByte(5));
+                        camera.Enabled = reader.GetBoolean(6);
                         cameraDictionary[id] = camera;
                     }
                     reader.Close();
                     return cameraDictionary;
-                };
+                }
+                ;
             })[0];
             return roles;
         }
@@ -217,7 +224,8 @@ namespace ConSurvBackend.Core.Services
                     }
                     reader.Close();
                     return rolesInternal;
-                };
+                }
+                ;
             })[0];
             foreach (Role role in roles)
             {

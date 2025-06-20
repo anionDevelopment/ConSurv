@@ -1,13 +1,40 @@
 ﻿using ConSurvBackend.Core.Model.DTOs;
 using System;
+using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Model.RecordModes
 {
     public abstract class RecordMode : IEquatable<RecordMode>
     {
+        public RecordMode() { }
         public abstract T Accept<T>(IRecordModeVisitor<T> visitor);
         public abstract void Accept(IRecordModeVisitor visitor);
 
+        private static IDictionary<byte, Type> _IntegerMapping = new Dictionary<byte, Type>()
+        {
+            { 0, typeof(NoRecording) },
+            { 1, typeof(RecordAlways) },
+            { 2, typeof(RecordOnMovements) },
+        };
+        public static byte ToNumber(Type type)
+        {
+           foreach (var kvp in _IntegerMapping)
+            {
+                if (kvp.Value.Equals(type))
+                {
+                    return kvp.Key;
+                }
+            }
+            throw new KeyNotFoundException($"No number found for type {type.Name}");
+        }
+        public static Type FromNumber(byte number)
+        {
+            return _IntegerMapping[number];
+        }
+        public static RecordMode FromNumberToInstance(byte number)
+        {
+            return (RecordMode) Activator.CreateInstance( FromNumber(number));
+        }
         public override bool Equals(object obj)
         {
             return this.Equals(obj as RecordMode);

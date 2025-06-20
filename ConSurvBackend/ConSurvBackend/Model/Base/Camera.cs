@@ -9,13 +9,19 @@ namespace ConSurvBackend.Core.Model.Base
         public string Name { get; internal set; }
         public VideoInformation VideoInformation { get; internal set; }
         public RecordMode RecordMode { get; internal set; }
+        public bool Enabled { get; internal set; }
 
         public Camera(string id, string name)
         {
             this.Id = id;
             this.Name = name;
-            this.VideoInformation = new VideoInformation();
+            this.VideoInformation = new VideoInformation()
+            {
+                Certificate=null,
+                IsONVIFCamera=false,
+            };
             this.RecordMode = new NoRecording();
+            this.Enabled = true;
         }
 
         public override bool Equals(object? obj)

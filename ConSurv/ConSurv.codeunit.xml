@@ -7,7 +7,7 @@
     <cps:version>1.0.0</cps:version>
     <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
     <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
-    <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="false"
+    <cps:properties codeunithastestablesourcecode="false" codeunithasupdatabledependencies="true"
         throwexceptionifcodeunitfilecannotbevalidated="false"
         developmentstate="Maintenance-updates only"
         description="ConSurv is an IP-cam-management-system.">

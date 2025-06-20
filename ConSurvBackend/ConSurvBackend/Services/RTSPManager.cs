@@ -25,6 +25,7 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly Dictionary<string/*cameraid*/, RecordInformation> _RecordingProcesses = new Dictionary<string, RecordInformation>();
         private readonly IGRYLog _Log;
+        private readonly IAuditLog _AuditLog;
         private readonly ITimeService _TimeService;
         private readonly IApplicationConstants _Constants;
         private readonly IGeneralResourceLoader _GeneralResourceLoader;
@@ -46,7 +47,7 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IGeneralResourceLoader generalResourceLoader)
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IGeneralResourceLoader generalResourceLoader, IAuditLog auditLog)
 
         {
             this._Log = log;
@@ -54,6 +55,7 @@ namespace ConSurvBackend.Core.Services
             this._TimeService = timeService;
             this._Constants = constants;
             this._GeneralResourceLoader = generalResourceLoader;
+            this._AuditLog = auditLog;
         }
 
         #region public functions
@@ -194,7 +196,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StartToRecordAlways(Camera camera)
         {
-            this._Log.Log($"Start recording on camera {camera.Id}");
+            this._AuditLog.AuditLogger.Log($"Start recording on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is RecordAlways);
             this._RecordingProcesses[camera.Id] = new RecordInformation(true, null, null, camera, camera.RecordMode);
 
@@ -205,7 +207,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StartToRecordOnMovements(Camera camera)
         {
-            this._Log.Log($"Start recording movements on camera {camera.Id}");
+            this._AuditLog.AuditLogger.Log($"Start recording movements on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is RecordOnMovements);
             this._RecordingProcesses[camera.Id] = new RecordInformation(true, null, null, camera, camera.RecordMode);
 
@@ -214,7 +216,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StopRecording(Camera camera)
         {
-            this._Log.Log($"Stop recording on camera {camera.Id}");
+            this._AuditLog.AuditLogger.Log($"Stop recording on camera {camera.Id}");
             GRYLibrary.Core.Misc.Utilities.AssertCondition(camera.RecordMode is NoRecording);
             this.TerminateProcess(this._RecordingProcesses[camera.Id].Process);
         }
@@ -246,13 +248,17 @@ namespace ConSurvBackend.Core.Services
                             {
                                 videoLength = TimeSpan.FromSeconds(20);
                             }
+                            else
+                            {
+                                videoLength = TimeSpan.FromMinutes(10);
+                            }
                             string targetFolderFinal = Path.Combine(targetFolder, camera.Id).Replace(@"\", "/");
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(targetFolderFinal);
                             string targetFile = $"{targetFolderFinal}/{Utilities.GetVideoTargetFile(camera.Id, timeInUTC, this._TimeService)}";
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
                             //TODO refactor this using filter_compley to also take a snapshot every 5 seconds
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera {camera.Id}", true);
+                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true);
                             /*
                             ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", $"-rtsp_transport tcp -i {streamURL}"
                                 + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolderFinal}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""

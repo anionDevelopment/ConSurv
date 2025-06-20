@@ -129,7 +129,9 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                     }
-                    if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development)
+                    bool useMockService = false;
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IStreamOrganizerService, StreamOrganizerService>();
+                    if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development && useMockService)
                     {
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
                     }
@@ -149,7 +151,7 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITimeService, TimeService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRandomnessProvider>(new RandomnessProvider(new Random(42)));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHealthCheck, HealthCheck>();
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProvider>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProviderService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsService, MetricsService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraService, CameraService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHeaderServiceConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration);

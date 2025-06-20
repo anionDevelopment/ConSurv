@@ -18,3 +18,5 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 ## IDE
 
 The recommended IDE for this codeunit is [Visual Studio Code](https://code.visualstudio.com/).
+
+Start the project using `task RunFrontend`.
