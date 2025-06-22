@@ -7,7 +7,6 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 
 namespace ConSurvBackend.Core.Controller
@@ -95,8 +94,6 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(result);
         }
 
-        //TODO add option to download recorded videos
-
         #region ONVIF-specific
 
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
@@ -111,5 +108,6 @@ namespace ConSurvBackend.Core.Controller
 
         #endregion
 
+        //TODO add option to download recorded videos
     }
 }

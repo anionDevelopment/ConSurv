@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CameraDTO, CameraService, StreamingService } from '../../../generated/con-surv-backend';
-import { distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { distinctUntilChanged, filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { StorageService } from '../../../services/storage.service';
 import videojs from 'video.js';
 import { ConfigurationService } from '../../../services/configuration.service';
@@ -13,12 +13,18 @@ import Player from 'video.js/dist/types/player';
   templateUrl: './camera.component.html',
   styleUrl: './camera.component.scss'
 })
-export class CameraComponent implements OnInit {
+export class CameraComponent implements OnInit, OnDestroy {
 
   player: Player | null = null;
   private destroy$ = new Subject<void>();
   options: any = {}
+  information: string = "";
   constructor(private activatedRoute: ActivatedRoute, private cameraService: CameraService, private storgeService: StorageService, private streamingService: StreamingService, private configurationService: ConfigurationService) {
+  }
+  ngOnDestroy(): void {
+    if (this.player != null) {
+      this.player.dispose();
+    }
   }
 
   ngOnInit(): void {
@@ -38,11 +44,8 @@ export class CameraComponent implements OnInit {
 
   initializeCamera(camera: CameraDTO): void {
     const apiURL: string = this.configurationService.getAPIURL();
+    this.information = `Camera ${camera.name} (Id: ${camera.cameraId})`;
     const url = `${apiURL}/API/v1/StreamingController/Stream/${camera.cameraId}/stream.m3u8`;
-    if (this.player !== null) {
-      this.player.dispose();
-      this.player = null;
-    }
     this.player = videojs("videoPlayer", {
       autoplay: true,
       controls: false,
@@ -55,18 +58,5 @@ export class CameraComponent implements OnInit {
     }, function onPlayerReady() {
       console.log('onPlayerReady', this);
     });
-    /*
-console.log("start stream " + camera.cameraId + " " + url);
-this.options = {
-  autoplay: true,
-  controls: false,
-  sources: [
-    {
-      src: url,
-      type: 'application/x-mpegURL'
-    }
-  ],
-};
-*/
   }
 }

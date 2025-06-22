@@ -4,7 +4,6 @@ using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.OperatingSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,11 +19,13 @@ namespace ConSurvBackend.Core.Services
         private readonly IDictionary<string, StreamOrganizationDataset> _Cameras;
         private readonly IApplicationConstants _ApplicationConstants;
         private readonly IGRYLog _Log;
-        public StreamOrganizerService(IApplicationConstants applicationConstants, IGRYLog log)
+        private readonly IProcessManager _ProcessManager;
+        public StreamOrganizerService(IApplicationConstants applicationConstants, IGRYLog log, IProcessManager processManager)
         {
             this._ApplicationConstants = applicationConstants;
             this._Log = log;
             this._Cameras = new Dictionary<string, StreamOrganizationDataset>();
+            this._ProcessManager = processManager;
         }
         public void OrganizeCamera(Camera camera)
         {
@@ -58,7 +59,7 @@ paths:
     source: {camera.VideoInformation.StreamURL}
     sourceProtocol: tcp
 ");
-                        using ExternalProgramExecutor process = Utilities.GetBackgroundProcess(mediaMTXExecutable, mediaMTXConfigurationFile, null, this._ApplicationConstants.GetConfigurationFolder(), null, this._Log, $"Rehost stream of camera \"{camera.Name}\" (Id: {camera.Id})", false, _ApplicationConstants.Environment);
+                        using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess(mediaMTXExecutable, mediaMTXConfigurationFile, null,  null, $"Rehost stream of camera \"{camera.Name}\" (Id: {camera.Id})", false);
                         this._Cameras[camera.Id] = new StreamOrganizationDataset()
                         {
                             Camera = camera,
@@ -91,7 +92,7 @@ paths:
             string rtspUrl = this.GetStreamURL(cameraId);
 
             string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments {outputDir}/stream.m3u8";
-            Utilities.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, this._ApplicationConstants.GetConfigurationFolder(), (process) => { }, _Log, "Streaming", false, _ApplicationConstants.Environment);
+            _ProcessManager.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, (process) => { }, "Streaming", false);
             //TODO check if wait a few seconds would be helpful here
         }
         private ushort GetNextFreePort()

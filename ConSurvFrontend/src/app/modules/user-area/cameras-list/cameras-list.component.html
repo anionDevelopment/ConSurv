@@ -1,6 +1,5 @@
 <app-frame-work>
     <app-user-area-container>
-
         <table mat-table [dataSource]="cameras">
             <ng-container matColumnDef="preview">
                 <th mat-header-cell *matHeaderCellDef> Preview </th>
@@ -42,11 +41,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-
         <br />
         <button mat-button *ngIf="userIdModerator" (click)="addCamera()">
             <mat-icon>add</mat-icon>
         </button>
-
     </app-user-area-container>
 </app-frame-work>

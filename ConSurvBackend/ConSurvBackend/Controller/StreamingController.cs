@@ -1,17 +1,11 @@
 ﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
-using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace ConSurvBackend.Core.Controller
 {

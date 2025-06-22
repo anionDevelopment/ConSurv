@@ -12,6 +12,7 @@ using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.DTOs;
 using Microsoft.Extensions.Logging;
+using GRYLibrary.Core.Crypto;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -41,7 +42,7 @@ namespace ConSurvBackend.Core.Services
         }
         public string CreateCamera(string name, string streamURL)
         {
-            Camera camera = new Camera(this.GetId(), name);
+            Camera camera = new Camera(this.GetId(streamURL), name);
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
@@ -49,9 +50,9 @@ namespace ConSurvBackend.Core.Services
             return camera.Id;
         }
 
-        private string GetId()
+        private string GetId(string seed)
         {
-            return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
+            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(seed))).Substring(0,6);
         }
 
         public bool IsAvailable(Camera camera)

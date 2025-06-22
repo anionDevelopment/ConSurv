@@ -13,7 +13,6 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { FooterComponent } from "./footer/footer.component";
 import { FrameWorkComponent } from './frame-work/frame-work.component';
-import { VideoPlayerComponent } from './video-player/video-player.component';
 
 
 
@@ -26,7 +25,6 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
     HintNotFoundComponent,
     HomePageComponent,
     LoginFormComponent,
-    VideoPlayerComponent,
   ],
   imports: [
     CommonModule,
@@ -41,7 +39,6 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
   exports: [
     FooterComponent,
     FrameWorkComponent,
-    VideoPlayerComponent,
   ]
 })
 export class HomePageModule { }

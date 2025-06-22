@@ -12,7 +12,6 @@ using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp.ColorSpaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,6 +30,20 @@ namespace ConSurvBackend.Core.Services
         private readonly IApplicationConstants _Constants;
         private readonly IGeneralResourceLoader _GeneralResourceLoader;
         private readonly IStreamOrganizerService _StreamOrganizerService;
+        private readonly IProcessManager _ProcessManager;
+
+        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IGeneralResourceLoader generalResourceLoader, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService, IProcessManager processManager)
+
+        {
+            this._Log = log;
+            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
+            this._TimeService = timeService;
+            this._Constants = constants;
+            this._GeneralResourceLoader = generalResourceLoader;
+            this._AuditLog = auditLog;
+            this._StreamOrganizerService = streamOrganizerService;
+            this._ProcessManager = processManager;
+        }
 
         private record RecordInformation
         {
@@ -49,18 +62,6 @@ namespace ConSurvBackend.Core.Services
                 this.LastSetRecordMode = lastSetRecordMode;
             }
         }
-        public RTSPManager(IGRYLog log, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService, IApplicationConstants constants, IGeneralResourceLoader generalResourceLoader, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService)
-
-        {
-            this._Log = log;
-            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
-            this._TimeService = timeService;
-            this._Constants = constants;
-            this._GeneralResourceLoader = generalResourceLoader;
-            this._AuditLog = auditLog;
-            this._StreamOrganizerService = streamOrganizerService;
-        }
-
         #region public functions
 
         public bool IsAvailable(Camera camera)
@@ -257,7 +258,7 @@ namespace ConSurvBackend.Core.Services
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
                             string streamURL = this._StreamOrganizerService.GetStreamURL(camera.Id);
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true, _Constants.Environment);
+                            using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null,  $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true);
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {

@@ -1,4 +1,5 @@
-﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using ConSurvBackend.Core.Misc;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -27,6 +28,23 @@ namespace ConSurvBackend.Tests.Testcases.Misc
             Assert.AreEqual(expectedName, actualName);
             timeServiceMock.Verify(timeService => timeService.GetCurrentTimeInUTC(), Times.Once);
             timeServiceMock.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public void EscapeBasicAuthPasswords()
+        {
+            // arrange
+            string password1 = "password1";
+            string password2 = "password2";
+            string escapeString = "***";
+            string input = $"test1: rtsp://user:{password1}@example.com/stream1 ; test2: rtsps://user:{password2}@example.com/stream1";
+            string expectedOutput = input.Replace(password1, escapeString).Replace(password2, escapeString);
+
+            // act
+            string actualOutput =Utilities.EscapeBasicAuthPasswords(input);
+
+            // assert
+            Assert.AreEqual(expectedOutput, actualOutput);
         }
     }
 }

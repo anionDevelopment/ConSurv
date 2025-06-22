@@ -3,19 +3,16 @@ using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.ExecutePrograms;
-using GRYLibrary.Core.ExecutePrograms.WaitingStates;
-using GRYLibrary.Core.Logging.GRYLogger;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using Sprache;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 using Image = SixLabors.ImageSharp.Image;
 
 
@@ -65,36 +62,7 @@ namespace ConSurvBackend.Core.Misc
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess, IGRYLog log, string purpose, bool runSynchronous,GRYEnvironment environment)
-        {
-            bool verbose = true;//can be changed to true temporary for debugging purposes
-            string workingDirectory = workingFolder ?? Directory.GetCurrentDirectory();
-            ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
-            {
-                Program = program,
-                Argument = argument,
-                WorkingDirectory = workingDirectory,
-
-            });
-            log.Log($"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose})", Microsoft.Extensions.Logging.LogLevel.Debug);
-            e.Configuration.Verbosity = verbose ? Verbosity.Verbose : Verbosity.Quiet;
-            if (runSynchronous)
-            {
-                e.Configuration.WaitingState = new RunSynchronously();
-            }
-            else
-            {
-                e.Configuration.WaitingState = new RunAsynchronously();
-            }
-            e.Run();
-            if (environment is Development)
-            {
-                string processListFile = Path.Combine(configurationFolder, "StartedProcesses.txt");
-                GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processListFile);
-                GRYLibrary.Core.Misc.Utilities.AppendLineToFile(processListFile, e.ProcessId.ToString(), _Encoding);
-            }                      
-            return e;
-        }
+      
         internal static byte[] ResizeImage(byte[] image, uint height, uint width)
         {
             MemoryStream inputStream = new MemoryStream(image);
@@ -131,6 +99,20 @@ namespace ConSurvBackend.Core.Misc
             sourceImage.Dispose();
             inputStream.Dispose();
             outputStream.Dispose();
+            return result;
+        }
+
+        public static string EscapeBasicAuthPasswords(string content)
+        {
+             string pattern = @"(?<scheme>[a-z]+):\/\/(?<user>[^:\s@]+):(?<pass>[^@\s]+)@";
+
+            string result = Regex.Replace(content, pattern, m =>
+            {
+                string scheme = m.Groups["scheme"].Value;
+                string user = m.Groups["user"].Value;
+                return $"{scheme}://{user}:***@";
+            });
+
             return result;
         }
     }
