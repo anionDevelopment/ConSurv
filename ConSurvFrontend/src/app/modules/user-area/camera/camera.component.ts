@@ -15,16 +15,15 @@ import Player from 'video.js/dist/types/player';
 })
 export class CameraComponent implements OnInit {
 
+  player: Player | null = null;
   private destroy$ = new Subject<void>();
-  private player: Player | null = null;
+  options: any = {}
   constructor(private activatedRoute: ActivatedRoute, private cameraService: CameraService, private storgeService: StorageService, private streamingService: StreamingService, private configurationService: ConfigurationService) {
   }
 
   ngOnInit(): void {
-    console.log("0");
     this.activatedRoute.queryParams.pipe(
       switchMap(params => {
-        console.log("1");
         if (params["cameraId"]) {
           return this.cameraService.aPIV1CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
         } else {
@@ -33,29 +32,41 @@ export class CameraComponent implements OnInit {
       }),
       filter(value => value !== null && value !== undefined),
       distinctUntilChanged(),
-      switchMap(camera => {
-        console.log("2");
-        return this.streamingService.aPIV1StreamingControllerStreamIdCameraIdGet(camera.cameraId!, this.storgeService.getAccessToken()).pipe(
-          tap((c) => { console.log("3: "); console.log(c); }),
-          map(streamId => [camera, streamId] as [CameraDTO, string]),
-        );
-      }),
       takeUntil(this.destroy$),
-    ).subscribe(cameraAndStreamId => this.initializeCamera(cameraAndStreamId[0], cameraAndStreamId[1]));
+    ).subscribe(camera => this.initializeCamera(camera));
   }
 
-  initializeCamera(camera: CameraDTO, streamId: string): void {
-    console.log("start " + camera.cameraId);
+  initializeCamera(camera: CameraDTO): void {
     const apiURL: string = this.configurationService.getAPIURL();
-    if (this.player != null) {
+    const url = `${apiURL}/API/v1/StreamingController/Stream/${camera.cameraId}/stream.m3u8`;
+    if (this.player !== null) {
       this.player.dispose();
+      this.player = null;
     }
-    this.player = videojs('videoPlayer', {
-      techOrder: ['html5'],
-      sources: [{
-        src: `https://${apiURL}/API/v1/StreamingController/Stream/${streamId}`,
-        type: 'application/dash+xml'
-      }]
+    this.player = videojs("videoPlayer", {
+      autoplay: true,
+      controls: false,
+      sources: [
+        {
+          src: url,
+          type: 'application/x-mpegURL'
+        }
+      ],
+    }, function onPlayerReady() {
+      console.log('onPlayerReady', this);
     });
+    /*
+console.log("start stream " + camera.cameraId + " " + url);
+this.options = {
+  autoplay: true,
+  controls: false,
+  sources: [
+    {
+      src: url,
+      type: 'application/x-mpegURL'
+    }
+  ],
+};
+*/
   }
 }

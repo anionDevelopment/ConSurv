@@ -31,6 +31,9 @@ export class UserAreaContainerComponent {
     this.router.navigate(['admin', 'dashboard']);
   }
   getSiteTitle(urlSegment: string): string {
+    if (urlSegment.indexOf("?") > -1) {
+      urlSegment = urlSegment.split("?")[0];
+    }
     switch (urlSegment) {
       case "admin": {
         return "Admin-Area";
@@ -40,6 +43,9 @@ export class UserAreaContainerComponent {
       }
       case "cameras": {
         return "Cameras";
+      }
+      case "camera": {
+        return "Camera";
       }
       case "settings": {
         return "Settings";

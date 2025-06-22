@@ -5,9 +5,12 @@ using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.OperatingSystem;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using OperatingSystem = GRYLibrary.Core.OperatingSystem.OperatingSystem;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -63,6 +66,8 @@ paths:
                             Path = path,
                             Port = port,
                         };
+                        Thread.Sleep(2);
+                        StartStreamOfCamera(camera.Id);
                     }
                     else
                     {
@@ -77,6 +82,18 @@ paths:
             }
         }
 
+        private void StartStreamOfCamera(string cameraId)
+        {
+            string streamId = Guid.NewGuid().ToString().Substring(0, 8);
+            streamId = cameraId;
+            string outputDir = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Temp", "Streaming", streamId).Replace(@"\", "/");
+            Directory.CreateDirectory(outputDir);
+            string rtspUrl = this.GetStreamURL(cameraId);
+
+            string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments {outputDir}/stream.m3u8";
+            Utilities.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, this._ApplicationConstants.GetConfigurationFolder(), (process) => { }, _Log, "Streaming", false, _ApplicationConstants.Environment);
+            //TODO check if wait a few seconds would be helpful here
+        }
         private ushort GetNextFreePort()
         {
             ushort port = 10000;

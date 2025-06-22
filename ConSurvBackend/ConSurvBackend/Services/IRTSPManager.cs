@@ -11,6 +11,6 @@ namespace ConSurvBackend.Core.Services
         public void EnsureRecordingAlwaysAsync(Camera camera);
         public void EnsureNotRecording(Camera camera);
         public void EnsureRecordingOnMovementsAsync(Camera camera);
-        public string StartStreamOfCamera(string cameraId);
+      // public void StartStreamOfCamera(string cameraId);
     }
 }

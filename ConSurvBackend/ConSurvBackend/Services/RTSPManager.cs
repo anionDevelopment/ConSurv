@@ -1,22 +1,23 @@
 ﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.ExecutePrograms;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp.ColorSpaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using ConSurvBackend.Core.Misc;
-using GRYLibrary.Core.APIServer.Services.Res;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Exceptions;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -295,33 +296,6 @@ namespace ConSurvBackend.Core.Services
         public void Dispose()
         {
             //TODO call EnsureNotRecording for all cameras
-        }
-
-        public string StartStreamOfCamera(string cameraId)
-        {
-            string streamId = Guid.NewGuid().ToString().Substring(0, 8);
-            string outputDir = Path.Combine(this._Constants.GetDataFolder(), "Temp", "Streaming", streamId).Replace(@"\","/");
-            Directory.CreateDirectory(outputDir);
-            string rtspUrl = _StreamOrganizerService.GetStreamURL(cameraId);
-
-            string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f dash " +
-                          "-seg_duration 2 -use_template 1 -use_timeline 1 " +
-                          "-window_size 5 -extra_window_size 5 -remove_at_exit 1 " +
-                          $"{outputDir}/stream.mpd";
-            /*
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = "ffmpeg",
-                Arguments = args,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            */
-            Utilities.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, this._Constants.GetConfigurationFolder(), (process) => { }, _Log, "Streaming", false, _Constants.Environment);
-            //TODO check if wait a few seconds would be helpful here
-            return streamId;
         }
     }
 }

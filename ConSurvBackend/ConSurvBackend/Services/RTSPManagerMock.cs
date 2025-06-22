@@ -32,9 +32,9 @@ namespace ConSurvBackend.Core.Services
             return true;
         }
 
-        public string StartStreamOfCamera(string cameraId)
+        public void StartStreamOfCamera(string cameraId)
         {
-            return Guid.NewGuid().ToString().Substring(0, 8);
+            //nothing to do
         }
     }
 }
