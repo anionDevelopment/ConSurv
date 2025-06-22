@@ -2,7 +2,7 @@
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using System;
 
-namespace ConSurvBackend.Core.Miscellaneous
+namespace ConSurvBackend.Core.Misc
 {
     internal class RunONVIFCommandVisitor : IONVIFCommandVisitor
     {

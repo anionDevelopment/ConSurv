@@ -1,7 +1,7 @@
 ﻿using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.ExecutePrograms;
 
-namespace ConSurvBackend.Core.Miscellaneous
+namespace ConSurvBackend.Core.Misc
 {
     internal class StreamOrganizationDataset
     {

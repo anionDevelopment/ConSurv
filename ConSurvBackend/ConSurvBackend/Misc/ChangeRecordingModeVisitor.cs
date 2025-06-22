@@ -2,7 +2,7 @@
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Services;
 
-namespace ConSurvBackend.Core.Miscellaneous
+namespace ConSurvBackend.Core.Misc
 {
     internal class ChangeRecordingModeVisitor : IRecordModeVisitor
     {

@@ -1,6 +1,6 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Miscellaneous;
+using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;

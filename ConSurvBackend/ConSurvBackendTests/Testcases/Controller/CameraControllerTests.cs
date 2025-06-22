@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 
-namespace ConSurvBackend.Tests.Testcases
+namespace ConSurvBackend.Tests.Testcases.Controller
 {
     [TestClass]
     public class CameraControllerTests

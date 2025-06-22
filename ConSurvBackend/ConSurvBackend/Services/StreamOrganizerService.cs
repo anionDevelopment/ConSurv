@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Miscellaneous;
+﻿using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Exceptions;
@@ -47,6 +47,7 @@ namespace ConSurvBackend.Core.Services
                         ushort port = GetNextFreePort();
                         string path = $"Stream_{camera.Id}";
                         //TODO add text-overlay-configuration into mediaMTX-Configuration to draw the current timestamp into the video, see https://github.com/bluenviron/mediamtx/pull/1604#issuecomment-1483848225
+                        //TODO add something like alwaysavailable like described here https://github.com/bluenviron/mediamtx/issues/2214 to have a defined behavior when the camera is not available
                         File.WriteAllText(mediaMTXConfigurationFile, $@"#Configuration for camera ""{camera.Name}"" (Id: {camera.Id})
 rtsp:
   enabled: yes

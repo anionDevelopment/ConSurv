@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ConSurvBackend.Core.Miscellaneous
+namespace ConSurvBackend.Core.Misc
 {
     internal static class Utilities
     {

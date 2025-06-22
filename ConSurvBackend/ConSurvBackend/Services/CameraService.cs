@@ -1,4 +1,4 @@
-using ConSurvBackend.Core.Miscellaneous;
+using ConSurvBackend.Core.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

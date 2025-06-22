@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
-namespace ConSurvBackend.Core.Miscellaneous
+namespace ConSurvBackend.Core.Misc
 {
     public class HealthCheck : IHealthCheck
     {
