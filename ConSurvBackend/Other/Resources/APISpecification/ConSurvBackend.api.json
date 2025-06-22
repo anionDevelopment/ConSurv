@@ -15,37 +15,6 @@
     "version": "v1.0.0"
   },
   "paths": {
-    "/API/v1/CameraController/GetStream/{cameraId}": {
-      "get": {
-        "tags": [
-          "Camera"
-        ],
-        "parameters": [
-          {
-            "name": "cameraId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-AccessToken",
-            "in": "header",
-            "description": "Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}": {
       "get": {
         "tags": [
@@ -462,10 +431,68 @@
         }
       }
     },
-    "/API/hls/x.m3u8": {
+    "/API/v1/StreamingController/StreamId/{cameraId}": {
       "get": {
         "tags": [
           "Streaming"
+        ],
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-AccessToken",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/v1/StreamingController/Stream/{streamId}/{filename}": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "parameters": [
+          {
+            "name": "streamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-AccessToken",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {

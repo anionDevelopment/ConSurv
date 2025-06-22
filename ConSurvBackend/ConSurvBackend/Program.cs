@@ -139,6 +139,7 @@ namespace ConSurvBackend.Core
                     {
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
                     }
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPreviewService, PreviewService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGeneralResourceLoader, Services.GeneralResourceLoader>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
@@ -169,6 +170,8 @@ namespace ConSurvBackend.Core
                 };
                 apiServerConfiguration.ConfigureWebApplication = (functionalInformationForWebApplication) =>
                 {
+                    try
+                    {
                     var logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
                     logger.Log("Configure webapplication...", LogLevel.Information);
                     /*
@@ -183,14 +186,23 @@ namespace ConSurvBackend.Core
                     initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
                     IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
+                    IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
                     functionalInformationForWebApplication.PreRun = () =>
                     {
                         metricsService.StartAsync();
+                        previewService.StartAsync();
                     };
                     functionalInformationForWebApplication.PostRun = () =>
                     {
                         metricsService.Stop().Wait();
+                        previewService.Stop().Wait();
                     };
+
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                 };
             });
         }

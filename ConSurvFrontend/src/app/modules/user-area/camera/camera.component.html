@@ -1,11 +1,6 @@
 <app-frame-work>
-    <div><!--*ngIf="(currentCamera$ | async) as camera"-->
-        <div><!--*ngIf="camera!=null" class="cameracontent"-->
-            <!--Camera-id: {{camera.cameraId}}-->
-            <!--TODO add camera-content (information, preview, etc.-->
-            <!--<video #videoElement autoplay playsinline></video>-->
-            <video id="videoElement" controls autoplay></video>
-        </div>
+    <div>
+        <video id="videoPlayer" autoplay></video>
     </div>
-    <!--TODO add unhappy-path-->
+    <!--TODO add handling of errors-->
 </app-frame-work>

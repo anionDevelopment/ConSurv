@@ -22,14 +22,19 @@ namespace ConSurvBackend.Core.Services
             //TODO pretend real camera-behavior-handling
         }
 
-        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth,bool logFail,IGRYLog log)
+        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
         {
-           throw new NotImplementedException();//TODO return (true, mock-picture)
+            throw new NotImplementedException();//TODO return (true, mock-picture)
         }
 
         public bool IsAvailable(Camera camera)
         {
             return true;
+        }
+
+        public string StartStreamOfCamera(string cameraId)
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8);
         }
     }
 }

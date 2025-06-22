@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -60,7 +61,7 @@ namespace ConSurvBackend.Core.Services
                 this._AuthenticationService.UpdateRole(adminsRole);
                 string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                 string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
-                _CameraService.EnsureUserHasRole(adminUserId, adminsRole.Id);
+                this._CameraService.EnsureUserHasRole(adminUserId, adminsRole.Id);
 
                 this._GeneralLogger.Log("Add initial cameras...", Microsoft.Extensions.Logging.LogLevel.Information);
                 if (commandlineParameter.InitialCameraAddresses != null)
@@ -88,15 +89,16 @@ namespace ConSurvBackend.Core.Services
 
         private void OrganizeCameras()
         {
-            foreach (var camera in _CameraService.GetAllCameras().Values)
+            foreach (var camera in this._CameraService.GetAllCameras().Values)
             {
-                _StreamOrganizerService.OrganizeCamera(camera);
+                this._StreamOrganizerService.OrganizeCamera(camera);
             }
+            Thread.Sleep(TimeSpan.FromSeconds(3));
         }
 
         private void StartCameras()
         {
-            foreach (var camera in _CameraService.GetAllCameras().Values)
+            foreach (var camera in this._CameraService.GetAllCameras().Values)
             {
                 camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
             }

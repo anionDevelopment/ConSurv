@@ -3,7 +3,7 @@ using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.ExecutePrograms;
-using GRYLibrary.Core.ExecutePrograms.WaitingStates;
+using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.OperatingSystem;
 using System.Collections.Generic;
 using System.IO;
@@ -13,22 +13,22 @@ namespace ConSurvBackend.Core.Services
 {
     public class StreamOrganizerService : IStreamOrganizerService
     {
-        private readonly ICameraService _CameraService;
         private static readonly object _Lock = new object();
         private readonly IDictionary<string, StreamOrganizationDataset> _Cameras;
         private readonly IApplicationConstants _ApplicationConstants;
-        public StreamOrganizerService(ICameraService cameraService, IApplicationConstants applicationConstants)
+        private readonly IGRYLog _Log;
+        public StreamOrganizerService(IApplicationConstants applicationConstants, IGRYLog log)
         {
-            _CameraService = cameraService;
-            _ApplicationConstants = applicationConstants;
-            _Cameras = new Dictionary<string, StreamOrganizationDataset>();
+            this._ApplicationConstants = applicationConstants;
+            this._Log = log;
+            this._Cameras = new Dictionary<string, StreamOrganizationDataset>();
         }
         public void OrganizeCamera(Camera camera)
         {
             lock (_Lock)
             {
-                bool isCurrentlyManaged = _Cameras.ContainsKey(camera.Id);
-                bool shouldBeManaged = camera.Enabled && _CameraService.IsAvailable(camera);
+                bool isCurrentlyManaged = this._Cameras.ContainsKey(camera.Id);
+                bool shouldBeManaged = true;  //TODO add something like "alwaysavailable" to mediamtx-config like described here https://github.com/bluenviron/mediamtx/issues/2214 to have a defined behavior when the camera is not available so that there is always a stream available for the camera even if it does only show a dummy-picture when the camera is not available
                 if (isCurrentlyManaged != shouldBeManaged)
                 {
                     string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -40,32 +40,23 @@ namespace ConSurvBackend.Core.Services
                         {
                             mediaMTXExecutable = mediaMTXExecutable + ".exe";
                         }
-                        string mediaMTXConfigurationFolder = Path.Combine(_ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
+                        string mediaMTXConfigurationFolder = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
                         GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(mediaMTXConfigurationFolder);
                         string mediaMTXConfigurationFile = Path.Combine(mediaMTXConfigurationFolder, $"MediaMTXConfiguration.{camera.Id}.txt");
                         GRYLibrary.Core.Misc.Utilities.EnsureFileExists(mediaMTXConfigurationFile);
-                        ushort port = GetNextFreePort();
+                        ushort port = this.GetNextFreePort();
                         string path = $"Stream_{camera.Id}";
                         //TODO add text-overlay-configuration into mediaMTX-Configuration to draw the current timestamp into the video, see https://github.com/bluenviron/mediamtx/pull/1604#issuecomment-1483848225
-                        //TODO add something like alwaysavailable like described here https://github.com/bluenviron/mediamtx/issues/2214 to have a defined behavior when the camera is not available
-                        File.WriteAllText(mediaMTXConfigurationFile, $@"#Configuration for camera ""{camera.Name}"" (Id: {camera.Id})
-rtsp:
-  enabled: yes
-  address: :{port}
 
+                        File.WriteAllText(mediaMTXConfigurationFile, $@"#Configuration for camera ""{camera.Name}"" (Id: {camera.Id})
+rtspAddress: :{port}
 paths:
   {path}:
     source: {camera.VideoInformation.StreamURL}
     sourceProtocol: tcp
 ");
-                        var process = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
-                        {
-                            Program = mediaMTXExecutable,
-                            Argument = mediaMTXConfigurationFile,
-                        });
-                        process.Configuration.WaitingState = new RunAsynchronously();
-                        process.Run();
-                        _Cameras[camera.Id] = new StreamOrganizationDataset()
+                        using ExternalProgramExecutor process = Utilities.GetBackgroundProcess(mediaMTXExecutable, mediaMTXConfigurationFile, null, this._ApplicationConstants.GetConfigurationFolder(), null, this._Log, $"Rehost stream of camera \"{camera.Name}\" (Id: {camera.Id})", false, _ApplicationConstants.Environment);
+                        this._Cameras[camera.Id] = new StreamOrganizationDataset()
                         {
                             Camera = camera,
                             Process = process,
@@ -75,12 +66,12 @@ paths:
                     }
                     else
                     {
-                        var entry = _Cameras[camera.Id];
+                        var entry = this._Cameras[camera.Id];
                         if (entry.Process.IsRunning)
                         {
                             entry.Process.Terminate();
                         }
-                        _Cameras.Remove(camera.Id);
+                        this._Cameras.Remove(camera.Id);
                     }
                 }
             }
@@ -91,7 +82,7 @@ paths:
             ushort port = 10000;
             while (port < ushort.MaxValue)
             {
-                if (PortIsFree(port))
+                if (this.PortIsFree(port))
                 {
                     return port;
                 }
@@ -102,7 +93,7 @@ paths:
 
         private bool PortIsFree(ushort port)
         {
-            foreach (var camera in _Cameras)
+            foreach (var camera in this._Cameras)
             {
                 if (camera.Value.Port == port)
                 {
@@ -116,7 +107,7 @@ paths:
         {
             lock (_Lock)
             {
-                return _Cameras.ContainsKey(cameraId);
+                return this._Cameras.ContainsKey(cameraId);
             }
         }
 
@@ -124,7 +115,7 @@ paths:
         {
             lock (_Lock)
             {
-                var info = _Cameras[cameraId];
+                var info = this._Cameras[cameraId];
                 return $"rtsp://localhost:{info.Port}/{info.Path}";
             }
         }

@@ -6,11 +6,18 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.ExecutePrograms.WaitingStates;
 using GRYLibrary.Core.Logging.GRYLogger;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
+using Image = SixLabors.ImageSharp.Image;
+
 
 namespace ConSurvBackend.Core.Misc
 {
@@ -58,13 +65,9 @@ namespace ConSurvBackend.Core.Misc
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess, IGRYLog log, string purpose, bool runSynchronous)
+        internal static ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, string configurationFolder, Action<Process>? configureProcess, IGRYLog log, string purpose, bool runSynchronous,GRYEnvironment environment)
         {
-            bool verbose = false;//can be changed to true temporary for debugging purposes
-            bool isDebug = false;
-#if Development
-            isDebug = true;
-#endif
+            bool verbose = true;//can be changed to true temporary for debugging purposes
             string workingDirectory = workingFolder ?? Directory.GetCurrentDirectory();
             ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
             {
@@ -84,36 +87,51 @@ namespace ConSurvBackend.Core.Misc
                 e.Configuration.WaitingState = new RunAsynchronously();
             }
             e.Run();
-            /*
-            Process process = new Process();
-            process.StartInfo.FileName = program;
-            process.StartInfo.Arguments = argument;
-            if (workingFolder != null)
-            {
-                process.StartInfo.WorkingDirectory = workingFolder;
-            }
-            configureProcess?.Invoke(process);
-            process.Start();
-            */
-            /*
-            if (isDebug)
+            if (environment is Development)
             {
                 string processListFile = Path.Combine(configurationFolder, "StartedProcesses.txt");
                 GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processListFile);
-                GRYLibrary.Core.Misc.Utilities.AppendLineToFile(processListFile, process.Id.ToString(), _Encoding);
-            }
-
-            Action<object, DataReceivedEventArgs> stdOutHandler = (sender, args) => { };
-            Action<object, DataReceivedEventArgs> stdErrHandler = (sender, args) => { };
-            if (verbose)
-            {
-                stdOutHandler = (sender, args) => Console.WriteLine(args.Data);
-                stdErrHandler = (sender, args) => Console.WriteLine(args.Data);
-            }
-            process.OutputDataReceived += (sender, args) => stdOutHandler(sender, args);
-            process.ErrorDataReceived += (sender, args) => stdErrHandler(sender, args);
-            */
+                GRYLibrary.Core.Misc.Utilities.AppendLineToFile(processListFile, e.ProcessId.ToString(), _Encoding);
+            }                      
             return e;
+        }
+        internal static byte[] ResizeImage(byte[] image, uint height, uint width)
+        {
+            MemoryStream inputStream = new MemoryStream(image);
+            Image<Rgba32> sourceImage = Image.Load<Rgba32>(inputStream);
+            IImageFormat format = sourceImage.Metadata.DecodedImageFormat;
+            int targetWidth = (int)width;
+            int targetHeight = (int)height;
+            sourceImage.Mutate(ctx => ctx.Resize(targetWidth, targetHeight));
+            MemoryStream outputStream = new MemoryStream();
+            sourceImage.Save(outputStream, format);
+            byte[] result = outputStream.ToArray();
+            sourceImage.Dispose();
+            inputStream.Dispose();
+            outputStream.Dispose();
+
+            return result;
+        }
+        internal static byte[] CropImage(byte[] image, uint height, uint width)
+        {
+            MemoryStream inputStream = new MemoryStream(image);
+            Image<Rgba32> sourceImage = Image.Load<Rgba32>(inputStream);
+            IImageFormat format = sourceImage.Metadata.DecodedImageFormat;
+            int targetWidth = (int)width;
+            int targetHeight = (int)height;
+            int cropX = Math.Max((sourceImage.Width - targetWidth) / 2, 0);
+            int cropY = Math.Max((sourceImage.Height - targetHeight) / 2, 0);
+            int cropWidth = Math.Min(targetWidth, sourceImage.Width);
+            int cropHeight = Math.Min(targetHeight, sourceImage.Height);
+            Rectangle cropArea = new Rectangle(cropX, cropY, cropWidth, cropHeight);
+            sourceImage.Mutate(ctx => ctx.Crop(cropArea));
+            MemoryStream outputStream = new MemoryStream();
+            sourceImage.Save(outputStream, format);
+            byte[] result = outputStream.ToArray();
+            sourceImage.Dispose();
+            inputStream.Dispose();
+            outputStream.Dispose();
+            return result;
         }
     }
 }

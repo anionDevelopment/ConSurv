@@ -17,10 +17,13 @@ export class CameraPreviewComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.cameraId) {
+      console.log("if");
       this.cameraService.aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(this.cameraId, 75, 100, this.storageService.getAccessToken()).subscribe((result) => {
         this.image = 'data:image/png;base64,' + result;//TODO update this picture every 5 seconds
+        console.log("set");
       });
     } else {
+      console.log("else");
       //TODO throw error
     }
   }

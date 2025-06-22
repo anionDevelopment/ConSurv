@@ -84,7 +84,7 @@ namespace ConSurvBackend.Core.Services
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
-                    using ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {camera.VideoInformation.StreamURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}");
+                    using ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}");
                     process.LogObject = GeneralLogger.NoLogAsGRYLog();
                     process.Run();
                     if (process.ExitCode != 0)
@@ -248,38 +248,15 @@ namespace ConSurvBackend.Core.Services
                         {
                             if (this._Constants.Environment is Development)
                             {
-                                videoLength = TimeSpan.FromSeconds(20);
-                            }
-                            else
-                            {
-                                videoLength = TimeSpan.FromMinutes(10);
+                                videoLength = TimeSpan.FromSeconds(20);//more useful for debugging
                             }
                             string targetFolderFinal = Path.Combine(targetFolder, camera.Id).Replace(@"\", "/");
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(targetFolderFinal);
                             string targetFile = $"{targetFolderFinal}/{Utilities.GetVideoTargetFile(camera.Id, timeInUTC, this._TimeService)}";
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
-                            //TODO refactor this using filter_compley to also take a snapshot every 5 seconds
-                            string streamURL = _StreamOrganizerService.GetStreamURL(camera.Id);
+                            string streamURL = this._StreamOrganizerService.GetStreamURL(camera.Id);
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true);
-                            /*
-                            ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", $"-rtsp_transport tcp -i {streamURL}"
-                                + $" -map 0 -c:v copy -c:a aac -f segment -segment_time 60 -strftime 1 \"{targetFolderFinal}/{camera.Id}_%Y-%m-%d_%H-%M-%S.mp4\""
-                                + $" -map 0:v -vf fps=1/3 -q:v 2 -update 1 {targetFolderFinal}/LatestSnapshot.jpg"
-                                + $" -f mpegts pipe:1", null, _Constants.GetConfigurationFolder(), null, _Log, "Start record always");
-                            */
-                            //some kind of working: 
-                            /*
-                                         var argument = "-rtsp_transport tcp -i rtsp://192.168.1.141/stream1"
-                + " -filter_complex \"[0:v]drawtext=text='%{localtime\\:%y-%m-%d-%H-%M-%S}':fontcolor=white:fontsize=24:x=10:y=10[v];[v]split=2[v1][v2];[v1]fps=1,split[frame]\""
-                + " -map \"[frame]\" C:/Temp/output/frame_%03d.jpg"
-                + " -map \"[v2]\" -c:v libx264 -c:a aac -f segment -segment_time 30 -segment_format mp4 C:/Temp/output/video_%03d.mp4"
-                             */
-                            //HINT: use https://ffmpeg.org/ffmpeg-formats.html#tee "The tee muxer can be used to write the same data to several outputs, such as files or streams. It can be used, for example, to stream a video over a network and save it to disk at the same time."
-                            //drawing a timestamp into the video would be possible here using an argument like '-i {streamURL} -vf "drawtext=fontfile=roboto.ttf:fontsize=36:fontcolor=yellow:text='%{pts\:gmtime\:1575526882\:%A, %d, %B %Y %I\\\:%M\\\:%S %p}'"' but this can not be used together with coping the stream (see https://stackoverflow.com/a/53526514/3905529 ) so this decreases the performance/quality significantly.
-                            //see https://stackoverflow.com/questions/71633262/ffmpeg-create-timestamp-based-on-actual-creation-time
-                            // GRYLibrary.Core.Misc.Utilities.AssertCondition(this._RecordingProcesses[camera.Id].Process == null);
-                            // this._RecordingProcesses[camera.Id].Process = process._Process;
+                            using ExternalProgramExecutor process = Utilities.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, this._Constants.GetConfigurationFolder(), null, this._Log, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true, _Constants.Environment);
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {
@@ -296,7 +273,7 @@ namespace ConSurvBackend.Core.Services
                 catch (Exception ex)
                 {
                     this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", LogLevel.Error, ex, null);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage
+                    Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage for error-loops
                 }
                 finally
                 {
@@ -318,6 +295,33 @@ namespace ConSurvBackend.Core.Services
         public void Dispose()
         {
             //TODO call EnsureNotRecording for all cameras
+        }
+
+        public string StartStreamOfCamera(string cameraId)
+        {
+            string streamId = Guid.NewGuid().ToString().Substring(0, 8);
+            string outputDir = Path.Combine(this._Constants.GetDataFolder(), "Temp", "Streaming", streamId).Replace(@"\","/");
+            Directory.CreateDirectory(outputDir);
+            string rtspUrl = _StreamOrganizerService.GetStreamURL(cameraId);
+
+            string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f dash " +
+                          "-seg_duration 2 -use_template 1 -use_timeline 1 " +
+                          "-window_size 5 -extra_window_size 5 -remove_at_exit 1 " +
+                          $"{outputDir}/stream.mpd";
+            /*
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "ffmpeg",
+                Arguments = args,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            */
+            Utilities.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, this._Constants.GetConfigurationFolder(), (process) => { }, _Log, "Streaming", false, _Constants.Environment);
+            //TODO check if wait a few seconds would be helpful here
+            return streamId;
         }
     }
 }

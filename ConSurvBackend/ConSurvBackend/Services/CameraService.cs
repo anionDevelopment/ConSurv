@@ -25,7 +25,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IRTSPManager _RTSPManager;
         private readonly IAuditLog _AuditLog;
         private readonly IRandomnessProvider _RandomnessProvider;
-        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog)
+        private readonly IStreamOrganizerService _StreamOrganizerService;
+
+        public CameraService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService)
         {
             this._Persistence = persistence;
             this._Log = log;
@@ -34,6 +36,7 @@ namespace ConSurvBackend.Core.Services
             this._AuthenticationService = authenticationService;
             this._RandomnessProvider = randomnessProvider;
             this._AuditLog = auditLog;
+            this._StreamOrganizerService = streamOrganizerService;
             //TODO load persisted cameras and start recording if necessary
         }
         public string CreateCamera(string name, string streamURL)
@@ -49,12 +52,6 @@ namespace ConSurvBackend.Core.Services
         private string GetId()
         {
             return GRYLibrary.Core.Misc.Utilities.GetRandomAlphaHexCharacter(this._RandomnessProvider) + GRYLibrary.Core.Misc.Utilities.GetRandomHexCharacter(5, this._RandomnessProvider);
-        }
-
-        public byte[] GetPreview(Camera camera, uint? maximalHeight, uint? maximalWidth)
-        {
-            //TODO check permission
-            return camera.VideoInformation.GetPreview(camera, this._RTSPManager, maximalHeight, maximalWidth, this._Log);
         }
 
         public bool IsAvailable(Camera camera)

@@ -1,5 +1,5 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
-using ConSurvBackend.Core.Services;
+﻿using ConSurvBackend.Core.BackgroundServices;
+using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.Logging.GRYLogger;
 
 namespace ConSurvBackend.Core.Model.Base
@@ -11,9 +11,9 @@ namespace ConSurvBackend.Core.Model.Base
         public bool IsONVIFCamera { get; internal set; }//probably ptz command is meant here
         //TODO add possibility to blacken a polygon from the video
 
-        public byte[] GetPreview(Camera camera, IRTSPManager rtspManager, uint? maximalHeight, uint? maximalWidth, IGRYLog log)
+        public byte[] GetPreview(Camera camera, IPreviewService previewService, uint? maximalHeight, uint? maximalWidth, IGRYLog log)
         {
-            return rtspManager.GetPreviewDirectlyFromCamera(camera, maximalHeight, maximalWidth, true, log).picture;
+            return previewService.GetPreview(camera.Id);
         }
 
         public VideoInformationDTO ToDTO()
