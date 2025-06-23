@@ -1,5 +1,4 @@
 ﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings;
