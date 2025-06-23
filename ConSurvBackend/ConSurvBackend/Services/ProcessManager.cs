@@ -15,22 +15,22 @@ namespace ConSurvBackend.Core.Services
 {
     public class ProcessManager : IProcessManager
     {
-        private IGRYLog _Log;
-        private IApplicationConstants _ApplicationConstants;
-        private ISet<ProcessInformation> _Processes;
+        private readonly IGRYLog _Log;
+        private readonly IApplicationConstants _ApplicationConstants;
+        private readonly ISet<ProcessInformation> _Processes;
         public ProcessManager(IGRYLog log, IApplicationConstants applicationConstants)
         {
             this._Log = log;
             this._ApplicationConstants = applicationConstants;
-            _Processes = new HashSet<ProcessInformation>();
+            this._Processes = new HashSet<ProcessInformation>();
         }
         public ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, Action<Process>? configureProcess, string purpose, string purposeForLogfile, bool runSynchronous)
         {
             bool verbose = true;//TODO should only be true in verbose mode
             string workingDirectory = workingFolder ?? Directory.GetCurrentDirectory();
             DateTime now = DateTime.Now;
-            string processId = Guid.NewGuid().ToString().Substring(0, 8);
-            string logfile = Path.Combine(_ApplicationConstants.GetLogFolder(), $"Background-process_{GUtilities.DateTimeForFilename(now)}_{purposeForLogfile}_{processId}.log");
+            string processId = Guid.NewGuid().ToString()[..8];
+            string logfile = Path.Combine(this._ApplicationConstants.GetLogFolder(), $"Background-process_{GUtilities.DateTimeForFilename(now)}_{purposeForLogfile}_{processId}.log");
             GRYLog eLog = GRYLog.Create(logfile);
             foreach (GRYLogTarget item in eLog.Configuration.LogTargets)
             {
@@ -65,22 +65,22 @@ namespace ConSurvBackend.Core.Services
                 e.Configuration.WaitingState = new RunAsynchronously();
             }
             e.Run();
-            string message = $"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose}; Process-id: {processId}; Technical process-id: {e._Process.Id})";
+            string message = $"Started background process \"{workingDirectory}>{program} {argument}\" (Purpose: {purpose}; Process-id: {processId}; Technical process-id: {e.ProcessId})";
             eLog.Log(message, Microsoft.Extensions.Logging.LogLevel.Debug);
-            _Log.Log(message, Microsoft.Extensions.Logging.LogLevel.Debug);
-            if (_ApplicationConstants.Environment is Development)
+            this._Log.Log(message, Microsoft.Extensions.Logging.LogLevel.Debug);
+            if (this._ApplicationConstants.Environment is Development)
             {
-                string processListFile = Path.Combine(_ApplicationConstants.GetConfigurationFolder(), "StartedProcesses.txt");
+                string processListFile = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "StartedProcesses.txt");
                 GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processListFile);
                 GRYLibrary.Core.Misc.Utilities.AppendLineToFile(processListFile, e.ProcessId.ToString(), Misc.Utilities._Encoding);
             }
-            _Processes.Add(new ProcessInformation(purpose, processId, e));
+            this._Processes.Add(new ProcessInformation(purpose, processId, e));
             return e;
         }
 
         public ISet<ProcessInformation> GetRunningProcesses()
         {
-            return _Processes.ToHashSet();
+            return this._Processes.ToHashSet();
         }
 
     }

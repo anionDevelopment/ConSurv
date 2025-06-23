@@ -79,14 +79,14 @@ namespace ConSurvBackend.Core.Services
         {
             lock (camera.Id)
             {
-                // return (true,new byte[] { });
                 string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
                 try
                 {
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
-                    ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}", null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
+                    string argument= $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalHeightValue}x{maximalWidthValue} {tempFile}";
+                    ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
                     if (process.ExitCode != 0)
                     {
                         throw new InternalAlgorithmException(GRYLog.FormatProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines));
@@ -258,7 +258,7 @@ namespace ConSurvBackend.Core.Services
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
                             string streamURL = this._StreamOrganizerService.GetStreamURL(camera.Id);
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", $"Record-{camera.Id}", true);
+                            using ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", $"Record-{camera.Id}", true);
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {

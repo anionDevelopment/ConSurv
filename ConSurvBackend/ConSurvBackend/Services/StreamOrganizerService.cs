@@ -45,7 +45,7 @@ namespace ConSurvBackend.Core.Services
             {
                 mediaMTXExecutable = mediaMTXExecutable + ".exe";
             }
-            ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess(mediaMTXExecutable, string.Empty, mediaMTXFolder, null, $"Media-hub", $"MediaHub", false);
+            ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, string.Empty, mediaMTXFolder, null, $"Media-hub", $"MediaHub", false);
             Thread.Sleep(TimeSpan.FromSeconds(2));
         }
         public void OrganizeCamera(Camera camera)
@@ -58,9 +58,9 @@ namespace ConSurvBackend.Core.Services
                 {
                     if (shouldBeManaged)
                     {
-                        ProvideStream(camera);
-                        StartReordingOfCamera(camera.Id);
-                        StartStreamOfCamera(camera.Id);
+                        this.ProvideStream(camera);
+                        this.StartRecordingOfCamera(camera.Id);
+                        this.StartStreamOfCamera(camera.Id);
                     }
                     else
                     {
@@ -75,10 +75,10 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
-        private void StartReordingOfCamera(string cameraId)
+        private void StartRecordingOfCamera(string cameraId)
         {
-            TimeSpan timeOfEveryFile = _CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.VideoLength;
-            if (_ApplicationConstants.Environment is Development)
+            TimeSpan timeOfEveryFile = this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.VideoLength;
+            if (this._ApplicationConstants.Environment is Development)
             {
                 timeOfEveryFile = TimeSpan.FromMinutes(1);
             }
@@ -86,7 +86,7 @@ namespace ConSurvBackend.Core.Services
             string targetFolderFinal = Path.Combine(targetFolder, cameraId).Replace(@"\", "/");
             GUtilities.EnsureDirectoryExists(targetFolderFinal);
             string argument = $"-i rtsp://localhost:8554/Stream_{cameraId} -acodec copy -vcodec copy -f segment -segment_time {(int)Math.Round(timeOfEveryFile.TotalSeconds, 0)} -strftime 1 -reset_timestamps 1 {targetFolderFinal}/Camera-{cameraId}_%Y-%m-%d_%H-%M-%S.avi";
-            _ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, $"Record {cameraId}", $"Record-{cameraId}", false);
+            this._ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, $"Record {cameraId}", $"Record-{cameraId}", false);
         }
 
         private void ProvideStream(Camera camera)
@@ -96,11 +96,10 @@ namespace ConSurvBackend.Core.Services
             string path = $"Stream_{camera.Id}";
             string fontfile = Path.Combine(location, "Fonts", "Noto", "NotoSans_Condensed-Regular.ttf");
             GUtilities.AssertCondition(File.Exists(fontfile), "Font-file does not exist.");
-            ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", "-rtsp_transport tcp -i " + camera.VideoInformation.StreamURL + " -vf \"drawtext=fontfile='" + fontfile + "':fontsize=60:fontcolor=white:text='%{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\" -c:v libx264 -c:a aac -vsync passthrough -fflags nobuffer -f rtsp " + this.GetStreamURL(camera.Id), null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
+            ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", "-rtsp_transport tcp -i " + camera.VideoInformation.StreamURL + " -vf \"drawtext=fontfile='" + fontfile + "':fontsize=60:fontcolor=white:text='%{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\" -c:v libx264 -c:a aac -vsync passthrough -fflags nobuffer -f rtsp " + this.GetStreamURL(camera.Id), null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
             this._Cameras[camera.Id] = new StreamOrganizationDataset()
             {
                 Camera = camera,
-                //   Process = process,
                 Path = path,
                 Port = port,
             };
@@ -110,11 +109,11 @@ namespace ConSurvBackend.Core.Services
         private void StartStreamOfCamera(string cameraId)
         {
             string outputDir = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Streaming", cameraId).Replace(@"\", "/");
-            Directory.CreateDirectory(outputDir);
+            GUtilities.EnsureDirectoryDoesNotExist(outputDir);
+            GUtilities.EnsureDirectoryExists(outputDir);
             string rtspUrl = this.GetStreamURL(cameraId);
-
             string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments {outputDir}/stream.m3u8";
-            _ProcessManager.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, (process) => { }, $"Streaming of camera {cameraId}", $"Stream-{cameraId}", false);
+            this._ProcessManager.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, (process) => { }, $"Streaming of camera {cameraId}", $"Stream-{cameraId}", false);
             //TODO check if wait a few seconds is required here
         }
         private ushort GetNextFreePort()

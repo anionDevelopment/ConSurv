@@ -18,7 +18,7 @@ namespace ConSurvBackend.Core.Model.Base
 
         public ProcessInformationDTO ToDTO()
         {
-            return new ProcessInformationDTO(this.Purpose, ProcessId,(uint)this.ExternalProgramExecutor.ProcessId, this.ExternalProgramExecutor.Configuration.Program, Misc.Utilities.EscapeBasicAuthPasswords(this.ExternalProgramExecutor.Configuration.Argument));
+            return new ProcessInformationDTO(this.Purpose, this.ProcessId,(uint)this.ExternalProgramExecutor.ProcessId, this.ExternalProgramExecutor.Configuration.Program, Misc.Utilities.EscapeBasicAuthPasswords(this.ExternalProgramExecutor.Configuration.Argument));
         }
     }
 }

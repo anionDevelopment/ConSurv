@@ -32,7 +32,7 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(GetRunningProcesses)}")]
         public IActionResult GetRunningProcesses()
         {
-            return new JsonResult(_ProcessManager.GetRunningProcesses().Select(p => p.ToDTO()));
+            return new JsonResult(this._ProcessManager.GetRunningProcesses().Select(p => p.ToDTO()));
         }
 
         [Authenticate]
@@ -44,7 +44,7 @@ namespace ConSurvBackend.Core.Controller
         {
             string mediaMTXConfigurationFolder = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
             string mediaMTXConfigurationFile = Path.Combine(mediaMTXConfigurationFolder, $"MediaMTXConfiguration.{cameraId}.txt");
-            return Ok(Misc.Utilities.EscapeBasicAuthPasswords(System.IO.File.ReadAllText(mediaMTXConfigurationFile, ConSurvBackend.Core.Misc.Utilities._Encoding)));
+            return this.Ok(Misc.Utilities.EscapeBasicAuthPasswords(System.IO.File.ReadAllText(mediaMTXConfigurationFile, ConSurvBackend.Core.Misc.Utilities._Encoding)));
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Services.Res;
@@ -24,7 +25,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._RTSPManager = rtspManager;
             this._Log = gryLog;
             this._GeneralResourceLoader = generalResourceLoader;
-            _PreviewPictures = new ConcurrentDictionary<string, byte[]>();
+            this._PreviewPictures = new ConcurrentDictionary<string, byte[]>();
         }
 
         public byte[] GetPreview(string cameraId)
@@ -41,20 +42,21 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         protected override void Run()
         {
-            foreach (System.Collections.Generic.KeyValuePair<string, Model.Base.Camera> kvp in this._CameraService.GetAllCameras())
+            foreach (System.Collections.Generic.KeyValuePair<string, Camera> kvp in this._CameraService.GetAllCameras())
             {
-                Model.Base.Camera camera = kvp.Value;
+                Camera camera = kvp.Value;
                 lock (camera.Id)
                 {
-                    _Log.Log($"Start calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Log.Log($"Start calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     try
                     {
                         this._PreviewPictures[camera.Id] = this._RTSPManager.GetPreviewDirectlyFromCamera(camera, 1280, 720, true, this._Log).picture;
-                        _Log.Log($"Finished calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                        this._Log.Log($"Finished calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     }
                     catch (Exception e)
                     {
-                        _Log.Log($"Error while calculating preview for camera {camera.Id}...", e);
+                        this._PreviewPictures[camera.Id] = this._GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg");
+                        this._Log.Log($"Error while calculating preview for camera {camera.Id}...", e);
                     }
                 }
             }

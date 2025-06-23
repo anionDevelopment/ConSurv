@@ -87,7 +87,7 @@ namespace ConSurvBackend.Core.Services
 
         private void OrganizeCameras()
         {
-            _StreamOrganizerService.InitializeCameraOrganization();
+            this._StreamOrganizerService.InitializeCameraOrganization();
             foreach (Model.Base.Camera camera in this._CameraService.GetAllCameras().Values)
             {
                 this._StreamOrganizerService.OrganizeCamera(camera);

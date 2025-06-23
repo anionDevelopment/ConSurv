@@ -3,7 +3,10 @@ import { Settings } from '../static/Settings';
 
 export const logInterceptor: HttpInterceptorFn = (req, next) => {
   if (Settings.isVerbose()) {
-    console.log(req);
+    const printRequests: boolean = false;
+    if (printRequests) {
+      console.log(req);
+    }
   }
   return next(req);
 };

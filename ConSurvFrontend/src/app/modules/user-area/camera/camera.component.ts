@@ -56,7 +56,7 @@ export class CameraComponent implements OnInit, OnDestroy {
         }
       ],
     }, function onPlayerReady() {
-      console.log('onPlayerReady', this);
+      //nothing to do
     });
   }
 }

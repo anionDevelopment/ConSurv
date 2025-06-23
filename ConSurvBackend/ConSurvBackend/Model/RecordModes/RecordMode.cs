@@ -10,7 +10,7 @@ namespace ConSurvBackend.Core.Model.RecordModes
         public abstract T Accept<T>(IRecordModeVisitor<T> visitor);
         public abstract void Accept(IRecordModeVisitor visitor);
 
-        private static IDictionary<byte, Type> _IntegerMapping = new Dictionary<byte, Type>()
+        private static readonly IDictionary<byte, Type> _IntegerMapping = new Dictionary<byte, Type>()
         {
             { 0, typeof(NoRecording) },
             { 1, typeof(RecordAlways) },

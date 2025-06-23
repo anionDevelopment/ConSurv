@@ -179,14 +179,6 @@ namespace ConSurvBackend.Core
                             logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
                         }
                         logger.Log("Configure webapplication...", LogLevel.Information);
-                        /*
-                        functionalInformationForWebApplication.WebApplication.UseWebSockets(new WebSocketOptions
-                        {
-                            KeepAliveInterval = TimeSpan.FromMinutes(2)
-                        });
-                        functionalInformationForWebApplication.WebApplication.UseRouting();
-                        */
-                        // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
                         IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                         initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
@@ -195,7 +187,7 @@ namespace ConSurvBackend.Core
                         functionalInformationForWebApplication.PreRun = () =>
                         {
                             metricsService.StartAsync();
-                            // previewService.StartAsync();
+                            previewService.StartAsync();
                         };
                         functionalInformationForWebApplication.PostRun = () =>
                         {

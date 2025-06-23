@@ -27,7 +27,7 @@ namespace ConSurvBackend.Core.Controller
             this._CameraService = cameraService;
             this._PreviewService = previewService;
         }
-      
+
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
@@ -36,9 +36,9 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}/{{{nameof(maximalHeight)}}}/{{{nameof(maximalWidth)}}}")]
         public IActionResult GetPreview([FromRoute] string cameraId, [FromRoute] uint? maximalHeight, [FromRoute] uint? maximalWidth)
         {
-            uint height= maximalHeight.HasValue ? maximalHeight.Value : 640;
+            uint height = maximalHeight.HasValue ? maximalHeight.Value : 640;
             uint width = maximalWidth.HasValue ? maximalWidth.Value : 360;
-            return this.Ok(Misc.Utilities.ResizeImage( this._PreviewService.GetPreview(cameraId), height, width));
+            return this.Ok(Misc.Utilities.ResizeImage(this._PreviewService.GetPreview(cameraId), height, width));
         }
 
         [Authenticate]

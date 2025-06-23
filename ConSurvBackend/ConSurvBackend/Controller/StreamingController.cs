@@ -36,11 +36,11 @@ namespace ConSurvBackend.Core.Controller
             string path = Path.Combine(folder, filename);
             if (!System.IO.File.Exists(path))
             {
-                return NotFound();
+                return this.NotFound();
             }
             string contentType = filename.EndsWith(".m3u8") ? "application/vnd.apple.mpegurl" : "video/MP2T";
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);
-            return File(fileBytes, contentType);
+            return this.File(fileBytes, contentType);
         }
     }
 }
