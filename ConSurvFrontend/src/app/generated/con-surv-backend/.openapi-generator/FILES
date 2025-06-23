@@ -6,6 +6,7 @@ api.module.ts
 api/api.ts
 api/camera.service.ts
 api/commonRoutes.service.ts
+api/insights.service.ts
 api/maintenanceRoutes.service.ts
 api/streaming.service.ts
 api/user.service.ts

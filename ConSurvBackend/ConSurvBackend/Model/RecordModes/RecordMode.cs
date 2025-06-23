@@ -18,7 +18,7 @@ namespace ConSurvBackend.Core.Model.RecordModes
         };
         public static byte ToNumber(Type type)
         {
-           foreach (var kvp in _IntegerMapping)
+           foreach (KeyValuePair<byte, Type> kvp in _IntegerMapping)
             {
                 if (kvp.Value.Equals(type))
                 {

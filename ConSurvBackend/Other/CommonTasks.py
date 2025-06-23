@@ -54,6 +54,7 @@ def common_tasks():
     t.set_constants_for_certificate_private_information(codeunit_folder)
     t.t4_transform(file, verbosity)
     t.update_year_for_dotnet_codeunit_in_common_scripts_file(file)
+    t.copy_product_resource_to_codeunit_resource_folder(codeunit_folder, "Fonts")
     ensure_mediamtx_is_available(t, codeunit_folder)
 
 

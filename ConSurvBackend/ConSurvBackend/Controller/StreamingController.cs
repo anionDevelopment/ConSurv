@@ -32,7 +32,7 @@ namespace ConSurvBackend.Core.Controller
         public IActionResult Stream([FromRoute] string streamId, [FromRoute] string filename)
         {
             //TODO check filename to not contain any path-traversal-attempts
-            string folder = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Temp", "Streaming", streamId);
+            string folder = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Streaming", streamId);
             string path = Path.Combine(folder, filename);
             if (!System.IO.File.Exists(path))
             {

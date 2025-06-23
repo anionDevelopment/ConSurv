@@ -1,43 +1,44 @@
-using ConSurvBackend.Core.Constants;
-using GRYLibrary.Core.Misc;
-using Microsoft.Extensions.DependencyInjection;
-using GUtilities = GRYLibrary.Core.Misc.Utilities;
-using ConSurvBackend.Core.Configuration;
-using ConSurvBackend.Core.Services;
 using ConSurvBackend.Core.BackgroundServices;
+using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Misc;
+using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.CommonRoutes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.ExecutionModes;
-using GRYLibrary.Core.APIServer.Utilities;
-using ConSurvBackend.Core.Misc;
 using GRYLibrary.Core.APIServer.MaintenanceRoutes;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using Microsoft.EntityFrameworkCore;
 using GRYLibrary.Core.APIServer.Mid.AuthS;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
-using System;
-using System.IO;
-using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.APIServer.MidT.Auth;
-using System.Collections.Generic;
-using GRYLibrary.Core.APIServer.Services.Auth.R;
-using GRYLibrary.Core.APIServer.Services.Init;
-using GRYLibrary.Core.APIServer.Mid.M05DLog;
-using ConSurvBackend.Core.Database;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
-using GRYLibrary.Core.APIServer.Mid.Ex;
-using GRYLibrary.Core.APIServer.MidT.Exception;
-using GRYLibrary.Core.APIServer.Services.CredH;
 using GRYLibrary.Core.APIServer.Mid.AutS;
-using GRYLibrary.Core.APIServer.MidT.RLog;
+using GRYLibrary.Core.APIServer.Mid.Ex;
+using GRYLibrary.Core.APIServer.Mid.M05DLog;
 using GRYLibrary.Core.APIServer.MidT.Aut;
+using GRYLibrary.Core.APIServer.MidT.Auth;
+using GRYLibrary.Core.APIServer.MidT.Exception;
+using GRYLibrary.Core.APIServer.MidT.RLog;
+using GRYLibrary.Core.APIServer.Services.Auth.R;
+using GRYLibrary.Core.APIServer.Services.CredH;
+using GRYLibrary.Core.APIServer.Services.Init;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Res;
-using Microsoft.Extensions.Logging;
+using GRYLibrary.Core.APIServer.Services.Trans;
+using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Utilities;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
+using GRYLibrary.Core.Misc;
 using GRYLibrary.Core.Misc.FilePath;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core
 {
@@ -52,8 +53,6 @@ namespace ConSurvBackend.Core
                 {
                     runPersistent = initializationInformation.ApplicationConstants.Environment is not Development && initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
-                    initializationInformation.InitialLogger.Log($"{nameof(initializationInformation.CommandlineParameter.InitialAdminPassword)}: \"{initializationInformation.CommandlineParameter.InitialAdminPassword}\"", LogLevel.Information);
-                    initializationInformation.InitialLogger.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                     initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
@@ -173,31 +172,37 @@ namespace ConSurvBackend.Core
                 {
                     try
                     {
-                    var logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
-                    logger.Log("Configure webapplication...", LogLevel.Information);
-                    /*
-                    functionalInformationForWebApplication.WebApplication.UseWebSockets(new WebSocketOptions
-                    {
-                        KeepAliveInterval = TimeSpan.FromMinutes(2)
-                    });
-                    functionalInformationForWebApplication.WebApplication.UseRouting();
-                    */
-                    // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
-                    IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
-                    initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
+                        IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
+                        bool showInitialData = false;//disabled because it would reveal sensitive information in the log
+                        if (showInitialData)
+                        {
+                            logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword)}: \"{functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword}\"", LogLevel.Information);
+                            logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
+                        }
+                        logger.Log("Configure webapplication...", LogLevel.Information);
+                        /*
+                        functionalInformationForWebApplication.WebApplication.UseWebSockets(new WebSocketOptions
+                        {
+                            KeepAliveInterval = TimeSpan.FromMinutes(2)
+                        });
+                        functionalInformationForWebApplication.WebApplication.UseRouting();
+                        */
+                        // functionalInformationForWebApplication.WebApplication.MapConnectionHandler<WebSocket2Controller>("/ws");
+                        IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
+                        initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
-                    IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
-                    IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
-                    functionalInformationForWebApplication.PreRun = () =>
-                    {
-                        metricsService.StartAsync();
-                        previewService.StartAsync();
-                    };
-                    functionalInformationForWebApplication.PostRun = () =>
-                    {
-                        metricsService.Stop().Wait();
-                        previewService.Stop().Wait();
-                    };
+                        IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
+                        IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
+                        functionalInformationForWebApplication.PreRun = () =>
+                        {
+                            metricsService.StartAsync();
+                            // previewService.StartAsync();
+                        };
+                        functionalInformationForWebApplication.PostRun = () =>
+                        {
+                            metricsService.Stop().Wait();
+                            previewService.Stop().Wait();
+                        };
 
                     }
                     catch

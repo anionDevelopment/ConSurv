@@ -67,12 +67,11 @@ namespace ConSurvBackend.Core.Services
                 if (commandlineParameter.InitialCameraAddresses != null)
                 {
                     uint counter = 0;
-                    foreach (var initialCameraAddress in commandlineParameter.InitialCameraAddresses.OrderBy(x => x))
+                    foreach (string? initialCameraAddress in commandlineParameter.InitialCameraAddresses.OrderBy(x => x))
                     {
                         counter = counter + 1;
-                        var cameraId = this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
-                        var camera = this._CameraService.GetCameraById(cameraId);
-                        camera.RecordMode = new RecordAlways();
+                        string cameraId = this._CameraService.CreateCamera($"Camera{counter.ToString().PadLeft(2, '0')}", initialCameraAddress);
+                        Model.Base.Camera camera = this._CameraService.GetCameraById(cameraId);
                     }
                 }
 
@@ -89,7 +88,8 @@ namespace ConSurvBackend.Core.Services
 
         private void OrganizeCameras()
         {
-            foreach (var camera in this._CameraService.GetAllCameras().Values)
+            _StreamOrganizerService.InitializeCameraOrganization();
+            foreach (Model.Base.Camera camera in this._CameraService.GetAllCameras().Values)
             {
                 this._StreamOrganizerService.OrganizeCamera(camera);
             }
@@ -98,7 +98,7 @@ namespace ConSurvBackend.Core.Services
 
         private void StartCameras()
         {
-            foreach (var camera in this._CameraService.GetAllCameras().Values)
+            foreach (Model.Base.Camera camera in this._CameraService.GetAllCameras().Values)
             {
                 camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
             }

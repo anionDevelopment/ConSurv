@@ -1,14 +1,19 @@
-﻿using ConSurvBackend.Core.Misc;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using GUtilities = GRYLibrary.Core.Misc.Utilities;
 using OperatingSystem = GRYLibrary.Core.OperatingSystem.OperatingSystem;
 
 namespace ConSurvBackend.Core.Services
@@ -16,16 +21,33 @@ namespace ConSurvBackend.Core.Services
     public class StreamOrganizerService : IStreamOrganizerService
     {
         private static readonly object _Lock = new object();
+        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly IDictionary<string, StreamOrganizationDataset> _Cameras;
         private readonly IApplicationConstants _ApplicationConstants;
         private readonly IGRYLog _Log;
         private readonly IProcessManager _ProcessManager;
-        public StreamOrganizerService(IApplicationConstants applicationConstants, IGRYLog log, IProcessManager processManager)
+        private readonly ITimeService _TimeService;
+        public StreamOrganizerService(IApplicationConstants applicationConstants, IGRYLog log, IProcessManager processManager, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, ITimeService timeService)
         {
             this._ApplicationConstants = applicationConstants;
             this._Log = log;
             this._Cameras = new Dictionary<string, StreamOrganizationDataset>();
             this._ProcessManager = processManager;
+            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
+            this._TimeService = timeService;
+        }
+        public void InitializeCameraOrganization()
+        {
+            // return;
+            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string mediaMTXFolder = Path.Combine(location, "MediaMTX");
+            string mediaMTXExecutable = Path.Combine(mediaMTXFolder, "mediamtx");
+            if (OperatingSystem.GetCurrentOperatingSystem() is GRYLibrary.Core.OperatingSystem.ConcreteOperatingSystems.Windows)
+            {
+                mediaMTXExecutable = mediaMTXExecutable + ".exe";
+            }
+            ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess(mediaMTXExecutable, string.Empty, mediaMTXFolder, null, $"Media-hub", $"MediaHub", false);
+            Thread.Sleep(TimeSpan.FromSeconds(2));
         }
         public void OrganizeCamera(Camera camera)
         {
@@ -35,44 +57,15 @@ namespace ConSurvBackend.Core.Services
                 bool shouldBeManaged = true;  //TODO add something like "alwaysavailable" to mediamtx-config like described here https://github.com/bluenviron/mediamtx/issues/2214 to have a defined behavior when the camera is not available so that there is always a stream available for the camera even if it does only show a dummy-picture when the camera is not available
                 if (isCurrentlyManaged != shouldBeManaged)
                 {
-                    string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                     if (shouldBeManaged)
                     {
-                        string mediaMTXFolder = Path.Combine(location, "MediaMTX");
-                        string mediaMTXExecutable = Path.Combine(mediaMTXFolder, "mediamtx");
-                        if (OperatingSystem.GetCurrentOperatingSystem() is GRYLibrary.Core.OperatingSystem.ConcreteOperatingSystems.Windows)
-                        {
-                            mediaMTXExecutable = mediaMTXExecutable + ".exe";
-                        }
-                        string mediaMTXConfigurationFolder = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
-                        GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(mediaMTXConfigurationFolder);
-                        string mediaMTXConfigurationFile = Path.Combine(mediaMTXConfigurationFolder, $"MediaMTXConfiguration.{camera.Id}.txt");
-                        GRYLibrary.Core.Misc.Utilities.EnsureFileExists(mediaMTXConfigurationFile);
-                        ushort port = this.GetNextFreePort();
-                        string path = $"Stream_{camera.Id}";
-                        //TODO add text-overlay-configuration into mediaMTX-Configuration to draw the current timestamp into the video, see https://github.com/bluenviron/mediamtx/pull/1604#issuecomment-1483848225
-
-                        File.WriteAllText(mediaMTXConfigurationFile, $@"#Configuration for camera ""{camera.Name}"" (Id: {camera.Id})
-rtspAddress: :{port}
-paths:
-  {path}:
-    source: {camera.VideoInformation.StreamURL}
-    sourceProtocol: tcp
-");
-                        using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess(mediaMTXExecutable, mediaMTXConfigurationFile, null,  null, $"Rehost stream of camera \"{camera.Name}\" (Id: {camera.Id})", false);
-                        this._Cameras[camera.Id] = new StreamOrganizationDataset()
-                        {
-                            Camera = camera,
-                            Process = process,
-                            Path = path,
-                            Port = port,
-                        };
-                        Thread.Sleep(2);
+                        ProvideStream(camera);
+                        StartReordingOfCamera(camera.Id);
                         StartStreamOfCamera(camera.Id);
                     }
                     else
                     {
-                        var entry = this._Cameras[camera.Id];
+                        StreamOrganizationDataset entry = this._Cameras[camera.Id];
                         if (entry.Process.IsRunning)
                         {
                             entry.Process.Terminate();
@@ -83,16 +76,72 @@ paths:
             }
         }
 
+        private void StartReordingOfCamera(string cameraId)
+        {
+            uint timeInSondsOfEveryFile = 20;//TODO take from config
+                                             //TODO ffmpeg -rtsp_transport tcp -i rtsp://localhost/Stream_{cameraId} -c copy -f segment -segment_time 20 -reset_timestamps 1 "aufnahme_%Y-%m-%d_%H-%M-%S.mp4"
+            string targetFolder = this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder;
+            //string targetFolderFinal = Path.Combine(targetFolder, Utilities.GetVideoTargetFile(cameraId, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TimeInUTC, this._TimeService).Replace(@"\", "/"));
+            string targetFolderFinal = Path.Combine(targetFolder, cameraId).Replace(@"\", "/");
+            GUtilities.EnsureDirectoryExists(targetFolderFinal);
+            //string targetFile = $"{targetFolderFinal}/{Utilities.GetVideoTargetFile(cameraId, this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TimeInUTC, this._TimeService)}";
+            string argument = $"-i rtsp://localhost:8554/Stream_{cameraId} -acodec copy -vcodec copy -f segment -segment_time 20 -strftime 1 -reset_timestamps 1 {targetFolderFinal}/ffmpeg_capture-%Y-%m-%d_%H-%M-%S.avi";
+            //int i = 3;
+            _ProcessManager.GetBackgroundProcess("ffmpeg",argument, null, null, $"Record {cameraId}", $"Record-{cameraId}", false);
+        }
+
+        private void ProvideStream(Camera camera)
+        {
+            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            /*
+                   string mediaMTXFolder = Path.Combine(location, "MediaMTX");
+                   string mediaMTXExecutable = Path.Combine(mediaMTXFolder, "mediamtx");
+                   if (OperatingSystem.GetCurrentOperatingSystem() is GRYLibrary.Core.OperatingSystem.ConcreteOperatingSystems.Windows)
+                   {
+                       mediaMTXExecutable = mediaMTXExecutable + ".exe";
+                   }
+                   string mediaMTXConfigurationFolder = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
+                   GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(mediaMTXConfigurationFolder);
+                   string mediaMTXConfigurationFile = Path.Combine(mediaMTXConfigurationFolder, $"MediaMTXConfiguration.{camera.Id}.txt");
+                   GRYLibrary.Core.Misc.Utilities.EnsureFileExists(mediaMTXConfigurationFile);
+                                          */
+            ushort port = this.GetNextFreePort();
+            string path = $"Stream_{camera.Id}";
+            //TODO add text-overlay-configuration into mediaMTX-Configuration to draw the current timestamp into the video, see https://github.com/bluenviron/mediamtx/pull/1604#issuecomment-1483848225
+            /*
+            File.WriteAllText(mediaMTXConfigurationFile, $@"#Configuration for camera ""{camera.Name}"" (Id: {camera.Id})
+rtspAddress: :{port}
+paths:
+{path}:
+source: {camera.VideoInformation.StreamURL}
+sourceProtocol: tcp
+");
+            */
+            // ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess(mediaMTXExecutable, mediaMTXConfigurationFile, null,  null, $"Rehost stream of camera \"{camera.Name}\" (Id: {camera.Id})", false);
+            //ffmpeg -rtsp_transport tcp -i rtsp://tpuser:GgrechuH_fzing655f@192.168.1.141/stream1 -vf "drawtext=fontsize=60:fontcolor=white:text='%{localtime\:%Y-%m-%d %H\\\:%M\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)" -c:v libx264 -c:a aac -f rtsp rtsp://localhost:8554/Stream_8C4BF7
+            //ffmpeg -rtsp_transport tcp -i rtsp://tpuser:GgrechuH_fzing655f@192.168.1.141/stream1 -vf "drawtext=fontsize=60:fontcolor=white:text='%{localtime\:%Y-%m-%d %H\\\:%M\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)" -c:v libx264 -c:a aac -vsync passthrough -fflags nobuffer -f rtsp rtsp://localhost:8554/Stream_8C4BF7
+            //ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", "-rtsp_transport tcp -i " + camera.VideoInformation.StreamURL + " -vf \"drawtext=fontsize=60:fontcolor=yellow:text='%{pts\\:hms}':x=(w-text_w):y=(h-text_h)\" -c:v libx264 -c:a aac -vsync passthrough -fflags nobuffer -f rtsp " + this.GetStreamURL(camera.Id), null, null, $"Send stream of camera \"{camera.Name}\" (Id: {camera.Id}) to media-hub", false);
+            string fontfile = Path.Combine(location, "Fonts", "Noto", "NotoSans_Condensed-Regular.ttf");
+            GUtilities.AssertCondition(File.Exists(fontfile), "Font-file does not exist.");
+            ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", "-rtsp_transport tcp -i " + camera.VideoInformation.StreamURL + " -vf \"drawtext=fontfile='" + fontfile + "':fontsize=60:fontcolor=white:text='%{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\" -c:v libx264 -c:a aac -vsync passthrough -fflags nobuffer -f rtsp " + this.GetStreamURL(camera.Id), null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
+            this._Cameras[camera.Id] = new StreamOrganizationDataset()
+            {
+                Camera = camera,
+                //   Process = process,
+                Path = path,
+                Port = port,
+            };
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+        }
+
         private void StartStreamOfCamera(string cameraId)
         {
-            string streamId = Guid.NewGuid().ToString().Substring(0, 8);
-            streamId = cameraId;
-            string outputDir = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Temp", "Streaming", streamId).Replace(@"\", "/");
+            string outputDir = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Streaming", cameraId).Replace(@"\", "/");
             Directory.CreateDirectory(outputDir);
             string rtspUrl = this.GetStreamURL(cameraId);
 
             string args = $"-i {rtspUrl} -c:v libx264 -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments {outputDir}/stream.m3u8";
-            _ProcessManager.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, (process) => { }, "Streaming", false);
+            _ProcessManager.GetBackgroundProcess("ffmpeg", args, Environment.CurrentDirectory, (process) => { }, $"Streaming of camera {cameraId}", $"Stream-{cameraId}", false);
             //TODO check if wait a few seconds would be helpful here
         }
         private ushort GetNextFreePort()
@@ -111,7 +160,7 @@ paths:
 
         private bool PortIsFree(ushort port)
         {
-            foreach (var camera in this._Cameras)
+            foreach (KeyValuePair<string, StreamOrganizationDataset> camera in this._Cameras)
             {
                 if (camera.Value.Port == port)
                 {
@@ -133,8 +182,9 @@ paths:
         {
             lock (_Lock)
             {
-                var info = this._Cameras[cameraId];
-                return $"rtsp://localhost:{info.Port}/{info.Path}";
+                //var info = this._Cameras[cameraId];
+                return "rtsp://localhost:8554/Stream_" + cameraId;
+                // return $"rtsp://localhost:{info.Port}/{info.Path}";
             }
         }
     }

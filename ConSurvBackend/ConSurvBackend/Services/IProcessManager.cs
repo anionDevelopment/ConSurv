@@ -8,7 +8,7 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IProcessManager
     {
-        public ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, Action<Process>? configureProcess, string purpose, bool runSynchronous);
+        public ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, Action<Process>? configureProcess, string purpose, string purposeForLogfile, bool runSynchronous);
         public ISet<ProcessInformation> GetRunningProcesses();
     }
 }

@@ -86,9 +86,7 @@ namespace ConSurvBackend.Core.Services
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
-                    using ExternalProgramExecutor process = new ExternalProgramExecutor("ffmpeg", $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}");
-                    process.LogObject = GeneralLogger.NoLogAsGRYLog();
-                    process.Run();
+                    ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}", null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
                     if (process.ExitCode != 0)
                     {
                         throw new InternalAlgorithmException(GRYLog.FormatProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines));
@@ -234,11 +232,13 @@ namespace ConSurvBackend.Core.Services
 
         private void RecordAlwaysRunner(Camera camera, string targetFolder, TimeSpan videoLength, bool timeInUTC)
         {
+            //obsolete:
             bool enabled = true;
             while (enabled)
             {
                 try
                 {
+                    return;
                     lock (camera.Id)
                     {
                         bool addSleep = false;
@@ -258,7 +258,7 @@ namespace ConSurvBackend.Core.Services
                             GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(GRYLibrary.Core.Misc.Utilities.GetValue(Path.GetDirectoryName(targetFile)));
                             string streamURL = this._StreamOrganizerService.GetStreamURL(camera.Id);
                             string ffmpegArgument = $"-i {streamURL} -t {(uint)Math.Round(videoLength.TotalSeconds, 0)} -c:v copy -c:a aac {targetFile}";
-                            using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null,  $"Record camera \"{camera.Name}\" (Id: {camera.Id})", true);
+                            using ExternalProgramExecutor process = _ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Record camera \"{camera.Name}\" (Id: {camera.Id})", $"Record-{camera.Id}", true);
                             process.WaitUntilTerminated();//wait for exit because this function will already be executed in a background-thread.
                             if (process.ExitCode != 0)
                             {
@@ -267,7 +267,7 @@ namespace ConSurvBackend.Core.Services
                         }
                         else
                         {
-                            this._Log.Log($"Camera '{camera.Id}' ({camera.VideoInformation.StreamURL}) is not available.", LogLevel.Warning);
+                            this._Log.Log($"Camera '{camera.Id}' is not available.", LogLevel.Warning);
                             Thread.Sleep(TimeSpan.FromSeconds(20));
                         }
                     }
@@ -277,22 +277,7 @@ namespace ConSurvBackend.Core.Services
                     this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", LogLevel.Error, ex, null);
                     Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage for error-loops
                 }
-                finally
-                {
-                    /*
-                    lock (camera.Id)
-                    {
-                        this._RecordingProcesses[camera.Id].Process = null;
-                    }
-                    */
-                }
             }
-            /*
-            lock (camera.Id)
-            {
-                this._RecordingProcesses[camera.Id].Thread = null;
-            }
-            */
         }
         public void Dispose()
         {

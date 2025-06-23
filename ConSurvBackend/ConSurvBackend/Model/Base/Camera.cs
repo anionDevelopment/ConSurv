@@ -20,7 +20,7 @@ namespace ConSurvBackend.Core.Model.Base
                 Certificate=null,
                 IsONVIFCamera=false,
             };
-            this.RecordMode = new NoRecording();
+            this.RecordMode = new RecordAlways();
             this.Enabled = true;
         }
 

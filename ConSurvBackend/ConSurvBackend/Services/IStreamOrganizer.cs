@@ -4,6 +4,7 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IStreamOrganizerService
     {
+        public void InitializeCameraOrganization();
         /// <summary>
         /// This function ensures that it is possible or not possible to access the camera by <see cref="IRTSPManager"/>.
         /// If it will be possible or not depends on <see cref="Camera.Enabled"/>.
