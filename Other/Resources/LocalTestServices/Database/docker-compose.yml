@@ -1,0 +1,26 @@
+version: "3.2"
+
+services:
+  consurvbackend_database:
+    # connectionstring: "Server=consurvbackend_database; Port=3306; Database=ConSurvBackendDatabase; Uid=user; Pwd=pa55w0rd;"
+    # direct local connection: "mariadb -u root -pR00tpa55w0rd ConSurvBackendDatabase"
+    image: mariadb:11.5.2
+    container_name: "consurvbackend_database"
+    ports:
+      - "3306:3306"
+    # Encomment the following 2 lines if the test-database is supposed to be persistent for test-purposes
+    #   volumes:
+    #     - "./Volumes/Data:/var/lib/mysql"
+    environment:
+      MARIADB_USER: user
+      MARIADB_PASSWORD: pa55w0rd
+      MARIADB_ROOT_PASSWORD: R00tpa55w0rd
+      MARIADB_DATABASE: ConSurvBackendDatabase
+
+  consurvbackend_database_administration:
+    image: adminer:4.8.1
+    container_name: "consurvbackend_database_administration"
+    ports:
+      - 8080:8080
+    depends_on:
+      - consurvbackend_database

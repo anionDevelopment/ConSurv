@@ -1,0 +1,26 @@
+@startuml CodeUnits-Overview
+title CodeUnits of ConSurv
+
+[ConSurvBackend]
+note as ConSurvBackendNote
+  ConSurvBackend is the backend for ConSurv.
+end note
+ConSurvBackend .. ConSurvBackendNote
+
+[ConSurvFrontend]
+note as ConSurvFrontendNote
+  ConSurvBackend is the frontend for ConSurv.
+end note
+ConSurvFrontend .. ConSurvFrontendNote
+
+[ConSurv]
+note as ConSurvNote
+  ConSurv is an IP-cam-management-system.
+end note
+ConSurv .. ConSurvNote
+
+ConSurvFrontend --> ConSurvBackend
+ConSurv --> ConSurvBackend
+ConSurv --> ConSurvFrontend
+
+@enduml

@@ -1,0 +1,83 @@
+version: '3'
+
+tasks:
+
+  BaseBuildAllCodeunits:
+    desc: "Base: Build all codeunits"
+    silent: true
+    dir: "."
+    cmds:
+      - scbuildcodeunits
+    aliases:
+      - basebuildallcodeunits
+      - bb
+
+  BaseExampleStart:
+    desc: "Base: Example start"
+    silent: true
+    dir: "./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
+    cmds:
+      - python StartExample.py
+    aliases:
+      - baseexamplestart
+      - beu
+
+  BaseExampleStop:
+    desc: "Base: Example stop"
+    silent: true
+    dir: "./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile"
+    cmds:
+      - python StopExample.py
+    aliases:
+      - baseexamplestop
+      - bed
+
+  LocaltestserviceDatabaseStart:
+    desc: "LocalTestService: Database start"
+    silent: true
+    dir: "./Other/Resources/LocalTestServices/Database"
+    cmds:
+      - python Start.py
+    aliases:
+      - localtestservicedatabasestart
+      - ldu
+
+  LocaltestserviceDatabaseStop:
+    desc: "LocalTestService: Database stop"
+    silent: true
+    dir: "./Other/Resources/LocalTestServices/Database"
+    cmds:
+      - python Stop.py
+    aliases:
+      - localtestservicedatabasestop
+      - ldd
+
+  LocaltestserviceReverseProxyStart:
+    desc: "LocalTestService: Reverse-proxy start"
+    silent: true
+    dir: "./Other/Resources/LocalTestServices/ReverseProxy"
+    cmds:
+      - python Start.py
+    aliases:
+      - localtestservicereverseproxystart
+      - lru
+
+  LocaltestserviceReverseProxyStop:
+    desc: "LocalTestService: Reverse-proxy stop"
+    silent: true
+    dir: "./Other/Resources/LocalTestServices/ReverseProxy"
+    cmds:
+      - python Stop.py
+    aliases:
+      - localtestservicereverseproxystop
+      - lrd
+
+  RunFrontend:
+    desc: "Run: Frontend"
+    silent: true
+    dir: "./ConSurvFrontend"
+    cmds:
+      - npm run start
+    aliases:
+      - runfrontend
+      - rf

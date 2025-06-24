@@ -1,0 +1,1 @@
+curl --fail http://localhost:80/API/Other/Maintenance/HealthCheck
