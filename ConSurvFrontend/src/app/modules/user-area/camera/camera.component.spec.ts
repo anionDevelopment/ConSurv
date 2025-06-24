@@ -1,14 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CameraComponent } from './camera.component';
-import { FrameWorkComponent } from '../../home-page/frame-work/frame-work.component';
 import { UserDataService } from '../../../services/user-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CameraDTO } from '../../../generated/con-surv-backend/model/cameraDTO';
 import { of } from 'rxjs';
-import { CameraService } from '../../../generated/con-surv-backend';
-import { HomePageModule } from '../../home-page/home-page.module';
+import { CameraService, StreamingService, UserService } from '../../../generated/con-surv-backend';
+import { Component } from '@angular/core';
 
+@Component({
+  selector: 'app-user-area-container',
+  standalone: false,
+  template: '<ng-content></ng-content>'
+})
+class MockUserAreaContainerComponent { }
 describe('CameraComponent', () => {
   let component: CameraComponent;
   let fixture: ComponentFixture<CameraComponent>;
@@ -16,11 +19,9 @@ describe('CameraComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
-        FrameWorkComponent,
-        CameraComponent,
+        MockUserAreaContainerComponent,
       ],
       imports: [
-        HomePageModule,
       ],
       providers: [
         {
@@ -38,8 +39,31 @@ describe('CameraComponent', () => {
               cameraId: "1",
               name: "camera",
             }),
+          }
+        },
+        {
+          provide: StreamingService,
+          useValue: {}
+        },
+        {
+          provide: UserDataService,
+          useValue: {
+            getUserName: () => of("username"),
+            getUserId: () => of("1"),
+            userIsAdmin: () => of(true),
+          }
+        },
+        {
+          provide: UserService,
+          useValue: {
+          }
+        },
+        {
+          provide: Router,
+          useValue: {
+            url: "user/camera",
           },
-        }
+        },
       ],
     }).compileComponents();
 

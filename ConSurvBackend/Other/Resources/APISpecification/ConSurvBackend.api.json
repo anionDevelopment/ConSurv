@@ -335,6 +335,100 @@
         }
       }
     },
+    "/API/v1/CameraController/ListCameras": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/v1/CameraController/ListAvailableVideos/{cameraId}": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/v1/CameraController/DownloadVideo/{cameraId}/{filename}": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/v1/CameraController/RemoveVideo/{cameraId}/{filename}": {
+      "put": {
+        "tags": [
+          "Camera"
+        ],
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/API/Other/Resources/Information/TermsOfService": {
       "get": {
         "tags": [

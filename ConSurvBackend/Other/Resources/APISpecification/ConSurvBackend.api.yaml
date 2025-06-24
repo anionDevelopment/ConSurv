@@ -239,6 +239,24 @@ paths:
           description: OK
       tags:
       - Camera
+  /API/v1/CameraController/DownloadVideo/{cameraId}/{filename}:
+    get:
+      parameters:
+      - in: path
+        name: cameraId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: filename
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Camera
   /API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}:
     get:
       parameters:
@@ -283,6 +301,26 @@ paths:
           description: OK
       tags:
       - Camera
+  /API/v1/CameraController/ListAvailableVideos/{cameraId}:
+    get:
+      parameters:
+      - in: path
+        name: cameraId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Camera
+  /API/v1/CameraController/ListCameras:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Camera
   /API/v1/CameraController/RemoveCamera/{cameraId}:
     delete:
       parameters:
@@ -294,6 +332,24 @@ paths:
       - description: Access Token
         in: header
         name: X-AccessToken
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Camera
+  /API/v1/CameraController/RemoveVideo/{cameraId}/{filename}:
+    put:
+      parameters:
+      - in: path
+        name: cameraId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: filename
         required: true
         schema:
           type: string

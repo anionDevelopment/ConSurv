@@ -27,7 +27,8 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, './coverage/con-surv-frontend'),
       subdir: '.',
       reporters: [
-        { type: 'cobertura', dir: './Other/Artifacts/TestCoverage' }
+        { type: 'cobertura', dir: './Other/Artifacts/TestCoverage' },
+        'progress'
       ]
     },
     reporters: ['progress', 'kjhtml'],
