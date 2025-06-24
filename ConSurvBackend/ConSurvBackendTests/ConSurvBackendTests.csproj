@@ -65,7 +65,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="0.12.148" />
+        <PackageReference Include="GRYLibrary" Version="0.12.149" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="17.14.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
