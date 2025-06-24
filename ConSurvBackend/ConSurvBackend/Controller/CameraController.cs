@@ -108,6 +108,41 @@ namespace ConSurvBackend.Core.Controller
 
         #endregion
 
-        //TODO add option to download recorded videos
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route(nameof(ListCameras))]
+        public IActionResult ListCameras()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route($"{nameof(ListAvailableVideos)}/{{{nameof(cameraId)}}}")]
+        public IActionResult ListAvailableVideos([FromRoute] string cameraId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route($"{nameof(DownloadVideo)}/{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
+        public IActionResult DownloadVideo([FromRoute] string cameraId, [FromRoute]string filename)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route($"{nameof(RemoveVideo)}/{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
+        public IActionResult RemoveVideo([FromRoute] string cameraId, [FromRoute] string filename)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }
