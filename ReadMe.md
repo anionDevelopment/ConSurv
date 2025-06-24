@@ -6,13 +6,13 @@
 
 ## Features
 
-- Capturing any RTSP-stream.
+- Processing any RTSP-stream
+- Support for TLS-encrypted streams (RTSPS)
+- Video-Recording
+- Live-Video-Viewing in the browser
 
 ## Not implemented features
 
-- Video-Recording
-- Support for TLS-encrypted streams (RTSPS)
-- Live-Video-Viewing in the browser
 - OpenID-Login
 - Usage of gpu if available
 - Video-blacken
@@ -20,7 +20,7 @@
 - Video-control using ONVIF-commands for cameras which supports ONVIF
 - Smartphone-app which has all features from the user-area
 - Text-translation for common languages
-- Being able to change group-memberships
+- Being able to change group-memberships of users
 - Design (including logo/favicon/dark-mode)
 
 ## Development
