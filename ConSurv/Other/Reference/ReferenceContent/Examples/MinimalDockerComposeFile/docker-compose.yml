@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   consurv:
-    image: consurv:1.0.0
+    image: consurv:1.0.1
     container_name: "consurv"
     volumes:
       - "./Volumes/Data:/Workspace/Data"
