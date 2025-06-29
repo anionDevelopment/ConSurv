@@ -24,4 +24,5 @@ model/updateCameraDTO.ts
 model/userInformationDTO.ts
 model/videoInformationDTO.ts
 param.ts
+provide-api.ts
 variables.ts
