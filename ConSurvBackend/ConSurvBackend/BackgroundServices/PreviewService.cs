@@ -12,12 +12,12 @@ namespace ConSurvBackend.Core.BackgroundServices
 {
     public class PreviewService : IteratingBackgroundService, IPreviewService
     {
-        private readonly ICameraService _CameraService;
+        private readonly IBusinessLogicService _CameraService;
         private readonly IRTSPManager _RTSPManager;
         private readonly IGeneralResourceLoader _GeneralResourceLoader;
         private readonly IGRYLog _Log;
         private readonly ConcurrentDictionary<string, byte[]> _PreviewPictures;
-        public PreviewService(IApplicationConstants<CodeUnitSpecificConstants> constants, ICameraService cameraService, IGRYLog logger, IRTSPManager rtspManager, IGRYLog gryLog, IGeneralResourceLoader generalResourceLoader) : base(constants.ExecutionMode, logger)
+        public PreviewService(IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IGRYLog logger, IRTSPManager rtspManager, IGRYLog gryLog, IGeneralResourceLoader generalResourceLoader) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
             this.AdditionalDelay = TimeSpan.FromSeconds(10);

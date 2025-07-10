@@ -4,6 +4,7 @@ using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
+using System.Data.Common;
 
 namespace ConSurvBackend.Core.Database
 {
@@ -13,13 +14,13 @@ namespace ConSurvBackend.Core.Database
         private readonly IGeneralLogger _Logger;
         private readonly ITimeService _TimeService;
         private readonly IDatabaseManager _DatabaseManager;
-        public MySqlConnection Connection { get; private set; }
+        public DbConnection Connection { get; private set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager) : base(options)
         {
             this._Logger = logger;
             this._TimeService = timeService;
-            this.Connection = (MySqlConnection)this.Database.GetDbConnection();
+            this.Connection = this.Database.GetDbConnection();
             this._DatabaseManager = databaseManager;
             this.Initialize();
         }

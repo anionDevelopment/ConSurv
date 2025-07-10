@@ -1,44 +1,29 @@
-version: "3.2"
-
 services:
   consurv:
-    image: consurv:1.0.1
-    container_name: "consurv"
-    volumes:
-      - "./Volumes/Data:/Workspace/Data"
-      - "./Volumes/Configuration:/Workspace/Configuration"
-      - "./Volumes/Logs:/Workspace/Logs"
-    env_file: "Variables.env"
+    container_name: consurv
+    env_file: Variables.env
+    image: consurv:1.1.0
     ports:
-      - 443:443
-
+    - 443:443
+    volumes:
+    - ./Volumes/Data:/Workspace/Data
+    - ./Volumes/Configuration:/Workspace/Configuration
+    - ./Volumes/Logs:/Workspace/Logs
   consurv_database:
-    # connectionstring: Server=consurv_database;Port=3306;Database=ConSurvDatabase;UID=root;PWD=R00tpa55w0rd;
-
-    # Data for adminer:
-    # System: MySQL
-    # Server: consurv_database
-    # Username: root
-    # Password: R00tpa55w0rd
-    # Database: ConSurvDatabase
-
-    image: mariadb:11.6.2
-    container_name: "consurv_database"
-    ports:
-      - "3306:3306"
-    volumes:
-      - "./Volumes/Database:/var/lib/mysql"
+    container_name: consurv_database
+    image: postgres:17.5
     environment:
-      MARIADB_ROOT_HOST: "%"
-      # MARIADB_USER: user
-      # MARIADB_PASSWORD: password
-      MARIADB_ROOT_PASSWORD: R00tpa55w0rd
-      MARIADB_DATABASE: ConSurvDatabase
-
-  consurv_database_administration:
-    image: adminer:4.8.1
-    container_name: "consurv_database_administration"
+      POSTGRES_PASSWORD: R00tpa55w0rd
+      POSTGRES_DB: ConSurvDatabase
     ports:
-      - 8080:8080
+      - "5432:5432"
+    volumes:
+      - ./Volumes/Data:/var/lib/postgresql/data
+  consurv_database_administration:
+    container_name: consurv_database_administration
     depends_on:
-      - consurv_database
+    - consurv_database
+    image: adminer:4.17.1
+    ports:
+    - 8080:8080
+version: '3.2'

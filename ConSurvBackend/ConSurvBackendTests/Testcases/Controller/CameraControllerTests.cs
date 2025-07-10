@@ -19,7 +19,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         {
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
-            Mock<ICameraService> cameraServiceMock = new Mock<ICameraService>(MockBehavior.Strict);
+            Mock<IBusinessLogicService> cameraServiceMock = new Mock<IBusinessLogicService>(MockBehavior.Strict);
             Mock<IPreviewService> previewService = new Mock<IPreviewService>(MockBehavior.Strict);
             string cameraId = Guid.NewGuid().ToString();
             cameraServiceMock.Setup(mock => mock.CreateCamera("New camera", "rtsp://mycamera.example.com/stream")).Returns(cameraId);

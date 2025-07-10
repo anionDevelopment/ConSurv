@@ -17,11 +17,11 @@ InitialCameraAddresses="rtsp://192.168.1.42/stream1 rtsp://192.168.1.43/stream2"
 
 ### Database
 
-connectionstring: `Server=consurv_database;Port=3306;Database=ConSurvDatabase;UID=root;PWD=R00tpa55w0rd;`
+connectionstring: `postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase`
 
 Data for adminer:
 
-System: `MySQL`
+System: `PostgreSQL`
 
 Server: `consurv_database`
 

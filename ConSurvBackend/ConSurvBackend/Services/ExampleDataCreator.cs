@@ -11,7 +11,7 @@ namespace ConSurvBackend.Core.Services
 {
     public class ExampleDataCreator : IExampleDataCreator
     {
-        private readonly ICameraService _CameraService;
+        private readonly IBusinessLogicService _CameraService;
         private readonly IPersistence _Persistence;
         private readonly IAuthenticationService<User> _AuthenticationService;
         private readonly ITimeService _TimeService;
@@ -20,7 +20,7 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _Configuration;
         private static readonly Random _Random = new Random();
 
-        public ExampleDataCreator(IPersistence persistence, IAuthenticationService<User> authenticationService, ITimeService timeService, IGeneralLogger logger, IApplicationConstants<CodeUnitSpecificConstants> constants, ICameraService cameraService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> configuration)
+        public ExampleDataCreator(IPersistence persistence, IAuthenticationService<User> authenticationService, ITimeService timeService, IGeneralLogger logger, IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> configuration)
         {
             this._Persistence = persistence;
             this._AuthenticationService = authenticationService;

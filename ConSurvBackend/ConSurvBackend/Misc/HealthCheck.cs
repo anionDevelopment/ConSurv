@@ -14,8 +14,8 @@ namespace ConSurvBackend.Core.Misc
     {
         private readonly IGeneralLogger _Logger;
         private readonly IPersistence _Persistence;
-        private readonly ICameraService _CameraService;
-        public HealthCheck(IGeneralLogger logger, IPersistence persistence, ICameraService cameraSchedulerService)
+        private readonly IBusinessLogicService _CameraService;
+        public HealthCheck(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraSchedulerService)
         {
             this._Logger = logger;
             this._Persistence = persistence;

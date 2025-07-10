@@ -12,8 +12,8 @@ namespace ConSurvBackend.Core.BackgroundServices
     public class MetricsService : IteratingBackgroundService, IMetricsService
     {
         public Gauge MetricAvailableCamerasRate { get; private set; }
-        private readonly ICameraService _CameraService;
-        public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IGRYLog logger, ICameraService cameraService) : base(constants.ExecutionMode, logger)
+        private readonly IBusinessLogicService _CameraService;
+        public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IGRYLog logger, IBusinessLogicService cameraService) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
             this._CameraService = cameraService;

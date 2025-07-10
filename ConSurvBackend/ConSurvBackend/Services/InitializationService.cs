@@ -18,14 +18,14 @@ namespace ConSurvBackend.Core.Services
     public class InitializationService : IInitializationService<CommandlineParameter>
     {
         private readonly IAuthenticationService _AuthenticationService;
-        private readonly ICameraService _CameraService;
+        private readonly IBusinessLogicService _CameraService;
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly IGeneralLogger _GeneralLogger;
         private readonly IExampleDataCreator _ExampleDataCreator;
         private readonly IRTSPManager _RTSPManager;
         private readonly IStreamOrganizerService _StreamOrganizerService;
 
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, ICameraService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService)
         {
             this._AuthenticationService = authenticationService;
             this._Constants = constants;

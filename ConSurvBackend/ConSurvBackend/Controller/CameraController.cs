@@ -18,9 +18,9 @@ namespace ConSurvBackend.Core.Controller
         public const string ControllerRoute = $"{ServerConfiguration.APIRoutePrefix}/v{GeneralConstants.CodeUnitMajorVersion}/{nameof(CameraController)}";
         private readonly IGeneralLogger _Logger;
         private readonly IPersistence _Persistence;
-        private readonly ICameraService _CameraService;
+        private readonly IBusinessLogicService _CameraService;
         private readonly IPreviewService _PreviewService;
-        public CameraController(IGeneralLogger logger, IPersistence persistence, ICameraService cameraService, IPreviewService previewService)
+        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IPreviewService previewService)
         {
             this._Logger = logger;
             this._Persistence = persistence;

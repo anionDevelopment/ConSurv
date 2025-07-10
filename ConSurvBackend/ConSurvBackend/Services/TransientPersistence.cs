@@ -31,7 +31,7 @@ namespace ConSurvBackend.Core.Services
 
         public void CreateCamera(Camera camera)
         {
-            this._Cameras[camera.Id]=camera;
+            this._Cameras[camera.Id] = camera;
         }
 
         public void RemoveCamera(string cameraId)
@@ -41,7 +41,7 @@ namespace ConSurvBackend.Core.Services
 
         public void UpdateCamera(Camera camera)
         {
-          
+
             this._Cameras[camera.Id] = camera;
         }
 
@@ -57,7 +57,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserWithNameExists(string username)
         {
-         return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
+            return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
         }
 
         public IDictionary<string, Camera> GetAllCameras()
@@ -173,6 +173,11 @@ namespace ConSurvBackend.Core.Services
         public Role GetRoleByName(string roleName)
         {
             throw new System.NotImplementedException();
+        }
+
+        public bool IsCamera(string id)
+        {
+            return _Cameras.ContainsKey(id);
         }
     }
 }

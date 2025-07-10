@@ -1,0 +1,25 @@
+version: "3.2"
+
+services:
+  consurvbackend_database:
+    container_name: "consurvbackend_database"
+    image: mariadb:11.5.2
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_USER: user
+      MARIADB_PASSWORD: pa55w0rd
+      MARIADB_ROOT_PASSWORD: R00tpa55w0rd
+      MARIADB_DATABASE: consurvDatabase
+    networks:
+      - consurv_net
+
+  consurvbackend_database_administration:
+    image: adminer:4.8.1
+    container_name: "consurvbackend_database_administration"
+    networks:
+      - consurv_net
+
+networks:
+  consurv_net:
+    external: true

@@ -15,9 +15,9 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly IAuthenticationServicePersistence<User> _Persistence;
 
-        public PersistentAuthenticationService(IAuthenticationServicePersistence<User> _Persistence)
+        public PersistentAuthenticationService(IAuthenticationServicePersistence<User> persistence)
         {
-            this._Persistence = _Persistence;
+            this._Persistence = persistence;
         }
 
         public bool AccessTokenIsValid(string accessToken)
