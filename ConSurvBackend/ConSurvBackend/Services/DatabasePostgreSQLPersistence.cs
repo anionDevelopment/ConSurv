@@ -19,7 +19,7 @@ namespace ConSurvBackend.Core.Services
         {
         }
 
-        public override DbParameter GetParameter(string parameterName, object? value, Type type)
+        public override DbParameter GetParameter(string parameterName, object? value, Type type)//TODO extract this frmo grylib
         {
             object formattedValue = this.FormatValue(value);
             Type adaptedType = this.AdaptType(type);
@@ -31,7 +31,7 @@ namespace ConSurvBackend.Core.Services
             };
         }
 
-        private Type AdaptType(Type type)
+        private Type AdaptType(Type type)//TODO extract this frmo grylib
         {
             return type switch
             {
@@ -43,7 +43,7 @@ namespace ConSurvBackend.Core.Services
             };
         }
 
-        private object FormatValue(object? value)
+        private object FormatValue(object? value)//TODO extract this frmo grylib
         {
             object result;
             if (value == null)
@@ -96,6 +96,7 @@ namespace ConSurvBackend.Core.Services
                 var t when t == typeof(byte[]) => NpgsqlDbType.Bytea,
                 var t when t == typeof(char) => NpgsqlDbType.Varchar,
                 var t when t == typeof(TimeSpan) => NpgsqlDbType.Interval,
+                var t when t == typeof(byte) => NpgsqlDbType.Smallint,
 
                 _ => throw new NotSupportedException($"Type '{type.FullName}' is not supported.")
             };

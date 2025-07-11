@@ -2,8 +2,10 @@
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Services;
+using ExtendedXmlSerializer.ExtensionModel.Content;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -70,9 +72,9 @@ namespace ConSurvBackend.Core.Misc
                 }
             }
         }
-        public void RunTransaction(params Action<MySqlCommand>[] actions)
+        public void RunTransaction(params Action<DbCommand>[] actions)
         {
-            this.RunTransaction(actions.Select<Action<MySqlCommand>, Func<MySqlCommand, object>>(action => (command) =>
+            this.RunTransaction(actions.Select<Action<DbCommand>, Func<DbCommand, object>>(action => (command) =>
             {
                 action(command);
                 return null;
@@ -80,7 +82,7 @@ namespace ConSurvBackend.Core.Misc
             ).ToArray());
         }
 
-        public T[] RunTransaction<T>(params Func<MySqlCommand, T>[] functions)
+        public T[] RunTransaction<T>(params Func<DbCommand, T>[] functions)
         {
             List<T> results = new List<T>();
             this.AccessDatabase(context =>
@@ -132,13 +134,13 @@ namespace ConSurvBackend.Core.Misc
             this.RunTransaction((command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptCreateCamera();
-                command.Parameters.Add(new MySqlParameter("Id", camera.Id));
-                command.Parameters.Add(new MySqlParameter("Name", camera.Name));
-                command.Parameters.Add(new MySqlParameter("StreamURL", camera.VideoInformation.StreamURL));
-                command.Parameters.Add(new MySqlParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
-                command.Parameters.Add(new MySqlParameter("Certificate", camera.VideoInformation.Certificate));
-                command.Parameters.Add(new MySqlParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
-                command.Parameters.Add(new MySqlParameter("Enabled", camera.VideoInformation.Certificate));
+                command.Parameters.Add(this.GetParameter("Id", camera.Id));
+                command.Parameters.Add(this.GetParameter("Name", camera.Name));
+                command.Parameters.Add(this.GetParameter("StreamURL", camera.VideoInformation.StreamURL));
+                command.Parameters.Add(this.GetParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
+                command.Parameters.Add(this.GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
+                command.Parameters.Add(this.GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
+                command.Parameters.Add(this.GetParameter("Enabled", camera.Enabled));
                 command.ExecuteNonQuery();
             });
         }
@@ -159,7 +161,7 @@ namespace ConSurvBackend.Core.Misc
             {
                 IDictionary<string, Camera> cameraDictionary = new Dictionary<string, Camera>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllCameras();
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (DbDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -170,7 +172,7 @@ namespace ConSurvBackend.Core.Misc
                         {
                             StreamURL = reader.GetString(2),
                             IsONVIFCamera = reader.GetBoolean(3),
-                            Certificate = reader.GetString(4),
+                            Certificate = DBUtilities.GetValue<string>(reader, 4, true),
                         };
                         camera.RecordMode = RecordMode.FromNumberToInstance(reader.GetByte(5));
                         camera.Enabled = reader.GetBoolean(6);
@@ -198,7 +200,6 @@ namespace ConSurvBackend.Core.Misc
                 }
             });
         }
-
         public void Dispose()
         {
             this._DatabaseContext.Dispose();
@@ -209,8 +210,8 @@ namespace ConSurvBackend.Core.Misc
             return this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithNameExists();
-                cmd.Parameters.Add(new MySqlParameter("UserName", userName));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("UserName", userName));
+                using DbDataReader reader = cmd.ExecuteReader();
                 return reader.HasRows;
             })[0];
         }
@@ -226,7 +227,7 @@ namespace ConSurvBackend.Core.Misc
             {
                 ISet<Role> rolesInternal = new HashSet<Role>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllRoles();
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (DbDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -256,8 +257,8 @@ namespace ConSurvBackend.Core.Misc
             this.RunTransaction((command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptInsertRole();
-                command.Parameters.Add(new MySqlParameter("Id", role.Id));
-                command.Parameters.Add(new MySqlParameter("Name", role.Name));
+                command.Parameters.Add(this.GetParameter("Id", role.Id));
+                command.Parameters.Add(this.GetParameter("Name", role.Name));
                 command.ExecuteNonQuery();
             }, (command) =>
             {
@@ -270,9 +271,9 @@ namespace ConSurvBackend.Core.Misc
             this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUpdateRole();
-                cmd.Parameters.Add(new MySqlParameter("Id", role.Id));
-                cmd.Parameters.Add(new MySqlParameter("Name", role.Name));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("Id", role.Id));
+                cmd.Parameters.Add(this.GetParameter("Name", role.Name));
+                using DbDataReader reader = cmd.ExecuteReader();
             }, (cmd) =>
             {
                 //TODO update inherited roles
@@ -294,15 +295,15 @@ namespace ConSurvBackend.Core.Misc
             this.RunTransaction((command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptAddUser();
-                command.Parameters.Add(new MySqlParameter("Id", user.Id));
-                command.Parameters.Add(new MySqlParameter("Name", user.Name));
-                command.Parameters.Add(new MySqlParameter("PasswordHash", user.PasswordHash));
-                command.Parameters.Add(new MySqlParameter("EMailAddress", user.EMailAddress));
-                command.Parameters.Add(new MySqlParameter("UserIsActivated", user.UserIsActivated));
-                command.Parameters.Add(new MySqlParameter("UserIsLocked", user.UserIsLocked));
-                command.Parameters.Add(new MySqlParameter("RegistrationMoment", user.RegistrationMoment));
-                command.Parameters.Add(new MySqlParameter("TOTPActivated", user.TOTP.IsActicated));
-                command.Parameters.Add(new MySqlParameter("TOTPSecretKey", user.TOTP.SecretKey));
+                command.Parameters.Add(this.GetParameter("Id", user.Id));
+                command.Parameters.Add(this.GetParameter("Name", user.Name));
+                command.Parameters.Add(this.GetParameter("PasswordHash", user.PasswordHash));
+                command.Parameters.Add(this.GetParameter("EMailAddress", user.EMailAddress));
+                command.Parameters.Add(this.GetParameter("UserIsActivated", user.UserIsActivated));
+                command.Parameters.Add(this.GetParameter("UserIsLocked", user.UserIsLocked));
+                command.Parameters.Add(this.GetParameter("RegistrationMoment", user.RegistrationMoment));
+                command.Parameters.Add(this.GetParameter("TOTPActivated", user.TOTP.IsActicated));
+                command.Parameters.Add(this.GetParameter("TOTPSecretKey", user.TOTP.SecretKey));
                 command.ExecuteNonQuery();
             });
         }
@@ -312,8 +313,8 @@ namespace ConSurvBackend.Core.Misc
             return this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithIdExists();
-                cmd.Parameters.Add(new MySqlParameter(nameof(userId), userId));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter(nameof(userId), userId));
+                using DbDataReader reader = cmd.ExecuteReader();
                 return reader.HasRows;
             })[0];
         }
@@ -323,8 +324,8 @@ namespace ConSurvBackend.Core.Misc
             User result = this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserById();
-                cmd.Parameters.Add(new MySqlParameter("Id", userId));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("Id", userId));
+                using DbDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -332,7 +333,7 @@ namespace ConSurvBackend.Core.Misc
                     user.Id = userId;
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
-                    user.EMailAddress = this.ConvertValue<string>(reader["EMailAddress"]);
+                    user.EMailAddress = DBUtilities.ConvertValue<string>(reader["EMailAddress"]);
                     user.UserIsActivated = reader.GetBoolean(4);
                     user.UserIsLocked = reader.GetBoolean(5);
                     user.RegistrationMoment = reader.GetDateTime(6);
@@ -357,8 +358,8 @@ namespace ConSurvBackend.Core.Misc
             this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetAllAccessTokenForUser();
-                cmd.Parameters.Add(new MySqlParameter("UserId", user.Id));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("UserId", user.Id));
+                using DbDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     while (reader.Read())
@@ -374,25 +375,13 @@ namespace ConSurvBackend.Core.Misc
             });
         }
 
-        private T? ConvertValue<T>(object value)
-        {
-            if (value == null || value == DBNull.Value)
-            {
-                return default;
-            }
-            else
-            {
-                return (T)value;
-            }
-        }
-
         public User GetUserByName(string userName)
         {
             User result = this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserByName();
-                cmd.Parameters.Add(new MySqlParameter("Name", userName));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("Name", userName));
+                using DbDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -400,7 +389,7 @@ namespace ConSurvBackend.Core.Misc
                     user.Id = reader.GetString(0);
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
-                    user.EMailAddress = this.ConvertValue<string>(reader["EMailAddress"]);
+                    user.EMailAddress = DBUtilities.ConvertValue<string>(reader["EMailAddress"]);
                     user.UserIsActivated = reader.GetBoolean(4);
                     user.UserIsLocked = reader.GetBoolean(5);
                     user.RegistrationMoment = reader.GetDateTime(6);
@@ -426,8 +415,8 @@ namespace ConSurvBackend.Core.Misc
             return this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptRoleExists();
-                cmd.Parameters.Add(new MySqlParameter("RoleName", roleName));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("RoleName", roleName));
+                using DbDataReader reader = cmd.ExecuteReader();
                 return reader.HasRows;
             })[0];
         }
@@ -438,8 +427,8 @@ namespace ConSurvBackend.Core.Misc
             {
                 this._Log.Log($"Adding role '{roleId}' to user '{userId}'", LogLevel.Information);
                 command.CommandText = this._SQLProvider.GetScriptAddRoleToUser();
-                command.Parameters.Add(new MySqlParameter("UserId", userId));
-                command.Parameters.Add(new MySqlParameter("RoleId", roleId));
+                command.Parameters.Add(this.GetParameter("UserId", userId));
+                command.Parameters.Add(this.GetParameter("RoleId", roleId));
                 command.ExecuteNonQuery();
             });
         }
@@ -454,9 +443,9 @@ namespace ConSurvBackend.Core.Misc
             return this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserHasRole();
-                cmd.Parameters.Add(new MySqlParameter("UserId", userId));
-                cmd.Parameters.Add(new MySqlParameter("RoleId", roleId));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("UserId", userId));
+                cmd.Parameters.Add(this.GetParameter("RoleId", roleId));
+                using DbDataReader reader = cmd.ExecuteReader();
                 return reader.HasRows;
             })[0];
         }
@@ -496,8 +485,8 @@ namespace ConSurvBackend.Core.Misc
             Role result = this.RunTransaction((cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetRoleByName();
-                cmd.Parameters.Add(new MySqlParameter("Name", roleName));
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Add(this.GetParameter("Name", roleName));
+                using DbDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -517,12 +506,31 @@ namespace ConSurvBackend.Core.Misc
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptResetDatabase();
+                using DbDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            });
         }
 
         public bool IsCamera(string id)
         {
-            throw new NotImplementedException();
+            return this.RunTransaction((cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptIsCamera();
+                cmd.Parameters.Add(this.GetParameter("CameraId", id));
+                using DbDataReader reader = cmd.ExecuteReader();
+                reader.Read();
+                if (reader.HasRows)
+                {
+                    return reader.GetInt32(0) == 1;
+                }
+                else
+                {
+                    return false;
+                }
+            })[0];
         }
     }
 }

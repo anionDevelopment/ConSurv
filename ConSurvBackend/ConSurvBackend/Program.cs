@@ -228,13 +228,14 @@ namespace ConSurvBackend.Core
                         {
                             metricsService.StartAsync();
                             previewService.StartAsync();
+                            //TODO start motion-detection-service
                         };
                         functionalInformationForWebApplication.PostRun = () =>
                         {
                             metricsService.Stop().Wait();
                             previewService.Stop().Wait();
+                            //TODO stop motion-detection-service
                         };
-
                     }
                     catch
                     {

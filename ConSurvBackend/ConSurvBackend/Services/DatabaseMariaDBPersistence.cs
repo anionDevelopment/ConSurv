@@ -1,13 +1,14 @@
 ﻿using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Misc;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
-using ConSurvBackend.Core.Database;
+using NpgsqlTypes;
 using System;
-using ConSurvBackend.Core.Misc;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -45,7 +46,6 @@ namespace ConSurvBackend.Core.Services
                 var t when t == typeof(UInt16) => MySqlDbType.UInt16,
                 var t when t == typeof(UInt32) => MySqlDbType.UInt32,
                 var t when t == typeof(UInt64) => MySqlDbType.UInt64,
-                var t when t == typeof(UInt128) => MySqlDbType.UInt64,
 
                 _ => throw new NotSupportedException($"Type '{type.FullName}' is not supported.")
             };

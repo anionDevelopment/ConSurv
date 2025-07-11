@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v1.0.1 API documentation
+ * ConSurvBackend v1.1.0 API documentation
  *
  * 
  *

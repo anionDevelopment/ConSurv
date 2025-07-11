@@ -58,6 +58,16 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("InsertRole");
         }
 
+        public string GetScriptIsCamera()
+        {
+            return this.LoadSQLScript("IsCamera");
+        }
+
+        public string GetScriptResetDatabase()
+        {
+            return this.LoadSQLScript("ResetDatabase");
+        }
+
         public string GetScriptRoleExists()
         {
             return this.LoadSQLScript("RoleExists");

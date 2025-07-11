@@ -37,12 +37,13 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
             IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(databasePersistence);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
-            Mock<IStreamOrganizerService> streamOrganizerService = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
+            Mock<IStreamOrganizerService> streamOrganizerServiceMock = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
+            streamOrganizerServiceMock.Setup(m => m.InitializeCameraOrganization());
             Mock<IRTSPManager> rtspManagerMock = new Mock<IRTSPManager>(MockBehavior.Strict);
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerService.Object);
+            businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(databasePersistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
-            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerService.Object);
+            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerServiceMock.Object);
         }
 
         [TestMethod(nameof(DatabaseInitializationTest))]

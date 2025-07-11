@@ -17,5 +17,7 @@
         string GetScriptUserWithNameExists();
         string GetScriptGetAllCameras();
         string GetScriptCreateCamera();
+        string GetScriptResetDatabase();
+        string GetScriptIsCamera();
     }
 }

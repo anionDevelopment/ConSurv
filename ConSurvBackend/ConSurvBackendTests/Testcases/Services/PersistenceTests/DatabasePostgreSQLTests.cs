@@ -23,17 +23,17 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 
         public override GenericPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider)
         {
-            return new DatabaseMariaDBPersistence(optionsBuilder.Options, logger, timeService, databaseManager, logger, sqlProvider);
+            return new DatabasePostgreSQLPersistence(optionsBuilder.Options, logger, timeService, databaseManager, logger, sqlProvider);
         }
 
         public override ISQLProvider GetSQLProvider(IGRYLog log)
         {
-            return new SQLProviderMariaDB(log);
+            return new SQLProviderPostgreSQL(log);
         }
 
         public override DatabaseTestFrameworkTemplate GetTestFramework()
         {
-            return new DatabaseTestFrameworkForMariaDB();
+            return new DatabaseTestFrameworkForPostgreSQL();
         }
 
 

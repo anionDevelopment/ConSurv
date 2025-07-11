@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
@@ -22,7 +23,15 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
             //arrange
             using IPersistence persistence = this.GetPersistence();
-            Camera testCamera = new Camera("ABCDEF", "Camera1");
+            Camera testCamera = new Camera("ABCDEF", "Camera1")
+            {
+                VideoInformation = new VideoInformation()
+                {
+                    Certificate = null,
+                    IsONVIFCamera = false,
+                    StreamURL = "rtsp://192.168.1.10/stream"
+                },
+            };
             Assert.IsFalse(persistence.IsCamera(testCamera.Id));
 
             //act
@@ -30,6 +39,10 @@ namespace ConSurvBackend.Tests.TestUtilities
 
             //assert
             Assert.IsTrue(persistence.IsCamera(testCamera.Id));
+            var camerasWithCorrectId = persistence.GetAllCameras().Values.Where(c => c.Id == testCamera.Id);
+            Assert.ContainsSingle(camerasWithCorrectId);
+            var reloadedCamera = camerasWithCorrectId.First();
+            Assert.AreEqual(testCamera, reloadedCamera);
         }
     }
 }
