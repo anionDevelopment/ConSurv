@@ -72,7 +72,7 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration()
                     {
-                        DatabaseConnectionString = "Server=consurv_database;Port=5432;Database=ConSurvDatabase;UID=user;PWD=pa55w0rd;",
+                        DatabaseConnectionString = "Server=consurv_database;Port=5432;Database=ConSurvDatabase;UID=user;PWD=pa55w0rd;Search Path=public;",
                         DatabaseType = Debugger.IsAttached ? "Transient" : "PostgreSQL",
                     };
                     bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;

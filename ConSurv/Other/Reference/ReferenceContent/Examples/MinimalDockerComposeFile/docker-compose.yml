@@ -4,13 +4,20 @@ services:
     env_file: Variables.env
     image: consurv:1.1.0
     ports:
-    - 443:443
+    - "443:443"
     volumes:
     - ./Volumes/Data:/Workspace/Data
     - ./Volumes/Configuration:/Workspace/Configuration
     - ./Volumes/Logs:/Workspace/Logs
     depends_on:
     - consurv_database
+  consurv_database_administration:
+    container_name: consurv_database_administration
+    depends_on:
+    - consurv_database
+    image: adminer:4.17.1
+    ports:
+    - "8080:8080"
   consurv_database:
     container_name: consurv_database
     image: postgres:17.5
@@ -22,11 +29,4 @@ services:
       - "5432:5432"
     volumes:
       - ./Volumes/Data:/var/lib/postgresql/data
-  consurv_database_administration:
-    container_name: consurv_database_administration
-    depends_on:
-    - consurv_database
-    image: adminer:4.17.1
-    ports:
-    - 8080:8080
 version: '3.2'
