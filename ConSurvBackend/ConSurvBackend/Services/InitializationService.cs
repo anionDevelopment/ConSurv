@@ -24,10 +24,12 @@ namespace ConSurvBackend.Core.Services
         private readonly IExampleDataCreator _ExampleDataCreator;
         private readonly IRTSPManager _RTSPManager;
         private readonly IStreamOrganizerService _StreamOrganizerService;
+        private readonly IPersistence _Persistence;
 
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService, IPersistence persistence)
         {
             this._AuthenticationService = authenticationService;
+            this._Persistence = persistence;
             this._Constants = constants;
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
@@ -39,6 +41,10 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
+            //if (_Persistence is IInitializable initializablePersistence)
+            //{
+            //    initializablePersistence.Initialize();
+            //}
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
             {

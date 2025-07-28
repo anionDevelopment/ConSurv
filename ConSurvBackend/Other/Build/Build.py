@@ -13,7 +13,6 @@ def build():
     target_windows = "win-x64"
     target_platforms = [target_windows, "linux-x64"]
     t.standardized_tasks_build_for_dotnet_project(str(Path(__file__).absolute()), "QualityCheck", t.get_default_target_environmenttype_mapping(), target_platforms, verbosity, cmd_args)
-    t.generate_openapi_file(file, target_windows, verbosity, cmd_args)
     codeunit_folder: str = GeneralUtilities.resolve_relative_path("../../..", file)
 
     for target_platform in target_platforms:
@@ -36,6 +35,8 @@ def build():
         font_trg_folder: str = os.path.join(codeunit_folder, "Other", "Artifacts", f"BuildResult_DotNet_{target_platform}", "Fonts")
         GeneralUtilities.ensure_folder_exists_and_is_empty(font_trg_folder)
         GeneralUtilities.copy_content_of_folder(font_src_folder, font_trg_folder)
+
+    t.generate_openapi_file(file, target_windows, verbosity, cmd_args)
 
 
 if __name__ == "__main__":

@@ -1,14 +1,16 @@
-﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Misc;
+using ConSurvBackend.Core.Services;
+using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Services;
-using ConSurvBackend.Tests.TestUtilities;
-using ConSurvBackend.Core.Misc;
 
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
@@ -20,9 +22,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             return new DatabaseManagerMariaDB();
         }
 
-        public override GenericPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider)
+
+        public override GenericPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
         {
-            return new DatabaseMariaDBPersistence(optionsBuilder.Options, logger, timeService, databaseManager, logger, sqlProvider);
+            return new DatabaseMariaDBPersistence(optionsBuilder.Options,  timeService, databaseManager, logger, sqlProvider, persistedAPIServerConfiguration);
         }
 
         public override ISQLProvider GetSQLProvider(IGRYLog log)

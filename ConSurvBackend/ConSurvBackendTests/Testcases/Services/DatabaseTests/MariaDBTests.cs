@@ -4,6 +4,7 @@ using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Database;
 using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
 
 namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
@@ -19,6 +20,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             return new DatabaseManagerMariaDB();
         }
+        protected override IGenericDatabaseInteractor GetDatabaseInteractor()
+        {
+            return new MariaDBDatabaseInteractor();
+        }
 
         [TestMethod(nameof(Migration000001Test))]
         [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
@@ -33,5 +38,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             this.GenerateDatabaseGenerationScript();
         }
+
     }
 }

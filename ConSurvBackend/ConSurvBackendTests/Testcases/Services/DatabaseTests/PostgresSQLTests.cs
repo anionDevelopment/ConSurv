@@ -1,9 +1,10 @@
-﻿using GRYLibrary.Core.APIServer.Services.Trans;
+﻿using ConSurvBackend.Core.Database;
+using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
+using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConSurvBackend.Core.Database;
-using ConSurvBackend.Tests.TestUtilities;
 
 namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
@@ -18,6 +19,11 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         protected override IDatabaseManager GetDatabaseManager()
         {
             return new DatabaseManagerPostgreSQL();
+        }
+
+        protected override IGenericDatabaseInteractor GetDatabaseInteractor()
+        {
+            return new PostgreSQLDatabaseInteractor();
         }
 
         [TestMethod(nameof(Migration000001Test))]

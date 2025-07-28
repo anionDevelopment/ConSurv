@@ -1,10 +1,6 @@
 ﻿using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.Misc.Strings;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConSurvBackend.Core.Services;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ConSurvBackend.Tests.TestUtilities
@@ -16,7 +12,6 @@ namespace ConSurvBackend.Tests.TestUtilities
         }
 
         public abstract IPersistence GetPersistence();
-
 
         public abstract void AddCameraTest();
         public void AddCamera()

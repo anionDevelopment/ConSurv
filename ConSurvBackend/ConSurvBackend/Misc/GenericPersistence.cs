@@ -1,19 +1,19 @@
-﻿using ConSurvBackend.Core.Database;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Services;
-using ExtendedXmlSerializer.ExtensionModel.Content;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MySqlConnector;
+using Sprache;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,22 +23,38 @@ using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core.Misc
 {
-    public abstract class GenericPersistence : IPersistence
+    public abstract class GenericPersistence : IPersistence, IInitializable
     {
         private readonly DatabaseContext _DatabaseContext;
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
         private readonly Semaphore _Semaphore = new Semaphore();
         private readonly IGRYLog _Log;
-
         private readonly ITimeService _TimeService;
-        public GenericPersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider)
+        private readonly IDatabaseManager _DatabaseManager;
+        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _PersistedAPIServerConfiguration;
+        private readonly DbContextOptions<DatabaseContext> _Options;
+        public bool IsInitialized { get; private set; }
+        public GenericPersistence(DbContextOptions<DatabaseContext> options, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
         {
             this._TimeService = timeService;
-            this._DatabaseContext = new DatabaseContext(options, logger, timeService, databaseManager);
             this._Log = log;
+            this._Options = options;
             this._SQLProvider = sqlProvider;
+            this._DatabaseManager = databaseManager;
+            this._PersistedAPIServerConfiguration = persistedAPIServerConfiguration;
+            //this._DatabaseContext = new DatabaseContext(_Options, _Log, _TimeService, _DatabaseManager, _PersistedAPIServerConfiguration);
         }
+
+        public void Initialize()
+        {
+            if (!IsInitialized)
+            {
+                _DatabaseContext.Initialize();
+                IsInitialized = true;
+            }
+        }
+
         public abstract DbParameter GetParameter(string parameterName, object? value, Type type);
         public DbParameter GetParameter(string parameterName, object value)
         {
@@ -88,6 +104,7 @@ namespace ConSurvBackend.Core.Misc
             this.AccessDatabase(context =>
             {
                 DbConnection connection = context.Connection;
+                GUtilities.AssertNotNull(connection, nameof(connection));
                 using DbTransaction transaction = connection.BeginTransaction();
                 bool commit = true;
                 try
@@ -532,5 +549,6 @@ namespace ConSurvBackend.Core.Misc
                 }
             })[0];
         }
+
     }
 }
