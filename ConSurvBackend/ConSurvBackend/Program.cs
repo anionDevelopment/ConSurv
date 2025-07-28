@@ -81,8 +81,8 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
                     {
                         RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
-                                @$"^/API/Other/Resources/APISpecification/*",
-                                @$"^/API/Other/Maintenance/HealthCheck$",
+                            @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/API/Other/Maintenance/HealthCheck$",
                         },
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
@@ -96,8 +96,9 @@ namespace ConSurvBackend.Core
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
-                                @$"^/favicon\.ico$",
-                                @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/favicon\.ico$",
+                            @$"^/API/Other/Resources/APISpecification/*",
+                            @$"^/API/Other/Maintenance/HealthCheck$"
                         },
                         MaximalLengthOfResponseBodies = 50,
                     };
