@@ -45,6 +45,10 @@ namespace ConSurvBackend.Core.Services
             //{
             //    initializablePersistence.Initialize();
             //}
+            if (_Persistence is IInitializable initializablePersistence)
+            {
+                initializablePersistence.Initialize();
+            }
             string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
             if (!this._CameraService.UserWithNameExists(adminUsername))
             {

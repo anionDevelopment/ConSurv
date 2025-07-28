@@ -61,6 +61,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                 GRYMigrator.DoAllMigrations(databaseTestFramework.Connection, databaseManager, timeService);
                 DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
                 databaseTestFramework.ConfigureDb(optionsBuilder);
+                IGenericDatabaseInteractor genericDatabaseInteractor;
                 Mock<IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>> persistedAPIServerConfigurationMock = new Mock<IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>>(MockBehavior.Strict);
                 persistedAPIServerConfigurationMock.SetupGet(m => m.ApplicationSpecificConfiguration).Returns(new CodeUnitSpecificConfiguration
                 {
