@@ -41,10 +41,6 @@ namespace ConSurvBackend.Core.Services
         public void Initialize(CommandlineParameter commandlineParameter)
         {
             this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-            //if (_Persistence is IInitializable initializablePersistence)
-            //{
-            //    initializablePersistence.Initialize();
-            //}
             if (_Persistence is IInitializable initializablePersistence)
             {
                 initializablePersistence.Initialize();

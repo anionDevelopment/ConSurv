@@ -1,6 +1,7 @@
 {
   "profiles": {
     "ConSurvBackend": {
+      "commandLineArgs": "Run --InitialAdminPassword admin",
       "commandName": "Project"
     }
   }

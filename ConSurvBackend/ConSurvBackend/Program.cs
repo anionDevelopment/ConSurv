@@ -128,12 +128,10 @@ namespace ConSurvBackend.Core
                             functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                             {
                                 string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                /*
-                                    options.UseNpgsql(connectionString, sqlOptions =>
+                                options.UseNpgsql(connectionString, sqlOptions =>
                                 {
                                     sqlOptions.CommandTimeout(120);
                                 });
-                                */
                             }, ServiceLifetime.Singleton);
                         }
                         else if (functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType == "MariaDB")
@@ -145,12 +143,10 @@ namespace ConSurvBackend.Core
                             functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                             {
                                 string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                /*
-                                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions =>
-                                 {
-                                     sqlOptions.CommandTimeout(120);
-                                 });
-                                */
+                                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions =>
+                                {
+                                    sqlOptions.CommandTimeout(120);
+                                });
                             }, ServiceLifetime.Singleton);
                         }
                         else
