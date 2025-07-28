@@ -14,7 +14,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         public override void ConfigureDb<TDbContext>(DbContextOptionsBuilder<TDbContext> optionsBuilder)
         {
-            optionsBuilder.UseMySql(this.ConnectionString, ServerVersion.AutoDetect(this.ConnectionString));
+            optionsBuilder.UseMySql(this.ConnectionString, ServerVersion.AutoDetect(this.ConnectionString), sqlOptions => { });
         }
 
         public override DbConnection CreateConnection(string connectionString)

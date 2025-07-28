@@ -12,7 +12,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         public override void ConfigureDb<TDbContext>(DbContextOptionsBuilder<TDbContext> optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(this.ConnectionString);
+            optionsBuilder.UseNpgsql(this.ConnectionString, sqlOptions => { });
         }
 
         public override DbConnection CreateConnection(string connectionString)

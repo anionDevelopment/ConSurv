@@ -34,6 +34,7 @@ namespace ConSurvBackend.Core.Database
             if (!IsInitialized)
             {
                 IGenericDatabaseInteractor interactor = this._DatabaseManager.GetGenericDatabaseInteractor();
+                return;//TODO remove this line
                 Tools.ConnectToDatabaseWrapper(() =>
                 {
                     this.Connection = this.Database.GetDbConnection();

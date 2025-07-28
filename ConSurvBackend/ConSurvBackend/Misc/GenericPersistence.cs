@@ -25,7 +25,7 @@ namespace ConSurvBackend.Core.Misc
 {
     public abstract class GenericPersistence : IPersistence, IInitializable
     {
-        private readonly DatabaseContext _DatabaseContext;
+        private DatabaseContext _DatabaseContext;
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
         private readonly Semaphore _Semaphore = new Semaphore();
@@ -43,11 +43,11 @@ namespace ConSurvBackend.Core.Misc
             this._SQLProvider = sqlProvider;
             this._DatabaseManager = databaseManager;
             this._PersistedAPIServerConfiguration = persistedAPIServerConfiguration;
-            //this._DatabaseContext = new DatabaseContext(_Options, _Log, _TimeService, _DatabaseManager, _PersistedAPIServerConfiguration);
         }
 
         public void Initialize()
         {
+            this._DatabaseContext = new DatabaseContext(_Options, _Log, _TimeService, _DatabaseManager, _PersistedAPIServerConfiguration);
             if (!IsInitialized)
             {
                 _DatabaseContext.Initialize();
