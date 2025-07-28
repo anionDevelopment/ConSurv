@@ -21,10 +21,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
             return new DatabaseManagerPostgreSQL();
         }
 
-        protected override IGenericDatabaseInteractor GetDatabaseInteractor()
-        {
-            return new PostgreSQLDatabaseInteractor();
-        }
 
         [TestMethod(nameof(Migration000001Test))]
         [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]

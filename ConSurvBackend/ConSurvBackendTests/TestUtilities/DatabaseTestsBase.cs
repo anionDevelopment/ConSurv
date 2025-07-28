@@ -23,7 +23,6 @@ namespace ConSurvBackend.Tests.TestUtilities
     {
         protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFramework();
         protected abstract IDatabaseManager GetDatabaseManager();
-        protected abstract IGenericDatabaseInteractor GetDatabaseInteractor();
         public abstract void Migration000001Test();
         protected static readonly object LockObject = new object();
         public DatabaseTestsBase()
@@ -71,7 +70,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                         DatabaseConnectionString = databaseTestFramework.ConnectionString
                     }
                 });
-                DatabaseContext context = new DatabaseContext(optionsBuilder.Options, GeneralLogger.CreateUsingConsole(), new TimeService(), databaseManager, GetDatabaseInteractor(), persistedAPIServerConfigurationMock.Object);
+                DatabaseContext context = new DatabaseContext(optionsBuilder.Options, GeneralLogger.CreateUsingConsole(), new TimeService(), databaseManager,  persistedAPIServerConfigurationMock.Object);
                 string sqlSource = context.Database.GenerateCreateScript();
                 string targetFolder = TestUtilities.Utilities.GetTestDatabaseCreationScriptArtifactFolder(databaseTestFramework.GetDatabaseName());
                 GUtilities.EnsureDirectoryDoesNotExist(targetFolder);

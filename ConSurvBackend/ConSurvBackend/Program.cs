@@ -47,12 +47,12 @@ namespace ConSurvBackend.Core
     {
         internal static int Main(string[] commandlineArguments)
         {
-            bool runPersistent = false;
+            bool runningUsually = false;
             return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
-                    runPersistent = initializationInformation.ApplicationConstants.Environment is not Development && initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
+                    runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
@@ -75,14 +75,14 @@ namespace ConSurvBackend.Core
                         DatabaseConnectionString = "Server=consurv_database;Port=5432;Database=ConSurvDatabase;UID=user;PWD=pa55w0rd;Search Path=public;",
                         DatabaseType = Debugger.IsAttached ? "Transient" : "PostgreSQL",
                     };
-                    bool runServices = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
+                    bool runServices = !runningUsually;
                     bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
 
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
                     {
                         RoutesWhereUnauthenticatedAccessIsAllowed = new HashSet<string>() {
-                            @$"^/API/Other/Resources/APISpecification/*",
-                            @$"^/API/Other/Maintenance/HealthCheck$",
+                                @$"^/API/Other/Resources/APISpecification/*",
+                                @$"^/API/Other/Maintenance/HealthCheck$",
                         },
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
@@ -96,8 +96,8 @@ namespace ConSurvBackend.Core
                     {
                         NotLoggedRoutes = new HashSet<string>()
                         {
-                            @$"^/favicon\.ico$",
-                            @$"^/API/Other/Resources/APISpecification/*",
+                                @$"^/favicon\.ico$",
+                                @$"^/API/Other/Resources/APISpecification/*",
                         },
                         MaximalLengthOfResponseBodies = 50,
                     };
@@ -112,7 +112,7 @@ namespace ConSurvBackend.Core
                     IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog")));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
                     IGeneralLogger logger = functionalInformation.Logger;
-                    bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient";
+                    bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient" && !runningUsually;
                     if (useDatabase)
                     {
                         logger.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
@@ -163,7 +163,7 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                     }
-                    bool useMockService = false;
+                    bool useMockService = runningUsually;
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IStreamOrganizerService, StreamOrganizerService>();
                     if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development && useMockService)
                     {
@@ -207,31 +207,35 @@ namespace ConSurvBackend.Core
                 {
                     try
                     {
-                        IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
-                        bool showInitialData = false;//disabled because it would reveal sensitive information in the log
-                        if (showInitialData)
+                        if (!runningUsually)
                         {
-                            logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword)}: \"{functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword}\"", LogLevel.Information);
-                            logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
-                        }
-                        logger.Log("Configure webapplication...", LogLevel.Information);
-                        IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
-                        initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
 
-                        IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
-                        IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
-                        functionalInformationForWebApplication.PreRun = () =>
-                        {
-                            metricsService.StartAsync();
-                            previewService.StartAsync();
-                            //TODO start motion-detection-service
-                        };
-                        functionalInformationForWebApplication.PostRun = () =>
-                        {
-                            metricsService.Stop().Wait();
-                            previewService.Stop().Wait();
-                            //TODO stop motion-detection-service
-                        };
+                            IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
+                            bool showInitialData = false;//disabled because it would reveal sensitive information in the log
+                            if (showInitialData)
+                            {
+                                logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword)}: \"{functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialAdminPassword}\"", LogLevel.Information);
+                                logger.Log($"{nameof(functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}: \"{string.Join(", ", functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.InitialCameraAddresses)}\"", LogLevel.Information);
+                            }
+                            logger.Log("Configure webapplication...", LogLevel.Information);
+                            IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
+                            initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
+
+                            IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
+                            IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
+                            functionalInformationForWebApplication.PreRun = () =>
+                                {
+                                    metricsService.StartAsync();
+                                    previewService.StartAsync();
+                                    //TODO start motion-detection-service
+                                };
+                            functionalInformationForWebApplication.PostRun = () =>
+                                {
+                                    metricsService.Stop().Wait();
+                                    previewService.Stop().Wait();
+                                    //TODO stop motion-detection-service
+                                };
+                        }
                     }
                     catch
                     {

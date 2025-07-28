@@ -20,10 +20,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             return new DatabaseManagerMariaDB();
         }
-        protected override IGenericDatabaseInteractor GetDatabaseInteractor()
-        {
-            return new MariaDBDatabaseInteractor();
-        }
 
         [TestMethod(nameof(Migration000001Test))]
         [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
