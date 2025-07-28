@@ -14,7 +14,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 
 namespace ConSurvBackend.Tests.Testcases.Services
@@ -43,7 +42,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
             businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(databasePersistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
-            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerServiceMock.Object);
+            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerServiceMock.Object, databasePersistence);
         }
 
         [TestMethod(nameof(DatabaseInitializationTest))]

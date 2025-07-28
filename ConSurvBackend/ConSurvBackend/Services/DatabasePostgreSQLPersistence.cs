@@ -1,21 +1,21 @@
-﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Misc;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using ConSurvBackend.Core.Database;
+using NpgsqlTypes;
 using System;
 using System.Data.Common;
-using NpgsqlTypes;
-using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Misc;
 
 namespace ConSurvBackend.Core.Services
 {
     public sealed class DatabasePostgreSQLPersistence : GenericPersistence, IPersistence
     {
-        public DatabasePostgreSQLPersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider) : base(options, logger, timeService, databaseManager, log, sqlProvider)
+        public DatabasePostgreSQLPersistence(DbContextOptions<DatabaseContext> options, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration) : base(options, timeService, databaseManager, log, sqlProvider, persistedAPIServerConfiguration)
         {
         }
 

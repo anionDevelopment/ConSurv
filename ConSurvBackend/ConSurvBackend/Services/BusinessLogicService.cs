@@ -132,7 +132,7 @@ namespace ConSurvBackend.Core.Services
             {
                 User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
                 this._AuthenticationService.AddUserTyped(newUser);
-                this._AuditLog.AuditLogger.Log($"User {newUser.Id} registered.", LogLevel.Information);
+                this._AuditLog.AuditLogger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
                 return newUser.Id;
             }
         }

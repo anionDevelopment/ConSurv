@@ -1,20 +1,19 @@
-﻿using ConSurvBackend.Core.Database;
+﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Misc;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
-using NpgsqlTypes;
 using System;
 
 namespace ConSurvBackend.Core.Services
 {
     public sealed class DatabaseMariaDBPersistence : GenericPersistence, IPersistence
     {
-        public DatabaseMariaDBPersistence(DbContextOptions<DatabaseContext> options, IGeneralLogger logger, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider) : base(options, logger, timeService, databaseManager, log, sqlProvider)
+        public DatabaseMariaDBPersistence(DbContextOptions<DatabaseContext> options,ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration) : base(options, timeService, databaseManager, log, sqlProvider, persistedAPIServerConfiguration)
         {
         }
         public override MySqlParameter GetParameter(string parameterName, object? value, Type type)

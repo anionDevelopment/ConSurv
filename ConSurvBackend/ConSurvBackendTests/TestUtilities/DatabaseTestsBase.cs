@@ -1,13 +1,16 @@
-﻿using ConSurvBackend.Core.Database;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Database;
+using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Trans;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Moq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +23,7 @@ namespace ConSurvBackend.Tests.TestUtilities
     {
         protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFramework();
         protected abstract IDatabaseManager GetDatabaseManager();
+        protected abstract IGenericDatabaseInteractor GetDatabaseInteractor();
         public abstract void Migration000001Test();
         protected static readonly object LockObject = new object();
         public DatabaseTestsBase()
@@ -57,7 +61,17 @@ namespace ConSurvBackend.Tests.TestUtilities
                 GRYMigrator.DoAllMigrations(databaseTestFramework.Connection, databaseManager, timeService);
                 DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
                 databaseTestFramework.ConfigureDb(optionsBuilder);
-                DatabaseContext context = new DatabaseContext(optionsBuilder.Options, GeneralLogger.CreateUsingConsole(), new TimeService(), databaseManager);
+                IGenericDatabaseInteractor genericDatabaseInteractor;
+                Mock<IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>> persistedAPIServerConfigurationMock = new Mock<IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>>(MockBehavior.Strict);
+                persistedAPIServerConfigurationMock.SetupGet(m => m.ApplicationSpecificConfiguration).Returns(new CodeUnitSpecificConfiguration
+                {
+                    RegistrationIsEnabled = true,
+                    DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration
+                    {
+                        DatabaseConnectionString = databaseTestFramework.ConnectionString
+                    }
+                });
+                DatabaseContext context = new DatabaseContext(optionsBuilder.Options, GeneralLogger.CreateUsingConsole(), new TimeService(), databaseManager, GetDatabaseInteractor(), persistedAPIServerConfigurationMock.Object);
                 string sqlSource = context.Database.GenerateCreateScript();
                 string targetFolder = TestUtilities.Utilities.GetTestDatabaseCreationScriptArtifactFolder(databaseTestFramework.GetDatabaseName());
                 GUtilities.EnsureDirectoryDoesNotExist(targetFolder);

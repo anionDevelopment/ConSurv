@@ -128,13 +128,10 @@ namespace ConSurvBackend.Core
                             functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                             {
                                 string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                Tools.ConnectToDatabaseWrapper(() =>
-                                {
-                                    options.UseNpgsql(connectionString, sqlOptions =>
-                                    {
-                                        sqlOptions.CommandTimeout(120);
-                                    });
-                                }, GeneralLogger.NoLog(), genericDatabaseInteractor.AdaptConnectionString(connectionString));
+                                options.UseNpgsql(connectionString, sqlOptions =>
+                               {
+                                   sqlOptions.CommandTimeout(120);
+                               });
                             }, ServiceLifetime.Singleton);
                         }
                         else if (functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType == "MariaDB")
@@ -146,13 +143,10 @@ namespace ConSurvBackend.Core
                             functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
                             {
                                 string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                Tools.ConnectToDatabaseWrapper(() =>
+                                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions =>
                                 {
-                                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions =>
-                                    {
-                                        sqlOptions.CommandTimeout(120);
-                                    });
-                                }, GeneralLogger.NoLog(), genericDatabaseInteractor.AdaptConnectionString(connectionString));
+                                    sqlOptions.CommandTimeout(120);
+                                });
                             }, ServiceLifetime.Singleton);
                         }
                         else

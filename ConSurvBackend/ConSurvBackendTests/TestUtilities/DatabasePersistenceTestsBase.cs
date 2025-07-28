@@ -1,4 +1,9 @@
-﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Database;
+using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Settings;
@@ -10,10 +15,6 @@ using GRYLibrary.Core.Misc;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using ConSurvBackend.Core.Configuration;
-using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Database;
-using ConSurvBackend.Core.Services;
 using ConSurvBackendBackendUtilities = ConSurvBackend.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Tests.TestUtilities
@@ -24,14 +25,14 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         public abstract IDatabaseManager GetDatabaseManager();
 
-        public abstract IPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider);
+        public abstract IPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration);
 
         public abstract DatabaseTestFrameworkTemplate GetTestFramework();
         public override IPersistence GetPersistence()
         {
             DatabaseTestFrameworkTemplate databaseTestFramework = this.GetTestFramework();
             IDatabaseManager databaseManager = this.GetDatabaseManager();
-            GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator.IGenericDatabaseInteractor interactor = databaseManager.GetGenericDatabaseInteractor();
+            IGenericDatabaseInteractor interactor = databaseManager.GetGenericDatabaseInteractor();
             ITimeService timeService = new TimeService();
             GRYMigrator.DoAllMigrations(databaseTestFramework.Connection, databaseManager, timeService);
             DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
@@ -39,6 +40,10 @@ namespace ConSurvBackend.Tests.TestUtilities
             IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>();
             persistedAPIServerConfiguration.ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration();
             persistedAPIServerConfiguration.ApplicationSpecificConfiguration.RegistrationIsEnabled = true;
+            persistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration
+            {
+                DatabaseConnectionString = databaseTestFramework.ConnectionString
+            };
             Mock<IIdGenerator<ulong>> idGeneratorMock = new Mock<IIdGenerator<ulong>>(MockBehavior.Strict);
             Mock<IExampleDataCreator> exampleDataCreatorMock = new Mock<IExampleDataCreator>(MockBehavior.Strict);
             exampleDataCreatorMock.Setup(mock => mock.AddExampleData());
@@ -46,7 +51,8 @@ namespace ConSurvBackend.Tests.TestUtilities
             Mock<IApplicationConstants<CodeUnitSpecificConstants>> constantsMock = new Mock<IApplicationConstants<CodeUnitSpecificConstants>>(MockBehavior.Strict);
             constantsMock.SetupGet(m => m.Environment).Returns(ConSurvBackendBackendUtilities.GetEnvironmentTargetType());
             ISQLProvider sqlProvider = this.GetSQLProvider(logger);
-            IPersistence result = this.GetPersistenceObject(databaseManager, timeService, optionsBuilder, logger, sqlProvider);
+            IPersistence result = this.GetPersistenceObject(databaseManager, timeService, optionsBuilder, logger, sqlProvider, persistedAPIServerConfiguration);
+            (result as IInitializable)!.Initialize();
             result.Reset();
             return result;
         }
