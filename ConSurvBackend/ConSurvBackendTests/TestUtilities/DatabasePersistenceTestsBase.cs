@@ -19,6 +19,10 @@ using ConSurvBackendBackendUtilities = ConSurvBackend.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
+    /// <summary>
+    ///This is the base class for database-persistence tests which uses the sql-code defined in the backend.
+    ///This code uses the backend-functions to connect to the database.
+    ///</summary>
     public abstract class DatabasePersistenceTestsBase : PersistenceTestsBase
     {
         public abstract ISQLProvider GetSQLProvider(IGRYLog log);

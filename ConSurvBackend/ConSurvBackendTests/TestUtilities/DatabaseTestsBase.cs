@@ -19,6 +19,10 @@ using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
+    /// <summary>
+    ///This is the base class for database tests which run directly against the database to test the sql-code.
+    ///This code does not use the backend-functions to connect to the database.
+    ///</summary>    
     public abstract class DatabaseTestsBase
     {
         protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFramework();
