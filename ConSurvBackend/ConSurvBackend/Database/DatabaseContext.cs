@@ -36,7 +36,6 @@ namespace ConSurvBackend.Core.Database
                 IGenericDatabaseInteractor interactor = this._DatabaseManager.GetGenericDatabaseInteractor();
                 Tools.ConnectToDatabaseWrapper(() =>
                 {
-                    //FIXME problem here: when generating the openapi-specification-documentation this function does not terminate. fix-attempt: ensure this will not be called beacuse it is not required anyway for the openapi-specification-documentation generation. the question is: why is this function called? with the current implementation it is not supposed to be called when generating the openapi-specification-documentation, because then the transient-persistence is used.
                     this.Connection = this.Database.GetDbConnection();
                     this.Connection.Open();
                     GRYMigrator migrator = new GRYMigrator(this._Logger, this._TimeService, this.Connection, this._DatabaseManager.GetAllMigrations(), interactor);

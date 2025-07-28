@@ -134,7 +134,7 @@ namespace ConSurvBackend.Core
                         else if (functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType == "MariaDB")
                         {
                             genericDatabaseInteractor = new MariaDBDatabaseInteractor();
-                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, GenericPersistence>();
+                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, GenericDatabasePersistence>();
                             functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDatabaseManager, DatabaseManagerMariaDB>();
                             functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProviderMariaDB>();
                             functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
@@ -201,7 +201,7 @@ namespace ConSurvBackend.Core
                 {
                     try
                     {
-                        if (!runningUsually)
+                        if (runningUsually)
                         {
 
                             IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());

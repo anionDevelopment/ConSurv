@@ -11,7 +11,7 @@ using System;
 
 namespace ConSurvBackend.Core.Services
 {
-    public sealed class DatabaseMariaDBPersistence : GenericPersistence, IPersistence
+    public sealed class DatabaseMariaDBPersistence : GenericDatabasePersistence, IPersistence
     {
         public DatabaseMariaDBPersistence(DbContextOptions<DatabaseContext> options,ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration) : base(options, timeService, databaseManager, log, sqlProvider, persistedAPIServerConfiguration)
         {

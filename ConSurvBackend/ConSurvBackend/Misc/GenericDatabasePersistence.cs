@@ -23,7 +23,7 @@ using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core.Misc
 {
-    public abstract class GenericPersistence : IPersistence, IInitializable
+    public abstract class GenericDatabasePersistence : IPersistence, IInitializable
     {
         private DatabaseContext _DatabaseContext;
         private readonly ISQLProvider _SQLProvider;
@@ -35,7 +35,7 @@ namespace ConSurvBackend.Core.Misc
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _PersistedAPIServerConfiguration;
         private readonly DbContextOptions<DatabaseContext> _Options;
         public bool IsInitialized { get; private set; }
-        public GenericPersistence(DbContextOptions<DatabaseContext> options, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
+        public GenericDatabasePersistence(DbContextOptions<DatabaseContext> options, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
         {
             this._TimeService = timeService;
             this._Log = log;

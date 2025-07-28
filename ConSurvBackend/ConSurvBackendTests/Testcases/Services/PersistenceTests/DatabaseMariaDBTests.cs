@@ -23,7 +23,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
         }
 
 
-        public override GenericPersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
+        public override GenericDatabasePersistence GetPersistenceObject(IDatabaseManager databaseManager, ITimeService timeService, DbContextOptionsBuilder<DatabaseContext> optionsBuilder, IGRYLog logger, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration)
         {
             return new DatabaseMariaDBPersistence(optionsBuilder.Options,  timeService, databaseManager, logger, sqlProvider, persistedAPIServerConfiguration);
         }

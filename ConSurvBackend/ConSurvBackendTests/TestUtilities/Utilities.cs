@@ -27,7 +27,7 @@ namespace ConSurvBackend.Tests.TestUtilities
         }
         public static string GetTestDatabaseCreationScriptArtifactFolder(string databaseName)
         {
-            return GUtilities.ResolveToFullPath(@$"{GeneralConstants.CodeUnitFolder}\Other\Artifacts\${databaseName}DatabaseCreationScript");
+            return GUtilities.ResolveToFullPath(@$"{GeneralConstants.CodeUnitFolder}\Other\Artifacts\{databaseName}DatabaseCreationScript");
         }
     }
 }

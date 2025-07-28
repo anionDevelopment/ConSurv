@@ -13,7 +13,7 @@ using System.Data.Common;
 
 namespace ConSurvBackend.Core.Services
 {
-    public sealed class DatabasePostgreSQLPersistence : GenericPersistence, IPersistence
+    public sealed class DatabasePostgreSQLPersistence : GenericDatabasePersistence, IPersistence
     {
         public DatabasePostgreSQLPersistence(DbContextOptions<DatabaseContext> options, ITimeService timeService, IDatabaseManager databaseManager, IGRYLog log, ISQLProvider sqlProvider, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration) : base(options, timeService, databaseManager, log, sqlProvider, persistedAPIServerConfiguration)
         {
