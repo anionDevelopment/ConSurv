@@ -52,7 +52,7 @@ Start ConSurv.
 
 If you just want to run ConSurv locally:
 
-- Run `task BaseExampleStart` (or shorter: `task beu`). This starts the ConSurv-backend and -frontend locally in a container. (see the [ReadMe.md](./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile/ReadMe.md) for this example)
+- Run `task BaseExampleStart` (or shorter: `task beu`). This starts the ConSurv-backend and -frontend including a PostgreSQL-database locally in a container. (See the [ReadMe.md](./ConSurv/Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile/ReadMe.md) for this example.)
 
 If you want to debug the frontend or backend instead:
 

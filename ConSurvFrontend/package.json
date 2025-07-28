@@ -3,9 +3,9 @@
   "version": "1.1.0",
   "scripts": {
     "build": "npm run build-QualityCheck",
-    "build-Development": "ng build --configuration Development",
-    "build-QualityCheck": "ng build --configuration QualityCheck",
-    "build-Productive": "ng build --configuration Productive",
+    "build-Development": "ng build --localize --configuration Development",
+    "build-QualityCheck": "ng build --localize --configuration QualityCheck",
+    "build-Productive": "ng build --localize --configuration Productive",
     "test": "npm run test-QualityCheck",
     "test-Development": "ng test --configuration Development --browsers ChromeHeadless --watch false",
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless --watch false",

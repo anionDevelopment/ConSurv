@@ -9,11 +9,14 @@ services:
     - ./Volumes/Data:/Workspace/Data
     - ./Volumes/Configuration:/Workspace/Configuration
     - ./Volumes/Logs:/Workspace/Logs
+    depends_on:
+    - consurv_database
   consurv_database:
     container_name: consurv_database
     image: postgres:17.5
     environment:
-      POSTGRES_PASSWORD: R00tpa55w0rd
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pa55w0rd
       POSTGRES_DB: ConSurvDatabase
     ports:
       - "5432:5432"

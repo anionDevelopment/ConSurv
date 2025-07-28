@@ -17,7 +17,7 @@ InitialCameraAddresses="rtsp://192.168.1.42/stream1 rtsp://192.168.1.43/stream2"
 
 ### Database
 
-connectionstring: `postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase`
+connectionstring: `postgresql://user:pa55w0rd@consurv_database:5432/ConSurvDatabase`
 
 Data for adminer:
 
@@ -25,8 +25,8 @@ System: `PostgreSQL`
 
 Server: `consurv_database`
 
-Username: `root`
+Username: `user`
 
-Password: `R00tpa55w0rd`
+Password: `pa55w0rd`
 
 Database: `ConSurvDatabase`

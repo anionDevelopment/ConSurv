@@ -35,7 +35,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             persistence = databasePersistence;
             persistence.Reset();
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
-            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(databasePersistence);
+            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, databasePersistence);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             Mock<IStreamOrganizerService> streamOrganizerServiceMock = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
             streamOrganizerServiceMock.Setup(m => m.InitializeCameraOrganization());
