@@ -163,7 +163,7 @@ namespace ConSurvBackend.Core.Services
             }
             AccessToken newAccessToken = new AccessToken();
             newAccessToken.Value = Guid.NewGuid().ToString();
-            newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTime().AddDays(1);//TODO make this configurable
+            newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTimeInUTC().AddDays(1);//TODO make this configurable
             this._Persistence.AddAccessToken(user.Id, newAccessToken);
             user.AccessToken.Add(newAccessToken);
             return newAccessToken;
@@ -222,6 +222,11 @@ namespace ConSurvBackend.Core.Services
         public bool UserWithNameExists(string username)
         {
             return this._Persistence.UserWithNameExists(username);
+        }
+
+        public string GetBaseRoleOfAllUser()
+        {
+            throw new NotImplementedException();
         }
     }
 }
