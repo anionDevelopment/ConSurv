@@ -189,7 +189,7 @@ namespace ConSurvBackend.Core.Misc
                         {
                             StreamURL = reader.GetString(2),
                             IsONVIFCamera = reader.GetBoolean(3),
-                            Certificate = DBUtilities.GetValue<string>(reader, 4, true),
+                            Certificate = DBUtilities.GetNullableValue<string>(reader, 4),
                         };
                         camera.RecordMode = RecordMode.FromNumberToInstance(reader.GetByte(5));
                         camera.Enabled = reader.GetBoolean(6);
@@ -350,7 +350,7 @@ namespace ConSurvBackend.Core.Misc
                     user.Id = userId;
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
-                    user.EMailAddress = DBUtilities.ConvertValue<string>(reader["EMailAddress"]);
+                    user.EMailAddress = DBUtilities.GetNullableValue<string>(reader,3);
                     user.UserIsActivated = reader.GetBoolean(4);
                     user.UserIsLocked = reader.GetBoolean(5);
                     user.RegistrationMoment = reader.GetDateTime(6);
@@ -406,7 +406,7 @@ namespace ConSurvBackend.Core.Misc
                     user.Id = reader.GetString(0);
                     user.Name = reader.GetString(1);
                     user.PasswordHash = reader.GetString(2);
-                    user.EMailAddress = DBUtilities.ConvertValue<string>(reader["EMailAddress"]);
+                    user.EMailAddress = DBUtilities.GetNullableValue<string>(reader, 3);
                     user.UserIsActivated = reader.GetBoolean(4);
                     user.UserIsLocked = reader.GetBoolean(5);
                     user.RegistrationMoment = reader.GetDateTime(6);

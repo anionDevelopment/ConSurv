@@ -10,5 +10,7 @@
         public const string WebControllerRoute = "Web";
         public const string BusinessMetricsPrefix = $"{GeneralConstants.CodeUnitName}_Business";
         public const string MetricsNameAvailableCamerasRate = $"{BusinessMetricsPrefix}_AvailableCamerasRate";
+
+        internal static ushort PortForTestRun = 5002;
     }
 }

@@ -2,6 +2,8 @@
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
+using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
@@ -23,5 +25,7 @@ namespace ConSurvBackend.Core.Services
         public CameraDTO ToDTO(Camera camera);
         public void EnsureUserHasRole(string userId, string roleId);
         public void EnsureUserDoesNotHaveRole(string userId, string roleId);
+        AccessToken Login(string name, string v);
+        User GetUser(string userId);
     }
 }

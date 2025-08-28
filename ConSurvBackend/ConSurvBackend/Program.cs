@@ -25,6 +25,7 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.APIServer.Services.Trans;
+using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -34,6 +35,7 @@ using GRYLibrary.Core.Misc.FilePath;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -45,7 +47,17 @@ namespace ConSurvBackend.Core
 {
     internal class Program
     {
+        internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; }
+        internal bool ListenOnEveryIP { get; set; }
+        internal bool RunAsync { get; set; }
+        internal IBusinessLogicService BusinessLogicService { get; set; }
+
+        private IHostApplicationLifetime? _HostApplicationLifetime;
         internal static int Main(string[] commandlineArguments)
+        {
+            return new Program().MainImplementation(commandlineArguments);
+        }
+        internal int MainImplementation(string[] commandlineArguments)
         {
             bool runningUsually = false;
             return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
@@ -85,7 +97,7 @@ namespace ConSurvBackend.Core
                             @$"^/API/Other/Maintenance/HealthCheck$",
                         },
                     };
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP();
+                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP(initializationInformation.CommandlineParameter.TestRun ? CodeUnitSpecificConstants.PortForTestRun : HTTP.DefaultPort);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
@@ -206,6 +218,7 @@ namespace ConSurvBackend.Core
                         {
 
                             IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
+                            this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
                             bool showInitialData = false;//disabled because it would reveal sensitive information in the log
                             if (showInitialData)
                             {
@@ -215,6 +228,7 @@ namespace ConSurvBackend.Core
                             logger.Log("Configure webapplication...", LogLevel.Information);
                             IInitializationService<CommandlineParameter> initializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             initializationService.Initialize(apiServerConfiguration.CommandlineParameter);
+                            functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
@@ -238,6 +252,10 @@ namespace ConSurvBackend.Core
                     }
                 };
             });
+        }
+        internal void Stop()
+        {
+            this._HostApplicationLifetime.StopApplication();
         }
     }
 }

@@ -1,18 +1,19 @@
 using ConSurvBackend.Core.Misc;
+using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.DTOs;
+using ConSurvBackend.Core.Model.RecordModes;
+using ConSurvBackend.Core.Model.RecordStates;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
+using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.Crypto;
+using GRYLibrary.Core.Exceptions;
+using GRYLibrary.Core.Logging.GRYLogger;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.Exceptions;
-using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
-using ConSurvBackend.Core.Model.Base;
-using ConSurvBackend.Core.Model.RecordModes;
-using ConSurvBackend.Core.Model.RecordStates;
-using ConSurvBackend.Core.Model.DTOs;
-using Microsoft.Extensions.Logging;
-using GRYLibrary.Core.Crypto;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -169,6 +170,15 @@ namespace ConSurvBackend.Core.Services
         {
             this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
             this._AuditLog.AuditLogger.Log($"Role {roleId} has been unassigned to user {userId}.", LogLevel.Information);//TODO add information about why and by whom this was done
+        }
+        public User GetUser(string userId)
+        {
+            return this._AuthenticationService.GetUserTyped(userId);
+        }
+
+        public AccessToken Login(string username, string password)
+        {
+            return this._AuthenticationService.Login(username, password);
         }
     }
 }
