@@ -1,3 +1,4 @@
+using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
@@ -7,12 +8,14 @@ using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Crypto;
 using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ConSurvBackend.Core.Services
@@ -28,8 +31,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IAuditLog _AuditLog;
         private readonly IRandomnessProvider _RandomnessProvider;
         private readonly IStreamOrganizerService _StreamOrganizerService;
+        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
 
-        public BusinessLogicService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService)
+        public BusinessLogicService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration)
         {
             this._Persistence = persistence;
             this._Log = log;
@@ -39,6 +43,7 @@ namespace ConSurvBackend.Core.Services
             this._RandomnessProvider = randomnessProvider;
             this._AuditLog = auditLog;
             this._StreamOrganizerService = streamOrganizerService;
+            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             //TODO load persisted cameras and start recording if necessary
         }
         public string CreateCamera(string name, string streamURL)
@@ -179,6 +184,53 @@ namespace ConSurvBackend.Core.Services
         public AccessToken Login(string username, string password)
         {
             return this._AuthenticationService.Login(username, password);
+        }
+
+        public IDictionary<string, IList<string>> GetVideos()
+        {
+            Dictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
+            foreach (string folder in Directory.GetDirectories(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder))
+            {
+                string cameraId = new DirectoryInfo(folder).Name;
+                List<string> list = new List<string>();
+                foreach (string file in Directory.GetFiles(folder))
+                {
+                    list.Add(file);
+                }
+                result.Add(cameraId, list);
+            }
+            return result;
+        }
+
+        public void RemoveVideo(string cameraId, string filename)
+        {
+            string fullPath = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, cameraId, filename);
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+            else
+            {
+                throw new BadRequestException($"File \"{filename}\" does not exist for camera \"{cameraId}\".");
+            }
+        }
+
+        public byte[] GetPreviewOfVideo(string cameraId, string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetVideo(string cameraId, string filename)
+        {
+            string fullPath = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, cameraId, filename);
+            if (File.Exists(fullPath))
+            {
+                return File.ReadAllBytes(fullPath);
+            }
+            else
+            {
+                throw new BadRequestException($"File \"{filename}\" does not exist for camera \"{cameraId}\".");
+            }
         }
     }
 }

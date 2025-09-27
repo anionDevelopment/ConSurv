@@ -25,7 +25,15 @@ namespace ConSurvBackend.Core.Services
         public CameraDTO ToDTO(Camera camera);
         public void EnsureUserHasRole(string userId, string roleId);
         public void EnsureUserDoesNotHaveRole(string userId, string roleId);
-        AccessToken Login(string name, string v);
-        User GetUser(string userId);
+        public AccessToken Login(string name, string v);
+        public User GetUser(string userId);
+        /// <summary>
+        /// key: camera-id
+        /// value: filenames of videos
+        /// </summary>
+        public IDictionary<string, IList<string>> GetVideos();
+        public void RemoveVideo(string cameraId,string filename);
+        byte[] GetPreviewOfVideo(string cameraId, string filename);
+        byte[] GetVideo(string cameraId, string filename);
     }
 }

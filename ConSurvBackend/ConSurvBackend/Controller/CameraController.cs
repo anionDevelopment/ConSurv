@@ -7,6 +7,7 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConSurvBackend.Core.Controller
@@ -108,21 +109,23 @@ namespace ConSurvBackend.Core.Controller
 
         #endregion
 
-        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
+        [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route(nameof(ListCameras))]
-        public IActionResult ListCameras()
+        [Route($"{nameof(ListVideos)}")]
+        public IActionResult ListVideos()
         {
-            throw new System.NotImplementedException();
+            IDictionary<string,IList<string>> result = this._CameraService.GetVideos();
+            return this.Ok(result);
         }
 
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route($"{nameof(ListAvailableVideos)}/{{{nameof(cameraId)}}}")]
-        public IActionResult ListAvailableVideos([FromRoute] string cameraId)
+        [Route($"{nameof(GetPreviewOfVideo)}{{{nameof(cameraId)}}}//{{{nameof(filename)}}}")]
+        public IActionResult GetPreviewOfVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
+          byte[] content=  this._CameraService.GetPreviewOfVideo(cameraId, filename);
             throw new System.NotImplementedException();
         }
 
@@ -130,18 +133,20 @@ namespace ConSurvBackend.Core.Controller
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(DownloadVideo)}/{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
-        public IActionResult DownloadVideo([FromRoute] string cameraId, [FromRoute]string filename)
+        public IActionResult DownloadVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
+            byte[] content = this._CameraService.GetVideo(cameraId, filename);
             throw new System.NotImplementedException();
         }
 
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
-        [HttpPut]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Route($"{nameof(RemoveVideo)}/{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
         public IActionResult RemoveVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
-            throw new System.NotImplementedException();
+            this._CameraService.RemoveVideo(cameraId,filename);
+            return this.Ok();
         }
 
     }

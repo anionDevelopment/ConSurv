@@ -110,8 +110,10 @@ namespace ConSurvBackend.Core
                         {
                             @$"^/favicon\.ico$",
                             @$"^/API/Other/Resources/APISpecification/*",
-                            @$"^/API/Other/Maintenance/HealthCheck$"
+                            @$"^/API/Other/Maintenance/Metrics$",
+                            @$"^/API/Other/Maintenance/HealthCheck$",
                         },
+                        MaximalLengthofRequestBodies = 50,
                         MaximalLengthOfResponseBodies = 50,
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;

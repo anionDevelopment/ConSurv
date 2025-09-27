@@ -34,9 +34,9 @@ namespace ConSurvBackend.Tests.TestUtilities
 
             //assert
             Assert.IsTrue(persistence.IsCamera(testCamera.Id));
-            var camerasWithCorrectId = persistence.GetAllCameras().Values.Where(c => c.Id == testCamera.Id);
+            System.Collections.Generic.IEnumerable<Camera> camerasWithCorrectId = persistence.GetAllCameras().Values.Where(c => c.Id == testCamera.Id);
             Assert.ContainsSingle(camerasWithCorrectId);
-            var reloadedCamera = camerasWithCorrectId.First();
+            Camera reloadedCamera = camerasWithCorrectId.First();
             Assert.AreEqual(testCamera, reloadedCamera);
         }
     }

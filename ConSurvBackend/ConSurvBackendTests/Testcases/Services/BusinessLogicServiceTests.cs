@@ -40,7 +40,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             streamOrganizerServiceMock.Setup(m => m.InitializeCameraOrganization());
             Mock<IRTSPManager> rtspManagerMock = new Mock<IRTSPManager>(MockBehavior.Strict);
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object);
+            businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object, persistedAPIServerConfiguration);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(databasePersistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
             initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerServiceMock.Object, databasePersistence);
         }
