@@ -1,21 +1,15 @@
-import sys
 import os
-from pathlib import Path
 from ScriptCollection.GeneralUtilities import GeneralUtilities
-from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjectStructure
-
-
+from ScriptCollection.TFCPS.DotNet.TFCPS_CodeUnitSpecific_DotNet import TFCPS_CodeUnitSpecific_DotNet_Functions,TFCPS_CodeUnitSpecific_DotNet_CLI
+ 
 def build():
-    t = TasksForCommonProjectStructure()
-    file = str(Path(__file__).absolute())
-    cmd_args = sys.argv
-    verbosity = t.get_verbosity_from_commandline_arguments(cmd_args, 1)
-    target_windows = "win-x64"
-    target_platforms = [target_windows, "linux-x64"]
-    t.standardized_tasks_build_for_dotnet_project(str(Path(__file__).absolute()), "QualityCheck", t.get_default_target_environmenttype_mapping(), target_platforms, verbosity, cmd_args)
-    codeunit_folder: str = GeneralUtilities.resolve_relative_path("../../..", file)
 
-    for target_platform in target_platforms:
+    platforms = ["win-x64", "linux-x64"]
+    tf:TFCPS_CodeUnitSpecific_DotNet_Functions=TFCPS_CodeUnitSpecific_DotNet_CLI.parse(__file__)
+    tf.build(platforms, True) 
+    codeunit_folder: str = tf.get_codeunit_folder()
+
+    for target_platform in platforms:
 
         # copy mediamtx to output folder
         os_name: str
@@ -35,8 +29,6 @@ def build():
         font_trg_folder: str = os.path.join(codeunit_folder, "Other", "Artifacts", f"BuildResult_DotNet_{target_platform}", "Fonts")
         GeneralUtilities.ensure_folder_exists_and_is_empty(font_trg_folder)
         GeneralUtilities.copy_content_of_folder(font_src_folder, font_trg_folder)
-
-    t.generate_openapi_file(file, target_windows, verbosity, cmd_args)
 
 
 if __name__ == "__main__":
