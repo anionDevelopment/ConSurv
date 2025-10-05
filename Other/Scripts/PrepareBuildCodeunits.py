@@ -11,7 +11,6 @@ def prepare_build_codeunits():
     t.tfcps_Tools_General.generate_tasksfile_from_workspace_file(repository_folder)
     t.tfcps_Tools_General.generate_codeunits_overview_diagram(repository_folder)
     t.tfcps_Tools_General.generate_svg_files_from_plantuml_files_for_repository(repository_folder,t.use_cache())
-    t.tfcps_Tools_General.do_npm_install(os.path.join(repository_folder, "Other", "Resources", "TypeScript"),True,t.use_cache())
 
 
 if __name__ == "__main__":
