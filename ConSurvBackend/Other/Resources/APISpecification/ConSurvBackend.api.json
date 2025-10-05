@@ -335,7 +335,7 @@
         }
       }
     },
-    "/API/v1/CameraController/ListCameras": {
+    "/API/v1/CameraController/ListVideos": {
       "get": {
         "tags": [
           "Camera"
@@ -347,7 +347,7 @@
         }
       }
     },
-    "/API/v1/CameraController/ListAvailableVideos/{cameraId}": {
+    "/API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename}": {
       "get": {
         "tags": [
           "Camera"
@@ -355,6 +355,14 @@
         "parameters": [
           {
             "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
             "in": "path",
             "required": true,
             "schema": {
@@ -400,7 +408,7 @@
       }
     },
     "/API/v1/CameraController/RemoveVideo/{cameraId}/{filename}": {
-      "put": {
+      "delete": {
         "tags": [
           "Camera"
         ],

@@ -6,7 +6,7 @@ def build():
 
     platforms = ["win-x64", "linux-x64"]
     tf:TFCPS_CodeUnitSpecific_DotNet_Functions=TFCPS_CodeUnitSpecific_DotNet_CLI.parse(__file__)
-    tf.build(platforms, True) 
+    tf.build(platforms, True)
     codeunit_folder: str = tf.get_codeunit_folder()
 
     for target_platform in platforms:

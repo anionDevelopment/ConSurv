@@ -98,6 +98,10 @@ namespace ConSurvBackend.Core
                         },
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP(initializationInformation.CommandlineParameter.TestRun ? CodeUnitSpecificConstants.PortForTestRun : HTTP.DefaultPort);
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationServiceSettings = new AuthenticationServiceSettings()
+                    {
+                        BaseRoleOfAllUser = CodeUnitSpecificConstants.RolenameUsers,
+                    };
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
@@ -185,6 +189,7 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPreviewService, PreviewService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGeneralResourceLoader, Misc.GeneralResourceLoader>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServiceSettings>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationServiceSettings);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService>(sp => sp.GetRequiredService<IAuthenticationService<User>>());
 
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRoleBasedAuthorizationService, StaticRoleBasedUserAuthorizationService<User>>();
@@ -207,6 +212,7 @@ namespace ConSurvBackend.Core
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthenticationMiddleware);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAutSRConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration);
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthorizationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.ConfigurationForAuthorizationMiddleware);
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService, InitializationService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IInitializationService<CommandlineParameter>, InitializationService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IExampleDataCreator, ExampleDataCreator>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IProcessManager, ProcessManager>();

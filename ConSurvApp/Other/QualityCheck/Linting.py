@@ -1,11 +1,11 @@
-import sys
-from pathlib import Path
-from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjectStructure
+from ScriptCollection.TFCPS.Flutter.TFCPS_CodeUnitSpecific_Flutter import TFCPS_CodeUnitSpecific_Flutter_Functions,TFCPS_CodeUnitSpecific_Flutter_CLI
 
 
-def run_linting():
-    TasksForCommonProjectStructure().standardized_tasks_run_linting_for_flutter_project_in_common_project_structure(str(Path(__file__).absolute()),  1, sys.argv)
+def linting():
+    tf:TFCPS_CodeUnitSpecific_Flutter_Functions=TFCPS_CodeUnitSpecific_Flutter_CLI.parse(__file__)    
+    tf.linting()
+
 
 
 if __name__ == "__main__":
-    run_linting()
+    linting()

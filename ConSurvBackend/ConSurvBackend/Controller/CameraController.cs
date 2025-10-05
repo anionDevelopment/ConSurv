@@ -122,7 +122,7 @@ namespace ConSurvBackend.Core.Controller
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Route($"{nameof(GetPreviewOfVideo)}{{{nameof(cameraId)}}}//{{{nameof(filename)}}}")]
+        [Route($"{nameof(GetPreviewOfVideo)}{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
         public IActionResult GetPreviewOfVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
           byte[] content=  this._CameraService.GetPreviewOfVideo(cameraId, filename);

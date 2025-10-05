@@ -58,7 +58,7 @@ namespace ConSurvBackend.Core.Services
 
         private string GetId(string seed)
         {
-            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(seed)))).Substring(0, 6);
+            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(seed))))[..6];
         }
 
         public bool IsAvailable(Camera camera)

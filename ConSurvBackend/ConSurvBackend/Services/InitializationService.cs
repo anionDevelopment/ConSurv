@@ -96,8 +96,8 @@ namespace ConSurvBackend.Core.Services
                         this._ExampleDataCreator.AddExampleData();
                     }
                 }
-                this.OrganizeCameras();
-                this.StartCameras();
+                //TODO this.OrganizeCameras();
+                //TODO this.StartCameras();
                 this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
                 _InitializationState = new Initialized();
             }
