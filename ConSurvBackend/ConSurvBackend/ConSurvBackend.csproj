@@ -51,9 +51,9 @@
         <ErrorReport>none</ErrorReport>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)'=='Productive'">
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-        <Optimize>true</Optimize>
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <Optimize>false</Optimize>
         <DefineConstants>Productive</DefineConstants>
         <ErrorReport>none</ErrorReport>
     </PropertyGroup>
