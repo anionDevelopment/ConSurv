@@ -7,7 +7,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 {
     public sealed class DatabaseTestFrameworkForMariaDB : DatabaseTestFrameworkTemplate
     {
-        public DatabaseTestFrameworkForMariaDB() : base("consurvbackend_database", "Host=localhost; Port=3306;Username=user; Password=pa55w0rd; Database=ConSurvDatabase;", Utilities.GetTestMariaDBDatabaseFolder())
+        public DatabaseTestFrameworkForMariaDB() : base("consurvbackend_database", "Host=localhost; Port=3306;Username=user; Password=pa55w0rd; Database=ConSurvDatabase;", Utilities.GetTestMariaDBDatabaseFolder(), ConSurvBackend.Tests.TestUtilities.Constants.GeneralConstants.RepositoryFolder, "LocaltestserviceMariadbStart", "LocaltestserviceMariadbStop", ConSurvBackend.Tests.TestUtilities.Utilities.GetResetDatabaseScript("MariaDB"))
         {
         }
 

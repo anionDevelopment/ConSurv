@@ -6,7 +6,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 {
     public sealed class DatabaseTestFrameworkForPostgreSQL : DatabaseTestFrameworkTemplate
     {
-        public DatabaseTestFrameworkForPostgreSQL() : base("consurvbackend_database", "Host=localhost; Port=5432; Username=user; Password=pa55w0rd; Database=ConSurvDatabase;", Utilities.GetTestPostgreSQLDatabaseFolder())
+        public DatabaseTestFrameworkForPostgreSQL() : base("consurvbackend_database", "Host=localhost; Port=5432; Username=user; Password=pa55w0rd; Database=ConSurvDatabase;", Utilities.GetTestPostgreSQLDatabaseFolder(), ConSurvBackend.Tests.TestUtilities.Constants.GeneralConstants.RepositoryFolder, "LocaltestserviceMariadbStart", "LocaltestserviceMariadbStop", ConSurvBackend.Tests.TestUtilities.Utilities.GetResetDatabaseScript("PostgreSQL"))
         {
         }
 
