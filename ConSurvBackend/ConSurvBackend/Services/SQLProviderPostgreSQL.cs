@@ -1,11 +1,9 @@
-﻿using GRYLibrary.Core.Logging.GRYLogger;
-using ConSurvBackend.Core.Miscellaneous;
+﻿using ConSurvBackend.Core.Miscellaneous;
 
 namespace ConSurvBackend.Core.Services
 {
-    public class SQLProviderPostgreSQL : SQLProvider, ISQLProvider
+    public class SQLProviderPostgreSQL : SQLProvider
     {
-        public SQLProviderPostgreSQL(IGRYLog log) : base("PostgreSQL", log) { }
-
+        public SQLProviderPostgreSQL() : base("PostgreSQL") { }
     }
 }

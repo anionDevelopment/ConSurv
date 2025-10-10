@@ -1,18 +1,17 @@
-﻿using GRYLibrary.Core.Misc;
+﻿using GRYLibrary.Core.APIServer.Utilities;
+using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConSurvBackend.Core.Services;
 
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
     [TestClass]
-    public class PersistenceTransientTests : PersistenceTestsBase
+    [Ignore]
+    public class PostgreSQLPersistenceTests : PersistenceDatabaseTestsBase
     {
-        public override IPersistence GetPersistence()
+        protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
         {
-            return TestUtilities.Utilities.GetTransientPersistence();
+            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForPostgreSQL();
         }
-
-
 
         [TestMethod(nameof(PersistCameraTest))]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
@@ -20,5 +19,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
         {
             this.PersistCamera();
         }
+
     }
 }

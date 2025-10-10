@@ -29,7 +29,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             persistedAPIServerConfiguration.ApplicationSpecificConfiguration.RegistrationIsEnabled = registrationIsEnabled;
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
-            ISQLProvider sqlProvider = new SQLProviderPostgreSQL(logger);
+            ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
             IPersistence databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence;
             persistence.Reset();

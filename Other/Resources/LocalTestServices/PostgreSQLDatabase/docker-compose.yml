@@ -1,32 +1,33 @@
 version: "3.2"
 
 services:
-  consurvbackend_database:
-    container_name: "consurvbackend_database"
-    image: postgres:17.5
+  ConSurvbackend_database:
+    container_name: "ConSurvbackend_database"
+    image: postgres:17.6
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pa55w0rd
       POSTGRES_DB: ConSurvDatabase
+#      PGDATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - ./Volumes/Data:/var/lib/postgresql/data
+#    volumes:
+#      - ConSurvPostgreSQLData:/var/lib/postgresql/data
     networks:
-      - consurv_net
+      - ConSurv_net
     command: >
       postgres -c log_connections=on -c log_disconnections=on
 
-  consurvbackend_database_administration:
+  ConSurvbackend_database_administration:
     image: adminer:4.8.1
-    container_name: "consurvbackend_database_administration"
+    container_name: "ConSurvbackend_database_administration"
     ports:
       - 8080:8080
     depends_on:
-      - consurvbackend_database
+      - ConSurvbackend_database
     networks:
-      - consurv_net
+      - ConSurv_net
 
 networks:
-  consurv_net:
+  ConSurv_net:
     external: true

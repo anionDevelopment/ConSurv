@@ -1,12 +1,11 @@
 ﻿using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 
 namespace ConSurvBackend.Core.Miscellaneous
 {
     public abstract class SQLProvider : AbstractSQLProvider, ISQLProvider
     {
-        public SQLProvider(string databaseType, IGRYLog log) : base($"ConSurvBackend.Core.Resources.Database.{databaseType}.Statements", log) { }
+        public SQLProvider(string databaseType) : base($"ConSurvBackend.Core.Resources.Database.{databaseType}.Statements") { }
 
         public string GetScriptAddRoleToUser()
         {

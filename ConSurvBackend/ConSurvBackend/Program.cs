@@ -1,7 +1,6 @@
 using ConSurvBackend.Core.BackgroundServices;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Database;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
@@ -19,7 +18,7 @@ using GRYLibrary.Core.APIServer.MidT.Exception;
 using GRYLibrary.Core.APIServer.MidT.RLog;
 using GRYLibrary.Core.APIServer.Services.Auth.R;
 using GRYLibrary.Core.APIServer.Services.CredH;
-using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
+using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
@@ -32,7 +31,6 @@ using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using GRYLibrary.Core.Misc.FilePath;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -48,11 +46,13 @@ namespace ConSurvBackend.Core
     internal class Program
     {
         internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; }
-        internal bool ListenOnEveryIP { get; set; }
-        internal bool RunAsync { get; set; }
-        internal IBusinessLogicService BusinessLogicService { get; set; }
+        internal bool ListenOnEveryIP { get; set; } = false;
+        internal bool RunAsync { get; set; } = false;
+        internal IBusinessLogicService? _BusinessLogicService;
+        internal IGRYLog? _Log;
 
-        private IHostApplicationLifetime? _HostApplicationLifetime;
+        internal IHostApplicationLifetime? _HostApplicationLifetime;
+
         internal static int Main(string[] commandlineArguments)
         {
             return new Program().MainImplementation(commandlineArguments);
@@ -97,7 +97,7 @@ namespace ConSurvBackend.Core
                             @$"^/API/Other/Maintenance/HealthCheck$",
                         },
                     };
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP(initializationInformation.CommandlineParameter.TestRun ? CodeUnitSpecificConstants.PortForTestRun : HTTP.DefaultPort);
+                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP(initializationInformation.CommandlineParameter.RealRun ? CodeUnitSpecificConstants.PortForIntegrationTestRun : HTTP.DefaultPort);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationServiceSettings = new AuthenticationServiceSettings()
                     {
                         BaseRoleOfAllUser = CodeUnitSpecificConstants.RolenameUsers,
@@ -131,47 +131,39 @@ namespace ConSurvBackend.Core
                     IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog")));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
                     IGeneralLogger logger = functionalInformation.Logger;
-                    bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient" && !runningUsually;
+                    bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != null && functionalInformation.InitializationInformation.CommandlineParameter.RealRun;
                     if (useDatabase)
                     {
                         logger.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, PersistentAuthenticationService>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<IPersistence>());
-                        IGenericDatabaseInteractor genericDatabaseInteractor;
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDatabasePersistenceConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration);
                         if (functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType == "PostgreSQL")
                         {
-                            genericDatabaseInteractor = new PostgreSQLDatabaseInteractor();
-                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePostgreSQLPersistence>();
-                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDatabaseManager, DatabaseManagerPostgreSQL>();
                             functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProviderPostgreSQL>();
-                            functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
-                            {
-                                string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                options.UseNpgsql(connectionString, sqlOptions => { });
-                            }, ServiceLifetime.Singleton);
+                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGenericDatabaseInteractor, PostgreSQLDatabaseInteractor>();
+                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IConSurvDatabaseInteractor, DatabaseInteractorPostgreSQL>();
                         }
                         else if (functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType == "MariaDB")
                         {
-                            genericDatabaseInteractor = new MariaDBDatabaseInteractor();
-                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, GenericDatabasePersistence>();
-                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IDatabaseManager, DatabaseManagerMariaDB>();
                             functionalInformation.WebApplicationBuilder.Services.AddSingleton<ISQLProvider, SQLProviderMariaDB>();
-                            functionalInformation.WebApplicationBuilder.Services.AddDbContext<DatabaseContext>(options =>
-                            {
-                                string connectionString = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseConnectionString;
-                                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlOptions => { });
-                            }, ServiceLifetime.Singleton);
+                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGenericDatabaseInteractor, MariaDBDatabaseInteractor>();
+                            functionalInformation.WebApplicationBuilder.Services.AddSingleton<IConSurvDatabaseInteractor, DatabaseInteractorMariaDB>();
                         }
                         else
                         {
                             throw new NotSupportedException("Database not supported. For a list of supported databases see the documentation.");
                         }
-                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGenericDatabaseInteractor>(genericDatabaseInteractor);
                     }
                     else
                     {
                         logger.Log($"Run transient.", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
+                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServiceSettings>(new AuthenticationServiceSettings()
+                        {
+                            BaseRoleOfAllUser = CodeUnitSpecificConstants.RolenameUsers
+                        });
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, TransientAuthenticationService<User>>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
@@ -227,6 +219,8 @@ namespace ConSurvBackend.Core
 
                             IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
+                            this._Log = functionalInformationForWebApplication.WebApplication.Services.GetService<IGRYLog>();
+                            this._BusinessLogicService = functionalInformationForWebApplication.WebApplication.Services.GetService<IBusinessLogicService>();
                             bool showInitialData = false;//disabled because it would reveal sensitive information in the log
                             if (showInitialData)
                             {

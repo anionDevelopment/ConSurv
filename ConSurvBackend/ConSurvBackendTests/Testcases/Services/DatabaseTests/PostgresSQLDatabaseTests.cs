@@ -6,11 +6,11 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
     [TestClass]
     [Ignore]
-    public class MariaDBDatabaseTests : DatabaseTestsBase
+    public class PostgresSQLDatabaseTests : DatabaseTestsBase
     {
         protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
         {
-            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForMariaDB();
+            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForPostgreSQL();
         }
 
 

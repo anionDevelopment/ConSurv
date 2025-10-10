@@ -61,7 +61,7 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="FFmpeg.AutoGen" Version="7.1.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.9.6" />
-        <PackageReference Include="GRYLibrary" Version="0.12.168" />
+        <PackageReference Include="GRYLibrary" Version="0.12.170" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
           <PrivateAssets>all</PrivateAssets>

@@ -1,19 +1,19 @@
 version: "3.2"
 
 services:
-  consurv_reverseproxy:
+  ConSurv_reverseproxy:
     image: nginx:1.27.4
-    container_name: "consurv_reverseproxy"
+    container_name: "ConSurv_reverseproxy"
     volumes:
-      - "./nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx.conf:/etc/nginx/nginx.conf:ro"
       - "../../DevelopmentCertificate:/Workspace/Certificates"
     ports:
       - "443:443"
     networks:
-      - consurv_net
+      - ConSurv_net
     extra_hosts:
       - "host.docker.internal:host-gateway"
       
 networks:
-  consurv_net:
+  ConSurv_net:
     external: true

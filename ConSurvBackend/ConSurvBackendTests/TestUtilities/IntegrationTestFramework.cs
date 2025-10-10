@@ -1,12 +1,16 @@
-﻿using GRYLibrary.Core.APIServer.Settings.Configuration;
+﻿using GRYLibrary.Core.APIServer;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using ConSurvBackend.Core;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
@@ -15,11 +19,12 @@ namespace ConSurvBackend.Tests.TestUtilities
 {
     public class IntegrationTestFramework : IDisposable
     {
-        public bool Started { get; private set; }
-        private IDictionary<User, string> UserPasswords = new Dictionary<User, string>();
-        private Program _Program;
+        private bool _Running = false;
+        private readonly IDictionary<User, string> _UserPasswords = new Dictionary<User, string>();
+        private Program? _Program = null;
         private readonly IntegrationTestConfiguration _IntegrationTestConfiguration;
-        public IBusinessLogicService BusinessLogicService { get; private set; }
+        internal IBusinessLogicService? _BusinessLogicService;
+        internal IGRYLog? _Log;
         public IntegrationTestFramework(bool startServer = true) : this(new IntegrationTestConfiguration(), startServer)
         {
         }
@@ -35,13 +40,43 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
             Action action = () =>
             {
-                this._Program = new Program();
-                this._Program.RunAsync = !this._IntegrationTestConfiguration.RunInOwnThread;
-                this._Program.ListenOnEveryIP = false;
-                this._Program.SetupMocks = this._IntegrationTestConfiguration.SetupMocks;
-                string[] args = new string[] { $"--{nameof(CommandlineParameter.TestRun)}" };
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(this._Program.MainImplementation(args) == 0, "Exitode of main-method was non-zero.");
-                this.BusinessLogicService = this._Program.BusinessLogicService;
+                try
+                {
+
+                    this._Program = new Program();
+                    this._Program.RunAsync = !this._IntegrationTestConfiguration.RunInOwnThread;
+                    this._Program.ListenOnEveryIP = false;
+                    this._Program.SetupMocks = this._IntegrationTestConfiguration.SetupMocks;
+
+                    string[] args = new string[] {
+                        @$"", Utilities.GetOCRDataFolder()
+                    };//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
+                    var exitCode = this._Program.MainImplementation(args);
+                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    GRYLibrary.Core.Misc.Utilities.AssertCondition(exitCode == 0, () =>
+                    {
+                        string message = $"Exitode of main-method was {exitCode}.";
+                        if (_Program._Log != null)//TODO this condition should not be required. but for unknown reasons the _log-property is null and this causes problems whille retrieving the logs here which would be useful.
+                        {
+                            IGRYLog log = GRYLibrary.Core.Misc.Utilities.AssertNotNull(_Program._Log, nameof(Program._Log));
+                            LogItem[] logMessages = log.LastLogEntries.GetEntries();
+                            if (logMessages.Any())
+                            {
+                                message = $"{message} Last log entries:\n" + string.Join("\n", logMessages.Select(item =>
+                                {
+                                    item.Format(_Program._Log.Configuration, out string result, out int _, out int _, out ConsoleColor _, GRYLogLogFormat.GRYLogFormat, null);
+                                    return result;
+                                }));
+                            }
+                        }
+                        return message;
+                    });
+
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             };
             if (this._IntegrationTestConfiguration.RunInOwnThread)
             {
@@ -58,27 +93,33 @@ namespace ConSurvBackend.Tests.TestUtilities
                 {
                     Thread.Sleep(TimeSpan.FromSeconds(1));
                 }
-            }, TimeSpan.FromSeconds(15)))
+            }, TimeSpan.FromSeconds(150)))
             {
                 throw new Exception("Could not start service.");
             }
-            this.Started = true;
+            this._Running = true;
+            this._BusinessLogicService = this._Program._BusinessLogicService;
+            this._Log = this._Program._Log;
         }
+
 
         private bool IsReady()
         {
             try
             {
                 using HttpClient client = this.GetClient();
-                string url = $"{this.GetServerURL()}{ServerConfiguration.APIRoutePrefix}/Other/Maintenance/AvailabilityCheck";
+                string url = $"{this.GetServerURL()}{ServerConfiguration.APIRoutePrefix}/Other/Maintenance/HealthCheck";
                 HttpResponseMessage response = client.GetAsync(url).WaitAndGetResult();
                 Assert.IsTrue(response.IsSuccessStatusCode);
+                string content = response.Content.ReadAsStringAsync().WaitAndGetResult();
+                dynamic obj = JsonConvert.DeserializeObject(content);
+                int status = (int)obj["status"];
+                return status == 2;//2 means healthy.
             }
             catch
             {
                 return false;
             }
-            return true;
         }
 
         public HttpClient GetClient(User? user = null)
@@ -86,7 +127,7 @@ namespace ConSurvBackend.Tests.TestUtilities
             HttpClient result = new HttpClient();
             if (user != null)
             {
-                result.DefaultRequestHeaders.Add("X-Accesstoken", this.BusinessLogicService.Login(user.Name, this.UserPasswords[user]).Value);
+                result.DefaultRequestHeaders.Add("X-Accesstoken", this._BusinessLogicService.Login(user.Name, this._UserPasswords[user]).Value);
             }
             return result;
         }
@@ -94,14 +135,14 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
             string username = Guid.NewGuid().ToString();
             string password = Guid.NewGuid().ToString();
-            string userId = this.BusinessLogicService.Register(username, password);
-            User user = this.BusinessLogicService.GetUser(userId);
-            this.UserPasswords[user] = password;
+            string userId = this._BusinessLogicService.Register(username, password);
+            User user = this._BusinessLogicService.GetUser(userId);
+            this._UserPasswords[user] = password;
             return user;
         }
         public string GetServerURL()
         {
-            return $"http://127.0.0.1:{CodeUnitSpecificConstants.PortForTestRun}";
+            return $"http://127.0.0.1:{CodeUnitSpecificConstants.PortForIntegrationTestRun}";
         }
         public void Dispose()
         {
@@ -110,9 +151,10 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         private void EnsureServerIsStopped()
         {
-            if (this.Started)
+            if (this._Running)
             {
                 this._Program.Stop();
+                this._Running = false;
             }
         }
     }

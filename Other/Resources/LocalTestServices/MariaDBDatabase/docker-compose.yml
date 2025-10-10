@@ -1,8 +1,8 @@
 version: "3.2"
 
 services:
-  consurvbackend_database:
-    container_name: "consurvbackend_database"
+  ConSurvbackend_database:
+    container_name: "ConSurvbackend_database"
     image: mariadb:11.5.2
     ports:
       - "3306:3306"
@@ -11,15 +11,19 @@ services:
       MARIADB_PASSWORD: pa55w0rd
       MARIADB_ROOT_PASSWORD: R00tpa55w0rd
       MARIADB_DATABASE: ConSurvDatabase
+#    volumes:
+#      - ./Volumes/Data:/var/lib/mysql
     networks:
-      - consurv_net
+      - ConSurv_net
 
-  consurvbackend_database_administration:
+  ConSurvbackend_database_administration:
     image: adminer:4.8.1
-    container_name: "consurvbackend_database_administration"
+    container_name: "ConSurvbackend_database_administration"
+    ports:
+      - 8080:8080
     networks:
-      - consurv_net
+      - ConSurv_net
 
 networks:
-  consurv_net:
+  ConSurv_net:
     external: true

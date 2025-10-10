@@ -11,6 +11,6 @@
         public const string BusinessMetricsPrefix = $"{GeneralConstants.CodeUnitName}_Business";
         public const string MetricsNameAvailableCamerasRate = $"{BusinessMetricsPrefix}_AvailableCamerasRate";
 
-        internal static ushort PortForTestRun = 5002;
+        internal static ushort PortForIntegrationTestRun = 5002;
     }
 }

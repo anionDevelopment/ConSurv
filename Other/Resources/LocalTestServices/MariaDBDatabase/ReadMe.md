@@ -10,7 +10,7 @@ Data for adminer:
 
 System: `MySQL`
 
-Server: `consurvbackend_database`
+Server: `ConSurvbackend_database`
 
 Username: `root`
 

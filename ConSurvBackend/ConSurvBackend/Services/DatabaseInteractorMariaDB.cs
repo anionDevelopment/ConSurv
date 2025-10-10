@@ -1,17 +1,17 @@
-﻿using GRYLibrary.Core.APIServer.Services.Database.DatabaseInterator;
-using GRYLibrary.Core.APIServer.Services.Trans;
+﻿using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.Misc.Migration;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ConSurvBackend.Core.Database
+namespace ConSurvBackend.Core.Services
 {
-    public class DatabaseManagerMariaDB : IDatabaseManager
+    public class DatabaseInteractorMariaDB : IConSurvDatabaseInteractor
     {
-        private readonly MariaDBDatabaseInteractor _MariaDBDatabaseInteractor = new MariaDBDatabaseInteractor();
+        private readonly MariaDBDatabaseInteractor _DatabaseInteractor;
         private readonly IList<MigrationInstance> _Migrations = GRYMigrator.LoadMigrationsFromResources(Assembly.GetExecutingAssembly(), "ConSurvBackend.Core.Resources.Database.MariaDB.Migrations.");
-        public DatabaseManagerMariaDB()
+        public DatabaseInteractorMariaDB(IGenericDatabaseInteractor interactor)
         {
+            this._DatabaseInteractor = (MariaDBDatabaseInteractor)interactor;
         }
         public IList<MigrationInstance> GetAllMigrations()
         {
@@ -20,7 +20,12 @@ namespace ConSurvBackend.Core.Database
 
         public IGenericDatabaseInteractor GetGenericDatabaseInteractor()
         {
-            return this._MariaDBDatabaseInteractor;
+            return this._DatabaseInteractor;
+        }
+
+        public ISQLProvider GetSQLProvider()
+        {
+            return new SQLProviderMariaDB();
         }
     }
 }

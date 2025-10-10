@@ -1,9 +1,10 @@
 import os
-from ScriptCollection.TasksForCommonProjectStructure import TasksForCommonProjectStructure
+from ScriptCollection.ScriptCollectionCore import ScriptCollectionCore
 
 
 def start_local_test_service():
-    TasksForCommonProjectStructure().start_local_test_service(os.path.abspath(__file__))
+    stript_file=__file__
+    ScriptCollectionCore().start_local_test_service(stript_file)
 
 
 if __name__ == "__main__":
