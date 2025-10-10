@@ -32,9 +32,11 @@ def ensure_mediamtx_is_available(t: TFCPS_Tools_General, target_folder: str) -> 
 
 def common_tasks():
     tf:TFCPS_CodeUnitSpecific_DotNet_Functions=TFCPS_CodeUnitSpecific_DotNet_CLI.parse(__file__)    
+    tf.tfcps_Tools_General.copy_product_resource_to_codeunit_resource_folder(tf.get_codeunit_folder(), "Fonts")
     tf.tfcps_Tools_General.get_resource_from_global_resource(tf.get_codeunit_folder(), "DevelopmentCertificate")
     tf.do_common_tasks(tf.get_version_of_project(),CertificateGeneratorInformationGenerate(),True)#codeunit-version should alsways be the same as project-version
     ensure_mediamtx_is_available(tf.tfcps_Tools_General,tf.get_codeunit_folder())
 
 if __name__ == "__main__":
     common_tasks()
+ 
