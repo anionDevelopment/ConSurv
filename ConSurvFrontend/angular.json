@@ -46,7 +46,7 @@
             "scripts": []
           },
           "configurations": {
-            "Production": {
+            "Productive": {
               "budgets": [
                 {
                   "type": "initial",
@@ -63,7 +63,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.Production.ts"
+                  "with": "src/environments/environment.Productive.ts"
                 }
               ]
             },
@@ -95,8 +95,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "Production": {
-              "buildTarget": "ConSurvFrontend:build:Production"
+            "Productive": {
+              "buildTarget": "ConSurvFrontend:build:Productive"
             },
             "QualityCheck": {
               "buildTarget": "ConSurvFrontend:build:QualityCheck"
@@ -114,7 +114,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "configurations": {
-            "Production": {},
+            "Productive": {},
             "QualityCheck": {},
             "Development": {}
           },
