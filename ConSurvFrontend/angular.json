@@ -8,11 +8,18 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
-        },
+        }
       },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "de": "src/locale/messages.de.xlf",
+          "fr": "src/locale/messages.fr.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -21,7 +28,8 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -38,7 +46,7 @@
             "scripts": []
           },
           "configurations": {
-            "Production": {
+            "Productive": {
               "budgets": [
                 {
                   "type": "initial",
@@ -55,7 +63,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.Production.ts"
+                  "with": "src/environments/environment.Productive.ts"
                 }
               ]
             },
@@ -87,8 +95,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "Production": {
-              "buildTarget": "ConSurvFrontend:build:Production"
+            "Productive": {
+              "buildTarget": "ConSurvFrontend:build:Productive"
             },
             "QualityCheck": {
               "buildTarget": "ConSurvFrontend:build:QualityCheck"
@@ -106,7 +114,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "configurations": {
-            "Production": {},
+            "Productive": {},
             "QualityCheck": {},
             "Development": {}
           },
@@ -114,7 +122,8 @@
             "codeCoverage": true,
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",

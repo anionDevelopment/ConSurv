@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -14,12 +15,14 @@ namespace ConSurvBackend.Core.Misc
     {
         private readonly IGeneralLogger _Logger;
         private readonly IPersistence _Persistence;
-        private readonly ICameraService _CameraService;
-        public HealthCheck(IGeneralLogger logger, IPersistence persistence, ICameraService cameraSchedulerService)
+        private readonly IBusinessLogicService _CameraService;
+        private readonly IInitializationService _InitializationService;
+        public HealthCheck(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraSchedulerService, IInitializationService initializationService)
         {
             this._Logger = logger;
             this._Persistence = persistence;
             this._CameraService = cameraSchedulerService;
+            this._InitializationService = initializationService;
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -38,7 +41,7 @@ namespace ConSurvBackend.Core.Misc
                 Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true, true);
                 return (result, messages);
 
-            }, context, cancellationToken);
+            }, context, cancellationToken, _InitializationService);
         }
     }
 }

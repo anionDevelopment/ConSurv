@@ -7,6 +7,12 @@ note as ConSurvBackendNote
 end note
 ConSurvBackend .. ConSurvBackendNote
 
+[ConSurvApp]
+note as ConSurvAppNote
+  ConSurvApp is an app-client for ConSurv.
+end note
+ConSurvApp .. ConSurvAppNote
+
 [ConSurvFrontend]
 note as ConSurvFrontendNote
   ConSurvBackend is the frontend for ConSurv.
@@ -19,6 +25,7 @@ note as ConSurvNote
 end note
 ConSurv .. ConSurvNote
 
+ConSurvApp --> ConSurvBackend
 ConSurvFrontend --> ConSurvBackend
 ConSurv --> ConSurvBackend
 ConSurv --> ConSurvFrontend

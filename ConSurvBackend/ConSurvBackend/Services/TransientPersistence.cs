@@ -31,7 +31,7 @@ namespace ConSurvBackend.Core.Services
 
         public void CreateCamera(Camera camera)
         {
-            this._Cameras[camera.Id]=camera;
+            this._Cameras[camera.Id] = camera;
         }
 
         public void RemoveCamera(string cameraId)
@@ -41,7 +41,7 @@ namespace ConSurvBackend.Core.Services
 
         public void UpdateCamera(Camera camera)
         {
-          
+
             this._Cameras[camera.Id] = camera;
         }
 
@@ -57,7 +57,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserWithNameExists(string username)
         {
-         return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
+            return this._TransientAuthenticationServicePersistence.UserWithNameExists(username);
         }
 
         public IDictionary<string, Camera> GetAllCameras()
@@ -67,112 +67,117 @@ namespace ConSurvBackend.Core.Services
 
         public IDictionary<string, User> GetAllUsers()
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetAllUsers();
         }
 
         public ISet<Role> GetAllRoles()
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetAllRoles();
         }
 
         public void AddRole(Role role)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.AddRole(role);
         }
 
         public void UpdateRole(Role role)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.UpdateRole(role);
         }
 
         public void DeleteRoleByName(string roleName)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.DeleteRoleByName(roleName);
         }
 
         public bool AccessTokenExists(string accessToken, out User? user)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.AccessTokenExists(accessToken, out user);
         }
 
         public void AddUser(User newUser)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.AddUser(newUser);
         }
 
         public bool UserWithIdExists(string userId)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.UserWithIdExists(userId);
         }
 
         public User GetUserById(string userId)
         {
-            throw new System.NotImplementedException();
+          return this._TransientAuthenticationServicePersistence.GetUserById(userId);
         }
 
         public User GetUserByName(string userName)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetUserByName(userName);
         }
 
         public void RemoveUser(string userId)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.RemoveUser(userId);
         }
 
         public bool RoleExists(string roleName)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.RoleExists(roleName);
         }
 
         public void AddRoleToUser(string userId, string roleId)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.AddRoleToUser(userId, roleId);
         }
 
         public void RemoveRoleFromUser(string userId, string roleId)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.RemoveRoleFromUser(userId, roleId);
         }
 
         public bool UserHasRole(string userId, string roleId)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.UserHasRole(userId, roleId);
         }
 
         public User GetUserByAccessToken(string accessToken)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetUserByAccessToken(accessToken);
         }
 
         public void UpdateUser(User user)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.UpdateUser(user);
         }
 
         public AccessToken GetAccessToken(string accessToken)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetAccessToken(accessToken);
         }
 
         public void AddAccessToken(string userId, AccessToken newAccessToken)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.AddAccessToken(userId, newAccessToken);
         }
 
         public void RemoveAccessToken(string accessToken)
         {
-            throw new System.NotImplementedException();
+            this._TransientAuthenticationServicePersistence.RemoveAccessToken(accessToken);
         }
 
         public ISet<AccessToken> GetAllAccessTokenOfUser(string userId)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetAllAccessTokenOfUser(userId);
         }
 
         public Role GetRoleByName(string roleName)
         {
-            throw new System.NotImplementedException();
+            return this._TransientAuthenticationServicePersistence.GetRoleByName(roleName);
+        }
+
+        public bool IsCamera(string id)
+        {
+            return this._Cameras.ContainsKey(id);
         }
     }
 }

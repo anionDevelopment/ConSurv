@@ -43,16 +43,16 @@ namespace ConSurvBackend.Core.Misc
 
         internal static string GetVideoTargetFile(string cameraId, bool timeInUTC, ITimeService timeService)
         {
-            DateTime dateTime;
+            DateTimeOffset dateTime;
             if (timeInUTC)
             {
                 dateTime = timeService.GetCurrentTimeInUTC();
             }
             else
             {
-                dateTime = timeService.GetCurrentTime();
+                dateTime = timeService.GetCurrentLocalTime();
             }
-            string result = $"{dateTime.Year.ToString().PadLeft(4, '0')}/{dateTime.Month.ToString().PadLeft(2, '0')}/{dateTime.Day.ToString().PadLeft(2, '0')}/{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
+            string result = $"{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
             result = result.Replace("\\", "/");
             return result;
         }

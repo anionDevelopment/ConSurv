@@ -3,6 +3,8 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Crypto;
+using GRYLibrary.Core.Exceptions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,12 @@ namespace ConSurvBackend.Core.Services
     internal class PersistentAuthenticationService : IAuthenticationService<User>
     {
         private readonly IAuthenticationServicePersistence<User> _Persistence;
+        private readonly ITimeService _TimeService;
 
-        public PersistentAuthenticationService(IAuthenticationServicePersistence<User> _Persistence)
+        public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence)
         {
-            this._Persistence = _Persistence;
+            this._Persistence = persistence;
+            _TimeService = timeService;
         }
 
         public bool AccessTokenIsValid(string accessToken)
@@ -137,9 +141,32 @@ namespace ConSurvBackend.Core.Services
             return result;
         }
 
+        private AccessToken ThrowInvalidCredentialsException()
+        {
+            throw new BadRequestException(StatusCodes.Status400BadRequest, "Invalid credentials");
+        }
         public AccessToken Login(string userName, string password)
         {
-            throw new NotImplementedException();
+            if (!this._Persistence.UserWithNameExists(userName))
+            {
+                return this.ThrowInvalidCredentialsException();
+            }
+            this._Persistence.GetUserByName(userName);
+            User user = this.GetUserByNameTyped(userName);
+            if (this.Hash(password) != user.PasswordHash)
+            {
+                return this.ThrowInvalidCredentialsException();
+            }
+            if (user.UserIsLocked)
+            {
+                throw new NotAuthorizedException($"User '{userName}' is locked.");
+            }
+            AccessToken newAccessToken = new AccessToken();
+            newAccessToken.Value = Guid.NewGuid().ToString();
+            newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTimeInUTC().AddDays(1);//TODO make this configurable
+            this._Persistence.AddAccessToken(user.Id, newAccessToken);
+            user.AccessToken.Add(newAccessToken);
+            return newAccessToken;
         }
 
         public void Logout(string accessToken)
@@ -195,6 +222,11 @@ namespace ConSurvBackend.Core.Services
         public bool UserWithNameExists(string username)
         {
             return this._Persistence.UserWithNameExists(username);
+        }
+
+        public string GetBaseRoleOfAllUser()
+        {
+            throw new NotImplementedException();
         }
     }
 }

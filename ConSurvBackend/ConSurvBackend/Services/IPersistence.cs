@@ -8,13 +8,16 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IPersistence : IExternalService, IAuthenticationServicePersistence<User>
     {
-        void CreateCamera(Camera camera);
-        void UpdateCamera(Camera camera);
-        void RemoveCamera(string cameraId);
+        public void Reset();
+        public void CreateCamera(Camera camera);
+        public void UpdateCamera(Camera camera);
+        public void RemoveCamera(string cameraId);
         /// <remarks>
         /// dictionary-key: camera-id
         /// dictionary-valur: camera-object
         /// </remarks>
-        IDictionary<string, Camera> GetAllCameras();
+        public IDictionary<string, Camera> GetAllCameras();
+        public bool IsCamera(string id);
+
     }
 }
