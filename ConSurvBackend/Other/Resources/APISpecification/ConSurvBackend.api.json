@@ -15,7 +15,7 @@
     "version": "v1.1.4"
   },
   "paths": {
-    "/API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}": {
+    "/API/v1/CameraController/GetPreview/{cameraId}": {
       "get": {
         "tags": [
           "Camera"
@@ -27,24 +27,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "maximalHeight",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "maximalWidth",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             }
           },
           {

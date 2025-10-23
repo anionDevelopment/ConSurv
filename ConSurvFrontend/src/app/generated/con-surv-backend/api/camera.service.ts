@@ -275,27 +275,19 @@ export class CameraService extends BaseService {
 
     /**
      * @param cameraId 
-     * @param maximalHeight 
-     * @param maximalWidth 
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId: string, maximalHeight: number, maximalWidth: number, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId: string, maximalHeight: number, maximalWidth: number, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId: string, maximalHeight: number, maximalWidth: number, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId: string, maximalHeight: number, maximalWidth: number, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV1CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public aPIV1CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public aPIV1CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public aPIV1CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cameraId === null || cameraId === undefined) {
-            throw new Error('Required parameter cameraId was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet.');
-        }
-        if (maximalHeight === null || maximalHeight === undefined) {
-            throw new Error('Required parameter maximalHeight was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet.');
-        }
-        if (maximalWidth === null || maximalWidth === undefined) {
-            throw new Error('Required parameter maximalWidth was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet.');
+            throw new Error('Required parameter cameraId was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdGet.');
         }
         if (xAccessToken === null || xAccessToken === undefined) {
-            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet.');
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV1CameraControllerGetPreviewCameraIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -328,7 +320,7 @@ export class CameraService extends BaseService {
             }
         }
 
-        let localVarPath = `/API/v1/CameraController/GetPreview/${this.configuration.encodeParam({name: "cameraId", value: cameraId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "maximalHeight", value: maximalHeight, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "maximalWidth", value: maximalWidth, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/API/v1/CameraController/GetPreview/${this.configuration.encodeParam({name: "cameraId", value: cameraId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
             {

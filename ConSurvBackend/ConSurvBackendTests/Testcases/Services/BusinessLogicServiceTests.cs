@@ -37,7 +37,6 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, databasePersistence);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             Mock<IStreamOrganizerService> streamOrganizerServiceMock = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
-            streamOrganizerServiceMock.Setup(m => m.InitializeCameraOrganization());
             Mock<IRTSPManager> rtspManagerMock = new Mock<IRTSPManager>(MockBehavior.Strict);
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
             businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object, persistedAPIServerConfiguration);

@@ -1,6 +1,5 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Misc;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
@@ -12,6 +11,7 @@ using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -42,16 +42,16 @@ namespace ConSurvBackend.Core.Services
 
         public InitializationState GetInitializationState()
         {
-            return _InitializationState;
+            return this._InitializationState;
         }
 
         public void Initialize(CommandlineParameter commandlineParameter)
         {
-            _InitializationState = new Initializing();
+            this._InitializationState = new Initializing();
             try
             {
                 this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
-                if (_Persistence is IInitializable initializablePersistence)
+                if (this._Persistence is IInitializable initializablePersistence)
                 {
                     initializablePersistence.Initialize();
                 }
@@ -90,51 +90,37 @@ namespace ConSurvBackend.Core.Services
                         }
                     }
 
-                    if (this._Constants.Environment is Development)
+                    if (commandlineParameter.RealRun && this._Constants.Environment is Development)
                     {
                         this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
                         this._ExampleDataCreator.AddExampleData();
                     }
                 }
-                //TODO this.OrganizeCameras();
-                //TODO this.StartCameras();
+
                 this._GeneralLogger.Log("Service is initialized.", Microsoft.Extensions.Logging.LogLevel.Information);
-                _InitializationState = new Initialized();
+                this._InitializationState = new Initialized();
             }
             catch
             {
-                _InitializationState = new InitializationFailed();
+                this._InitializationState = new InitializationFailed();
                 throw;
-            }
-        }
-
-        private void OrganizeCameras()
-        {
-            this._StreamOrganizerService.InitializeCameraOrganization();
-            foreach (Model.Base.Camera camera in this._CameraService.GetAllCameras().Values)
-            {
-                this._StreamOrganizerService.OrganizeCamera(camera);
-            }
-            Thread.Sleep(TimeSpan.FromSeconds(3));
-        }
-
-        private void StartCameras()
-        {
-            foreach (Model.Base.Camera camera in this._CameraService.GetAllCameras().Values)
-            {
-                camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
             }
         }
 
         private void StartWatchDogProcess(string configurationFolder)
         {
-            this._GeneralLogger.Log("Start watch-dog-process...", Microsoft.Extensions.Logging.LogLevel.Information);
+            this._GeneralLogger.Log($"Start watch-dog-process in {configurationFolder}...", Microsoft.Extensions.Logging.LogLevel.Information);
             int currentProcessId = Environment.ProcessId;
             Process process = new Process();
             process.StartInfo.FileName = "scespoc";
-            process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./StartedProcesses.txt";
+            string processesFileName = "StartedProcesses.txt";
+            process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./{processesFileName}";
+            string processesFile=Path.Combine(configurationFolder, processesFileName);
+            GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processesFile);
             process.StartInfo.WorkingDirectory = configurationFolder;
-            process.Start();
+            GRYLibrary.Core.Misc.Utilities.AssertCondition(process.Start());
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            GRYLibrary.Core.Misc.Utilities.AssertCondition(!process.HasExited, "Watchdog exited unexpectedly.");
         }
     }
 }

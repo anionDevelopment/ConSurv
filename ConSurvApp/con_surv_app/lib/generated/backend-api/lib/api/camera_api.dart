@@ -222,23 +222,17 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v1/CameraController/GetPreview/{cameraId}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
-  /// * [int] maximalHeight (required):
-  ///
-  /// * [int] maximalWidth (required):
-  ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGetWithHttpInfo(String cameraId, int maximalHeight, int maximalWidth, String xAccessToken,) async {
+  Future<Response> aPIV1CameraControllerGetPreviewCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}'
-      .replaceAll('{cameraId}', cameraId)
-      .replaceAll('{maximalHeight}', maximalHeight.toString())
-      .replaceAll('{maximalWidth}', maximalWidth.toString());
+    final path = r'/API/v1/CameraController/GetPreview/{cameraId}'
+      .replaceAll('{cameraId}', cameraId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -267,14 +261,10 @@ class CameraApi {
   ///
   /// * [String] cameraId (required):
   ///
-  /// * [int] maximalHeight (required):
-  ///
-  /// * [int] maximalWidth (required):
-  ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<String?> aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(String cameraId, int maximalHeight, int maximalWidth, String xAccessToken,) async {
-    final response = await aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGetWithHttpInfo(cameraId, maximalHeight, maximalWidth, xAccessToken,);
+  Future<String?> aPIV1CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken,) async {
+    final response = await aPIV1CameraControllerGetPreviewCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

@@ -14,7 +14,7 @@ services:
 #    volumes:
 #      - ConSurvPostgreSQLData:/var/lib/postgresql/data
     networks:
-      - ConSurv_net
+      - consurv_net
     command: >
       postgres -c log_connections=on -c log_disconnections=on
 
@@ -26,8 +26,8 @@ services:
     depends_on:
       - ConSurvbackend_database
     networks:
-      - ConSurv_net
+      - consurv_net
 
 networks:
-  ConSurv_net:
+  consurv_net:
     external: true

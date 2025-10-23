@@ -14,7 +14,7 @@ services:
 #    volumes:
 #      - ./Volumes/Data:/var/lib/mysql
     networks:
-      - ConSurv_net
+      - consurv_net
 
   ConSurvbackend_database_administration:
     image: adminer:4.8.1
@@ -22,8 +22,8 @@ services:
     ports:
       - 8080:8080
     networks:
-      - ConSurv_net
+      - consurv_net
 
 networks:
-  ConSurv_net:
+  consurv_net:
     external: true

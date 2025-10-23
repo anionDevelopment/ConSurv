@@ -13,7 +13,7 @@ Method | HTTP request | Description
 [**aPIV1CameraControllerCamerasGet**](CameraApi.md#apiv1cameracontrollercamerasget) | **GET** /API/v1/CameraController/Cameras | 
 [**aPIV1CameraControllerCreateCameraPost**](CameraApi.md#apiv1cameracontrollercreatecamerapost) | **POST** /API/v1/CameraController/CreateCamera | 
 [**aPIV1CameraControllerDownloadVideoCameraIdFilenameGet**](CameraApi.md#apiv1cameracontrollerdownloadvideocameraidfilenameget) | **GET** /API/v1/CameraController/DownloadVideo/{cameraId}/{filename} | 
-[**aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet**](CameraApi.md#apiv1cameracontrollergetpreviewcameraidmaximalheightmaximalwidthget) | **GET** /API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth} | 
+[**aPIV1CameraControllerGetPreviewCameraIdGet**](CameraApi.md#apiv1cameracontrollergetpreviewcameraidget) | **GET** /API/v1/CameraController/GetPreview/{cameraId} | 
 [**aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet**](CameraApi.md#apiv1cameracontrollergetpreviewofvideocameraidfilenameget) | **GET** /API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename} | 
 [**aPIV1CameraControllerListVideosGet**](CameraApi.md#apiv1cameracontrollerlistvideosget) | **GET** /API/v1/CameraController/ListVideos | 
 [**aPIV1CameraControllerRemoveCameraCameraIdDelete**](CameraApi.md#apiv1cameracontrollerremovecameracameraiddelete) | **DELETE** /API/v1/CameraController/RemoveCamera/{cameraId} | 
@@ -189,8 +189,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet**
-> String aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId, maximalHeight, maximalWidth, xAccessToken)
+# **aPIV1CameraControllerGetPreviewCameraIdGet**
+> String aPIV1CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken)
 
 
 
@@ -200,15 +200,13 @@ import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
 final cameraId = cameraId_example; // String | 
-final maximalHeight = 56; // int | 
-final maximalWidth = 56; // int | 
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(cameraId, maximalHeight, maximalWidth, xAccessToken);
+    final result = api_instance.aPIV1CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet: $e\n');
+    print('Exception when calling CameraApi->aPIV1CameraControllerGetPreviewCameraIdGet: $e\n');
 }
 ```
 
@@ -217,8 +215,6 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cameraId** | **String**|  | 
- **maximalHeight** | **int**|  | 
- **maximalWidth** | **int**|  | 
  **xAccessToken** | **String**| Access Token | 
 
 ### Return type

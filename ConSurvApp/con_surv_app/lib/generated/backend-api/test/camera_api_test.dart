@@ -37,8 +37,8 @@ void main() {
       // TODO
     });
 
-    //Future<String> aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(String cameraId, int maximalHeight, int maximalWidth, String xAccessToken) async
-    test('test aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet', () async {
+    //Future<String> aPIV1CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken) async
+    test('test aPIV1CameraControllerGetPreviewCameraIdGet', () async {
       // TODO
     });
 

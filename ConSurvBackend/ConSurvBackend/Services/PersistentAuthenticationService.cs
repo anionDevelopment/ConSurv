@@ -21,7 +21,7 @@ namespace ConSurvBackend.Core.Services
         public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence)
         {
             this._Persistence = persistence;
-            _TimeService = timeService;
+            this._TimeService = timeService;
         }
 
         public bool AccessTokenIsValid(string accessToken)

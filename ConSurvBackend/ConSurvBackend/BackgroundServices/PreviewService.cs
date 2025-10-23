@@ -1,12 +1,18 @@
-﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Model.Base;
+﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
+using GRYLibrary.Core.APIServer.Services.Init;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace ConSurvBackend.Core.BackgroundServices
 {
@@ -16,16 +22,28 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IRTSPManager _RTSPManager;
         private readonly IGeneralResourceLoader _GeneralResourceLoader;
         private readonly IGRYLog _Log;
+        private readonly IRuntimeData _RuntimeData;
+        private readonly IProcessManager _ProcessManager;
         private readonly ConcurrentDictionary<string, byte[]> _PreviewPictures;
-        public PreviewService(IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IGRYLog logger, IRTSPManager rtspManager, IGRYLog gryLog, IGeneralResourceLoader generalResourceLoader) : base(constants.ExecutionMode, logger)
+        private readonly ITimeService _TimeService;
+        private readonly IInitializationService<CommandlineParameter> _InitializationService;
+        private readonly CommandlineParameter _CommandlineParameter;
+        private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
+        public PreviewService(IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IGRYLog logger, IRTSPManager rtspManager, IGRYLog gryLog, IGeneralResourceLoader generalResourceLoader, IRuntimeData runtimeData, IProcessManager processManager, ITimeService timeService, IInitializationService<CommandlineParameter> initializationService, CommandlineParameter commandlineParameter) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
-            this.AdditionalDelay = TimeSpan.FromSeconds(10);
+            this._Constants = constants;
+            this.AdditionalDelay = TimeSpan.FromSeconds(1);
             this._CameraService = cameraService;
             this._RTSPManager = rtspManager;
             this._Log = gryLog;
             this._GeneralResourceLoader = generalResourceLoader;
             this._PreviewPictures = new ConcurrentDictionary<string, byte[]>();
+            this._RuntimeData = runtimeData;
+            this._ProcessManager = processManager;
+            this._TimeService = timeService;
+            this._InitializationService = initializationService;
+            this._CommandlineParameter = commandlineParameter;
         }
 
         public byte[] GetPreview(string cameraId)
@@ -42,21 +60,60 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         protected override void Run()
         {
-            foreach (System.Collections.Generic.KeyValuePair<string, Camera> kvp in this._CameraService.GetAllCameras())
+            if (this._CommandlineParameter.RealRun && this._InitializationService.GetInitializationState() is Initialized)
             {
-                Camera camera = kvp.Value;
-                lock (camera.Id)
+                foreach (System.Collections.Generic.KeyValuePair<string, Model.Base.Camera> cameraKvp in this._CameraService.GetAllCameras())
                 {
-                    this._Log.Log($"Start calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
+                    uint maximalHeightValue = 480;
+                    uint maximalWidthValue = 640;
+                    Model.Base.Camera camera = cameraKvp.Value;
                     try
                     {
-                        this._PreviewPictures[camera.Id] = this._RTSPManager.GetPreviewDirectlyFromCamera(camera, 1280, 720, true, this._Log).picture;
-                        this._Log.Log($"Finished calculating preview for camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                        /*
+                        if (_RuntimeData.InternalsAreAvailable(camera.Id))
+                        {
+                            //TODO check if camera is available
+                            CameraInternalsBase internals = this._RuntimeData.GetCameraInternals(camera.Id);
+                            if (internals is Available available)
+                            {
+                                string argument = $"-i {available.MediaMTXURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
+                                ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
+                                if (process.ExitCode != 0)
+                                {
+                                    throw new InternalAlgorithmException(GRYLog.FormatProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines));
+                                }
+                                this._RuntimeData.AddPreview(camera.Id, new Model.Preview(File.ReadAllBytes(tempFile), this._TimeService.GetCurrentLocalTime()));
+                            }
+                        }
+                        */
+                        //TODO collect screenshots from disk
+                        string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "Screenshots", camera.Id);
+                        string[] files = Directory.GetFiles(screenshots_folder);
+                        Thread.Sleep(TimeSpan.FromSeconds(1));//wait 1 second to let ffmpeg finish writing the last frame
+                        System.Collections.Generic.List<string> sorted = files
+                            .Where(f => f.EndsWith(".jpg"))
+                            .Select(f => new FileInfo(f))
+                            .OrderBy(f => f.LastWriteTimeUtc)
+                            .Select(f => f.FullName)
+                            .ToList();
+                        if (sorted.Any())
+                        {
+                            string latest_preview = sorted.Last();
+                            this._RuntimeData.AddPreview(camera.Id, new Model.Preview(File.ReadAllBytes(latest_preview), new FileInfo(latest_preview).LastAccessTimeUtc));
+                            foreach (string file in sorted)
+                            {
+                                File.Delete(file);
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
-                        this._PreviewPictures[camera.Id] = this._GeneralResourceLoader.GetResource("NoPreviewAvailablePicture.jpg");
-                        this._Log.Log($"Error while calculating preview for camera {camera.Id}...", e);
+                        this._Log.Log($"Could not calculate preview for camera {cameraKvp.Key}", e);
+                    }
+                    finally
+                    {
+                        GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(tempFile);
                     }
                 }
             }

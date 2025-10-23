@@ -75,7 +75,7 @@ namespace ConSurvBackend.Core.Services
                 return false;
             }
         }
-        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
+        private (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log)
         {
             lock (camera.Id)
             {

@@ -21,12 +21,14 @@ namespace ConSurvBackend.Core.Controller
         private readonly IPersistence _Persistence;
         private readonly IBusinessLogicService _CameraService;
         private readonly IPreviewService _PreviewService;
-        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IPreviewService previewService)
+        private readonly IRuntimeData _RuntimeData;
+        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IPreviewService previewService, IRuntimeData runtimeData)
         {
             this._Logger = logger;
             this._Persistence = persistence;
             this._CameraService = cameraService;
             this._PreviewService = previewService;
+            this._RuntimeData = runtimeData;
         }
 
         [Authenticate]
@@ -34,12 +36,10 @@ namespace ConSurvBackend.Core.Controller
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(byte[]))]
-        [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}/{{{nameof(maximalHeight)}}}/{{{nameof(maximalWidth)}}}")]
-        public IActionResult GetPreview([FromRoute] string cameraId, [FromRoute] uint? maximalHeight, [FromRoute] uint? maximalWidth)
+        [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}")]
+        public IActionResult GetPreview([FromRoute] string cameraId)
         {
-            uint height = maximalHeight.HasValue ? maximalHeight.Value : 640;
-            uint width = maximalWidth.HasValue ? maximalWidth.Value : 360;
-            return this.Ok(Misc.Utilities.ResizeImage(this._PreviewService.GetPreview(cameraId), height, width));
+            return this.Ok(this._RuntimeData.GetLatestPreview(cameraId).Data);
         }
 
         [Authenticate]

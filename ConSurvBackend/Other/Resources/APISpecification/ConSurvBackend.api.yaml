@@ -257,7 +257,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/GetPreview/{cameraId}/{maximalHeight}/{maximalWidth}:
+  /API/v1/CameraController/GetPreview/{cameraId}:
     get:
       parameters:
       - in: path
@@ -265,18 +265,6 @@ paths:
         required: true
         schema:
           type: string
-      - in: path
-        name: maximalHeight
-        required: true
-        schema:
-          format: int32
-          type: integer
-      - in: path
-        name: maximalWidth
-        required: true
-        schema:
-          format: int32
-          type: integer
       - description: Access Token
         in: header
         name: X-AccessToken

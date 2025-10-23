@@ -10,10 +10,10 @@ services:
     ports:
       - "443:443"
     networks:
-      - ConSurv_net
+      - consurv_net
     extra_hosts:
       - "host.docker.internal:host-gateway"
       
 networks:
-  ConSurv_net:
+  consurv_net:
     external: true

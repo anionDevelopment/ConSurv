@@ -25,10 +25,10 @@ def build():
         GeneralUtilities.copy_content_of_folder(mediamtx_src_folder, mediamtx_trg_folder)
 
         # copy font to output folder
-        font_src_folder: str = os.path.join(codeunit_folder, "Other", "Resources", "Fonts")
-        font_trg_folder: str = os.path.join(codeunit_folder, "Other", "Artifacts", f"BuildResult_DotNet_{target_platform}", "Fonts")
-        GeneralUtilities.ensure_folder_exists_and_is_empty(font_trg_folder)
-        GeneralUtilities.copy_content_of_folder(font_src_folder, font_trg_folder)
+        #font_src_folder: str = os.path.join(codeunit_folder, "Other", "Resources", "Fonts")
+        #font_trg_folder: str = os.path.join(codeunit_folder, "Other", "Artifacts", f"BuildResult_DotNet_{target_platform}", "Fonts")
+        #GeneralUtilities.ensure_folder_exists_and_is_empty(font_trg_folder)
+        #GeneralUtilities.copy_content_of_folder(font_src_folder, font_trg_folder)
 
 
 if __name__ == "__main__":
