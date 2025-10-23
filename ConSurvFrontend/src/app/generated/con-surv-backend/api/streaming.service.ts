@@ -36,21 +36,28 @@ export class StreamingService extends BaseService {
     /**
      * @param streamId 
      * @param filename 
+     * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (streamId === null || streamId === undefined) {
             throw new Error('Required parameter streamId was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
         }
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
         }
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);

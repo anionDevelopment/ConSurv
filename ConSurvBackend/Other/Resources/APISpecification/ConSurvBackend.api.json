@@ -495,53 +495,6 @@
         }
       }
     },
-    "/API/v1/InsightsController/GetMediaMTXConfiguration/cameraId": {
-      "get": {
-        "tags": [
-          "Insights"
-        ],
-        "parameters": [
-          {
-            "name": "cameraId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-AccessToken",
-            "in": "header",
-            "description": "Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CameraDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CameraDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CameraDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/API/Other/Maintenance/AvailabilityCheck": {
       "get": {
         "tags": [
@@ -619,6 +572,15 @@
           {
             "name": "filename",
             "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-AccessToken",
+            "in": "header",
+            "description": "Access Token",
             "required": true,
             "schema": {
               "type": "string"

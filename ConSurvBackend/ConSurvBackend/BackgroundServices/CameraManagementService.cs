@@ -1,10 +1,12 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.Internals;
+using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.ExecutePrograms.WaitingStates;
@@ -28,11 +30,12 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IRuntimeData _RuntimeData;
         private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
         private readonly IInitializationService<CommandlineParameter> _InitializationService;
+        private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly CommandlineParameter _CommandlineParameter;
         private readonly IGRYLog _Log;
         private const ushort _LastUsedPortRangeBegin = 10_000;
         private ushort _LastUsedPort = _LastUsedPortRangeBegin;
-        public CameraManagementService(IStreamOrganizerService streamOrganizerService, IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IRTSPManager rTSPManager, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants) : base(constants.ExecutionMode, logger)
+        public CameraManagementService(IStreamOrganizerService streamOrganizerService, IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IRTSPManager rTSPManager, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger)
         {
             this._StreamOrganizerService = streamOrganizerService;
             this._CameraService = businessLogicService;
@@ -45,6 +48,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._RuntimeData = runtimeData;
             this._Log = log;
             this._Constants = constants;
+            this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
         }
 
         protected override void Run()
@@ -88,7 +92,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 newState.Accept(new EnsureDesiredConditionIsApplied(currentState));
             }
 
-            //camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
+            //TODO camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
         }
         private class EnsureDesiredConditionIsApplied : ICameraInternalsBaseVisitor
         {
@@ -177,6 +181,8 @@ namespace ConSurvBackend.Core.BackgroundServices
         private static ExternalProgramExecutor mediamtx;
         private static ExternalProgramExecutor streamtomediamtx;
         private static ExternalProgramExecutor takescreenshots;
+        private static ExternalProgramExecutor m3u8;
+        private static ExternalProgramExecutor record;
         private bool TryGetMediaMTXProcess(Camera camera, out ExternalProgramExecutor? ffmpegProcessResult, out ExternalProgramExecutor? mediaMTXProcessResult, out string? url)
         {
             bool isAlreadyAvailable;
@@ -213,7 +219,6 @@ namespace ConSurvBackend.Core.BackgroundServices
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL), $"Camera {camera.Id} is not available.");
                 string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-
                 //mediamtx
                 string mediaMTXFolder = Path.Combine(location, "MediaMTX");
                 string mediaMTXExecutable = Path.Combine(mediaMTXFolder, "mediamtx");
@@ -237,39 +242,20 @@ paths:
                 Thread.Sleep(TimeSpan.FromSeconds(3));
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(mediaMTXProcess.IsRunning, () => $"Process terminated unexpectedly with {mediaMTXProcess.ExitCode}.");
 
-
-
                 //stream to media hub
                 ushort ffmpegPort = this.GetNewFreePort();
-                string overlay_folder = $"{this._Constants.GetDataFolder()}/Overlays/{camera.Id}";
-                GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(overlay_folder);
+                string overlay_folder = $"{this._Constants.GetDataFolder()}/CameraData/{camera.Id}/Overlays";
+                GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(overlay_folder);
                 string overlay_file = $"{overlay_folder}\\overlay.png";
                 this.CreateOverlayFile(camera, overlay_file);
                 overlay_file = overlay_file.Replace("\\", "/");
 
                 string path = $"Stream_{camera.Id}";
 
-                //string fontfile = Path.Combine(location, "Fonts", "Noto", "NotoSans_Condensed-Regular.ttf");
-                //GUtilities.AssertCondition(File.Exists(fontfile), "Font-file does not exist.");
-                //TODO use "-reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 10"
                 string ffmpegArgument = "-fflags +genpts -rtsp_transport tcp -use_wallclock_as_timestamps 1  -i " + camera.VideoInformation.StreamURL + " -loop 1 -i " + overlay_file;
-                //add the font if desired after "drawtext=":
-                //fontfile='" + fontfile + "':
-                ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='%{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider timezone
+                ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='"+camera.Name+" ("+camera.Id+") %{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider timezone
 
-                /*
-                 
-                 ffmpeg -rtsp_transport tcp \
-  -i rtsp://user:pass@192.168.1.141/stream1 \
-  -vf "drawtext=text='%{localtime\:%Y-%m-%d %H\\:%M\\:%S}':fontsize=24:fontcolor=white:x=10:y=10" \
-  -c:v libx264 -preset ultrafast -tune zerolatency -c:a aac -fflags +genpts -use_wallclock_as_timestamps 1 \
-  -f rtsp rtsp://127.0.0.1:8554/camera_6071FF \
-  -vf fps=1/2 -update 1 preview_%03d.jpg
-
-                 
-                 */
-                //TODO add black areas if defined
-                ffmpegArgument = ffmpegArgument + " -c:v libx264 -c:a aac -preset ultrafast -avoid_negative_ts make_zero -vsync vfr -fflags nobuffer -f rtsp " + url;//ffmpeg takes the stream and redirects it to mediamtx
+                ffmpegArgument = ffmpegArgument + " -c:v libx264 -c:a aac -preset ultrafast -tune zerolatency -g 50 -keyint_min 50 -sc_threshold 0 -avoid_negative_ts make_zero -vsync vfr -fflags nobuffer -metadata title=\"Camera-"+camera.Id+"\" -f rtsp " + url;//ffmpeg takes the stream and redirects it to mediamtx
                 ffmpegProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess.ExitCode}.");
 
@@ -281,12 +267,36 @@ paths:
                 this._Log.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
 
                 //take screenshots
-                string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "Screenshots", camera.Id);
-                GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(screenshots_folder);
+                string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(),"CameraData", camera.Id, "Screenshots");
+                GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(screenshots_folder);
                 string target_file = Path.Combine(screenshots_folder, "frame").Replace("\\", "/");
                 string ffmpegArgument2 = $"-rtsp_transport tcp -i {url} -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 10 -vf fps=1/2 -qscale:v 2 {target_file}_%01d.jpg";
                 ExternalProgramExecutor ffmpegProcess2 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument2, null, null, $"Take screenshots of {camera.Id}", $"TakeScreenshotsOf-{camera.Id}", false);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess2.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess2.ExitCode}.");
+
+                //prepare m3u8 stream
+                string fradments_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Fragments");
+                GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(fradments_folder);
+                fradments_folder= fradments_folder.Replace("\\", "/");
+                uint timeOfFragmentInSeconds = 2;
+                uint amountOfFragments= 1;
+                string ffmpegArgument3 = $"-rtsp_transport tcp -i {url} -c:v copy -c:a aac -f hls -hls_time {timeOfFragmentInSeconds} -hls_list_size {amountOfFragments} -hls_flags delete_segments -hls_segment_filename {fradments_folder}/segment_%01d.ts {fradments_folder}/stream.m3u8";
+                ExternalProgramExecutor ffmpegProcess3 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument3, null, null, $"Provide m3u8-stream {camera.Id}", $"ProvideM3U8Stream-{camera.Id}", false);
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess3.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess3.ExitCode}.");
+                m3u8 = ffmpegProcess3;
+
+                if(camera.RecordMode is RecordAlways)
+                {
+                    //record
+                    string target_folder = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, "CameraData", camera.Id, "Videos");
+                    GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(target_folder);
+                    target_folder = target_folder.Replace("\\", "/");
+                    uint videoLengthInSeconds = (uint)Math.Round(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.VideoLength.TotalSeconds);
+                    string ffmpegArgument4 = $"-rtsp_transport tcp -i {url} -c copy -f segment -strftime 1 -segment_time {videoLengthInSeconds} -reset_timestamps 1 {target_folder}/Camera_{camera.Id}_%Y-%m-%d-%H-%M-%S.mp4";
+                    ExternalProgramExecutor ffmpegProcess4 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument4, null, null, $"Record camera-stream {camera.Id}", $"RecordCameraStream-{camera.Id}", false);
+                    GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess4.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess4.ExitCode}.");
+                    record = ffmpegProcess4;
+                }
 
                 Thread.Sleep(TimeSpan.FromSeconds(5));
 
@@ -309,43 +319,39 @@ paths:
             }
         }
 
-        private void CreateOverlayFile(Camera camera, string overlay_ffile)
+        private void CreateOverlayFile(Camera camera, string overlayFile)
         {
             int width = (int)camera.Overlay.Width;
 
             int height = (int)camera.Overlay.Height;
 
-            var polygons = new List<List<SKPoint>>
-            {
-                //  new() { new SKPoint(100,100), new SKPoint(400,150), new SKPoint(350,400) },
-                //  new() { new SKPoint(800,300), new SKPoint(1000,500), new SKPoint(700,550), new SKPoint(650,400) }
-            };
-            foreach (var polygon in camera.Overlay.Polygons)
+            List<List<SKPoint>> polygons = new List<List<SKPoint>>();
+            foreach (Polygon polygon in camera.Overlay.Polygons)
             {
                 polygons.Add(polygon.Points.Select(point => new SKPoint(point.X, point.Y)).ToList());
             }
 
-            using var surface = SKSurface.Create(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul));
-            var canvas = surface.Canvas;
+            using SKSurface surface = SKSurface.Create(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul));
+            SKCanvas canvas = surface.Canvas;
             canvas.Clear(SKColors.Transparent);
 
-            using var paint = new SKPaint
+            using SKPaint paint = new SKPaint
             {
                 Color = SKColors.Black,
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill
             };
 
-            foreach (var poly in polygons)
+            foreach (List<SKPoint> poly in polygons)
             {
-                using var path = new SKPath();
+                using SKPath path = new SKPath();
                 path.AddPoly(poly.ToArray(), close: true);
                 canvas.DrawPath(path, paint);
             }
 
-            using var image = surface.Snapshot();
-            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            using var stream = System.IO.File.OpenWrite(overlay_ffile);
+            using SKImage image = surface.Snapshot();
+            using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
+            using FileStream stream = System.IO.File.OpenWrite(overlayFile);
             data.SaveTo(stream);
         }
 

@@ -34,11 +34,8 @@ namespace ConSurvBackend.Tests.Testcases.Misc
         public void EscapeBasicAuthPasswords()
         {
             // arrange
-            string password1 = "password1";
-            string password2 = "password2";
-            string escapeString = "***";
-            string input = $"test1: rtsp://user:{password1}@example.com/stream1 ; test2: rtsps://user:{password2}@example.com/stream1";
-            string expectedOutput = input.Replace(password1, escapeString).Replace(password2, escapeString);
+            string input = $"test1: rtsp://user:password1@example.com/stream1 ; test2: rtsps://user:password2@example.com/stream2";
+            string expectedOutput = "test1: rtsp://example.com/stream1 ; test2: rtsps://example.com/stream2";
 
             // act
             string actualOutput =Utilities.EscapeBasicAuthPasswords(input);

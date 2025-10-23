@@ -24,9 +24,13 @@ namespace ConSurvBackend.Tests.Testcases.Services
         private void InitializeServices(bool registrationIsEnabled, out IBusinessLogicService businessLogicService, out IInitializationService<CommandlineParameter> initializationService, out IPersistence persistence)
         {
             ITimeService timeService = new TimeService();
-            IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>();
-            persistedAPIServerConfiguration.ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration();
-            persistedAPIServerConfiguration.ApplicationSpecificConfiguration.RegistrationIsEnabled = registrationIsEnabled;
+            IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>
+            {
+                ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration
+                {
+                    RegistrationIsEnabled = registrationIsEnabled
+                }
+            };
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
             ISQLProvider sqlProvider = new SQLProviderPostgreSQL();

@@ -11,7 +11,7 @@ namespace ConSurvBackend.Core.Model.Base
         public RecordMode RecordMode { get; internal set; }
         public bool Enabled { get; internal set; }
         public TimeZoneInfo TimeZone { get; internal set; } = TimeZoneInfo.Local;//TODO make this configurable
-        public Overlay Overlay { get; internal set; }=new Overlay();
+        public Overlay Overlay { get; internal set; } = new Overlay();
 
         public Camera(string id, string name)
         {

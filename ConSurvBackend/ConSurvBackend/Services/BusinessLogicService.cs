@@ -56,9 +56,9 @@ namespace ConSurvBackend.Core.Services
             return camera.Id;
         }
 
-        private string GetId(string seed)
+        private string GetId(string rtspLink)
         {
-            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(seed))))[..6];
+            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
         }
 
         public bool IsAvailable(Camera camera)

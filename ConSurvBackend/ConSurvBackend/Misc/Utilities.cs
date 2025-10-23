@@ -102,15 +102,15 @@ namespace ConSurvBackend.Core.Misc
             return result;
         }
 
-        public static string EscapeBasicAuthPasswords(string content)
+        public static string EscapeBasicAuthPasswords(string rtspLink)
         {
              string pattern = @"(?<scheme>[a-z]+):\/\/(?<user>[^:\s@]+):(?<pass>[^@\s]+)@";
 
-            string result = Regex.Replace(content, pattern, m =>
+            string result = Regex.Replace(rtspLink, pattern, m =>
             {
                 string scheme = m.Groups["scheme"].Value;
                 string user = m.Groups["user"].Value;
-                return $"{scheme}://{user}:***@";
+                return $"{scheme}://";
             });
 
             return result;

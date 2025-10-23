@@ -64,56 +64,36 @@ namespace ConSurvBackend.Core.BackgroundServices
             {
                 foreach (System.Collections.Generic.KeyValuePair<string, Model.Base.Camera> cameraKvp in this._CameraService.GetAllCameras())
                 {
-                    string tempFile = Path.Join(Path.GetTempPath(), $"{Guid.NewGuid()}.jpg");
                     uint maximalHeightValue = 480;
                     uint maximalWidthValue = 640;
                     Model.Base.Camera camera = cameraKvp.Value;
                     try
                     {
-                        /*
-                        if (_RuntimeData.InternalsAreAvailable(camera.Id))
+                        string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
+                        if (Directory.Exists(screenshots_folder))
                         {
-                            //TODO check if camera is available
-                            CameraInternalsBase internals = this._RuntimeData.GetCameraInternals(camera.Id);
-                            if (internals is Available available)
+                            string[] files = Directory.GetFiles(screenshots_folder);
+                            Thread.Sleep(TimeSpan.FromSeconds(0.5));//wait let ffmpeg finish writing the last frame
+                            System.Collections.Generic.List<string> sorted = files
+                                .Where(f => f.EndsWith(".jpg"))
+                                .Select(f => new FileInfo(f))
+                                .OrderBy(f => f.LastWriteTimeUtc)
+                                .Select(f => f.FullName)
+                                .ToList();
+                            if (sorted.Any())
                             {
-                                string argument = $"-i {available.MediaMTXURL} -vframes 1 -s {maximalWidthValue}x{maximalHeightValue} {tempFile}";
-                                ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
-                                if (process.ExitCode != 0)
+                                string latest_preview = sorted.Last();
+                                this._RuntimeData.AddPreview(camera.Id, new Model.Preview(File.ReadAllBytes(latest_preview), new FileInfo(latest_preview).LastAccessTimeUtc));
+                                foreach (string file in sorted)
                                 {
-                                    throw new InternalAlgorithmException(GRYLog.FormatProgramOutput($"Generate-preview-process exited with exitcode {process.ExitCode}.", process.AllStdOutLines, process.AllStdErrLines));
+                                    File.Delete(file);
                                 }
-                                this._RuntimeData.AddPreview(camera.Id, new Model.Preview(File.ReadAllBytes(tempFile), this._TimeService.GetCurrentLocalTime()));
-                            }
-                        }
-                        */
-                        //TODO collect screenshots from disk
-                        string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "Screenshots", camera.Id);
-                        string[] files = Directory.GetFiles(screenshots_folder);
-                        Thread.Sleep(TimeSpan.FromSeconds(1));//wait 1 second to let ffmpeg finish writing the last frame
-                        System.Collections.Generic.List<string> sorted = files
-                            .Where(f => f.EndsWith(".jpg"))
-                            .Select(f => new FileInfo(f))
-                            .OrderBy(f => f.LastWriteTimeUtc)
-                            .Select(f => f.FullName)
-                            .ToList();
-                        if (sorted.Any())
-                        {
-                            string latest_preview = sorted.Last();
-                            this._RuntimeData.AddPreview(camera.Id, new Model.Preview(File.ReadAllBytes(latest_preview), new FileInfo(latest_preview).LastAccessTimeUtc));
-                            foreach (string file in sorted)
-                            {
-                                File.Delete(file);
                             }
                         }
                     }
                     catch (Exception e)
                     {
                         this._Log.Log($"Could not calculate preview for camera {cameraKvp.Key}", e);
-                    }
-                    finally
-                    {
-                        GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(tempFile);
                     }
                 }
             }

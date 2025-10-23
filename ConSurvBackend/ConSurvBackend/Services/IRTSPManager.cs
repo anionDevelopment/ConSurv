@@ -1,7 +1,9 @@
 ﻿using ConSurvBackend.Core.Model.Base;
+using System;
 
 namespace ConSurvBackend.Core.Services
 {
+    [Obsolete]
     public interface IRTSPManager
     {
    

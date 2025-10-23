@@ -16,65 +16,6 @@ class InsightsApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v1/InsightsController/GetMediaMTXConfiguration/cameraId' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [String] xAccessToken (required):
-  ///   Access Token
-  ///
-  /// * [String] cameraId:
-  Future<Response> aPIV1InsightsControllerGetMediaMTXConfigurationCameraIdGetWithHttpInfo(String xAccessToken, { String? cameraId, }) async {
-    // ignore: prefer_const_declarations
-    final path = r'/API/v1/InsightsController/GetMediaMTXConfiguration/cameraId';
-
-    // ignore: prefer_final_locals
-    Object? postBody;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    if (cameraId != null) {
-      queryParams.addAll(_queryParams('', 'cameraId', cameraId));
-    }
-
-    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
-
-    const contentTypes = <String>[];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'GET',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [String] xAccessToken (required):
-  ///   Access Token
-  ///
-  /// * [String] cameraId:
-  Future<CameraDTO?> aPIV1InsightsControllerGetMediaMTXConfigurationCameraIdGet(String xAccessToken, { String? cameraId, }) async {
-    final response = await aPIV1InsightsControllerGetMediaMTXConfigurationCameraIdGetWithHttpInfo(xAccessToken,  cameraId: cameraId, );
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'CameraDTO',) as CameraDTO;
-    
-    }
-    return null;
-  }
-
   /// Performs an HTTP 'GET /API/v1/InsightsController/GetRunningProcesses' operation and returns the [Response].
   /// Parameters:
   ///
