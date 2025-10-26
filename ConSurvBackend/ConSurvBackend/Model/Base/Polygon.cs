@@ -4,6 +4,6 @@ namespace ConSurvBackend.Core.Model.Base
 {
     public class Polygon
     {
-        public IList<Point> Points { get; set; } = new List<Point>();
+        public IList<Point> Points { get; internal set; } = new List<Point>();
     }
 }

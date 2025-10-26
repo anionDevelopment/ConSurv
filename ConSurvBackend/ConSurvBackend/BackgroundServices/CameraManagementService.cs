@@ -285,7 +285,7 @@ paths:
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess3.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess3.ExitCode}.");
                 m3u8 = ffmpegProcess3;
 
-                if(camera.RecordMode is RecordAlways)
+                if (camera.RecordMode is RecordAlways)
                 {
                     //record
                     string target_folder = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, "CameraData", camera.Id, "Videos");
@@ -296,6 +296,10 @@ paths:
                     ExternalProgramExecutor ffmpegProcess4 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument4, null, null, $"Record camera-stream {camera.Id}", $"RecordCameraStream-{camera.Id}", false);
                     GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess4.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess4.ExitCode}.");
                     record = ffmpegProcess4;
+                } else if (camera.RecordMode is RecordOnMovements recordOnMovements)
+                {
+                    //TODO run ffmpeg with something like "-i rtsp://camera/stream -vf "select=gt(scene\,0.1)" -vsync vfr -f null -" async and start recording on events (0.1 is the threshold which mus be taken from recordOnMovements)
+
                 }
 
                 Thread.Sleep(TimeSpan.FromSeconds(5));

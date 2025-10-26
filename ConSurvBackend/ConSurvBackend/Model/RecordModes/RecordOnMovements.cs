@@ -2,7 +2,7 @@
 {
     public class RecordOnMovements : RecordMode
     {
-
+        public double Threshold { get; internal set; }
         public override T Accept<T>(IRecordModeVisitor<T> visitor)
         {
             return visitor.Handle(this);

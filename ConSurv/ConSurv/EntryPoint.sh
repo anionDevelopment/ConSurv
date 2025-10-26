@@ -9,7 +9,7 @@ export IsRunningInContainer=true
 #    echo "SomeVariable has the value: $SomeVariable"
 #fi
 
-argument="--NoTestRun"
+argument="--RealRun"
 
 if [[ -n "$InitialAdminPassword" ]]; then
     argument="--InitialAdminPassword $InitialAdminPassword"

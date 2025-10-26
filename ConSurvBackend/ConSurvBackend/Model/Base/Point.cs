@@ -8,7 +8,7 @@
             this.Y = y;
         }
 
-        public uint X { get; set; }
-        public uint Y { get; set; }
+        public uint X { get; internal set; }
+        public uint Y { get; internal set; }
     }
 }

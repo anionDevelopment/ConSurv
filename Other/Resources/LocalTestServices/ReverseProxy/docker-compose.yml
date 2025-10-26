@@ -3,7 +3,7 @@ version: "3.2"
 services:
   ConSurv_reverseproxy:
     image: nginx:1.27.4
-    container_name: "ConSurv_reverseproxy"
+    container_name: "consurv_reverseproxy"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf:ro"
       - "../../DevelopmentCertificate:/Workspace/Certificates"
