@@ -14,7 +14,7 @@ using GRYLibrary.Core.APIServer.CommonDBTypes;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
-    public class IntegrationTestFramework : IDisposable
+    public sealed class IntegrationTestFramework : IDisposable
     {
         private bool _Running = false;
         private readonly IDictionary<User, string> _UserPasswords = new Dictionary<User, string>();
@@ -40,10 +40,12 @@ namespace ConSurvBackend.Tests.TestUtilities
                 try
                 {
 
-                    this._Program = new Program();
-                    this._Program.RunAsync = !this._IntegrationTestConfiguration.RunInOwnThread;
-                    this._Program.ListenOnEveryIP = false;
-                    this._Program.SetupMocks = this._IntegrationTestConfiguration.SetupMocks;
+                    this._Program = new Program
+                    {
+                        RunAsync = !this._IntegrationTestConfiguration.RunInOwnThread,
+                        ListenOnEveryIP = false,
+                        SetupMocks = this._IntegrationTestConfiguration.SetupMocks
+                    };
 
                     string[] args = new string[] {
                         @$"", Utilities.GetOCRDataFolder()
@@ -61,7 +63,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                             {
                                 message = $"{message} Last log entries:\n" + string.Join("\n", logMessages.Select(item =>
                                 {
-                                    item.Format(this._Program._Log.Configuration, out string result, out int _, out int _, out ConsoleColor _, GRYLogLogFormat.GRYLogFormat, null);
+                                    item.Format(this._Program._Log.Configuration, out string result, out int _, out int _, out ConsoleColor _, GRYLogLogFormat.GRYLogFormat);
                                     return result;
                                 }));
                             }

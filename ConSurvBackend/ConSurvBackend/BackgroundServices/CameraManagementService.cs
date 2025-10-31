@@ -85,7 +85,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             {
                 currentState.Accept(new EnsureDesiredConditionIsApplied(existingState));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 NotAvailable newState = new NotAvailable(camera);
                 this._RuntimeData.SetCameraInternals(newState);

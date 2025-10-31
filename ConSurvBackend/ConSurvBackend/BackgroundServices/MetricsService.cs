@@ -29,7 +29,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             }
             catch (Exception exception)
             {
-                this._Logger.LogException(exception, "Error while calculating metrics");
+                this._Logger.Log( "Error while calculating metrics",exception);
             }
         }
 

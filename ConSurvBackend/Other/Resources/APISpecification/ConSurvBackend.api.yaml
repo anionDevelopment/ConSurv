@@ -528,11 +528,11 @@ paths:
     put:
       parameters:
       - in: header
-        name: user
+        name: x-user
         schema:
           type: string
       - in: header
-        name: password
+        name: x-password
         schema:
           type: string
       responses:

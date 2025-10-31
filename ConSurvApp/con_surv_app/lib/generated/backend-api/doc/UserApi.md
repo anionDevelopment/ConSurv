@@ -144,7 +144,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV1UserControllerLoginPut**
-> AccessToken aPIV1UserControllerLoginPut(user, password)
+> AccessToken aPIV1UserControllerLoginPut(xUser, xPassword)
 
 
 
@@ -153,11 +153,11 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = UserApi();
-final user = user_example; // String | 
-final password = password_example; // String | 
+final xUser = xUser_example; // String | 
+final xPassword = xPassword_example; // String | 
 
 try {
-    final result = api_instance.aPIV1UserControllerLoginPut(user, password);
+    final result = api_instance.aPIV1UserControllerLoginPut(xUser, xPassword);
     print(result);
 } catch (e) {
     print('Exception when calling UserApi->aPIV1UserControllerLoginPut: $e\n');
@@ -168,8 +168,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user** | **String**|  | [optional] 
- **password** | **String**|  | [optional] 
+ **xUser** | **String**|  | [optional] 
+ **xPassword** | **String**|  | [optional] 
 
 ### Return type
 

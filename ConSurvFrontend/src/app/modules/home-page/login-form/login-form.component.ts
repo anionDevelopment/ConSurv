@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { UserService } from '../../../generated/con-surv-backend';
+import { AccessToken, UserService } from '../../../generated/con-surv-backend';
 import { Router } from '@angular/router';
 import { UserDataService } from '../../../services/user-data.service';
 import { StorageService } from '../../../services/storage.service';
@@ -23,7 +23,7 @@ export class LoginFormComponent {
   public login(): void {
     const username: string = this.form.get('username')!.value;
     const password: string = this.form.get('password')!.value;
-    this.userService.aPIV1UserControllerLoginPut(username, password).subscribe((a: any) => {
+    this.userService.aPIV1UserControllerLoginPut(username, password).subscribe((a: AccessToken) => {
       this.storageService.setAccessToken(a.value!);
       this.userDataService.loadUserData().subscribe(() => {
         this.router.navigate(['user', 'dashboard']);

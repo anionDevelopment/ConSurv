@@ -46,11 +46,11 @@ namespace ConSurvBackend.Core.Misc
             DateTimeOffset dateTime;
             if (timeInUTC)
             {
-                dateTime = timeService.GetCurrentTimeInUTC();
+                dateTime = timeService.GetCurrentTimeInUTCAsDateTimeOffset();
             }
             else
             {
-                dateTime = timeService.GetCurrentLocalTime();
+                dateTime = timeService.GetCurrentLocalTimeAsDateTimeOffset();
             }
             string result = $"{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
             result = result.Replace("\\", "/");

@@ -18,7 +18,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
             bool inUTC = true;
 
             DateTime dateTime = new DateTime(2025, 06, 22, 13, 55, 09);
-            timeServiceMock.Setup(timeService => timeService.GetCurrentTimeInUTC()).Returns(dateTime);
+            timeServiceMock.Setup(timeService => timeService.GetCurrentTimeInUTCAsDateTimeOffset()).Returns(dateTime);
             string expectedName = $"{cameraId}_{dateTime.Year:D4}_{dateTime.Month:D2}_{dateTime.Day:D2}_{dateTime.Hour:D2}_{dateTime.Minute:D2}_{dateTime.Second:D2}.mp4";
 
             // act
@@ -26,7 +26,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
 
             // assert
             Assert.AreEqual(expectedName, actualName);
-            timeServiceMock.Verify(timeService => timeService.GetCurrentTimeInUTC(), Times.Once);
+            timeServiceMock.Verify(timeService => timeService.GetCurrentTimeInUTCAsDateTimeOffset(), Times.Once);
             timeServiceMock.VerifyNoOtherCalls();
         }
 

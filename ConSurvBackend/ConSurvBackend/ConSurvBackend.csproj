@@ -61,6 +61,7 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="FFmpeg.AutoGen" Version="7.1.1" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.9.6" />
+        <PackageReference Include="GRYLibrary" Version="0.12.172" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
           <PrivateAssets>all</PrivateAssets>
@@ -73,6 +74,7 @@
         <PackageReference Include="Npgsql" Version="9.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+        <PackageReference Include="SkiaSharp" Version="3.119.1" />
         <PackageReference Include="System.Collections.Immutable" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.10" />
@@ -91,8 +93,5 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Model\NewFolder\" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\GRYLibrary\GRYLibrary\GRYLibrary\GRYLibrary.csproj" />
     </ItemGroup>
 </Project>

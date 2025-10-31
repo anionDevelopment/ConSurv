@@ -217,22 +217,22 @@ export class UserService extends BaseService {
     }
 
     /**
-     * @param user 
-     * @param password 
+     * @param xUser 
+     * @param xPassword 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV1UserControllerLoginPut(user?: string, password?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<AccessToken>;
-    public aPIV1UserControllerLoginPut(user?: string, password?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccessToken>>;
-    public aPIV1UserControllerLoginPut(user?: string, password?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccessToken>>;
-    public aPIV1UserControllerLoginPut(user?: string, password?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV1UserControllerLoginPut(xUser?: string, xPassword?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<AccessToken>;
+    public aPIV1UserControllerLoginPut(xUser?: string, xPassword?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccessToken>>;
+    public aPIV1UserControllerLoginPut(xUser?: string, xPassword?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccessToken>>;
+    public aPIV1UserControllerLoginPut(xUser?: string, xPassword?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-        if (user !== undefined && user !== null) {
-            localVarHeaders = localVarHeaders.set('user', String(user));
+        if (xUser !== undefined && xUser !== null) {
+            localVarHeaders = localVarHeaders.set('x-user', String(xUser));
         }
-        if (password !== undefined && password !== null) {
-            localVarHeaders = localVarHeaders.set('password', String(password));
+        if (xPassword !== undefined && xPassword !== null) {
+            localVarHeaders = localVarHeaders.set('x-password', String(xPassword));
         }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([

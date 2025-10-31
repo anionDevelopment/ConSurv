@@ -59,13 +59,15 @@ namespace ConSurvBackend.Core
         }
         internal int MainImplementation(string[] commandlineArguments)
         {
-           // Polygon();
             bool runningUsually = false;
             return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
+                    var t1 = initializationInformation.ApplicationConstants.GetDataFolder();
+                    var t2 = initializationInformation.ApplicationConstants.GetConfigurationFolder();
+                    var t3 = initializationInformation.ApplicationConstants.GetLogFolder();
                     string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);

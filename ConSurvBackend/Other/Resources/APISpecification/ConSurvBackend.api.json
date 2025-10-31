@@ -601,14 +601,14 @@
         ],
         "parameters": [
           {
-            "name": "user",
+            "name": "x-user",
             "in": "header",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "password",
+            "name": "x-password",
             "in": "header",
             "schema": {
               "type": "string"

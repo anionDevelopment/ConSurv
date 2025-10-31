@@ -85,7 +85,7 @@ namespace ConSurvBackend.Core.Services
                     uint maximalHeightValue = maximalHeight ?? 75;
                     uint maximalWidthValue = maximalWidth ?? 100;
                     bool logToConsole = this._Constants.Environment is Development;
-                    string argument= $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalHeightValue}x{maximalWidthValue} {tempFile}";
+                    string argument = $"-i {this._StreamOrganizerService.GetStreamURL(camera.Id)} -vframes 1 -s {maximalHeightValue}x{maximalWidthValue} {tempFile}";
                     ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess("ffmpeg", argument, null, null, "Generate preview", $"PreviewFor-{camera.Id}", true);
                     if (process.ExitCode != 0)
                     {
@@ -100,7 +100,7 @@ namespace ConSurvBackend.Core.Services
                         bool verbose = false;//can be changed to true temporary for debugging purposes
                         if (verbose)
                         {
-                            log.LogException(e, $"Error while generating preview for camera with id '{camera.Id}'.", LogLevel.Warning);
+                            log.Log($"Error while generating preview for camera with id '{camera.Id}'.", e, LogLevel.Warning);
                         }
                         else
                         {
@@ -238,7 +238,6 @@ namespace ConSurvBackend.Core.Services
             {
                 try
                 {
-                    return;
                     lock (camera.Id)
                     {
                         bool addSleep = false;
@@ -274,7 +273,7 @@ namespace ConSurvBackend.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", LogLevel.Error, ex, null);
+                    this._Log.Log($"Error while record-loop for camera with id '{camera.Id}'.", ex, LogLevel.Error);
                     Thread.Sleep(TimeSpan.FromSeconds(2));//prevent hig cpu-usage for error-loops
                 }
             }

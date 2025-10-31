@@ -11,6 +11,7 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using IAuthenticationService = GRYLibrary.Core.APIServer.Services.Interfaces.IAuthenticationService;
 
 namespace ConSurvBackend.Core.Controller
@@ -35,9 +36,26 @@ namespace ConSurvBackend.Core.Controller
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
-        public IActionResult Login([FromHeader] string user, [FromHeader] string password)
+        public IActionResult Login([FromHeader(Name = "x-user")] string? user, [FromHeader(Name = "x-password")] string? password)
         {
-            return this.Ok(this._AuthenticationService.Login(user, password));
+            try
+            {
+                if (user == null)
+                {
+                    return this.BadRequest("user not given");
+                }
+                if (password == null)
+                {
+                    return this.BadRequest("password not given");
+                }
+                return this.Ok(this._AuthenticationService.Login(user, password));
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("xx temp");
+                Console.Error.WriteLine(e);
+                return this.StatusCode(500);
+            }
         }
 
         [Authenticate]

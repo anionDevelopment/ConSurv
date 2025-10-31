@@ -32,7 +32,7 @@ void main() {
       // TODO
     });
 
-    //Future<AccessToken> aPIV1UserControllerLoginPut({ String user, String password }) async
+    //Future<AccessToken> aPIV1UserControllerLoginPut({ String xUser, String xPassword }) async
     test('test aPIV1UserControllerLoginPut', () async {
       // TODO
     });

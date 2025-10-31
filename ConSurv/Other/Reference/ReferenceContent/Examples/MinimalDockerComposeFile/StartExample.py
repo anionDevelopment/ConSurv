@@ -9,8 +9,8 @@ def start_dockerfile_example():
     sc=ScriptCollectionCore()
     t: TFCPS_Tools_General = TFCPS_Tools_General(sc)
     t.ensure_env_file_is_generated(current_file, env_file_name, dict({
-    #    'InitialAdminPassword': 'Adm1npa55w0rd',
-    #    'InitialCameraAddresses': 'rtsp://@192.168.1.141/stream1;rtsp://@192.168.1.142/stream1',
+        'InitialAdminPassword': 'admin',
+        'InitialCameraAddresses': 'rtsp://@192.168.1.141/stream1;rtsp://@192.168.1.142/stream1',
     }))
     t.start_dockerfile_example(current_file, True, False,  env_file_name)
 
