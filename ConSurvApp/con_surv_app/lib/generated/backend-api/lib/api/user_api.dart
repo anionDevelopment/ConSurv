@@ -181,10 +181,10 @@ class UserApi {
   /// Performs an HTTP 'PUT /API/v1/UserController/Login' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] user:
+  /// * [String] xUser:
   ///
-  /// * [String] password:
-  Future<Response> aPIV1UserControllerLoginPutWithHttpInfo({ String? user, String? password, }) async {
+  /// * [String] xPassword:
+  Future<Response> aPIV1UserControllerLoginPutWithHttpInfo({ String? xUser, String? xPassword, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v1/UserController/Login';
 
@@ -195,11 +195,11 @@ class UserApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    if (user != null) {
-      headerParams[r'user'] = parameterToString(user);
+    if (xUser != null) {
+      headerParams[r'x-user'] = parameterToString(xUser);
     }
-    if (password != null) {
-      headerParams[r'password'] = parameterToString(password);
+    if (xPassword != null) {
+      headerParams[r'x-password'] = parameterToString(xPassword);
     }
 
     const contentTypes = <String>[];
@@ -218,11 +218,11 @@ class UserApi {
 
   /// Parameters:
   ///
-  /// * [String] user:
+  /// * [String] xUser:
   ///
-  /// * [String] password:
-  Future<AccessToken?> aPIV1UserControllerLoginPut({ String? user, String? password, }) async {
-    final response = await aPIV1UserControllerLoginPutWithHttpInfo( user: user, password: password, );
+  /// * [String] xPassword:
+  Future<AccessToken?> aPIV1UserControllerLoginPut({ String? xUser, String? xPassword, }) async {
+    final response = await aPIV1UserControllerLoginPutWithHttpInfo( xUser: xUser, xPassword: xPassword, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

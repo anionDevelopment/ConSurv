@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CameraService, StreamingService, UserService } from '../../../generated/con-surv-backend';
 import { Component } from '@angular/core';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-user-area-container',
@@ -63,6 +64,12 @@ describe('CameraComponent', () => {
           useValue: {
             url: "user/camera",
           },
+        },
+        {
+          provide: StorageService,
+          useValue: {
+            getAccessToken: () => "at1",
+          }
         },
       ],
     }).compileComponents();

@@ -16,8 +16,8 @@ namespace ConSurvBackend.Core.BackgroundServices
         public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IGRYLog logger, IBusinessLogicService cameraService) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
-            this._CameraService = cameraService;
             this.AdditionalDelay = TimeSpan.FromMinutes(1);
+            this._CameraService = cameraService;
             this.MetricAvailableCamerasRate = Metrics.CreateGauge(CodeUnitSpecificConstants.MetricsNameAvailableCamerasRate, "Rate of available cameras");
         }
 
@@ -29,7 +29,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             }
             catch (Exception exception)
             {
-                this._Logger.LogException(exception, "Error while calculating metrics");
+                this._Logger.Log( "Error while calculating metrics",exception);
             }
         }
 

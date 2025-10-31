@@ -22,7 +22,10 @@ class StreamingApi {
   /// * [String] streamId (required):
   ///
   /// * [String] filename (required):
-  Future<Response> aPIV1StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename,) async {
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<Response> aPIV1StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename, String xAccessToken,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v1/StreamingController/Stream/{streamId}/{filename}'
       .replaceAll('{streamId}', streamId)
@@ -34,6 +37,8 @@ class StreamingApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>[];
 
@@ -54,8 +59,11 @@ class StreamingApi {
   /// * [String] streamId (required):
   ///
   /// * [String] filename (required):
-  Future<void> aPIV1StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename,) async {
-    final response = await aPIV1StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename,);
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<void> aPIV1StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken,) async {
+    final response = await aPIV1StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

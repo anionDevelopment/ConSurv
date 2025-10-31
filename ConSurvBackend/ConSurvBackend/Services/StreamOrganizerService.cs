@@ -14,7 +14,6 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
-using OperatingSystem = GRYLibrary.Core.OperatingSystem.OperatingSystem;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -36,18 +35,7 @@ namespace ConSurvBackend.Core.Services
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._TimeService = timeService;
         }
-        public void InitializeCameraOrganization()
-        {
-            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string mediaMTXFolder = Path.Combine(location, "MediaMTX");
-            string mediaMTXExecutable = Path.Combine(mediaMTXFolder, "mediamtx");
-            if (OperatingSystem.GetCurrentOperatingSystem() is GRYLibrary.Core.OperatingSystem.ConcreteOperatingSystems.Windows)
-            {
-                mediaMTXExecutable = mediaMTXExecutable + ".exe";
-            }
-            ExternalProgramExecutor process = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, string.Empty, mediaMTXFolder, null, $"Media-hub", $"MediaHub", false);
-            Thread.Sleep(TimeSpan.FromSeconds(2));
-        }
+     
         public void OrganizeCamera(Camera camera)
         {
             lock (_Lock)

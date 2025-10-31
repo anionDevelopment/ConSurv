@@ -24,9 +24,13 @@ namespace ConSurvBackend.Tests.Testcases.Services
         private void InitializeServices(bool registrationIsEnabled, out IBusinessLogicService businessLogicService, out IInitializationService<CommandlineParameter> initializationService, out IPersistence persistence)
         {
             ITimeService timeService = new TimeService();
-            IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>();
-            persistedAPIServerConfiguration.ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration();
-            persistedAPIServerConfiguration.ApplicationSpecificConfiguration.RegistrationIsEnabled = registrationIsEnabled;
+            IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>
+            {
+                ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration
+                {
+                    RegistrationIsEnabled = registrationIsEnabled
+                }
+            };
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
             ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
@@ -37,7 +41,6 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, databasePersistence);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             Mock<IStreamOrganizerService> streamOrganizerServiceMock = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
-            streamOrganizerServiceMock.Setup(m => m.InitializeCameraOrganization());
             Mock<IRTSPManager> rtspManagerMock = new Mock<IRTSPManager>(MockBehavior.Strict);
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
             businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object, persistedAPIServerConfiguration);

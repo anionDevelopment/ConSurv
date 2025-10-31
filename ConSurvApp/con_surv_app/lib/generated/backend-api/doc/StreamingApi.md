@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **aPIV1StreamingControllerStreamStreamIdFilenameGet**
-> aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId, filename)
+> aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken)
 
 
 
@@ -24,9 +24,10 @@ import 'package:openapi/api.dart';
 final api_instance = StreamingApi();
 final streamId = streamId_example; // String | 
 final filename = filename_example; // String | 
+final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId, filename);
+    api_instance.aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken);
 } catch (e) {
     print('Exception when calling StreamingApi->aPIV1StreamingControllerStreamStreamIdFilenameGet: $e\n');
 }
@@ -38,6 +39,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **streamId** | **String**|  | 
  **filename** | **String**|  | 
+ **xAccessToken** | **String**| Access Token | 
 
 ### Return type
 

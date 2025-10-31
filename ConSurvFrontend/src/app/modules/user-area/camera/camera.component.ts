@@ -21,6 +21,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   information: string = "";
   constructor(private activatedRoute: ActivatedRoute, private cameraService: CameraService, private storgeService: StorageService, private streamingService: StreamingService, private configurationService: ConfigurationService) {
   }
+
   ngOnDestroy(): void {
     if (this.player != null) {
       this.player.dispose();
@@ -28,6 +29,12 @@ export class CameraComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const accessToken : string = this.storgeService.getAccessToken();
+    (videojs as any).Vhs.xhr.beforeRequest = function(options: any) {
+      options.headers = options.headers || {};
+      options.headers['X-AccessToken'] = accessToken;
+      return options;
+    };
     this.activatedRoute.queryParams.pipe(
       switchMap(params => {
         if (params["cameraId"]) {

@@ -41,7 +41,7 @@ namespace ConSurvBackend.Core.Misc
                 Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true, true);
                 return (result, messages);
 
-            }, context, cancellationToken, _InitializationService);
+            }, context, cancellationToken, this._InitializationService);
         }
     }
 }

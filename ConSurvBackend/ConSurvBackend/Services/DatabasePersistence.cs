@@ -16,7 +16,7 @@ using Role = GRYLibrary.Core.APIServer.CommonDBTypes.Role;
 
 namespace ConSurvBackend.Core.Services
 {
-    public class DatabasePersistence : IPersistence
+    public sealed class DatabasePersistence : IPersistence
     {
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
@@ -174,7 +174,7 @@ namespace ConSurvBackend.Core.Services
             return roles;
         }
 
-        public virtual bool IsAvailable()
+        public bool IsAvailable()
         {
             return true;//TODO implement correctly
         }

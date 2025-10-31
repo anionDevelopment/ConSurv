@@ -46,11 +46,11 @@ namespace ConSurvBackend.Core.Misc
             DateTimeOffset dateTime;
             if (timeInUTC)
             {
-                dateTime = timeService.GetCurrentTimeInUTC();
+                dateTime = timeService.GetCurrentTimeInUTCAsDateTimeOffset();
             }
             else
             {
-                dateTime = timeService.GetCurrentLocalTime();
+                dateTime = timeService.GetCurrentLocalTimeAsDateTimeOffset();
             }
             string result = $"{cameraId}_{dateTime.Year.ToString().PadLeft(4, '0')}_{dateTime.Month.ToString().PadLeft(2, '0')}_{dateTime.Day.ToString().PadLeft(2, '0')}_{dateTime.Hour.ToString().PadLeft(2, '0')}_{dateTime.Minute.ToString().PadLeft(2, '0')}_{dateTime.Second.ToString().PadLeft(2, '0')}.mp4";
             result = result.Replace("\\", "/");
@@ -102,15 +102,15 @@ namespace ConSurvBackend.Core.Misc
             return result;
         }
 
-        public static string EscapeBasicAuthPasswords(string content)
+        public static string EscapeBasicAuthPasswords(string rtspLink)
         {
              string pattern = @"(?<scheme>[a-z]+):\/\/(?<user>[^:\s@]+):(?<pass>[^@\s]+)@";
 
-            string result = Regex.Replace(content, pattern, m =>
+            string result = Regex.Replace(rtspLink, pattern, m =>
             {
                 string scheme = m.Groups["scheme"].Value;
                 string user = m.Groups["user"].Value;
-                return $"{scheme}://{user}:***@";
+                return $"{scheme}://";
             });
 
             return result;

@@ -34,18 +34,5 @@ namespace ConSurvBackend.Core.Controller
         {
             return new JsonResult(this._ProcessManager.GetRunningProcesses().Select(p => p.ToDTO()));
         }
-
-        [Authenticate]
-        [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CameraDTO))]
-        [Route($"{nameof(GetMediaMTXConfiguration)}/{nameof(cameraId)}")]
-        public IActionResult GetMediaMTXConfiguration(string cameraId)
-        {
-            string mediaMTXConfigurationFolder = Path.Combine(this._ApplicationConstants.GetConfigurationFolder(), "MediaMTXConfigurationFiles");
-            string mediaMTXConfigurationFile = Path.Combine(mediaMTXConfigurationFolder, $"MediaMTXConfiguration.{cameraId}.txt");
-            return this.Ok(Misc.Utilities.EscapeBasicAuthPasswords(System.IO.File.ReadAllText(mediaMTXConfigurationFile, ConSurvBackend.Core.Misc.Utilities._Encoding)));
-        }
-
     }
 }

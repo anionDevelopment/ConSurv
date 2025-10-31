@@ -10,6 +10,8 @@ namespace ConSurvBackend.Core.Model.Base
         public VideoInformation VideoInformation { get; internal set; }
         public RecordMode RecordMode { get; internal set; }
         public bool Enabled { get; internal set; }
+        public TimeZoneInfo TimeZone { get; internal set; } = TimeZoneInfo.Local;//TODO make this configurable
+        public Overlay Overlay { get; internal set; } = new Overlay();
 
         public Camera(string id, string name)
         {
@@ -17,8 +19,8 @@ namespace ConSurvBackend.Core.Model.Base
             this.Name = name;
             this.VideoInformation = new VideoInformation()
             {
-                Certificate=null,
-                IsONVIFCamera=false,
+                Certificate = null,
+                IsONVIFCamera = false,
             };
             this.RecordMode = new RecordAlways();
             this.Enabled = true;

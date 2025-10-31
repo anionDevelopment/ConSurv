@@ -21,7 +21,7 @@ namespace ConSurvBackend.Core.Services
         public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence)
         {
             this._Persistence = persistence;
-            _TimeService = timeService;
+            this._TimeService = timeService;
         }
 
         public bool AccessTokenIsValid(string accessToken)
@@ -141,21 +141,17 @@ namespace ConSurvBackend.Core.Services
             return result;
         }
 
-        private AccessToken ThrowInvalidCredentialsException()
-        {
-            throw new BadRequestException(StatusCodes.Status400BadRequest, "Invalid credentials");
-        }
         public AccessToken Login(string userName, string password)
         {
             if (!this._Persistence.UserWithNameExists(userName))
             {
-                return this.ThrowInvalidCredentialsException();
+                throw new InvalidCredentialsException();
             }
             this._Persistence.GetUserByName(userName);
             User user = this.GetUserByNameTyped(userName);
             if (this.Hash(password) != user.PasswordHash)
             {
-                return this.ThrowInvalidCredentialsException();
+                throw new InvalidCredentialsException();
             }
             if (user.UserIsLocked)
             {
@@ -163,7 +159,7 @@ namespace ConSurvBackend.Core.Services
             }
             AccessToken newAccessToken = new AccessToken();
             newAccessToken.Value = Guid.NewGuid().ToString();
-            newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTimeInUTC().AddDays(1);//TODO make this configurable
+            newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset().AddDays(1);//TODO make this configurable
             this._Persistence.AddAccessToken(user.Id, newAccessToken);
             user.AccessToken.Add(newAccessToken);
             return newAccessToken;

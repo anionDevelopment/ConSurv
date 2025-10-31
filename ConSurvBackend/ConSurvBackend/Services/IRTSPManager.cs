@@ -1,13 +1,13 @@
 ﻿using ConSurvBackend.Core.Model.Base;
-using GRYLibrary.Core.Logging.GRYLogger;
+using System;
 
 namespace ConSurvBackend.Core.Services
 {
+    [Obsolete]
     public interface IRTSPManager
     {
    
         public bool IsAvailable(Camera camera);
-        public (bool success, byte[] picture) GetPreviewDirectlyFromCamera(Camera camera, uint? maximalHeight, uint? maximalWidth, bool logFail, IGRYLog log);
         public void EnsureRecordingAlwaysAsync(Camera camera);
         public void EnsureNotRecording(Camera camera);
         public void EnsureRecordingOnMovementsAsync(Camera camera);

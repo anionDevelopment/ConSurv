@@ -19,14 +19,27 @@ export class CameraPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.cameraId) {
-      interval(10000).pipe( // alle 10 Sekunden
+      interval(5000).pipe( 
         startWith(0),
-        switchMap(() => this.cameraService.aPIV1CameraControllerGetPreviewCameraIdMaximalHeightMaximalWidthGet(this.cameraId!, 75, 100, this.storageService.getAccessToken())
+        switchMap(() => this.cameraService.aPIV1CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
         )).subscribe((result) => {
-          this.image = 'data:image/png;base64,' + result;//TODO update this picture every 5 seconds
+          this.image = 'data:image/png;base64,' + result;
         });
-    } else {
-      //TODO throw error
     }
   }
+
+  popupVisible = false;
+popupX = 0;
+popupY = 0;
+
+updatePopupPosition(event: MouseEvent) {
+  this.popupVisible = true;
+  const offset = 10; 
+  this.popupX = event.clientX + offset;
+  this.popupY = event.clientY + offset;
+  const maxX = window.innerWidth - 420; 
+  const maxY = window.innerHeight - 420;
+  if (this.popupX > maxX) this.popupX = maxX;
+  if (this.popupY > maxY) this.popupY = maxY;
+}
 }

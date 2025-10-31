@@ -2,10 +2,12 @@
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ConSurvBackend.Core.Controller
 {
@@ -26,13 +28,16 @@ namespace ConSurvBackend.Core.Controller
 
         [HttpGet()]
         [Route($"{nameof(Stream)}/{{{nameof(streamId)}}}/{{{nameof(filename)}}}")]
-        //TODO [Authenticate]
-        //TODO [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
+        [Authenticate]
+        [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Stream([FromRoute] string streamId, [FromRoute] string filename)
         {
-            //TODO check filename to not contain any path-traversal-attempts
-            string folder = Path.Combine(this._ApplicationConstants.GetDataFolder(), "Streaming", streamId);
+            if (!Regex.IsMatch(filename, @"^[0-9A-Za-z_]+\.[0-9A-Za-z]+$"))
+            {
+                return this.BadRequest($"Filename \"{filename}\" is an invalid stream-file.");
+            }
+            string folder = Path.Combine(this._ApplicationConstants.GetDataFolder(), "CameraData", streamId, "Fragments");
             string path = Path.Combine(folder, filename);
             if (!System.IO.File.Exists(path))
             {
