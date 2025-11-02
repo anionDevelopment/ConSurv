@@ -92,6 +92,8 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Model\NewFolder\" />
+      <Compile Remove="Model\NewFolder\**" />
+      <EmbeddedResource Remove="Model\NewFolder\**" />
+      <None Remove="Model\NewFolder\**" />
     </ItemGroup>
 </Project>

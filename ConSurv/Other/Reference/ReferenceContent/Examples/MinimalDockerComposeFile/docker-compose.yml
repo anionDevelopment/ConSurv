@@ -11,22 +11,20 @@ services:
     - ./Volumes/Logs:/Workspace/Logs
     depends_on:
     - consurv_database
+  consurv_database:
+    container_name: consurv_database
+    image: postgres:17.5
+    environment:
+      POSTGRES_PASSWORD: R00tpa55w0rd
+      POSTGRES_DB: ConSurvDatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./Volumes/Data:/var/lib/postgresql/data
   consurv_database_administration:
     container_name: consurv_database_administration
     depends_on:
     - consurv_database
     image: adminer:4.17.1
     ports:
-    - "8080:8080"
-  consurv_database:
-    container_name: consurv_database
-    image: postgres:17.5
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pa55w0rd
-      POSTGRES_DB: ConSurvDatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./Volumes/Data:/var/lib/postgresql/data
-version: '3.2'
+    - 8080:8080a

@@ -10,24 +10,24 @@ Example-content for a valid `Variables.env`-file:
 
 ```bash
 InitialAdminPassword=Adm1npa55w0rd
-InitialCameraAddresses="rtsp://192.168.1.42/stream1;rtsp://192.168.1.43/stream2"
+InitialDatabaseType=PostgreSQL
+InitialDatabaseConnectionString=postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase
 ```
-
-(This file will automagically generateed when running `StartExample.py`.)
 
 ## Access
 
 ### Database
 
-connectionstring: `postgresql://user:pa55w0rd@consurv_database:5432/ConSurvDatabase`
-Data to acces the databas through adminer (`localhost:8080`):
+connectionstring: `postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase`
+
+Data for adminer:
 
 System: `PostgreSQL`
 
 Server: `consurv_database`
 
-Username: `user`
+Username: `root`
 
-Password: `pa55w0rd`
+Password: `R00tpa55w0rd`
 
 Database: `ConSurvDatabase`

@@ -85,9 +85,11 @@ namespace ConSurvBackend.Core
                         TermsOfServiceLink = $"https://information.{domain}/Products/{GeneralConstants.CodeUnitName}/TermsOfService"
                     };
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MaintenanceRoutesInformation = new MaintenanceRoutesInformation();
+                    //TODO use CommandlineParameter.InitialDatabaseType for initialization
+                    //TODO use CommandlineParameter.InitialDatabaseConnectionString for initialization
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration()
                     {
-                        DatabaseConnectionString = "Server=consurv_database;Port=5432;Database=ConSurvDatabase;UID=user;PWD=pa55w0rd;Search Path=public;",
+                        DatabaseConnectionString = "Server=consurv_database;Port=5432;Database=ConSurvDatabase;UID=root;PWD=R00tpa55w0rd;Search Path=public;",
                         DatabaseType = Debugger.IsAttached ? "Transient" : "PostgreSQL",
                     };
                     bool runServices = !runningUsually;

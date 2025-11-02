@@ -10,6 +10,8 @@ def start_dockerfile_example():
     t: TFCPS_Tools_General = TFCPS_Tools_General(sc)
     t.ensure_env_file_is_generated(current_file, env_file_name, dict({
         'InitialAdminPassword': 'admin',
+        'InitialDatabaseType': 'PostgreSQL',
+        'InitialDatabaseConnectionString': 'postgresql://root:R00tpa55w0rd@opendms_database:5432/OpenDMSDatabase',
         'InitialCameraAddresses': 'rtsp://192.168.1.141/stream1;rtsp://192.168.1.142/stream1',
     }))
     t.start_dockerfile_example(current_file, True, False,  env_file_name)
