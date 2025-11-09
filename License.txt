@@ -1,2 +1,2 @@
-Private-persons and Nonprofit-organizations are allowed to use ConSurv under the conditions of the GPL v3.
-If you are interested in a license for commercial companies or a support-license then please the owner of the repository.
+You are allowed to use this product only for personal usage or as a non-profit-organization.
+For a commercial license please contact the repository-owner.
