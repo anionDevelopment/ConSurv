@@ -6,9 +6,9 @@ services:
     ports:
     - "443:443"
     volumes:
-    - ./Volumes/Data:/Workspace/Data
-    - ./Volumes/Configuration:/Workspace/Configuration
-    - ./Volumes/Logs:/Workspace/Logs
+    - ./Volumes/consurv/Data:/Workspace/Data
+    - ./Volumes/consurv/Configuration:/Workspace/Configuration
+    - ./Volumes/consurv/Logs:/Workspace/Logs
     depends_on:
     - consurv_database
   consurv_database:
@@ -20,7 +20,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./Volumes/Data:/var/lib/postgresql/data
+      - ./Volumes/consurv_database/Data:/var/lib/postgresql/data
   consurv_database_administration:
     container_name: consurv_database_administration
     depends_on:
