@@ -2,6 +2,7 @@ using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
+using ConSurvBackend.Core.Model.Internals;
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
@@ -27,24 +28,21 @@ namespace ConSurvBackend.Core.Services
         private readonly IAuthenticationService<User> _AuthenticationService;
         private readonly IPersistence _Persistence;
         private readonly ITimeService _TimeService;
-        private readonly IRTSPManager _RTSPManager;
         private readonly IAuditLog _AuditLog;
         private readonly IRandomnessProvider _RandomnessProvider;
-        private readonly IStreamOrganizerService _StreamOrganizerService;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
+        private readonly IRuntimeData _RuntimeData;
 
-        public BusinessLogicService(IPersistence persistence, IGRYLog log, IRTSPManager rtspManager, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IStreamOrganizerService streamOrganizerService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration)
+        public BusinessLogicService(IPersistence persistence, IGRYLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData)
         {
             this._Persistence = persistence;
             this._Log = log;
-            this._RTSPManager = rtspManager;
             this._TimeService = timeService;
             this._AuthenticationService = authenticationService;
             this._RandomnessProvider = randomnessProvider;
             this._AuditLog = auditLog;
-            this._StreamOrganizerService = streamOrganizerService;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
-            //TODO load persisted cameras and start recording if necessary
+            this._RuntimeData = runtimeData;
         }
         public string CreateCamera(string name, string streamURL)
         {
@@ -61,9 +59,16 @@ namespace ConSurvBackend.Core.Services
             return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
         }
 
-        public bool IsAvailable(Camera camera)
+        public (bool, Exception?) IsAvailable(Camera camera)
         {
-            return this.GetCurrentRecordingInformation(camera) is not Unavailable;
+            if (this.GetCurrentRecordingInformation(camera) is Available)
+            {
+                return (true, null);
+            }
+            else
+            {
+                return (false, new DependencyNotAvailableException($"Camera {camera.Id} is not available."));
+            }
         }
 
         public RecordState GetCurrentRecordingInformation(Camera camera)
@@ -103,7 +108,7 @@ namespace ConSurvBackend.Core.Services
         {
             //TODO check permission
             this._Persistence.UpdateCamera(camera);
-            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
+            camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RuntimeData));
             this._AuditLog.AuditLogger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done
         }
 
@@ -128,7 +133,7 @@ namespace ConSurvBackend.Core.Services
             }
             else
             {
-                return this.GetAllCameras().Where(kvp => this.IsAvailable(kvp.Value)).Count() / this.GetAllCameras().Count;
+                return this.GetAllCameras().Where(kvp => this.IsAvailable(kvp.Value).Item1).Count() / this.GetAllCameras().Count;
             }
         }
 

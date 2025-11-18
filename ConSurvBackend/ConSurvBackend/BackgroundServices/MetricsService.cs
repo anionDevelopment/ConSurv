@@ -2,7 +2,6 @@
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using Prometheus;
 using System;

@@ -12,14 +12,40 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
     public abstract class DatabaseTestsBase
     {
-        protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFramework();
+        protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFrameworkImplementation();
+        protected DatabaseTestFrameworkTemplate GetDatabaseTestFramework(bool runMigrations)
+        {
+            DatabaseTestFrameworkTemplate result = this.GetDatabaseTestFrameworkImplementation();
+            this.PrepareDatabase(result, runMigrations);
+            return result;
+        }
+        /// <summary>
+        /// Resets database.
+        /// If desired, all available migrations will be done.
+        /// </summary>
+        private void PrepareDatabase(DatabaseTestFrameworkTemplate databaseTestFramework, bool runMigrations)
+        {
+            databaseTestFramework.ResetDatabase();
+            IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
+            IConSurvDatabaseInteractor openDMSDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
+
+            List<string> tables1 = databaseInteractor.GetAllTableNames().ToList();
+            Assert.IsEmpty(tables1);
+
+            if (runMigrations)
+            {
+                IList<MigrationInstance> migrations = openDMSDatabaseInteractor.GetAllMigrations();
+                GRYMigrator migrator = new GRYMigrator(new TimeService(), migrations.ToList(), databaseInteractor);
+                migrator.InitializeDatabaseAndMigrateIfRequired();
+            }
+        }
         public abstract void Migration000001Test();
         public void Migration000001()
         {
             lock (ConSurvBackend.Tests.TestUtilities.Utilities.LockForTests)
             {
                 //arrange
-                using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework())
+                using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework(false))
                 {
                     databaseTestFramework.ResetDatabase();
                     IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
@@ -51,7 +77,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             lock (ConSurvBackend.Tests.TestUtilities.Utilities.LockForTests)
             {
-                using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework())
+                using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework(false))
                 {
                     databaseTestFramework.ResetDatabase();
                     IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();

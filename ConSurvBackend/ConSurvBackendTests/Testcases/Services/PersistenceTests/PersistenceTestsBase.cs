@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
-using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Tests.TestUtilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
@@ -10,8 +11,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
         {
         }
 
-        public abstract IPersistence GetPersistence();
-
+        internal abstract PersistenceDisposable GetPersistence();
 
         public abstract void PersistCameraTest();
         public void PersistCamera()
@@ -19,15 +19,15 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             lock (ConSurvBackend.Tests.TestUtilities.Utilities.LockForTests)
             {
                 //arrange
-                using IPersistence persistence = this.GetPersistence();
+                using PersistenceDisposable persistenceD = this.GetPersistence();
                 Camera testCamera = new Camera("id", "name");
-                Assert.IsFalse(persistence.IsCamera(testCamera.Id));
+                Assert.IsFalse(persistenceD.Persistence.IsCamera(testCamera.Id));
 
                 //act
-                persistence.CreateCamera(testCamera);
+                persistenceD.Persistence.CreateCamera(testCamera);
 
                 //assert
-                Assert.IsTrue(persistence.IsCamera(testCamera.Id));
+                Assert.IsTrue(persistenceD.Persistence.IsCamera(testCamera.Id));
             }
         }
 

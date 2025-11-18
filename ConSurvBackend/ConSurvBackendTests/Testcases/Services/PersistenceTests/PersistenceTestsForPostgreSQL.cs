@@ -5,8 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
     [TestClass]
-    [Ignore]
-    public class PostgreSQLPersistenceTests : PersistenceDatabaseTestsBase
+    public class PersistenceTestsForPostgreSQL : PersistenceTestsBaseForDatabase
     {
         protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
         {

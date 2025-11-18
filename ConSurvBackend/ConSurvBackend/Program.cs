@@ -35,6 +35,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sprache;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,14 +46,21 @@ namespace ConSurvBackend.Core
 {
     internal class Program
     {
-        internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; }
         internal bool ListenOnEveryIP { get; set; } = false;
         internal bool RunAsync { get; set; } = false;
+        internal bool IsRunning { get; set; } = false;
         internal IBusinessLogicService? _BusinessLogicService;
-        internal IGRYLog? _Log;
+        internal IInitializationService<CommandlineParameter>? _InitializationService;
+        internal IGRYLog _Log;
 
         internal IHostApplicationLifetime? _HostApplicationLifetime;
+        internal APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> _Constants;
 
+        internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; }
+        public Program()
+        {
+            this._Log = GRYLog.Create();
+        }
         internal static int Main(string[] commandlineArguments)
         {
             return new Program().MainImplementation(commandlineArguments);
@@ -60,7 +68,8 @@ namespace ConSurvBackend.Core
         internal int MainImplementation(string[] commandlineArguments)
         {
             bool runningUsually = false;
-            return Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
+            this.IsRunning = true;
+            var result = Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
@@ -174,18 +183,8 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                     }
                     bool useMockService = runningUsually;
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IStreamOrganizerService, StreamOrganizerService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementService, CameraManagementService>();
-                    if (functionalInformation.InitializationInformation.ApplicationConstants.Environment is Development && useMockService)
-                    {
-                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManagerMock>();
-                    }
-                    else
-                    {
-                        functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRTSPManager, RTSPManager>();
-                    }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRuntimeData, RuntimeData>();
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPreviewService, PreviewService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMotionDetectionService, MotionDetectionService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IGeneralResourceLoader, Misc.GeneralResourceLoader>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationConfiguration>(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration);
@@ -224,7 +223,6 @@ namespace ConSurvBackend.Core
                     {
                         if (runningUsually)
                         {
-
                             IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
                             this._Log = functionalInformationForWebApplication.WebApplication.Services.GetService<IGRYLog>();
@@ -241,20 +239,21 @@ namespace ConSurvBackend.Core
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
-                            IPreviewService previewService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IPreviewService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());
                             functionalInformationForWebApplication.PreRun = () =>
-                                {
-                                    metricsService.StartAsync();
-                                    previewService.StartAsync();
+                            {
+                                //initialize
+                                this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
+                                this._Constants = apiServerConfiguration;
+                                this._InitializationService.Initialize(apiServerConfiguration.CommandlineParameter);
+                                metricsService.StartAsync();
                                     motionDetectionService.StartAsync();
                                     cameraManagementService.StartAsync();
                                 };
                             functionalInformationForWebApplication.PostRun = () =>
                                 {
                                     metricsService.Stop().Wait();
-                                    previewService.Stop().Wait();
                                     motionDetectionService.Stop().Wait();
                                     cameraManagementService.Stop().Wait();
                                 };
@@ -266,12 +265,14 @@ namespace ConSurvBackend.Core
                     }
                 };
             });
+            this.IsRunning = false;
+            return result;
         }
 
 
         internal void Stop()
         {
-            this._HostApplicationLifetime.StopApplication();
+            GUtilities.AssertNotNull(this._Constants, nameof(this._Constants)).CancellationTokenSource.Cancel();
         }
     }
 }

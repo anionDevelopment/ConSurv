@@ -27,5 +27,9 @@ namespace ConSurvBackend.Core.Services
         {
             return new SQLProviderMariaDB();
         }
+        public void SetLogConnectionAttemptErrors(bool enabled)
+        {
+            this._DatabaseInteractor.SetLogConnectionAttemptErrors(enabled);
+        }
     }
 }

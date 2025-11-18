@@ -23,9 +23,7 @@ namespace ConSurvBackend.Core.BackgroundServices
 {
     public class CameraManagementService : IteratingBackgroundService, ICameraManagementService
     {
-        private readonly IStreamOrganizerService _StreamOrganizerService;
         private readonly IBusinessLogicService _CameraService;
-        private readonly IRTSPManager _RTSPManager;
         private readonly IProcessManager _ProcessManager;
         private readonly IRuntimeData _RuntimeData;
         private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
@@ -35,12 +33,10 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IGRYLog _Log;
         private const ushort _LastUsedPortRangeBegin = 10_000;
         private ushort _LastUsedPort = _LastUsedPortRangeBegin;
-        public CameraManagementService(IStreamOrganizerService streamOrganizerService, IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IRTSPManager rTSPManager, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger)
+        public CameraManagementService( IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger)
         {
-            this._StreamOrganizerService = streamOrganizerService;
             this._CameraService = businessLogicService;
             this._CommandlineParameter = commandlineParameter;
-            this._RTSPManager = rTSPManager;
             this._ProcessManager = processManager;
             this.Enabled = true;
             this.AdditionalDelay = TimeSpan.FromSeconds(2);
@@ -253,7 +249,7 @@ paths:
                 string path = $"Stream_{camera.Id}";
 
                 string ffmpegArgument = "-fflags +genpts -rtsp_transport tcp -use_wallclock_as_timestamps 1  -i " + camera.VideoInformation.StreamURL + " -loop 1 -i " + overlay_file;
-                ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='"+camera.Name+" ("+camera.Id+") %{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider timezone
+                ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='"+camera.Name+" ("+camera.Id+") %{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider camera-timezone in timestamp
 
                 ffmpegArgument = ffmpegArgument + " -c:v libx264 -c:a aac -preset ultrafast -tune zerolatency -g 50 -keyint_min 50 -sc_threshold 0 -avoid_negative_ts make_zero -vsync vfr -fflags nobuffer -metadata title=\"Camera-"+camera.Id+"\" -f rtsp " + url;//ffmpeg takes the stream and redirects it to mediamtx
                 ffmpegProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
@@ -266,7 +262,7 @@ paths:
                 this._RuntimeData.SetCameraInternals(new Available(camera, ffmpegProcessResult, mediaMTXProcessResult, url));
                 this._Log.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
 
-                //take screenshots
+                //take screenshots (means: previews)
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(),"CameraData", camera.Id, "Screenshots");
                 GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(screenshots_folder);
                 string target_file = Path.Combine(screenshots_folder, "frame").Replace("\\", "/");
@@ -298,7 +294,7 @@ paths:
                     record = ffmpegProcess4;
                 } else if (camera.RecordMode is RecordOnMovements recordOnMovements)
                 {
-                    //TODO run ffmpeg with something like "-i rtsp://camera/stream -vf "select=gt(scene\,0.1)" -vsync vfr -f null -" async and start recording on events (0.1 is the threshold which mus be taken from recordOnMovements)
+                    //TODO run ffmpeg with something like "-i rtsp://camera/stream -vf "select=gt(scene\,0.1)" -vsync vfr -f null -" async and start recording on events for motion-detection (0.1 is the threshold which mus be taken from recordOnMovements)
 
                 }
 

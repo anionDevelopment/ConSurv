@@ -7,27 +7,26 @@ namespace ConSurvBackend.Core.Misc
     internal class ChangeRecordingModeVisitor : IRecordModeVisitor
     {
         private readonly Camera _Camera;
-        private readonly IRTSPManager _RTSPManager;
-
-        public ChangeRecordingModeVisitor(Camera camera, IRTSPManager rtspManager)
+        private readonly IRuntimeData _RuntimeData;
+        public ChangeRecordingModeVisitor(Camera camera, IRuntimeData runtimeData)
         {
             this._Camera = camera;
-            this._RTSPManager = rtspManager;
+            this._RuntimeData = runtimeData;
         }
 
         public void Handle(NoRecording noRecording)
         {
-            this._RTSPManager.EnsureNotRecording(this._Camera);
+            //TODO use _RuntimeData to notify CameraManagementService about the changed state 
         }
 
         public void Handle(RecordAlways recordAlways)
         {
-            this._RTSPManager.EnsureRecordingAlwaysAsync(this._Camera);
+            //TODO use _RuntimeData to notify CameraManagementService about the changed state
         }
 
         public void Handle(RecordOnMovements recordOnMovements)
         {
-            this._RTSPManager.EnsureRecordingOnMovementsAsync(this._Camera);
+            //TODO use _RuntimeData to notify CameraManagementService about the changed state
         }
     }
 }

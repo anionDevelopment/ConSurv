@@ -1,4 +1,3 @@
-using ConSurvBackend.Core.BackgroundServices;
 using ConSurvBackend.Core.Controller;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -20,11 +19,10 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
             Mock<IBusinessLogicService> cameraServiceMock = new Mock<IBusinessLogicService>(MockBehavior.Strict);
-            Mock<IPreviewService> previewService = new Mock<IPreviewService>(MockBehavior.Strict);
             Mock<IRuntimeData> runtimeData = new Mock<IRuntimeData>(MockBehavior.Strict);
             string cameraId = Guid.NewGuid().ToString();
             cameraServiceMock.Setup(mock => mock.CreateCamera("New camera", "rtsp://mycamera.example.com/stream")).Returns(cameraId);
-            CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object, previewService.Object, runtimeData.Object);
+            CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object, runtimeData.Object);
 
             // act
             IActionResult actualResult = controller.CreateCamera();

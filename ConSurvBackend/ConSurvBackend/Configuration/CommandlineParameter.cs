@@ -2,8 +2,9 @@
 using GRYLibrary.Core.APIServer.Verbs;
 using System.Collections.Generic;
 
-namespace ConSurvBackend.Core.Configuration { 
-    public  class CommandlineParameter : RunServer
+namespace ConSurvBackend.Core.Configuration
+{
+    public class CommandlineParameter : RunServer
     {
 
         [Option(nameof(InitialAdminPassword), Required = false)]
@@ -16,6 +17,6 @@ namespace ConSurvBackend.Core.Configuration {
         public string? InitialDatabaseConnectionString { get; set; }
 
         [Option(nameof(InitialCameraAddresses), Required = false, Separator = ';')]
-        public IEnumerable<string> InitialCameraAddresses { get; set; }
+        public IEnumerable<string> InitialCameraAddresses { get; set; } = new List<string>();
     }
 }

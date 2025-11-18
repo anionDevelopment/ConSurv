@@ -4,7 +4,6 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Crypto;
 using GRYLibrary.Core.Exceptions;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -221,6 +220,11 @@ namespace ConSurvBackend.Core.Services
         }
 
         public string GetBaseRoleOfAllUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ClaimsPrincipal GetPrincipal(string accessToken)
         {
             throw new NotImplementedException();
         }

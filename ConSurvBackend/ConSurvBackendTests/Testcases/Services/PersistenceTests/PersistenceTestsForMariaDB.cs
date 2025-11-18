@@ -5,8 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
     [TestClass]
-    [Ignore]
-    public class MariaDBPersistenceTests : PersistenceDatabaseTestsBase
+    public class PersistenceTestsForMariaDB : PersistenceTestsBaseForDatabase
     {
         protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
         {

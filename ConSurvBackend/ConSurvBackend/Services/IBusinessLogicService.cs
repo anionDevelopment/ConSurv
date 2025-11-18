@@ -4,6 +4,7 @@ using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using System;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
@@ -12,7 +13,7 @@ namespace ConSurvBackend.Core.Services
     {
         /// <returns>Returns the id of the created camera</returns>
         public string CreateCamera(string name, string streamURL);
-        public bool IsAvailable(Camera camera);
+        public (bool,Exception?) IsAvailable(Camera camera);
         public RecordState GetCurrentRecordingInformation(Camera camera);
         public void UpdateCamera(Camera camera);
         public void RemoveCamera(string cameraId);

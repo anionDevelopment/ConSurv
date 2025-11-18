@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
 {
-    public interface IConSurvDatabaseInteractor 
+    public interface IConSurvDatabaseInteractor : IProjectSpecificDatabaseInteractor
     {
-        public IGenericDatabaseInteractor GetGenericDatabaseInteractor();
-        public IList<MigrationInstance> GetAllMigrations();
         public ISQLProvider GetSQLProvider();
     }
 }

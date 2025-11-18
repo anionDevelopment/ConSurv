@@ -24,11 +24,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly IGeneralLogger _GeneralLogger;
         private readonly IExampleDataCreator _ExampleDataCreator;
-        private readonly IRTSPManager _RTSPManager;
-        private readonly IStreamOrganizerService _StreamOrganizerService;
         private readonly IPersistence _Persistence;
         private InitializationState _InitializationState = new Uninitialized();
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IRTSPManager rtspManager, IStreamOrganizerService streamOrganizerService, IPersistence persistence)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator,  IPersistence persistence)
         {
             this._AuthenticationService = authenticationService;
             this._Persistence = persistence;
@@ -36,8 +34,6 @@ namespace ConSurvBackend.Core.Services
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
             this._ExampleDataCreator = exampleDataCreator;
-            this._RTSPManager = rtspManager;
-            this._StreamOrganizerService = streamOrganizerService;
         }
 
         public InitializationState GetInitializationState()

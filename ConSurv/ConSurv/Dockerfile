@@ -12,16 +12,18 @@ RUN mkdir /Workspace && \
     mkdir /Workspace/Other/Certificates && \
     mkdir /Workspace/Other/EntryPoint && \
     apt-get update && \
-    apt-get install -y wget iputils-ping curl procps nginx
+    apt-get install -y curl nginx ffmpeg
 
 WORKDIR /Workspace/Other/EntryPoint
 
-#Install .NET and ffmpeg
-RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+#Install .NET
+RUN wget https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y aspnetcore-runtime-9.0 ffmpeg
+    apt-get install -y aspnetcore-runtime-10.0
+
+RUN rm -rf /var/lib/apt/lists/*
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_linux-x64 /Workspace/Application/Backend
 ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplication /Workspace/Application/Frontend/WebApplicationFiles

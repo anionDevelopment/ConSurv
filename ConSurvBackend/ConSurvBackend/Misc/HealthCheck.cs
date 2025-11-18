@@ -30,15 +30,21 @@ namespace ConSurvBackend.Core.Misc
             {
                 IList<string> messages = new List<string>();
                 HealthStatus result = HealthStatus.Healthy;
-
+                Tools.CheckSingleExternalService(this._Logger, this._Persistence.GetType().Name, this._Persistence, ref result, messages, true, true);
+                (HealthStatus, IList<string>) abortResult;
+                if (GUtilities.CheckCancellationToken(messages, cancellationToken, out abortResult))
+                {
+                    return abortResult;
+                }
                 foreach (Camera camera in this._CameraService.GetAllCameras().Values)
                 {
-                    Tools.CheckService(this._Logger, $"Camera {camera.Id}", false, () => this._CameraService.IsAvailable(camera), ref result, messages, true, false);
-                    if (GUtilities.CheckCancellationToken(messages, cancellationToken, out (HealthStatus, IList<string>) abortResult))
-                    { return abortResult; }
+                    Tools.CheckSingleExternalService(this._Logger, $"Camera_{camera.Id}", () => this._CameraService.IsAvailable(camera), ref result, messages, true, false);
+                    if (GUtilities.CheckCancellationToken(messages, cancellationToken, out abortResult))
+                    {
+                        return abortResult;
+                    }
                 }
 
-                Tools.CheckService(this._Logger, nameof(this._Persistence), this._Persistence, ref result, messages, true, true);
                 return (result, messages);
 
             }, context, cancellationToken, this._InitializationService);

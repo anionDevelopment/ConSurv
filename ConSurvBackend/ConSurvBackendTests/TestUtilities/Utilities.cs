@@ -1,14 +1,16 @@
-﻿using GRYLibrary.Core.APIServer.Services.Database;
+﻿using ConSurvBackend.Core.Services;
+using ConSurvBackend.Tests.TestUtilities.Constants;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using ConSurvBackend.Core.Services;
-using ConSurvBackend.Tests.TestUtilities.Constants;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
@@ -21,12 +23,12 @@ namespace ConSurvBackend.Tests.TestUtilities
             string result = File.ReadAllText(file, new UTF8Encoding(false));
             return result;
         }
-        public static TransientPersistence GetTransientPersistence()
+        public static (TransientPersistence, ISet<IDisposable>) GetTransientPersistence()
         {
             ITimeService timeService = new TimeService();
             TransientAuthenticationServicePersistence<User> transientAuthenticationServicePersistence = new TransientAuthenticationServicePersistence<User>(timeService);
             TransientPersistence persistence = new TransientPersistence(transientAuthenticationServicePersistence);
-            return persistence;
+            return (persistence, new HashSet<IDisposable>());
         }
 
         public static string GetTestMariaDBDatabaseFolder()

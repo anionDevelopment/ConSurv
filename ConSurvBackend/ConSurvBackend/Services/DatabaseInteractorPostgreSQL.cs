@@ -35,6 +35,10 @@ namespace ConSurvBackend.Core.Services
         {
             return new SQLProviderPostgreSQL();
         }
+        public void SetLogConnectionAttemptErrors(bool enabled)
+        {
+            this._DatabaseInteractor.SetLogConnectionAttemptErrors(enabled);
+        }
 
     }
 }

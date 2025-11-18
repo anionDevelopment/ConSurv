@@ -3,6 +3,7 @@ using ConSurvBackend.Core.Model.Internals;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.Misc;
+using System;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services
@@ -11,11 +12,9 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly byte[] _NoPreviewAvailablePicture;
         private readonly ITimeService _TimeService;
-        private readonly IBusinessLogicService _BusinessLogicService;
-        public RuntimeData(IGeneralResourceLoader generalResourceLoader, ITimeService timeService, IBusinessLogicService businessLogicService)
+        public RuntimeData(IGeneralResourceLoader generalResourceLoader, ITimeService timeService)
         {
             this._TimeService = timeService;
-            this._BusinessLogicService = businessLogicService;
             this._NoPreviewAvailablePicture = generalResourceLoader.GetResource("NoPreviewAvailablePicture.jpg");
         }
         #region Camera Internals
@@ -95,7 +94,7 @@ namespace ConSurvBackend.Core.Services
         {
             if (this._Previews[cameraId].Count == 0)
             {
-                this._Previews[cameraId].Enqueue(new Preview(this._NoPreviewAvailablePicture, this._TimeService.GetCurrentTimeInTimezone(this._BusinessLogicService.GetCameraById(cameraId).TimeZone)));
+                this._Previews[cameraId].Enqueue(new Preview(this._NoPreviewAvailablePicture, _TimeService.GetCurrentLocalTimeAsDateTimeOffset()));
             }
         }
 
