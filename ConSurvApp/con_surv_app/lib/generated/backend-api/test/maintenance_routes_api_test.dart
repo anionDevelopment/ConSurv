@@ -32,6 +32,11 @@ void main() {
       // TODO
     });
 
+    //Future aPIOtherMaintenanceInitializationStateGet() async
+    test('test aPIOtherMaintenanceInitializationStateGet', () async {
+      // TODO
+    });
+
     //Future aPIOtherMaintenanceMetricsGet() async
     test('test aPIOtherMaintenanceMetricsGet', () async {
       // TODO

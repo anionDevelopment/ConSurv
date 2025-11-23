@@ -34,6 +34,7 @@ namespace ConSurvBackend.Core.Services
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
             this._ExampleDataCreator = exampleDataCreator;
+            _GeneralLogger.Log("xx temp InitializationService-constr");
         }
 
         public InitializationState GetInitializationState()

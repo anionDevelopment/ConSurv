@@ -94,7 +94,7 @@ namespace ConSurvBackend.Core.Services
         {
             if (this._Previews[cameraId].Count == 0)
             {
-                this._Previews[cameraId].Enqueue(new Preview(this._NoPreviewAvailablePicture, _TimeService.GetCurrentLocalTimeAsDateTimeOffset()));
+                this._Previews[cameraId].Enqueue(new Preview(this._NoPreviewAvailablePicture, this._TimeService.GetCurrentLocalTimeAsDateTimeOffset()));
             }
         }
 

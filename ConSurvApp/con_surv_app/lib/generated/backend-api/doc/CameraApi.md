@@ -9,21 +9,21 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV1CameraControllerCameraCameraIdGet**](CameraApi.md#apiv1cameracontrollercameracameraidget) | **GET** /API/v1/CameraController/Camera/{cameraId} | 
-[**aPIV1CameraControllerCamerasGet**](CameraApi.md#apiv1cameracontrollercamerasget) | **GET** /API/v1/CameraController/Cameras | 
-[**aPIV1CameraControllerCreateCameraPost**](CameraApi.md#apiv1cameracontrollercreatecamerapost) | **POST** /API/v1/CameraController/CreateCamera | 
-[**aPIV1CameraControllerDownloadVideoCameraIdFilenameGet**](CameraApi.md#apiv1cameracontrollerdownloadvideocameraidfilenameget) | **GET** /API/v1/CameraController/DownloadVideo/{cameraId}/{filename} | 
-[**aPIV1CameraControllerGetPreviewCameraIdGet**](CameraApi.md#apiv1cameracontrollergetpreviewcameraidget) | **GET** /API/v1/CameraController/GetPreview/{cameraId} | 
-[**aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet**](CameraApi.md#apiv1cameracontrollergetpreviewofvideocameraidfilenameget) | **GET** /API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename} | 
-[**aPIV1CameraControllerListVideosGet**](CameraApi.md#apiv1cameracontrollerlistvideosget) | **GET** /API/v1/CameraController/ListVideos | 
-[**aPIV1CameraControllerRemoveCameraCameraIdDelete**](CameraApi.md#apiv1cameracontrollerremovecameracameraiddelete) | **DELETE** /API/v1/CameraController/RemoveCamera/{cameraId} | 
-[**aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete**](CameraApi.md#apiv1cameracontrollerremovevideocameraidfilenamedelete) | **DELETE** /API/v1/CameraController/RemoveVideo/{cameraId}/{filename} | 
-[**aPIV1CameraControllerRunONVIFCommandCameraIdPost**](CameraApi.md#apiv1cameracontrollerrunonvifcommandcameraidpost) | **POST** /API/v1/CameraController/RunONVIFCommand/{cameraId} | 
-[**aPIV1CameraControllerUpdateCameraPut**](CameraApi.md#apiv1cameracontrollerupdatecameraput) | **PUT** /API/v1/CameraController/UpdateCamera | 
+[**aPIV2CameraControllerCameraCameraIdGet**](CameraApi.md#apiv2cameracontrollercameracameraidget) | **GET** /API/v2/CameraController/Camera/{cameraId} | 
+[**aPIV2CameraControllerCamerasGet**](CameraApi.md#apiv2cameracontrollercamerasget) | **GET** /API/v2/CameraController/Cameras | 
+[**aPIV2CameraControllerCreateCameraPost**](CameraApi.md#apiv2cameracontrollercreatecamerapost) | **POST** /API/v2/CameraController/CreateCamera | 
+[**aPIV2CameraControllerDownloadVideoCameraIdFilenameGet**](CameraApi.md#apiv2cameracontrollerdownloadvideocameraidfilenameget) | **GET** /API/v2/CameraController/DownloadVideo/{cameraId}/{filename} | 
+[**aPIV2CameraControllerGetPreviewCameraIdGet**](CameraApi.md#apiv2cameracontrollergetpreviewcameraidget) | **GET** /API/v2/CameraController/GetPreview/{cameraId} | 
+[**aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet**](CameraApi.md#apiv2cameracontrollergetpreviewofvideocameraidfilenameget) | **GET** /API/v2/CameraController/GetPreviewOfVideo{cameraId}/{filename} | 
+[**aPIV2CameraControllerListVideosGet**](CameraApi.md#apiv2cameracontrollerlistvideosget) | **GET** /API/v2/CameraController/ListVideos | 
+[**aPIV2CameraControllerRemoveCameraCameraIdDelete**](CameraApi.md#apiv2cameracontrollerremovecameracameraiddelete) | **DELETE** /API/v2/CameraController/RemoveCamera/{cameraId} | 
+[**aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete**](CameraApi.md#apiv2cameracontrollerremovevideocameraidfilenamedelete) | **DELETE** /API/v2/CameraController/RemoveVideo/{cameraId}/{filename} | 
+[**aPIV2CameraControllerRunONVIFCommandCameraIdPost**](CameraApi.md#apiv2cameracontrollerrunonvifcommandcameraidpost) | **POST** /API/v2/CameraController/RunONVIFCommand/{cameraId} | 
+[**aPIV2CameraControllerUpdateCameraPut**](CameraApi.md#apiv2cameracontrollerupdatecameraput) | **PUT** /API/v2/CameraController/UpdateCamera | 
 
 
-# **aPIV1CameraControllerCameraCameraIdGet**
-> CameraDTO aPIV1CameraControllerCameraCameraIdGet(cameraId, xAccessToken)
+# **aPIV2CameraControllerCameraCameraIdGet**
+> CameraDTO aPIV2CameraControllerCameraCameraIdGet(cameraId, xAccessToken)
 
 
 
@@ -36,10 +36,10 @@ final cameraId = cameraId_example; // String |
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1CameraControllerCameraCameraIdGet(cameraId, xAccessToken);
+    final result = api_instance.aPIV2CameraControllerCameraCameraIdGet(cameraId, xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerCameraCameraIdGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerCameraCameraIdGet: $e\n');
 }
 ```
 
@@ -65,8 +65,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerCamerasGet**
-> List<CameraDTO> aPIV1CameraControllerCamerasGet(xAccessToken)
+# **aPIV2CameraControllerCamerasGet**
+> List<CameraDTO> aPIV2CameraControllerCamerasGet(xAccessToken)
 
 
 
@@ -78,10 +78,10 @@ final api_instance = CameraApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1CameraControllerCamerasGet(xAccessToken);
+    final result = api_instance.aPIV2CameraControllerCamerasGet(xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerCamerasGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerCamerasGet: $e\n');
 }
 ```
 
@@ -106,8 +106,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerCreateCameraPost**
-> String aPIV1CameraControllerCreateCameraPost(xAccessToken)
+# **aPIV2CameraControllerCreateCameraPost**
+> String aPIV2CameraControllerCreateCameraPost(xAccessToken)
 
 
 
@@ -119,10 +119,10 @@ final api_instance = CameraApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1CameraControllerCreateCameraPost(xAccessToken);
+    final result = api_instance.aPIV2CameraControllerCreateCameraPost(xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerCreateCameraPost: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerCreateCameraPost: $e\n');
 }
 ```
 
@@ -147,8 +147,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerDownloadVideoCameraIdFilenameGet**
-> aPIV1CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename)
+# **aPIV2CameraControllerDownloadVideoCameraIdFilenameGet**
+> aPIV2CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename)
 
 
 
@@ -161,9 +161,9 @@ final cameraId = cameraId_example; // String |
 final filename = filename_example; // String | 
 
 try {
-    api_instance.aPIV1CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename);
+    api_instance.aPIV2CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerDownloadVideoCameraIdFilenameGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerDownloadVideoCameraIdFilenameGet: $e\n');
 }
 ```
 
@@ -189,8 +189,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerGetPreviewCameraIdGet**
-> String aPIV1CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken)
+# **aPIV2CameraControllerGetPreviewCameraIdGet**
+> String aPIV2CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken)
 
 
 
@@ -203,10 +203,10 @@ final cameraId = cameraId_example; // String |
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken);
+    final result = api_instance.aPIV2CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerGetPreviewCameraIdGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerGetPreviewCameraIdGet: $e\n');
 }
 ```
 
@@ -232,8 +232,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet**
-> aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename)
+# **aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet**
+> aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename)
 
 
 
@@ -246,9 +246,9 @@ final cameraId = cameraId_example; // String |
 final filename = filename_example; // String | 
 
 try {
-    api_instance.aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename);
+    api_instance.aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet: $e\n');
 }
 ```
 
@@ -274,8 +274,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerListVideosGet**
-> aPIV1CameraControllerListVideosGet()
+# **aPIV2CameraControllerListVideosGet**
+> aPIV2CameraControllerListVideosGet()
 
 
 
@@ -286,9 +286,9 @@ import 'package:openapi/api.dart';
 final api_instance = CameraApi();
 
 try {
-    api_instance.aPIV1CameraControllerListVideosGet();
+    api_instance.aPIV2CameraControllerListVideosGet();
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerListVideosGet: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerListVideosGet: $e\n');
 }
 ```
 
@@ -310,8 +310,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerRemoveCameraCameraIdDelete**
-> aPIV1CameraControllerRemoveCameraCameraIdDelete(cameraId, xAccessToken)
+# **aPIV2CameraControllerRemoveCameraCameraIdDelete**
+> aPIV2CameraControllerRemoveCameraCameraIdDelete(cameraId, xAccessToken)
 
 
 
@@ -324,9 +324,9 @@ final cameraId = cameraId_example; // String |
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV1CameraControllerRemoveCameraCameraIdDelete(cameraId, xAccessToken);
+    api_instance.aPIV2CameraControllerRemoveCameraCameraIdDelete(cameraId, xAccessToken);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerRemoveCameraCameraIdDelete: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerRemoveCameraCameraIdDelete: $e\n');
 }
 ```
 
@@ -352,8 +352,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete**
-> aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename)
+# **aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete**
+> aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename)
 
 
 
@@ -366,9 +366,9 @@ final cameraId = cameraId_example; // String |
 final filename = filename_example; // String | 
 
 try {
-    api_instance.aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename);
+    api_instance.aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete: $e\n');
 }
 ```
 
@@ -394,8 +394,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerRunONVIFCommandCameraIdPost**
-> aPIV1CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO)
+# **aPIV2CameraControllerRunONVIFCommandCameraIdPost**
+> aPIV2CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO)
 
 
 
@@ -408,9 +408,9 @@ final cameraId = cameraId_example; // String |
 final oNVIFCommandDTO = ONVIFCommandDTO(); // ONVIFCommandDTO | 
 
 try {
-    api_instance.aPIV1CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO);
+    api_instance.aPIV2CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerRunONVIFCommandCameraIdPost: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerRunONVIFCommandCameraIdPost: $e\n');
 }
 ```
 
@@ -436,8 +436,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1CameraControllerUpdateCameraPut**
-> aPIV1CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO)
+# **aPIV2CameraControllerUpdateCameraPut**
+> aPIV2CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO)
 
 
 
@@ -450,9 +450,9 @@ final xAccessToken = xAccessToken_example; // String | Access Token
 final updateCameraDTO = UpdateCameraDTO(); // UpdateCameraDTO | 
 
 try {
-    api_instance.aPIV1CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO);
+    api_instance.aPIV2CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO);
 } catch (e) {
-    print('Exception when calling CameraApi->aPIV1CameraControllerUpdateCameraPut: $e\n');
+    print('Exception when calling CameraApi->aPIV2CameraControllerUpdateCameraPut: $e\n');
 }
 ```
 

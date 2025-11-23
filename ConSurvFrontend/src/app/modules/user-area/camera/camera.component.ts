@@ -38,7 +38,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.pipe(
       switchMap(params => {
         if (params["cameraId"]) {
-          return this.cameraService.aPIV1CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
+          return this.cameraService.aPIV2CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
         } else {
           return of(null);
         }
@@ -52,7 +52,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   initializeCamera(camera: CameraDTO): void {
     const apiURL: string = this.configurationService.getAPIURL();
     this.information = `Camera ${camera.name} (Id: ${camera.cameraId})`;
-    const url = `${apiURL}/API/v1/StreamingController/Stream/${camera.cameraId}/stream.m3u8`;
+    const url = `${apiURL}/API/v2/StreamingController/Stream/${camera.cameraId}/stream.m3u8`;
     this.player = videojs("videoPlayer", {
       autoplay: true,
       controls: false,

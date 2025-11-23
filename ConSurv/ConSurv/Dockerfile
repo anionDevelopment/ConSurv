@@ -12,11 +12,10 @@ RUN mkdir /Workspace && \
     mkdir /Workspace/Other/Certificates && \
     mkdir /Workspace/Other/EntryPoint && \
     apt-get update && \
-    apt-get install -y curl nginx ffmpeg
+    apt-get install -y curl nginx ffmpeg wget
 
 WORKDIR /Workspace/Other/EntryPoint
 
-#Install .NET
 RUN wget https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \

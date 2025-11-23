@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v1.1.4 API documentation
+ * ConSurvBackend v2.0.0 API documentation
  *
  * 
  *
@@ -40,18 +40,18 @@ export class StreamingService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV1StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (streamId === null || streamId === undefined) {
-            throw new Error('Required parameter streamId was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
+            throw new Error('Required parameter streamId was null or undefined when calling aPIV2StreamingControllerStreamStreamIdFilenameGet.');
         }
         if (filename === null || filename === undefined) {
-            throw new Error('Required parameter filename was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
+            throw new Error('Required parameter filename was null or undefined when calling aPIV2StreamingControllerStreamStreamIdFilenameGet.');
         }
         if (xAccessToken === null || xAccessToken === undefined) {
-            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV1StreamingControllerStreamStreamIdFilenameGet.');
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV2StreamingControllerStreamStreamIdFilenameGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -81,7 +81,7 @@ export class StreamingService extends BaseService {
             }
         }
 
-        let localVarPath = `/API/v1/StreamingController/Stream/${this.configuration.encodeParam({name: "streamId", value: streamId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "filename", value: filename, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/API/v2/StreamingController/Stream/${this.configuration.encodeParam({name: "streamId", value: streamId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "filename", value: filename, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {

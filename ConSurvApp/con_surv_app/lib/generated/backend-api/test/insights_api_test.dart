@@ -17,8 +17,8 @@ void main() {
   // final instance = InsightsApi();
 
   group('tests for InsightsApi', () {
-    //Future<CameraDTO> aPIV1InsightsControllerGetRunningProcessesGet(String xAccessToken) async
-    test('test aPIV1InsightsControllerGetRunningProcessesGet', () async {
+    //Future<CameraDTO> aPIV2InsightsControllerGetRunningProcessesGet(String xAccessToken) async
+    test('test aPIV2InsightsControllerGetRunningProcessesGet', () async {
       // TODO
     });
 

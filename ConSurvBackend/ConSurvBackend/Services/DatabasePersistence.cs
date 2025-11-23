@@ -74,7 +74,7 @@ namespace ConSurvBackend.Core.Services
                 command.CommandText = this._SQLProvider.GetScriptCreateCamera();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", camera.Id));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", camera.Name));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL,typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
@@ -449,7 +449,7 @@ namespace ConSurvBackend.Core.Services
             return this.RunTransaction(nameof(IsCamera),(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptIsCamera();
-                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("CameraId", id));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", id));
                 using DbDataReader reader = cmd.ExecuteReader();
                 reader.Read();
                 if (reader.HasRows)

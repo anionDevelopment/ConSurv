@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v1.1.4 API documentation",
+    "title": "ConSurvBackend v2.0.0 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,10 +12,10 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v1.1.4"
+    "version": "v2.0.0"
   },
   "paths": {
-    "/API/v1/CameraController/GetPreview/{cameraId}": {
+    "/API/v2/CameraController/GetPreview/{cameraId}": {
       "get": {
         "tags": [
           "Camera"
@@ -66,7 +66,7 @@
         }
       }
     },
-    "/API/v1/CameraController/CreateCamera": {
+    "/API/v2/CameraController/CreateCamera": {
       "post": {
         "tags": [
           "Camera"
@@ -106,7 +106,7 @@
         }
       }
     },
-    "/API/v1/CameraController/RemoveCamera/{cameraId}": {
+    "/API/v2/CameraController/RemoveCamera/{cameraId}": {
       "delete": {
         "tags": [
           "Camera"
@@ -137,7 +137,7 @@
         }
       }
     },
-    "/API/v1/CameraController/UpdateCamera": {
+    "/API/v2/CameraController/UpdateCamera": {
       "put": {
         "tags": [
           "Camera"
@@ -179,7 +179,7 @@
         }
       }
     },
-    "/API/v1/CameraController/Camera/{cameraId}": {
+    "/API/v2/CameraController/Camera/{cameraId}": {
       "get": {
         "tags": [
           "Camera"
@@ -227,7 +227,7 @@
         }
       }
     },
-    "/API/v1/CameraController/Cameras": {
+    "/API/v2/CameraController/Cameras": {
       "get": {
         "tags": [
           "Camera"
@@ -276,7 +276,7 @@
         }
       }
     },
-    "/API/v1/CameraController/RunONVIFCommand/{cameraId}": {
+    "/API/v2/CameraController/RunONVIFCommand/{cameraId}": {
       "post": {
         "tags": [
           "Camera"
@@ -317,7 +317,7 @@
         }
       }
     },
-    "/API/v1/CameraController/ListVideos": {
+    "/API/v2/CameraController/ListVideos": {
       "get": {
         "tags": [
           "Camera"
@@ -329,37 +329,7 @@
         }
       }
     },
-    "/API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename}": {
-      "get": {
-        "tags": [
-          "Camera"
-        ],
-        "parameters": [
-          {
-            "name": "cameraId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filename",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/API/v1/CameraController/DownloadVideo/{cameraId}/{filename}": {
+    "/API/v2/CameraController/GetPreviewOfVideo{cameraId}/{filename}": {
       "get": {
         "tags": [
           "Camera"
@@ -389,7 +359,37 @@
         }
       }
     },
-    "/API/v1/CameraController/RemoveVideo/{cameraId}/{filename}": {
+    "/API/v2/CameraController/DownloadVideo/{cameraId}/{filename}": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "parameters": [
+          {
+            "name": "cameraId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/v2/CameraController/RemoveVideo/{cameraId}/{filename}": {
       "delete": {
         "tags": [
           "Camera"
@@ -455,7 +455,7 @@
         }
       }
     },
-    "/API/v1/InsightsController/GetRunningProcesses": {
+    "/API/v2/InsightsController/GetRunningProcesses": {
       "get": {
         "tags": [
           "Insights"
@@ -496,6 +496,18 @@
       }
     },
     "/API/Other/Maintenance/AvailabilityCheck": {
+      "get": {
+        "tags": [
+          "MaintenanceRoutes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/API/Other/Maintenance/InitializationState": {
       "get": {
         "tags": [
           "MaintenanceRoutes"
@@ -555,7 +567,7 @@
         }
       }
     },
-    "/API/v1/StreamingController/Stream/{streamId}/{filename}": {
+    "/API/v2/StreamingController/Stream/{streamId}/{filename}": {
       "get": {
         "tags": [
           "Streaming"
@@ -594,7 +606,7 @@
         }
       }
     },
-    "/API/v1/UserController/Login": {
+    "/API/v2/UserController/Login": {
       "put": {
         "tags": [
           "User"
@@ -639,7 +651,7 @@
         }
       }
     },
-    "/API/v1/UserController/CreateUser": {
+    "/API/v2/UserController/CreateUser": {
       "put": {
         "tags": [
           "User"
@@ -676,7 +688,7 @@
         }
       }
     },
-    "/API/v1/UserController/Logout": {
+    "/API/v2/UserController/Logout": {
       "put": {
         "tags": [
           "User"
@@ -699,7 +711,7 @@
         }
       }
     },
-    "/API/v1/UserController/TokenIsValid": {
+    "/API/v2/UserController/TokenIsValid": {
       "get": {
         "tags": [
           "User"
@@ -737,7 +749,7 @@
         }
       }
     },
-    "/API/v1/UserController/GetRoles": {
+    "/API/v2/UserController/GetRoles": {
       "put": {
         "tags": [
           "User"
@@ -786,7 +798,7 @@
         }
       }
     },
-    "/API/v1/UserController/GetUserInformation": {
+    "/API/v2/UserController/GetUserInformation": {
       "get": {
         "tags": [
           "User"
@@ -954,5 +966,25 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Camera"
+    },
+    {
+      "name": "CommonRoutes"
+    },
+    {
+      "name": "Insights"
+    },
+    {
+      "name": "MaintenanceRoutes"
+    },
+    {
+      "name": "Streaming"
+    },
+    {
+      "name": "User"
+    }
+  ]
 }
