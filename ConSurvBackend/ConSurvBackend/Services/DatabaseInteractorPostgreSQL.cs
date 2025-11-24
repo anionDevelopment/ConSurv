@@ -8,13 +8,6 @@ namespace ConSurvBackend.Core.Services
 {
     public class DatabaseInteractorPostgreSQL : IConSurvDatabaseInteractor
     {
-        public IGRYLog Log
-        {
-            get
-            {
-                return this._DatabaseInteractor.Log;
-            }
-        }
         private readonly PostgreSQLDatabaseInteractor _DatabaseInteractor;
         private readonly IList<MigrationInstance> _Migrations = GRYMigrator.LoadMigrationsFromResources(Assembly.GetExecutingAssembly(), "ConSurvBackend.Core.Resources.Database.PostgreSQL.Migrations.");
         public DatabaseInteractorPostgreSQL(IGenericDatabaseInteractor interactor)
