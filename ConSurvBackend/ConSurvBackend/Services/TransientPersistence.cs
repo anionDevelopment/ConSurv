@@ -2,6 +2,7 @@
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Trans;
+using System;
 using System.Collections.Generic;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
@@ -50,9 +51,9 @@ namespace ConSurvBackend.Core.Services
             GUtilities.NoOperation();
         }
 
-        public bool IsAvailable()
+        public (bool, Exception?) IsAvailable()
         {
-            return true;
+            return (true, null);
         }
 
         public bool UserWithNameExists(string username)
@@ -178,6 +179,11 @@ namespace ConSurvBackend.Core.Services
         public bool IsCamera(string id)
         {
             return this._Cameras.ContainsKey(id);
+        }
+
+        public Role GetRoleById(string roleId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

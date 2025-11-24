@@ -72,7 +72,7 @@ describe('CamerasListComponent', () => {
         {
           provide: CameraService,
           useValue: {
-            aPIV1CameraControllerCamerasGet: () => of([]),
+            aPIV2CameraControllerCamerasGet: () => of([]),
           },
         },
         {

@@ -21,6 +21,7 @@ namespace ConSurvBackend.Core.Model.Base
             {
                 Certificate = null,
                 IsONVIFCamera = false,
+                StreamURL=$"rtsp://{name}"
             };
             this.RecordMode = new RecordAlways();
             this.Enabled = true;
@@ -37,5 +38,9 @@ namespace ConSurvBackend.Core.Model.Base
             return HashCode.Combine(this.Id);
         }
 
+        public override string? ToString()
+        {
+            return $"Camera_{this.Id}({this.Name})";
+        }
     }
 }

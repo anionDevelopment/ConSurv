@@ -1,5 +1,4 @@
 ﻿using ConSurvBackend.Core.Constants;
-using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
@@ -17,12 +16,10 @@ namespace ConSurvBackend.Core.Controller
     {
         public const string ControllerRoute = $"{ServerConfiguration.APIRoutePrefix}/v{GeneralConstants.CodeUnitMajorVersion}/{nameof(StreamingController)}";
         private readonly IApplicationConstants _ApplicationConstants;
-        private readonly IRTSPManager _RTSPManager;
         private readonly IGRYLog _Log;
-        public StreamingController(IApplicationConstants applicationConstants, IRTSPManager rtspManager, IGRYLog log)
+        public StreamingController(IApplicationConstants applicationConstants,  IGRYLog log)
         {
             this._ApplicationConstants = applicationConstants;
-            this._RTSPManager = rtspManager;
             this._Log = log;
         }
 

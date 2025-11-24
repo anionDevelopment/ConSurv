@@ -21,7 +21,7 @@ export class CameraPreviewComponent implements OnInit {
     if (this.cameraId) {
       interval(5000).pipe( 
         startWith(0),
-        switchMap(() => this.cameraService.aPIV1CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
+        switchMap(() => this.cameraService.aPIV2CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
         )).subscribe((result) => {
           this.image = 'data:image/png;base64,' + result;
         });

@@ -34,18 +34,17 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
             ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
-            IPersistence databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
-            persistence = databasePersistence;
+            var databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
+            persistence = databasePersistence.Item1;
             persistence.Reset();
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
-            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, databasePersistence);
+            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
-            Mock<IStreamOrganizerService> streamOrganizerServiceMock = new Mock<IStreamOrganizerService>(MockBehavior.Strict);
-            Mock<IRTSPManager> rtspManagerMock = new Mock<IRTSPManager>(MockBehavior.Strict);
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            businessLogicService = new BusinessLogicService(databasePersistence, logger, rtspManagerMock.Object, timeService, authenticationService, randomnessProvider, auditLog, streamOrganizerServiceMock.Object, persistedAPIServerConfiguration);
-            IExampleDataCreator exampleDataCreator = new ExampleDataCreator(databasePersistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
-            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, rtspManagerMock.Object, streamOrganizerServiceMock.Object, databasePersistence);
+            IRuntimeData runtimeData=new RuntimeData(generalResourceLoader,timeService);
+            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog,persistedAPIServerConfiguration,runtimeData);
+            IExampleDataCreator exampleDataCreator = new ExampleDataCreator(persistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
+            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
         }
 
         [TestMethod(nameof(DatabaseInitializationTest))]

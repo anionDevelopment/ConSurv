@@ -96,8 +96,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v1.1.4 API documentation
-  version: v1.1.4
+  title: ConSurvBackend v2.0.0 API documentation
+  version: v2.0.0
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:
@@ -115,6 +115,13 @@ paths:
       tags:
       - MaintenanceRoutes
   /API/Other/Maintenance/HealthCheck:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - MaintenanceRoutes
+  /API/Other/Maintenance/InitializationState:
     get:
       responses:
         '200':
@@ -156,7 +163,7 @@ paths:
           description: OK
       tags:
       - CommonRoutes
-  /API/v1/CameraController/Camera/{cameraId}:
+  /API/v2/CameraController/Camera/{cameraId}:
     get:
       parameters:
       - in: path
@@ -185,7 +192,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/Cameras:
+  /API/v2/CameraController/Cameras:
     get:
       parameters:
       - description: Access Token
@@ -215,7 +222,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/CreateCamera:
+  /API/v2/CameraController/CreateCamera:
     post:
       parameters:
       - description: Access Token
@@ -239,7 +246,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/DownloadVideo/{cameraId}/{filename}:
+  /API/v2/CameraController/DownloadVideo/{cameraId}/{filename}:
     get:
       parameters:
       - in: path
@@ -257,7 +264,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/GetPreview/{cameraId}:
+  /API/v2/CameraController/GetPreview/{cameraId}:
     get:
       parameters:
       - in: path
@@ -289,7 +296,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename}:
+  /API/v2/CameraController/GetPreviewOfVideo{cameraId}/{filename}:
     get:
       parameters:
       - in: path
@@ -307,14 +314,14 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/ListVideos:
+  /API/v2/CameraController/ListVideos:
     get:
       responses:
         '200':
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/RemoveCamera/{cameraId}:
+  /API/v2/CameraController/RemoveCamera/{cameraId}:
     delete:
       parameters:
       - in: path
@@ -333,7 +340,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/RemoveVideo/{cameraId}/{filename}:
+  /API/v2/CameraController/RemoveVideo/{cameraId}/{filename}:
     delete:
       parameters:
       - in: path
@@ -351,7 +358,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/RunONVIFCommand/{cameraId}:
+  /API/v2/CameraController/RunONVIFCommand/{cameraId}:
     post:
       parameters:
       - in: path
@@ -375,7 +382,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/CameraController/UpdateCamera:
+  /API/v2/CameraController/UpdateCamera:
     put:
       parameters:
       - description: Access Token
@@ -400,7 +407,7 @@ paths:
           description: OK
       tags:
       - Camera
-  /API/v1/InsightsController/GetRunningProcesses:
+  /API/v2/InsightsController/GetRunningProcesses:
     get:
       parameters:
       - description: Access Token
@@ -424,7 +431,7 @@ paths:
           description: OK
       tags:
       - Insights
-  /API/v1/StreamingController/Stream/{streamId}/{filename}:
+  /API/v2/StreamingController/Stream/{streamId}/{filename}:
     get:
       parameters:
       - in: path
@@ -448,7 +455,7 @@ paths:
           description: OK
       tags:
       - Streaming
-  /API/v1/UserController/CreateUser:
+  /API/v2/UserController/CreateUser:
     put:
       parameters:
       - in: header
@@ -470,7 +477,7 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/UserController/GetRoles:
+  /API/v2/UserController/GetRoles:
     put:
       parameters:
       - description: Access Token
@@ -500,7 +507,7 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/UserController/GetUserInformation:
+  /API/v2/UserController/GetUserInformation:
     get:
       parameters:
       - description: Access Token
@@ -524,7 +531,7 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/UserController/Login:
+  /API/v2/UserController/Login:
     put:
       parameters:
       - in: header
@@ -550,7 +557,7 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/UserController/Logout:
+  /API/v2/UserController/Logout:
     put:
       parameters:
       - description: Access Token
@@ -564,7 +571,7 @@ paths:
           description: OK
       tags:
       - User
-  /API/v1/UserController/TokenIsValid:
+  /API/v2/UserController/TokenIsValid:
     get:
       parameters:
       - in: header
@@ -586,3 +593,10 @@ paths:
           description: OK
       tags:
       - User
+tags:
+- name: Camera
+- name: CommonRoutes
+- name: Insights
+- name: MaintenanceRoutes
+- name: Streaming
+- name: User

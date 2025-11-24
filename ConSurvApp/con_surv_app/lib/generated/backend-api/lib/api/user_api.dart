@@ -16,7 +16,7 @@ class UserApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'PUT /API/v1/UserController/CreateUser' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /API/v2/UserController/CreateUser' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -25,9 +25,9 @@ class UserApi {
   /// * [String] user:
   ///
   /// * [String] password:
-  Future<Response> aPIV1UserControllerCreateUserPutWithHttpInfo(String xAccessToken, { String? user, String? password, }) async {
+  Future<Response> aPIV2UserControllerCreateUserPutWithHttpInfo(String xAccessToken, { String? user, String? password, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/CreateUser';
+    final path = r'/API/v2/UserController/CreateUser';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -66,21 +66,21 @@ class UserApi {
   /// * [String] user:
   ///
   /// * [String] password:
-  Future<void> aPIV1UserControllerCreateUserPut(String xAccessToken, { String? user, String? password, }) async {
-    final response = await aPIV1UserControllerCreateUserPutWithHttpInfo(xAccessToken,  user: user, password: password, );
+  Future<void> aPIV2UserControllerCreateUserPut(String xAccessToken, { String? user, String? password, }) async {
+    final response = await aPIV2UserControllerCreateUserPutWithHttpInfo(xAccessToken,  user: user, password: password, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'PUT /API/v1/UserController/GetRoles' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /API/v2/UserController/GetRoles' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1UserControllerGetRolesPutWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2UserControllerGetRolesPutWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/GetRoles';
+    final path = r'/API/v2/UserController/GetRoles';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -109,8 +109,8 @@ class UserApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<List<String>?> aPIV1UserControllerGetRolesPut(String xAccessToken,) async {
-    final response = await aPIV1UserControllerGetRolesPutWithHttpInfo(xAccessToken,);
+  Future<List<String>?> aPIV2UserControllerGetRolesPut(String xAccessToken,) async {
+    final response = await aPIV2UserControllerGetRolesPutWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -127,14 +127,14 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v1/UserController/GetUserInformation' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/UserController/GetUserInformation' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1UserControllerGetUserInformationGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2UserControllerGetUserInformationGetWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/GetUserInformation';
+    final path = r'/API/v2/UserController/GetUserInformation';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -163,8 +163,8 @@ class UserApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<UserInformationDTO?> aPIV1UserControllerGetUserInformationGet(String xAccessToken,) async {
-    final response = await aPIV1UserControllerGetUserInformationGetWithHttpInfo(xAccessToken,);
+  Future<UserInformationDTO?> aPIV2UserControllerGetUserInformationGet(String xAccessToken,) async {
+    final response = await aPIV2UserControllerGetUserInformationGetWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -178,15 +178,15 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'PUT /API/v1/UserController/Login' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /API/v2/UserController/Login' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xUser:
   ///
   /// * [String] xPassword:
-  Future<Response> aPIV1UserControllerLoginPutWithHttpInfo({ String? xUser, String? xPassword, }) async {
+  Future<Response> aPIV2UserControllerLoginPutWithHttpInfo({ String? xUser, String? xPassword, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/Login';
+    final path = r'/API/v2/UserController/Login';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -221,8 +221,8 @@ class UserApi {
   /// * [String] xUser:
   ///
   /// * [String] xPassword:
-  Future<AccessToken?> aPIV1UserControllerLoginPut({ String? xUser, String? xPassword, }) async {
-    final response = await aPIV1UserControllerLoginPutWithHttpInfo( xUser: xUser, xPassword: xPassword, );
+  Future<AccessToken?> aPIV2UserControllerLoginPut({ String? xUser, String? xPassword, }) async {
+    final response = await aPIV2UserControllerLoginPutWithHttpInfo( xUser: xUser, xPassword: xPassword, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -236,14 +236,14 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'PUT /API/v1/UserController/Logout' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /API/v2/UserController/Logout' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1UserControllerLogoutPutWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2UserControllerLogoutPutWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/Logout';
+    final path = r'/API/v2/UserController/Logout';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -272,20 +272,20 @@ class UserApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV1UserControllerLogoutPut(String xAccessToken,) async {
-    final response = await aPIV1UserControllerLogoutPutWithHttpInfo(xAccessToken,);
+  Future<void> aPIV2UserControllerLogoutPut(String xAccessToken,) async {
+    final response = await aPIV2UserControllerLogoutPutWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'GET /API/v1/UserController/TokenIsValid' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/UserController/TokenIsValid' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] accessToken:
-  Future<Response> aPIV1UserControllerTokenIsValidGetWithHttpInfo({ String? accessToken, }) async {
+  Future<Response> aPIV2UserControllerTokenIsValidGetWithHttpInfo({ String? accessToken, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/UserController/TokenIsValid';
+    final path = r'/API/v2/UserController/TokenIsValid';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -315,8 +315,8 @@ class UserApi {
   /// Parameters:
   ///
   /// * [String] accessToken:
-  Future<bool?> aPIV1UserControllerTokenIsValidGet({ String? accessToken, }) async {
-    final response = await aPIV1UserControllerTokenIsValidGetWithHttpInfo( accessToken: accessToken, );
+  Future<bool?> aPIV2UserControllerTokenIsValidGet({ String? accessToken, }) async {
+    final response = await aPIV2UserControllerTokenIsValidGetWithHttpInfo( accessToken: accessToken, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v1.1.4 API documentation
+ * ConSurvBackend v2.0.0 API documentation
  *
  * 
  *
@@ -40,12 +40,12 @@ export class InsightsService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<CameraDTO>;
-    public aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CameraDTO>>;
-    public aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CameraDTO>>;
-    public aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<CameraDTO>;
+    public aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CameraDTO>>;
+    public aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CameraDTO>>;
+    public aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (xAccessToken === null || xAccessToken === undefined) {
-            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV1InsightsControllerGetRunningProcessesGet.');
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV2InsightsControllerGetRunningProcessesGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -78,7 +78,7 @@ export class InsightsService extends BaseService {
             }
         }
 
-        let localVarPath = `/API/v1/InsightsController/GetRunningProcesses`;
+        let localVarPath = `/API/v2/InsightsController/GetRunningProcesses`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CameraDTO>('get', `${basePath}${localVarPath}`,
             {

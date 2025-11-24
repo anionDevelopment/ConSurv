@@ -55,9 +55,9 @@ export class EditCameraDialogComponent {
         isONVIFCamera: this.form.get('isonvifcamera')!.value,
       },
     };
-    this.cameraService.aPIV1CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(
+    this.cameraService.aPIV2CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(
       switchMap(() => {
-        const result: Observable<CameraDTO> = this.cameraService.aPIV1CameraControllerCameraCameraIdGet(updated.cameraId!, this.storageService.getAccessToken());
+        const result: Observable<CameraDTO> = this.cameraService.aPIV2CameraControllerCameraCameraIdGet(updated.cameraId!, this.storageService.getAccessToken());
         return result;
       })
     ).subscribe((cameraDTO: CameraDTO) => {

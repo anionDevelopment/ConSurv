@@ -9,11 +9,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV1InsightsControllerGetRunningProcessesGet**](InsightsApi.md#apiv1insightscontrollergetrunningprocessesget) | **GET** /API/v1/InsightsController/GetRunningProcesses | 
+[**aPIV2InsightsControllerGetRunningProcessesGet**](InsightsApi.md#apiv2insightscontrollergetrunningprocessesget) | **GET** /API/v2/InsightsController/GetRunningProcesses | 
 
 
-# **aPIV1InsightsControllerGetRunningProcessesGet**
-> CameraDTO aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken)
+# **aPIV2InsightsControllerGetRunningProcessesGet**
+> CameraDTO aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken)
 
 
 
@@ -25,10 +25,10 @@ final api_instance = InsightsApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1InsightsControllerGetRunningProcessesGet(xAccessToken);
+    final result = api_instance.aPIV2InsightsControllerGetRunningProcessesGet(xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling InsightsApi->aPIV1InsightsControllerGetRunningProcessesGet: $e\n');
+    print('Exception when calling InsightsApi->aPIV2InsightsControllerGetRunningProcessesGet: $e\n');
 }
 ```
 

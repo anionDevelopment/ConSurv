@@ -5,12 +5,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
     [TestClass]
-    [Ignore]
-    public class PostgresSQLDatabaseTests : DatabaseTestsBase
+    public class DatabaseTestsForMariaDB : DatabaseTestsBase
     {
-        protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
+        protected override DatabaseTestFrameworkTemplate GetDatabaseTestFrameworkImplementation()
         {
-            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForPostgreSQL();
+            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForMariaDB();
         }
 
 

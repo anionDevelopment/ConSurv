@@ -9,16 +9,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV1UserControllerCreateUserPut**](UserApi.md#apiv1usercontrollercreateuserput) | **PUT** /API/v1/UserController/CreateUser | 
-[**aPIV1UserControllerGetRolesPut**](UserApi.md#apiv1usercontrollergetrolesput) | **PUT** /API/v1/UserController/GetRoles | 
-[**aPIV1UserControllerGetUserInformationGet**](UserApi.md#apiv1usercontrollergetuserinformationget) | **GET** /API/v1/UserController/GetUserInformation | 
-[**aPIV1UserControllerLoginPut**](UserApi.md#apiv1usercontrollerloginput) | **PUT** /API/v1/UserController/Login | 
-[**aPIV1UserControllerLogoutPut**](UserApi.md#apiv1usercontrollerlogoutput) | **PUT** /API/v1/UserController/Logout | 
-[**aPIV1UserControllerTokenIsValidGet**](UserApi.md#apiv1usercontrollertokenisvalidget) | **GET** /API/v1/UserController/TokenIsValid | 
+[**aPIV2UserControllerCreateUserPut**](UserApi.md#apiv2usercontrollercreateuserput) | **PUT** /API/v2/UserController/CreateUser | 
+[**aPIV2UserControllerGetRolesPut**](UserApi.md#apiv2usercontrollergetrolesput) | **PUT** /API/v2/UserController/GetRoles | 
+[**aPIV2UserControllerGetUserInformationGet**](UserApi.md#apiv2usercontrollergetuserinformationget) | **GET** /API/v2/UserController/GetUserInformation | 
+[**aPIV2UserControllerLoginPut**](UserApi.md#apiv2usercontrollerloginput) | **PUT** /API/v2/UserController/Login | 
+[**aPIV2UserControllerLogoutPut**](UserApi.md#apiv2usercontrollerlogoutput) | **PUT** /API/v2/UserController/Logout | 
+[**aPIV2UserControllerTokenIsValidGet**](UserApi.md#apiv2usercontrollertokenisvalidget) | **GET** /API/v2/UserController/TokenIsValid | 
 
 
-# **aPIV1UserControllerCreateUserPut**
-> aPIV1UserControllerCreateUserPut(xAccessToken, user, password)
+# **aPIV2UserControllerCreateUserPut**
+> aPIV2UserControllerCreateUserPut(xAccessToken, user, password)
 
 
 
@@ -32,9 +32,9 @@ final user = user_example; // String |
 final password = password_example; // String | 
 
 try {
-    api_instance.aPIV1UserControllerCreateUserPut(xAccessToken, user, password);
+    api_instance.aPIV2UserControllerCreateUserPut(xAccessToken, user, password);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerCreateUserPut: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerCreateUserPut: $e\n');
 }
 ```
 
@@ -61,8 +61,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1UserControllerGetRolesPut**
-> List<String> aPIV1UserControllerGetRolesPut(xAccessToken)
+# **aPIV2UserControllerGetRolesPut**
+> List<String> aPIV2UserControllerGetRolesPut(xAccessToken)
 
 
 
@@ -74,10 +74,10 @@ final api_instance = UserApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1UserControllerGetRolesPut(xAccessToken);
+    final result = api_instance.aPIV2UserControllerGetRolesPut(xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerGetRolesPut: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerGetRolesPut: $e\n');
 }
 ```
 
@@ -102,8 +102,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1UserControllerGetUserInformationGet**
-> UserInformationDTO aPIV1UserControllerGetUserInformationGet(xAccessToken)
+# **aPIV2UserControllerGetUserInformationGet**
+> UserInformationDTO aPIV2UserControllerGetUserInformationGet(xAccessToken)
 
 
 
@@ -115,10 +115,10 @@ final api_instance = UserApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    final result = api_instance.aPIV1UserControllerGetUserInformationGet(xAccessToken);
+    final result = api_instance.aPIV2UserControllerGetUserInformationGet(xAccessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerGetUserInformationGet: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerGetUserInformationGet: $e\n');
 }
 ```
 
@@ -143,8 +143,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1UserControllerLoginPut**
-> AccessToken aPIV1UserControllerLoginPut(xUser, xPassword)
+# **aPIV2UserControllerLoginPut**
+> AccessToken aPIV2UserControllerLoginPut(xUser, xPassword)
 
 
 
@@ -157,10 +157,10 @@ final xUser = xUser_example; // String |
 final xPassword = xPassword_example; // String | 
 
 try {
-    final result = api_instance.aPIV1UserControllerLoginPut(xUser, xPassword);
+    final result = api_instance.aPIV2UserControllerLoginPut(xUser, xPassword);
     print(result);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerLoginPut: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerLoginPut: $e\n');
 }
 ```
 
@@ -186,8 +186,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1UserControllerLogoutPut**
-> aPIV1UserControllerLogoutPut(xAccessToken)
+# **aPIV2UserControllerLogoutPut**
+> aPIV2UserControllerLogoutPut(xAccessToken)
 
 
 
@@ -199,9 +199,9 @@ final api_instance = UserApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV1UserControllerLogoutPut(xAccessToken);
+    api_instance.aPIV2UserControllerLogoutPut(xAccessToken);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerLogoutPut: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerLogoutPut: $e\n');
 }
 ```
 
@@ -226,8 +226,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **aPIV1UserControllerTokenIsValidGet**
-> bool aPIV1UserControllerTokenIsValidGet(accessToken)
+# **aPIV2UserControllerTokenIsValidGet**
+> bool aPIV2UserControllerTokenIsValidGet(accessToken)
 
 
 
@@ -239,10 +239,10 @@ final api_instance = UserApi();
 final accessToken = accessToken_example; // String | 
 
 try {
-    final result = api_instance.aPIV1UserControllerTokenIsValidGet(accessToken);
+    final result = api_instance.aPIV2UserControllerTokenIsValidGet(accessToken);
     print(result);
 } catch (e) {
-    print('Exception when calling UserApi->aPIV1UserControllerTokenIsValidGet: $e\n');
+    print('Exception when calling UserApi->aPIV2UserControllerTokenIsValidGet: $e\n');
 }
 ```
 

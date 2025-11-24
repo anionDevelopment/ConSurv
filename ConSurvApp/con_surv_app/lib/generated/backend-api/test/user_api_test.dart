@@ -17,33 +17,33 @@ void main() {
   // final instance = UserApi();
 
   group('tests for UserApi', () {
-    //Future aPIV1UserControllerCreateUserPut(String xAccessToken, { String user, String password }) async
-    test('test aPIV1UserControllerCreateUserPut', () async {
+    //Future aPIV2UserControllerCreateUserPut(String xAccessToken, { String user, String password }) async
+    test('test aPIV2UserControllerCreateUserPut', () async {
       // TODO
     });
 
-    //Future<List<String>> aPIV1UserControllerGetRolesPut(String xAccessToken) async
-    test('test aPIV1UserControllerGetRolesPut', () async {
+    //Future<List<String>> aPIV2UserControllerGetRolesPut(String xAccessToken) async
+    test('test aPIV2UserControllerGetRolesPut', () async {
       // TODO
     });
 
-    //Future<UserInformationDTO> aPIV1UserControllerGetUserInformationGet(String xAccessToken) async
-    test('test aPIV1UserControllerGetUserInformationGet', () async {
+    //Future<UserInformationDTO> aPIV2UserControllerGetUserInformationGet(String xAccessToken) async
+    test('test aPIV2UserControllerGetUserInformationGet', () async {
       // TODO
     });
 
-    //Future<AccessToken> aPIV1UserControllerLoginPut({ String xUser, String xPassword }) async
-    test('test aPIV1UserControllerLoginPut', () async {
+    //Future<AccessToken> aPIV2UserControllerLoginPut({ String xUser, String xPassword }) async
+    test('test aPIV2UserControllerLoginPut', () async {
       // TODO
     });
 
-    //Future aPIV1UserControllerLogoutPut(String xAccessToken) async
-    test('test aPIV1UserControllerLogoutPut', () async {
+    //Future aPIV2UserControllerLogoutPut(String xAccessToken) async
+    test('test aPIV2UserControllerLogoutPut', () async {
       // TODO
     });
 
-    //Future<bool> aPIV1UserControllerTokenIsValidGet({ String accessToken }) async
-    test('test aPIV1UserControllerTokenIsValidGet', () async {
+    //Future<bool> aPIV2UserControllerTokenIsValidGet({ String accessToken }) async
+    test('test aPIV2UserControllerTokenIsValidGet', () async {
       // TODO
     });
 

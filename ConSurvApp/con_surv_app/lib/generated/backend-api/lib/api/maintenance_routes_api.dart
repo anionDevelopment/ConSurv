@@ -115,6 +115,39 @@ class MaintenanceRoutesApi {
     }
   }
 
+  /// Performs an HTTP 'GET /API/Other/Maintenance/InitializationState' operation and returns the [Response].
+  Future<Response> aPIOtherMaintenanceInitializationStateGetWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/API/Other/Maintenance/InitializationState';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<void> aPIOtherMaintenanceInitializationStateGet() async {
+    final response = await aPIOtherMaintenanceInitializationStateGetWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'GET /API/Other/Maintenance/Metrics' operation and returns the [Response].
   Future<Response> aPIOtherMaintenanceMetricsGetWithHttpInfo() async {
     // ignore: prefer_const_declarations

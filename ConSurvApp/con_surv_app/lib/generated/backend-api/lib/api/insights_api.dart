@@ -16,14 +16,14 @@ class InsightsApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v1/InsightsController/GetRunningProcesses' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/InsightsController/GetRunningProcesses' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1InsightsControllerGetRunningProcessesGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2InsightsControllerGetRunningProcessesGetWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/InsightsController/GetRunningProcesses';
+    final path = r'/API/v2/InsightsController/GetRunningProcesses';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -52,8 +52,8 @@ class InsightsApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<CameraDTO?> aPIV1InsightsControllerGetRunningProcessesGet(String xAccessToken,) async {
-    final response = await aPIV1InsightsControllerGetRunningProcessesGetWithHttpInfo(xAccessToken,);
+  Future<CameraDTO?> aPIV2InsightsControllerGetRunningProcessesGet(String xAccessToken,) async {
+    final response = await aPIV2InsightsControllerGetRunningProcessesGetWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

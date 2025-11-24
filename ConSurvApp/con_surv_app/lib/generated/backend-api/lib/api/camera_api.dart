@@ -16,16 +16,16 @@ class CameraApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/Camera/{cameraId}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/CameraController/Camera/{cameraId}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerCameraCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV2CameraControllerCameraCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/Camera/{cameraId}'
+    final path = r'/API/v2/CameraController/Camera/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
 
     // ignore: prefer_final_locals
@@ -57,8 +57,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<CameraDTO?> aPIV1CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken,) async {
-    final response = await aPIV1CameraControllerCameraCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
+  Future<CameraDTO?> aPIV2CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken,) async {
+    final response = await aPIV2CameraControllerCameraCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -72,14 +72,14 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/Cameras' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/CameraController/Cameras' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerCamerasGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2CameraControllerCamerasGetWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/Cameras';
+    final path = r'/API/v2/CameraController/Cameras';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -108,8 +108,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<List<CameraDTO>?> aPIV1CameraControllerCamerasGet(String xAccessToken,) async {
-    final response = await aPIV1CameraControllerCamerasGetWithHttpInfo(xAccessToken,);
+  Future<List<CameraDTO>?> aPIV2CameraControllerCamerasGet(String xAccessToken,) async {
+    final response = await aPIV2CameraControllerCamerasGetWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -126,14 +126,14 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'POST /API/v1/CameraController/CreateCamera' operation and returns the [Response].
+  /// Performs an HTTP 'POST /API/v2/CameraController/CreateCamera' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerCreateCameraPostWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV2CameraControllerCreateCameraPostWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/CreateCamera';
+    final path = r'/API/v2/CameraController/CreateCamera';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -162,8 +162,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<String?> aPIV1CameraControllerCreateCameraPost(String xAccessToken,) async {
-    final response = await aPIV1CameraControllerCreateCameraPostWithHttpInfo(xAccessToken,);
+  Future<String?> aPIV2CameraControllerCreateCameraPost(String xAccessToken,) async {
+    final response = await aPIV2CameraControllerCreateCameraPostWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -177,15 +177,15 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/DownloadVideo/{cameraId}/{filename}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/CameraController/DownloadVideo/{cameraId}/{filename}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<Response> aPIV1CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
+  Future<Response> aPIV2CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/DownloadVideo/{cameraId}/{filename}'
+    final path = r'/API/v2/CameraController/DownloadVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
       .replaceAll('{filename}', filename);
 
@@ -215,23 +215,23 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<void> aPIV1CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename,) async {
-    final response = await aPIV1CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename,);
+  Future<void> aPIV2CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename,) async {
+    final response = await aPIV2CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/GetPreview/{cameraId}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/CameraController/GetPreview/{cameraId}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerGetPreviewCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV2CameraControllerGetPreviewCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/GetPreview/{cameraId}'
+    final path = r'/API/v2/CameraController/GetPreview/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
 
     // ignore: prefer_final_locals
@@ -263,8 +263,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<String?> aPIV1CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken,) async {
-    final response = await aPIV1CameraControllerGetPreviewCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
+  Future<String?> aPIV2CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken,) async {
+    final response = await aPIV2CameraControllerGetPreviewCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -278,15 +278,15 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v2/CameraController/GetPreviewOfVideo{cameraId}/{filename}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<Response> aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
+  Future<Response> aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/GetPreviewOfVideo{cameraId}/{filename}'
+    final path = r'/API/v2/CameraController/GetPreviewOfVideo{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
       .replaceAll('{filename}', filename);
 
@@ -316,17 +316,17 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<void> aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename,) async {
-    final response = await aPIV1CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename,);
+  Future<void> aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename,) async {
+    final response = await aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'GET /API/v1/CameraController/ListVideos' operation and returns the [Response].
-  Future<Response> aPIV1CameraControllerListVideosGetWithHttpInfo() async {
+  /// Performs an HTTP 'GET /API/v2/CameraController/ListVideos' operation and returns the [Response].
+  Future<Response> aPIV2CameraControllerListVideosGetWithHttpInfo() async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/ListVideos';
+    final path = r'/API/v2/CameraController/ListVideos';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -349,23 +349,23 @@ class CameraApi {
     );
   }
 
-  Future<void> aPIV1CameraControllerListVideosGet() async {
-    final response = await aPIV1CameraControllerListVideosGetWithHttpInfo();
+  Future<void> aPIV2CameraControllerListVideosGet() async {
+    final response = await aPIV2CameraControllerListVideosGetWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'DELETE /API/v1/CameraController/RemoveCamera/{cameraId}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /API/v2/CameraController/RemoveCamera/{cameraId}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV1CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV2CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(String cameraId, String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/RemoveCamera/{cameraId}'
+    final path = r'/API/v2/CameraController/RemoveCamera/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
 
     // ignore: prefer_final_locals
@@ -397,22 +397,22 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV1CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken,) async {
-    final response = await aPIV1CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(cameraId, xAccessToken,);
+  Future<void> aPIV2CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken,) async {
+    final response = await aPIV2CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(cameraId, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'DELETE /API/v1/CameraController/RemoveVideo/{cameraId}/{filename}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /API/v2/CameraController/RemoveVideo/{cameraId}/{filename}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<Response> aPIV1CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename,) async {
+  Future<Response> aPIV2CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/RemoveVideo/{cameraId}/{filename}'
+    final path = r'/API/v2/CameraController/RemoveVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
       .replaceAll('{filename}', filename);
 
@@ -442,22 +442,22 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///
   /// * [String] filename (required):
-  Future<void> aPIV1CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename,) async {
-    final response = await aPIV1CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename,);
+  Future<void> aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename,) async {
+    final response = await aPIV2CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /API/v1/CameraController/RunONVIFCommand/{cameraId}' operation and returns the [Response].
+  /// Performs an HTTP 'POST /API/v2/CameraController/RunONVIFCommand/{cameraId}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] cameraId (required):
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
-  Future<Response> aPIV1CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
+  Future<Response> aPIV2CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/RunONVIFCommand/{cameraId}'
+    final path = r'/API/v2/CameraController/RunONVIFCommand/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
 
     // ignore: prefer_final_locals
@@ -486,23 +486,23 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
-  Future<void> aPIV1CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
-    final response = await aPIV1CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId,  oNVIFCommandDTO: oNVIFCommandDTO, );
+  Future<void> aPIV2CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
+    final response = await aPIV2CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId,  oNVIFCommandDTO: oNVIFCommandDTO, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'PUT /API/v1/CameraController/UpdateCamera' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /API/v2/CameraController/UpdateCamera' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
-  Future<Response> aPIV1CameraControllerUpdateCameraPutWithHttpInfo(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
+  Future<Response> aPIV2CameraControllerUpdateCameraPutWithHttpInfo(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v1/CameraController/UpdateCamera';
+    final path = r'/API/v2/CameraController/UpdateCamera';
 
     // ignore: prefer_final_locals
     Object? postBody = updateCameraDTO;
@@ -533,8 +533,8 @@ class CameraApi {
   ///   Access Token
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
-  Future<void> aPIV1CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
-    final response = await aPIV1CameraControllerUpdateCameraPutWithHttpInfo(xAccessToken,  updateCameraDTO: updateCameraDTO, );
+  Future<void> aPIV2CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
+    final response = await aPIV2CameraControllerUpdateCameraPutWithHttpInfo(xAccessToken,  updateCameraDTO: updateCameraDTO, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

@@ -12,6 +12,7 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 - `python`
 - `reportgenerator`
 - `scriptcollection`
+- `swagger`
 
 ## IDE
 

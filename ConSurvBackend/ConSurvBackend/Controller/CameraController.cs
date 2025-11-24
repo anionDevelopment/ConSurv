@@ -1,5 +1,4 @@
-﻿using ConSurvBackend.Core.BackgroundServices;
-using ConSurvBackend.Core.Constants;
+﻿using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
@@ -20,14 +19,12 @@ namespace ConSurvBackend.Core.Controller
         private readonly IGeneralLogger _Logger;
         private readonly IPersistence _Persistence;
         private readonly IBusinessLogicService _CameraService;
-        private readonly IPreviewService _PreviewService;
         private readonly IRuntimeData _RuntimeData;
-        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IPreviewService previewService, IRuntimeData runtimeData)
+        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IRuntimeData runtimeData)
         {
             this._Logger = logger;
             this._Persistence = persistence;
             this._CameraService = cameraService;
-            this._PreviewService = previewService;
             this._RuntimeData = runtimeData;
         }
 
@@ -115,7 +112,7 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(ListVideos)}")]
         public IActionResult ListVideos()
         {
-            IDictionary<string,IList<string>> result = this._CameraService.GetVideos();
+            IDictionary<string, IList<string>> result = this._CameraService.GetVideos();
             return this.Ok(result);
         }
 
@@ -125,7 +122,7 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(GetPreviewOfVideo)}{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
         public IActionResult GetPreviewOfVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
-          byte[] content=  this._CameraService.GetPreviewOfVideo(cameraId, filename);
+            byte[] content = this._CameraService.GetPreviewOfVideo(cameraId, filename);
             throw new System.NotImplementedException();
         }
 
@@ -145,7 +142,7 @@ namespace ConSurvBackend.Core.Controller
         [Route($"{nameof(RemoveVideo)}/{{{nameof(cameraId)}}}/{{{nameof(filename)}}}")]
         public IActionResult RemoveVideo([FromRoute] string cameraId, [FromRoute] string filename)
         {
-            this._CameraService.RemoveVideo(cameraId,filename);
+            this._CameraService.RemoveVideo(cameraId, filename);
             return this.Ok();
         }
 
