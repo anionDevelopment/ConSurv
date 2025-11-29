@@ -2,7 +2,7 @@ services:
   consurv:
     container_name: consurv
     env_file: Variables.env
-    image: consurv:2.0.0
+    image: consurv:2.0.1
     ports:
     - "443:443"
     volumes:
