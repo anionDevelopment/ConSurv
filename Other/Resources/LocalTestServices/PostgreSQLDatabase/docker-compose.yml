@@ -11,8 +11,8 @@ services:
 #      PGDATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"
-#    volumes:
-#      - ConSurvPostgreSQLData:/var/lib/postgresql/data
+    volumes:
+      - ./Volumes/ConSurvPostgreSQLData:/var/lib/postgresql/data
     networks:
       - consurv_net
     command: >
