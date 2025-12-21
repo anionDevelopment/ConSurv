@@ -10,7 +10,7 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
         }
 
-        public override string GetDatabaseName()
+        public override string GetDatabaseTypeName()
         {
             return "MariaDB";
         }

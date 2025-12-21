@@ -26,7 +26,7 @@ namespace ConSurvBackend.Core.Services
         private readonly IExampleDataCreator _ExampleDataCreator;
         private readonly IPersistence _Persistence;
         private InitializationState _InitializationState = new Uninitialized();
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator,  IPersistence persistence)
+        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IPersistence persistence)
         {
             this._AuthenticationService = authenticationService;
             this._Persistence = persistence;
@@ -34,7 +34,6 @@ namespace ConSurvBackend.Core.Services
             this._CameraService = cameraService;
             this._GeneralLogger = generalLogger;
             this._ExampleDataCreator = exampleDataCreator;
-            _GeneralLogger.Log("xx temp InitializationService-constr");
         }
 
         public InitializationState GetInitializationState()

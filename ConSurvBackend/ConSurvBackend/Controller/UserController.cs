@@ -52,7 +52,6 @@ namespace ConSurvBackend.Core.Controller
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine("xx temp");
                 Console.Error.WriteLine(e);
                 return this.StatusCode(500);
             }
