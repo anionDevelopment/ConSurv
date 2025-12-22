@@ -18,5 +18,23 @@ namespace ConSurvBackend.Core.Configuration
 
         [Option(nameof(InitialCameraAddresses), Required = false, Separator = ';')]
         public IEnumerable<string> InitialCameraAddresses { get; set; } = new List<string>();
+
+        [Option(nameof(InitialEnableEndpointAvailabilityCheckValue), Required = false, Default = true)]
+        public bool InitialEnableEndpointAvailabilityCheckValue { get; set; }
+
+        [Option(nameof(InitialEnableEndpointInitializationStateValue), Required = false, Default = false)]
+        public bool InitialEnableEndpointInitializationStateValue { get; set; }
+
+        [Option(nameof(InitialEnableEndpointCurrentVersionValue), Required = false, Default = false)]
+        public bool InitialEnableEndpointCurrentVersionValue { get; set; }
+
+        [Option(nameof(InitialEnableEndpointShowAllEndpointsValue), Required = false, Default = false)]
+        public bool InitialEnableEndpointShowAllEndpointsValue { get; set; }
+
+        [Option(nameof(InitialEnableEndpointHealthCheckValue), Required = false, Default = true)]
+        public bool InitialEnableEndpointHealthCheckValue { get; set; }
+
+        [Option(nameof(InitialEnableEndpointMetricsValue), Required = false, Default = false)]
+        public bool InitialEnableEndpointMetricsValue { get; set; }
     }
 }

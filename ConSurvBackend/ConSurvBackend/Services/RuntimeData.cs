@@ -3,7 +3,6 @@ using ConSurvBackend.Core.Model.Internals;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.Misc;
-using System;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Services

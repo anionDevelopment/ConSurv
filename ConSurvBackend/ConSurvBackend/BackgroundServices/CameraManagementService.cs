@@ -52,7 +52,6 @@ namespace ConSurvBackend.Core.BackgroundServices
         {
             this._Log.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
             {
-                _Log.Log("xx temp init-state: " + this._InitializationService.GetInitializationState().GetType().FullName);
                 if (this._InitializationService.GetInitializationState() is Initialized)
                 {
                     ICollection<Camera> cameras = this._CameraService.GetAllCameras().Values;

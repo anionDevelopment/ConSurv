@@ -1,10 +1,13 @@
-﻿using GRYLibrary.Core.APIServer.Services.Database;
+﻿using ConSurvBackend.Core.Misc;
+using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.Services.Database;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Utilities;
+using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConSurvBackend.Core.Misc;
-using ConSurvBackend.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,6 +38,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
             if (runMigrations)
             {
                 IList<MigrationInstance> migrations = openDMSDatabaseInteractor.GetAllMigrations();
+                Assert.IsNotEmpty(migrations);
                 GRYMigrator migrator = new GRYMigrator(new TimeService(), migrations.ToList(), databaseInteractor);
                 migrator.InitializeDatabaseAndMigrateIfRequired();
             }
@@ -47,7 +51,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                 //arrange
                 using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework(false))
                 {
-                    databaseTestFramework.ResetDatabase();
                     IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
                     IConSurvDatabaseInteractor ConSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
 
@@ -79,7 +82,6 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
             {
                 using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework(false))
                 {
-                    databaseTestFramework.ResetDatabase();
                     IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
                     IConSurvDatabaseInteractor ConSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
 
@@ -97,6 +99,33 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 
                     List<string> tables2 = databaseInteractor.GetAllTableNames().ToList();
                     Assert.IsTrue(1 < tables2.Count);
+                }
+            }
+        }
+
+        public abstract void LoadCameraTest();
+        public void LoadCamera()
+        {
+            lock (ConSurvBackend.Tests.TestUtilities.Utilities.LockForTests)
+            {
+                using (DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework(true))
+                {
+                    //arrange
+                    using IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
+                    IConSurvDatabaseInteractor openDMSDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
+                    ITimeService timeService = new TimeService();
+                    IGRYLog log = GRYLog.Create();
+                    using DatabasePersistence databasePersistence = new DatabasePersistence(openDMSDatabaseInteractor, timeService, log);
+                    ConSurvBackend.Core.Model.Base.Camera expectedCamera = new ConSurvBackend.Core.Model.Base.Camera("id", "name");
+                    databasePersistence.CreateCamera(expectedCamera);
+
+                    //act
+                    IDictionary<string, Camera> cameras = databasePersistence.GetAllCameras();
+
+                    //assert
+                    Assert.AreEqual(1, cameras.Count);
+                    Assert.IsTrue(cameras.ContainsKey(expectedCamera.Id));
+                    Assert.AreEqual(expectedCamera, cameras[expectedCamera.Id]);
                 }
             }
         }

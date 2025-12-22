@@ -26,5 +26,11 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             this.AllMigrationsAreWorking();
         }
+        [TestMethod(nameof(LoadCameraTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        public override void LoadCameraTest()
+        {
+            this.LoadCamera();
+        }
     }
 }

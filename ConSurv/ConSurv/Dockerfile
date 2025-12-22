@@ -36,7 +36,6 @@ COPY ConSurv/HealthCheck.sh /Workspace/Other/EntryPoint
 RUN chmod +x /Workspace/Other/EntryPoint/HealthCheck.sh
 
 HEALTHCHECK CMD ./HealthCheck.sh
-#TODO extract to script and add frontend to healthcheck
 
 ENTRYPOINT ["./EntryPoint.sh"]
 CMD []

@@ -1,22 +1,47 @@
 #!/bin/bash
-export IsRunningInContainer=true
 
-#if [[ ! -v SomeVariable ]]; then
-#    echo "SomeVariable is not set"
-#elif [[ -z "$SomeVariable" ]]; then
-#    echo "SomeVariable is set to the empty string"
-#else
-#    echo "SomeVariable has the value: $SomeVariable"
-#fi
+export IsRunningInContainer=true
 
 argument="--RealRun"
 
 if [[ -n "$InitialAdminPassword" ]]; then
-    argument="--InitialAdminPassword $InitialAdminPassword"
+    argument+=" --InitialAdminPassword $InitialAdminPassword"
+fi
+
+if [[ -n "$InitialDatabaseType" ]]; then
+    argument+=" --InitialDatabaseType $InitialDatabaseType"
+fi
+
+if [[ -n "$InitialDatabaseConnectionString" ]]; then
+    argument+=" --InitialDatabaseConnectionString $InitialDatabaseConnectionString"
 fi
 
 if [[ -n "$InitialCameraAddresses" ]]; then
-    argument="$argument --InitialCameraAddresses $InitialCameraAddresses"
+    argument+=" --InitialCameraAddresses $InitialCameraAddresses"
+fi
+
+if [[ -n "${InitialEnableEndpointAvailabilityCheckValue}" ]]; then
+    argument+=" --InitialEnableEndpointAvailabilityCheckValue $InitialEnableEndpointAvailabilityCheckValue"
+fi
+
+if [[ -n "${InitialEnableEndpointInitializationStateValue}" ]]; then
+    argument+=" --InitialEnableEndpointInitializationStateValue $InitialEnableEndpointInitializationStateValue"
+fi
+
+if [[ -n "${InitialEnableEndpointCurrentVersionValue}" ]]; then
+    argument+=" --InitialEnableEndpointCurrentVersionValue $InitialEnableEndpointCurrentVersionValue"
+fi
+
+if [[ -n "${InitialEnableEndpointShowAllEndpointsValue}" ]]; then
+    argument+=" --InitialEnableEndpointShowAllEndpointsValue $InitialEnableEndpointShowAllEndpointsValue"
+fi
+
+if [[ -n "${InitialEnableEndpointHealthCheckValue}" ]]; then
+    argument+=" --InitialEnableEndpointHealthCheckValue $InitialEnableEndpointHealthCheckValue"
+fi
+
+if [[ -n "${InitialEnableEndpointMetricsValue}" ]]; then
+    argument+=" --InitialEnableEndpointMetricsValue $InitialEnableEndpointMetricsValue"
 fi
 
 if [ -z ${DoNotHostFrontend+x} ]; then

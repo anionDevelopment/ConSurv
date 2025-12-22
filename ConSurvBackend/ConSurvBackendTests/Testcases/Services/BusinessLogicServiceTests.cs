@@ -11,10 +11,11 @@ using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
+using System.Collections.Generic;
+using System;
 
 namespace ConSurvBackend.Tests.Testcases.Services
 {
@@ -34,7 +35,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
             ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
-            var databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
+            (TransientPersistence, ISet<IDisposable>) databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence.Item1;
             persistence.Reset();
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
