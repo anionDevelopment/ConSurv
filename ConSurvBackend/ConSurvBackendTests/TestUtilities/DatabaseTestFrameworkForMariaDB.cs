@@ -6,7 +6,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 {
     public sealed class DatabaseTestFrameworkForMariaDB : DatabaseTestFrameworkTemplate
     {
-        public DatabaseTestFrameworkForMariaDB(IGRYLog log) : base("ConSurvbackend_database_mariadb", new DatabasePersistenceConfiguration() { DatabaseType = "MariaDB", DatabaseConnectionString = Utilities.GetTestMariaDBConnectionString() }, Utilities.GetTestMariaDBDatabaseFolder(), ConSurvBackend.Tests.TestUtilities.Constants.GeneralConstants.RepositoryFolder, "LocaltestserviceMariadbStart", "LocaltestserviceMariadbStop", ConSurvBackend.Tests.TestUtilities.Utilities.GetResetDatabaseScript("MariaDB"), log)
+        public DatabaseTestFrameworkForMariaDB(IGRYLog log) : base("ConSurv_database_mariadb", new DatabasePersistenceConfiguration() { DatabaseType = "MariaDB", DatabaseConnectionString = Utilities.GetTestMariaDBConnectionString() }, Utilities.GetTestMariaDBDatabaseFolder(), ConSurvBackend.Tests.TestUtilities.Constants.GeneralConstants.RepositoryFolder, "LocaltestserviceMariadbStart", "LocaltestserviceMariadbStop", ConSurvBackend.Tests.TestUtilities.Utilities.GetResetDatabaseScript("MariaDB"), log)
         {
         }
 

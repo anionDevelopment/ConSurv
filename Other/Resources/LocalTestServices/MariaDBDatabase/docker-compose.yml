@@ -1,9 +1,9 @@
 version: "3.2"
 
 services:
-  ConSurvbackend_database:
-    container_name: "ConSurvbackend_database"
-    image: mariadb:11.5.2
+  consurv_database:
+    container_name: "consurv_database"
+    image: ${image_mariadb}:12.1.2
     ports:
       - "3306:3306"
     environment:
@@ -16,9 +16,9 @@ services:
     networks:
       - consurv_net
 
-  ConSurvbackend_database_administration:
-    image: adminer:4.8.1
-    container_name: "ConSurvbackend_database_administration"
+  consurv_database_administration:
+    image: ${image_adminer}:5.4.1
+    container_name: "consurv_database_administration"
     ports:
       - 8080:8080
     networks:
