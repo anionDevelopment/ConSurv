@@ -96,8 +96,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v2.0.3 API documentation
-  version: v2.0.3
+  title: ConSurvBackend v2.0.4 API documentation
+  version: v2.0.4
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:

@@ -22,10 +22,10 @@ namespace ConSurvBackend.Tests.TestUtilities
         private readonly IntegrationTestConfiguration _IntegrationTestConfiguration;
         internal IBusinessLogicService? _BusinessLogicService;
         internal IGRYLog? _Log;
-        public IntegrationTestFramework(bool startServer = true) : this(new IntegrationTestConfiguration(), startServer)
+        public IntegrationTestFramework(bool startServer) : this(new IntegrationTestConfiguration(), startServer)
         {
         }
-        public IntegrationTestFramework(IntegrationTestConfiguration integrationTestConfiguration, bool startServer = true)
+        public IntegrationTestFramework(IntegrationTestConfiguration integrationTestConfiguration, bool startServer)
         {
             this._IntegrationTestConfiguration = integrationTestConfiguration;
             if (startServer)
