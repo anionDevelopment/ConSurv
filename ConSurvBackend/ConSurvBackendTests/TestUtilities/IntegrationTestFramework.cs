@@ -1,31 +1,32 @@
-﻿using GRYLibrary.Core.APIServer.Settings.Configuration;
+﻿using ConSurvBackend.Core;
+using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using ConSurvBackend.Core;
-using ConSurvBackend.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
 
 namespace ConSurvBackend.Tests.TestUtilities
 {
     public sealed class IntegrationTestFramework : IDisposable
     {
-        private bool _Running = false;
+        private bool Started = false;
         private readonly IDictionary<User, string> _UserPasswords = new Dictionary<User, string>();
         private Program? _Program = null;
         private readonly IntegrationTestConfiguration _IntegrationTestConfiguration;
         internal IBusinessLogicService? _BusinessLogicService;
         internal IGRYLog? _Log;
-        public IntegrationTestFramework(bool startServer = true) : this(new IntegrationTestConfiguration(), startServer)
+        public IntegrationTestFramework(bool startServer) : this(new IntegrationTestConfiguration(), startServer)
         {
         }
-        public IntegrationTestFramework(IntegrationTestConfiguration integrationTestConfiguration, bool startServer = true)
+        public IntegrationTestFramework(IntegrationTestConfiguration integrationTestConfiguration, bool startServer)
         {
             this._IntegrationTestConfiguration = integrationTestConfiguration;
             if (startServer)
@@ -39,7 +40,6 @@ namespace ConSurvBackend.Tests.TestUtilities
             {
                 try
                 {
-
                     this._Program = new Program
                     {
                         RunAsync = !this._IntegrationTestConfiguration.RunInOwnThread,
@@ -48,7 +48,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                     };
 
                     string[] args = new string[] {
-                        @$"", Utilities.GetOCRDataFolder()
+                        Utilities.GetOCRDataFolder()
                     };//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
                     int exitCode = this._Program.MainImplementation(args);
                     Thread.Sleep(TimeSpan.FromSeconds(5));
@@ -79,30 +79,41 @@ namespace ConSurvBackend.Tests.TestUtilities
             };
             if (this._IntegrationTestConfiguration.RunInOwnThread)
             {
-                Thread t = new Thread(() => action());
+                Thread t = new Thread(() => action())
+                {
+                    Name = nameof(Program)
+                };
                 t.Start();
             }
             else
             {
                 action();
             }
+            Exception? lastException = null;
             if (!GRYLibrary.Core.Misc.Utilities.RunWithTimeout(() =>
             {
-                while (!this.IsReady())
+                while (!this.IsReady(out lastException))
                 {
                     Thread.Sleep(TimeSpan.FromSeconds(1));
                 }
-            }, TimeSpan.FromSeconds(150)))
+            }, TimeSpan.
+            FromSeconds(120)))
             {
-                throw new Exception("Could not start service.");
+                if (lastException == null)
+                {
+                    throw new DependencyNotAvailableException("Could not start service.");
+                }
+                else
+                {
+                    throw lastException;
+                }
             }
-            this._Running = true;
+            this.Started = true;
             this._BusinessLogicService = this._Program._BusinessLogicService;
             this._Log = this._Program._Log;
         }
 
-
-        private bool IsReady()
+        private bool IsReady(out Exception? exception)
         {
             try
             {
@@ -113,10 +124,12 @@ namespace ConSurvBackend.Tests.TestUtilities
                 string content = response.Content.ReadAsStringAsync().WaitAndGetResult();
                 dynamic obj = JsonConvert.DeserializeObject(content);
                 int status = (int)obj["status"];
+                exception = null;
                 return status == 2;//2 means healthy.
             }
-            catch
+            catch (Exception e)
             {
+                exception = e;
                 return false;
             }
         }
@@ -150,10 +163,10 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         private void EnsureServerIsStopped()
         {
-            if (this._Running)
+            if (this.Started)
             {
                 this._Program.Stop();
-                this._Running = false;
+                this.Started = false;
             }
         }
     }

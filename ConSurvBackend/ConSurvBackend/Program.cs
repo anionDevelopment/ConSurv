@@ -117,7 +117,7 @@ namespace ConSurvBackend.Core
                             @$"^/API/Other/Maintenance/Metrics$",
                             @$"^/API/Other/Maintenance/HealthCheck$",
                         },
-                                            };
+                    };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Protocol = new HTTP(HTTP.DefaultPort);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationServiceSettings = new AuthenticationServiceSettings()
                     {
@@ -229,6 +229,7 @@ namespace ConSurvBackend.Core
                 {
                     try
                     {
+                        this._Constants = apiServerConfiguration;
                         if (runningUsually)
                         {
                             IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
@@ -242,10 +243,10 @@ namespace ConSurvBackend.Core
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());
+                            this._Constants = apiServerConfiguration;
                             functionalInformationForWebApplication.PreRun = () =>
                             {
                                 //initialize
-                                this._Constants = apiServerConfiguration;
                                 this._InitializationService.Initialize(apiServerConfiguration.CommandlineParameter);
                                 metricsService.StartAsync();
                                 motionDetectionService.StartAsync();
