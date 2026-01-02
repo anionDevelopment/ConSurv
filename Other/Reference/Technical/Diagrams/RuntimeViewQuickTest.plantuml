@@ -1,0 +1,20 @@
+@startuml RuntimeViewQuickTest
+title Runtime-view quick test
+
+actor "User" as user
+note as UserNote
+  The user calls https://consurv.test.local:443
+end note
+user .. UserNote
+
+[ConSurv (:443)] as ConSurv
+note as ConSurvNote
+    Started by container-engine (for example docker).
+    The domain can be set using the commandline-parameter "--InitialDomain <domain>".
+    Backend and frontend are running in the container.
+    Transient will be used as persistence.
+end note 
+ConSurv .. ConSurvNote
+
+user --> ConSurv
+@enduml

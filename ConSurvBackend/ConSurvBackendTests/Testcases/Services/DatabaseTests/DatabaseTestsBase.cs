@@ -30,14 +30,14 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
         {
             databaseTestFramework.ResetDatabase();
             IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
-            IConSurvDatabaseInteractor openDMSDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
+            IConSurvDatabaseInteractor conSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
 
             List<string> tables1 = databaseInteractor.GetAllTableNames().ToList();
             Assert.IsEmpty(tables1);
 
             if (runMigrations)
             {
-                IList<MigrationInstance> migrations = openDMSDatabaseInteractor.GetAllMigrations();
+                IList<MigrationInstance> migrations = conSurvDatabaseInteractor.GetAllMigrations();
                 Assert.IsNotEmpty(migrations);
                 GRYMigrator migrator = new GRYMigrator(new TimeService(), migrations.ToList(), databaseInteractor);
                 migrator.InitializeDatabaseAndMigrateIfRequired();
@@ -112,10 +112,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                 {
                     //arrange
                     using IGenericDatabaseInteractor databaseInteractor = databaseTestFramework.GenericDatabaseInteractor();
-                    IConSurvDatabaseInteractor openDMSDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
+                    IConSurvDatabaseInteractor conSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
                     ITimeService timeService = new TimeService();
                     IGRYLog log = GRYLog.Create();
-                    using DatabasePersistence databasePersistence = new DatabasePersistence(openDMSDatabaseInteractor, timeService, log);
+                    using DatabasePersistence databasePersistence = new DatabasePersistence(conSurvDatabaseInteractor, timeService, log);
                     ConSurvBackend.Core.Model.Base.Camera expectedCamera = new ConSurvBackend.Core.Model.Base.Camera("id", "name");
                     databasePersistence.CreateCamera(expectedCamera);
 
