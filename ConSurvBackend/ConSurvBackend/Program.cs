@@ -76,7 +76,8 @@ namespace ConSurvBackend.Core
                     var t1 = initializationInformation.ApplicationConstants.GetDataFolder();
                     var t2 = initializationInformation.ApplicationConstants.GetConfigurationFolder();
                     var t3 = initializationInformation.ApplicationConstants.GetLogFolder();
-                    string domain = Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName);
+
+                    string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                     initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);

@@ -20,6 +20,10 @@ if [[ -n "$InitialCameraAddresses" ]]; then
     argument+=" --InitialCameraAddresses $InitialCameraAddresses"
 fi
 
+if [[ -n "${InitialDomain}" ]]; then
+    argument+=" --InitialDomain $InitialDomain"
+fi
+
 if [[ -n "${InitialEnableEndpointAvailabilityCheckValue}" ]]; then
     argument+=" --InitialEnableEndpointAvailabilityCheckValue $InitialEnableEndpointAvailabilityCheckValue"
 fi

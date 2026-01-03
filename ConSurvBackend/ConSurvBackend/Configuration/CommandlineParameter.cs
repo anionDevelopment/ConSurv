@@ -19,6 +19,9 @@ namespace ConSurvBackend.Core.Configuration
         [Option(nameof(InitialCameraAddresses), Required = false, Separator = ';')]
         public IEnumerable<string> InitialCameraAddresses { get; set; } = new List<string>();
 
+        [Option(nameof(InitialDomain), Required = false)]
+        public string? InitialDomain { get; set; }
+
         [Option(nameof(InitialEnableEndpointAvailabilityCheckValue), Required = false, Default = true)]
         public bool InitialEnableEndpointAvailabilityCheckValue { get; set; }
 
