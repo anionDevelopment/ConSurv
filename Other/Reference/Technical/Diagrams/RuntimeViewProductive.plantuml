@@ -1,0 +1,27 @@
+@startuml RuntimeViewProductive
+title Runtime-view Productive
+
+actor "User" as user
+note as UserNote
+  The user calls https://<domain>:443 or http://<domain>:8080
+end note
+user .. UserNote
+
+[ConSurv (:443 and :8080)] as ConSurv
+note as ConSurvNote
+    Started by container-engine (for example docker).
+    The domain can be set using the commandline-parameter "--InitialDomain <domain>".
+    Backend and frontend are running in the container.
+end note
+ConSurv .. ConSurvNote
+
+[Database (:5432 or :3306)] as ConSurvDatabase
+note as ConSurvDatabaseNote
+    Database-container
+    Port can be changed of course but must be updated in the connection-string in the ConSurv-configuration.
+end note 
+ConSurvDatabase .. ConSurvDatabaseNote
+
+user --> ConSurv
+ConSurv --> ConSurvDatabase
+@enduml

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Settings } from '../static/Settings';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,6 @@ export class ConfigurationService {
   }
 
   public getAPIURL(): string {
-    if (environment.apiUrl) {
-      return environment.apiUrl!;
-    } else {
-      throw new Error("environment.apiUrl is not set.");
-    }
+    return Settings.getAPIUrl();
   }
 }
