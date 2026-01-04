@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2026-01-05_00-15-15" tag="v2.0.6">
+  <assembly name="ConSurvApp">
+    <class name="lib.main.dart" coveredlines="24" coverablelines="26" totallines="122" coveredbranches="0" totalbranches="0" coveredcodeelements="0" fullcoveredcodeelements="0" totalcodeelements="0" />
+  </assembly>
+</coverage>
