@@ -16,7 +16,7 @@ class StreamingApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v2/StreamingController/Stream/{streamId}/{filename}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /API/v3/StreamingController/Stream/{streamId}/{filename}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] streamId (required):
@@ -25,9 +25,9 @@ class StreamingApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV2StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename, String xAccessToken,) async {
+  Future<Response> aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename, String xAccessToken,) async {
     // ignore: prefer_const_declarations
-    final path = r'/API/v2/StreamingController/Stream/{streamId}/{filename}'
+    final path = r'/API/v3/StreamingController/Stream/{streamId}/{filename}'
       .replaceAll('{streamId}', streamId)
       .replaceAll('{filename}', filename);
 
@@ -62,8 +62,8 @@ class StreamingApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV2StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken,) async {
-    final response = await aPIV2StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename, xAccessToken,);
+  Future<void> aPIV3StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken,) async {
+    final response = await aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

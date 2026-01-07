@@ -29,8 +29,8 @@ export class CameraComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const accessToken : string = this.storgeService.getAccessToken();
-    (videojs as any).Vhs.xhr.beforeRequest = function(options: any) {
+    const accessToken: string = this.storgeService.getAccessToken();
+    (videojs as any).Vhs.xhr.beforeRequest = function (options: any) {
       options.headers = options.headers || {};
       options.headers['X-AccessToken'] = accessToken;
       return options;
@@ -38,7 +38,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.pipe(
       switchMap(params => {
         if (params["cameraId"]) {
-          return this.cameraService.aPIV2CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
+          return this.cameraService.aPIV3CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
         } else {
           return of(null);
         }

@@ -19,9 +19,9 @@ export class CameraPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.cameraId) {
-      interval(5000).pipe( 
+      interval(5000).pipe(
         startWith(0),
-        switchMap(() => this.cameraService.aPIV2CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
+        switchMap(() => this.cameraService.aPIV3CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
         )).subscribe((result) => {
           this.image = 'data:image/png;base64,' + result;
         });
@@ -29,17 +29,17 @@ export class CameraPreviewComponent implements OnInit {
   }
 
   popupVisible = false;
-popupX = 0;
-popupY = 0;
+  popupX = 0;
+  popupY = 0;
 
-updatePopupPosition(event: MouseEvent) {
-  this.popupVisible = true;
-  const offset = 10; 
-  this.popupX = event.clientX + offset;
-  this.popupY = event.clientY + offset;
-  const maxX = window.innerWidth - 420; 
-  const maxY = window.innerHeight - 420;
-  if (this.popupX > maxX) this.popupX = maxX;
-  if (this.popupY > maxY) this.popupY = maxY;
-}
+  updatePopupPosition(event: MouseEvent) {
+    this.popupVisible = true;
+    const offset = 10;
+    this.popupX = event.clientX + offset;
+    this.popupY = event.clientY + offset;
+    const maxX = window.innerWidth - 420;
+    const maxY = window.innerHeight - 420;
+    if (this.popupX > maxX) this.popupX = maxX;
+    if (this.popupY > maxY) this.popupY = maxY;
+  }
 }

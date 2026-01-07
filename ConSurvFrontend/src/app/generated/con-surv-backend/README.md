@@ -2,7 +2,7 @@
 
 ConSurvBackend is the backend for ConSurv.
 
-The version of the OpenAPI document: v2.0.6
+The version of the OpenAPI document: v3.0.0
 
 ## Building
 

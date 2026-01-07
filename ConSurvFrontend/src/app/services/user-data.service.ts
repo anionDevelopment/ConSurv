@@ -38,7 +38,7 @@ export class UserDataService {
 
   userIsLoggedIn(): Observable<boolean> {
     if (this.storageService.hasAccessToken()) {
-      return this.userService.aPIV2UserControllerTokenIsValidGet(this.storageService.getAccessToken());
+      return this.userService.aPIV3UserControllerTokenIsValidGet(this.storageService.getAccessToken());
     } else {
       return of(false);
     }
@@ -69,7 +69,7 @@ export class UserDataService {
     if (this.loaded) {
       pipe = of(null);//null is required here because otherwise first() will throw a 'no elements in sequence'-error
     } else {
-      pipe = this.userService.aPIV2UserControllerGetUserInformationGet(this.storageService.getAccessToken()).pipe(
+      pipe = this.userService.aPIV3UserControllerGetUserInformationGet(this.storageService.getAccessToken()).pipe(
         tap((value: UserInformationDTO) => {
           this.storageService.setUserName(value.name);
           this.storageService.setUserId(value.id);
