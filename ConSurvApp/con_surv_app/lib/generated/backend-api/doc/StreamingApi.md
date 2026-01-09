@@ -9,11 +9,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV2StreamingControllerStreamStreamIdFilenameGet**](StreamingApi.md#apiv2streamingcontrollerstreamstreamidfilenameget) | **GET** /API/v2/StreamingController/Stream/{streamId}/{filename} | 
+[**aPIV3StreamingControllerStreamStreamIdFilenameGet**](StreamingApi.md#apiv3streamingcontrollerstreamstreamidfilenameget) | **GET** /API/v3/StreamingController/Stream/{streamId}/{filename} | 
 
 
-# **aPIV2StreamingControllerStreamStreamIdFilenameGet**
-> aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken)
+# **aPIV3StreamingControllerStreamStreamIdFilenameGet**
+> aPIV3StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken)
 
 
 
@@ -27,9 +27,9 @@ final filename = filename_example; // String |
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV2StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken);
+    api_instance.aPIV3StreamingControllerStreamStreamIdFilenameGet(streamId, filename, xAccessToken);
 } catch (e) {
-    print('Exception when calling StreamingApi->aPIV2StreamingControllerStreamStreamIdFilenameGet: $e\n');
+    print('Exception when calling StreamingApi->aPIV3StreamingControllerStreamStreamIdFilenameGet: $e\n');
 }
 ```
 

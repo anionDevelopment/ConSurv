@@ -28,7 +28,7 @@ export class CamerasListComponent implements OnInit {
       newColumnsList.push("options");
       this.displayedColumns = newColumnsList;
     });
-    this.cameraService.aPIV2CameraControllerCamerasGet(this.storageService.getAccessToken()).subscribe(((cameras: CameraDTO[]) => {
+    this.cameraService.aPIV3CameraControllerCamerasGet(this.storageService.getAccessToken()).subscribe(((cameras: CameraDTO[]) => {
       cameras.forEach(camera => {
         this.recordModes.set(camera.cameraId!, new BehaviorSubject<RecordModeDTO>(camera.recordModeDTO!))
       });
@@ -37,8 +37,8 @@ export class CamerasListComponent implements OnInit {
   }
 
   addCamera() {
-    this.cameraService.aPIV2CameraControllerCreateCameraPost(this.storageService.getAccessToken()).subscribe((cameraId: string) => {
-      this.cameraService.aPIV2CameraControllerCameraCameraIdGet(cameraId, this.storageService.getAccessToken()).subscribe((camera: CameraDTO) => {
+    this.cameraService.aPIV3CameraControllerCreateCameraPost(this.storageService.getAccessToken()).subscribe((cameraId: string) => {
+      this.cameraService.aPIV3CameraControllerCameraCameraIdGet(cameraId, this.storageService.getAccessToken()).subscribe((camera: CameraDTO) => {
         const newCameraList = [...this.cameras];
         newCameraList.push(camera)
         this.cameras = newCameraList;
@@ -48,7 +48,7 @@ export class CamerasListComponent implements OnInit {
   }
 
   removeCamera(camera: CameraDTO) {
-    this.cameraService.aPIV2CameraControllerRemoveCameraCameraIdDelete(camera.cameraId!, this.storageService.getAccessToken()).subscribe(() => {
+    this.cameraService.aPIV3CameraControllerRemoveCameraCameraIdDelete(camera.cameraId!, this.storageService.getAccessToken()).subscribe(() => {
       const newList: CameraDTO[] = [];
       this.cameras.forEach(existingCamera => {
         if (existingCamera.cameraId !== camera.cameraId) {

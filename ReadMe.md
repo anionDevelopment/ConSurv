@@ -73,6 +73,8 @@ You can now also use the REST-API directly. The graphical API-documentation shou
 
 Contributions are always welcome.
 
+See [Contributing.md](./Contributing.md) for information about that.
+
 This product has the contribution-requirements defines by [DefaultOpenSourceContributionProcess](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/Contributing/DefaultOpenSourceContributionProcess/DefaultOpenSourceContributionProcess.md).
 
 ## Repository-structure

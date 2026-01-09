@@ -27,7 +27,7 @@ describe('CameraPreviewComponent', () => {
         {
           provide: CameraService,
           useValue: {
-            aPIV2CameraControllerCameraCameraIdGet: () => of({
+            aPIV3CameraControllerCameraCameraIdGet: () => of({
               cameraId: "1",
               name: "camera",
             }),

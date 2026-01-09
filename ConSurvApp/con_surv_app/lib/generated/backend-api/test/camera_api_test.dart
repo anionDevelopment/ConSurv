@@ -17,58 +17,58 @@ void main() {
   // final instance = CameraApi();
 
   group('tests for CameraApi', () {
-    //Future<CameraDTO> aPIV2CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken) async
-    test('test aPIV2CameraControllerCameraCameraIdGet', () async {
+    //Future<CameraDTO> aPIV3CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken) async
+    test('test aPIV3CameraControllerCameraCameraIdGet', () async {
       // TODO
     });
 
-    //Future<List<CameraDTO>> aPIV2CameraControllerCamerasGet(String xAccessToken) async
-    test('test aPIV2CameraControllerCamerasGet', () async {
+    //Future<List<CameraDTO>> aPIV3CameraControllerCamerasGet(String xAccessToken) async
+    test('test aPIV3CameraControllerCamerasGet', () async {
       // TODO
     });
 
-    //Future<String> aPIV2CameraControllerCreateCameraPost(String xAccessToken) async
-    test('test aPIV2CameraControllerCreateCameraPost', () async {
+    //Future<String> aPIV3CameraControllerCreateCameraPost(String xAccessToken) async
+    test('test aPIV3CameraControllerCreateCameraPost', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename) async
-    test('test aPIV2CameraControllerDownloadVideoCameraIdFilenameGet', () async {
+    //Future aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename) async
+    test('test aPIV3CameraControllerDownloadVideoCameraIdFilenameGet', () async {
       // TODO
     });
 
-    //Future<String> aPIV2CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken) async
-    test('test aPIV2CameraControllerGetPreviewCameraIdGet', () async {
+    //Future<String> aPIV3CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken) async
+    test('test aPIV3CameraControllerGetPreviewCameraIdGet', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename) async
-    test('test aPIV2CameraControllerGetPreviewOfVideocameraIdFilenameGet', () async {
+    //Future aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename) async
+    test('test aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerListVideosGet() async
-    test('test aPIV2CameraControllerListVideosGet', () async {
+    //Future aPIV3CameraControllerListVideosGet() async
+    test('test aPIV3CameraControllerListVideosGet', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken) async
-    test('test aPIV2CameraControllerRemoveCameraCameraIdDelete', () async {
+    //Future aPIV3CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken) async
+    test('test aPIV3CameraControllerRemoveCameraCameraIdDelete', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename) async
-    test('test aPIV2CameraControllerRemoveVideoCameraIdFilenameDelete', () async {
+    //Future aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename) async
+    test('test aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO oNVIFCommandDTO }) async
-    test('test aPIV2CameraControllerRunONVIFCommandCameraIdPost', () async {
+    //Future aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO oNVIFCommandDTO }) async
+    test('test aPIV3CameraControllerRunONVIFCommandCameraIdPost', () async {
       // TODO
     });
 
-    //Future aPIV2CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO updateCameraDTO }) async
-    test('test aPIV2CameraControllerUpdateCameraPut', () async {
+    //Future aPIV3CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO updateCameraDTO }) async
+    test('test aPIV3CameraControllerUpdateCameraPut', () async {
       // TODO
     });
 

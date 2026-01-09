@@ -17,8 +17,8 @@ void main() {
   // final instance = StreamingApi();
 
   group('tests for StreamingApi', () {
-    //Future aPIV2StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken) async
-    test('test aPIV2StreamingControllerStreamStreamIdFilenameGet', () async {
+    //Future aPIV3StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken) async
+    test('test aPIV3StreamingControllerStreamStreamIdFilenameGet', () async {
       // TODO
     });
 
