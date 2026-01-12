@@ -105,7 +105,7 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration = new DatabasePersistenceConfiguration()
                     {
                         DatabaseConnectionString = initializationInformation.CommandlineParameter.InitialDatabaseConnectionString ?? "insert your connection-string here",
-                        DatabaseType = Debugger.IsAttached ? "Transient" : (initializationInformation.CommandlineParameter.InitialDatabaseType ?? "PostgreSQL"),
+                        DatabaseType = initializationInformation.CommandlineParameter.InitialDatabaseType ?? "Transient",
                     };
                     bool runServices = !runningUsually;
                     bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
