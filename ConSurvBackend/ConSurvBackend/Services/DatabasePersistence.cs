@@ -46,19 +46,19 @@ namespace ConSurvBackend.Core.Services
                 return DBUtilities.AccessDatabase<T, IConSurvDatabaseInteractor>(this._Database, function);
             }
         }
-        protected void RunTransaction(string nameOfAction, params Action<DbCommand>[] actions)
+        protected void RunTransaction(string nameOfAction, bool runTransactional, params Action<DbCommand>[] actions)
         {
             lock (_Lock)
             {
-                DBUtilities.RunTransaction<IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, actions);
+                DBUtilities.RunTransaction<IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, runTransactional,actions);
             }
         }
 
-        protected T?[] RunTransaction<T>(string nameOfAction, params Func<DbCommand, T?>[] functions)
+        protected T?[] RunTransaction<T>(string nameOfAction,bool runTransactional, params Func<DbCommand, T?>[] functions)
         {
             lock (_Lock)
             {
-                return DBUtilities.RunTransaction<T, IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, functions);
+                return DBUtilities.RunTransaction<T, IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, runTransactional, functions);
             }
         }
 
@@ -66,7 +66,7 @@ namespace ConSurvBackend.Core.Services
 
         public void CreateCamera(Camera camera)
         {
-            this.RunTransaction(nameof(CreateCamera),(command) =>
+            this.RunTransaction(nameof(CreateCamera), true, (command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptCreateCamera();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", camera.Id));
@@ -92,7 +92,7 @@ namespace ConSurvBackend.Core.Services
 
         public IDictionary<string, Camera> GetAllCameras()
         {
-            IDictionary<string, Camera> roles = this.RunTransaction(nameof(GetAllCameras),(command) =>
+            IDictionary<string, Camera> roles = this.RunTransaction(nameof(GetAllCameras),true,(command) =>
             {
                 IDictionary<string, Camera> cameraDictionary = new Dictionary<string, Camera>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllCameras();
@@ -134,7 +134,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserWithNameExists(string userName)
         {
-            return this.RunTransaction(nameof(UserWithNameExists),(cmd) =>
+            return this.RunTransaction(nameof(UserWithNameExists),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithNameExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserName", userName));
@@ -150,7 +150,7 @@ namespace ConSurvBackend.Core.Services
 
         public ISet<Role> GetAllRoles()
         {
-            ISet<Role> roles = this.RunTransaction(nameof(GetAllRoles),(command) =>
+            ISet<Role> roles = this.RunTransaction(nameof(GetAllRoles),true,(command) =>
             {
                 ISet<Role> rolesInternal = new HashSet<Role>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllRoles();
@@ -181,7 +181,7 @@ namespace ConSurvBackend.Core.Services
 
         public void AddRole(Role role)
         {
-            this.RunTransaction(nameof(AddRole),(command) =>
+            this.RunTransaction(nameof(AddRole),true,(command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptInsertRole();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", role.Id));
@@ -195,7 +195,7 @@ namespace ConSurvBackend.Core.Services
 
         public void UpdateRole(Role role)
         {
-            this.RunTransaction(nameof(UpdateRole),(cmd) =>
+            this.RunTransaction(nameof(UpdateRole),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUpdateRole();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", role.Id));
@@ -219,7 +219,7 @@ namespace ConSurvBackend.Core.Services
 
         public void AddUser(User user)
         {
-            this.RunTransaction(nameof(AddUser),(command) =>
+            this.RunTransaction(nameof(AddUser),true,(command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptAddUser();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", user.Id));
@@ -237,7 +237,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserWithIdExists(string userId)
         {
-            return this.RunTransaction(nameof(UserWithIdExists),(cmd) =>
+            return this.RunTransaction(nameof(UserWithIdExists),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithIdExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter(nameof(userId), userId));
@@ -248,7 +248,7 @@ namespace ConSurvBackend.Core.Services
 
         public User GetUserById(string userId)
         {
-            User result = this.RunTransaction(nameof(GetUserById),(cmd) =>
+            User result = this.RunTransaction(nameof(GetUserById),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserById();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", userId));
@@ -282,7 +282,7 @@ namespace ConSurvBackend.Core.Services
 
         private void EnrichWhichAccessToken(User user)
         {
-            this.RunTransaction(nameof(EnrichWhichAccessToken),(cmd) =>
+            this.RunTransaction(nameof(EnrichWhichAccessToken),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetAllAccessTokenForUser();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", user.Id));
@@ -304,7 +304,7 @@ namespace ConSurvBackend.Core.Services
 
         public User GetUserByName(string userName)
         {
-            User result = this.RunTransaction(nameof(GetUserByName),(cmd) =>
+            User result = this.RunTransaction(nameof(GetUserByName),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserByName();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", userName));
@@ -339,7 +339,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool RoleExists(string roleName)
         {
-            return this.RunTransaction(nameof(RoleExists),(cmd) =>
+            return this.RunTransaction(nameof(RoleExists),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptRoleExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleName", roleName));
@@ -350,7 +350,7 @@ namespace ConSurvBackend.Core.Services
 
         public void AddRoleToUser(string userId, string roleId)
         {
-            this.RunTransaction(nameof(AddRoleToUser),(command) =>
+            this.RunTransaction(nameof(AddRoleToUser),true,(command) =>
             {
                 this._Log.Log($"Adding role '{roleId}' to user '{userId}'", LogLevel.Information);
                 command.CommandText = this._SQLProvider.GetScriptAddRoleToUser();
@@ -367,7 +367,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserHasRole(string userId, string roleId)
         {
-            return this.RunTransaction(nameof(UserHasRole),(cmd) =>
+            return this.RunTransaction(nameof(UserHasRole),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserHasRole();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", userId));
@@ -409,7 +409,7 @@ namespace ConSurvBackend.Core.Services
 
         public Role GetRoleByName(string roleName)
         {
-            Role result = this.RunTransaction(nameof(GetRoleByName),(cmd) =>
+            Role result = this.RunTransaction(nameof(GetRoleByName),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetRoleByName();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", roleName));
@@ -433,7 +433,7 @@ namespace ConSurvBackend.Core.Services
 
         public void Reset()
         {
-            this.RunTransaction(nameof(Reset),(cmd) =>
+            this.RunTransaction(nameof(Reset),false,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptResetDatabase();
                 using DbDataReader reader = cmd.ExecuteReader();
@@ -443,7 +443,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool IsCamera(string id)
         {
-            return this.RunTransaction(nameof(IsCamera),(cmd) =>
+            return this.RunTransaction(nameof(IsCamera),true,(cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptIsCamera();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", id));
