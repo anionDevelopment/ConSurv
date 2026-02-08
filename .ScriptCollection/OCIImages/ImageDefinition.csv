@@ -1,5 +1,7 @@
 ImageName;UpstreamRegistryAddress;DefaultTag
-MariaDB;https://docker.io/library/mariadb;12.1.2
-PostgreSQL;https://docker.io/library/postgres;17.7
-nginx;https://docker.io/library/nginx;1.29.4
-Adminer;https://docker.io/library/adminer;5.4.1
+MariaDB;docker.io/library/mariadb;12.1.2
+PostgreSQL;docker.io/library/postgres;17.7
+nginx;docker.io/library/nginx;1.29.4
+Adminer;docker.io/library/adminer;5.4.1
+Debian;docker.io/library/debian;13.2-slim
+Syft;docker.io/anchore/syft;v1.39.0

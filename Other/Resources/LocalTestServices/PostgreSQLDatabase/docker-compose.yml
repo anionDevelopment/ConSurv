@@ -3,7 +3,7 @@ version: "3.2"
 services:
   consurv_database:
     container_name: "consurv_database"
-    image: ${image_postgres}:17.7
+    image: ${image_postgresql}
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pa55w0rd
@@ -19,7 +19,7 @@ services:
       postgres -c log_connections=on -c log_disconnections=on
 
   consurv_database_administration:
-    image: ${image_adminer}:5.4.1
+    image: ${image_adminer}
     container_name: "consurv_database_administration"
     ports:
       - 8080:8080
