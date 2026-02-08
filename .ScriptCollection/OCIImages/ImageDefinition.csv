@@ -1,0 +1,5 @@
+ImageName;UpstreamRegistryAddress;DefaultTag
+MariaDB;https://docker.io/library/mariadb;12.1.2
+PostgreSQL;https://docker.io/library/postgres;17.7
+nginx;https://docker.io/library/nginx;1.29.4
+Adminer;https://docker.io/library/adminer;5.4.1
