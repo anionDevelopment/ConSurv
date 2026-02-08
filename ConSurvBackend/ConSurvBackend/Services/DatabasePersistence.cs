@@ -4,6 +4,8 @@ using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Utilities;
+using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using Microsoft.Extensions.Logging;
@@ -14,7 +16,7 @@ using Role = GRYLibrary.Core.APIServer.CommonDBTypes.Role;
 
 namespace ConSurvBackend.Core.Services
 {
-    public sealed class DatabasePersistence : IPersistence
+    public sealed class DatabasePersistence : IInitializable, IPersistence
     {
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
@@ -22,6 +24,9 @@ namespace ConSurvBackend.Core.Services
         private readonly ITimeService _TimeService;
         private readonly IGRYLog _Log;
         private readonly IConSurvDatabaseInteractor _Database;
+
+        public InitializationState InitializationState { get; private set; }
+
         public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log)
         {
             this._TimeService = timeService;
@@ -464,6 +469,25 @@ namespace ConSurvBackend.Core.Services
         public Role GetRoleById(string roleId)
         {
             throw new NotImplementedException();
+        }
+
+
+        public void Initialize()
+        {
+            lock (_Lock)
+            {
+                try
+                {
+                    this.InitializationState = new Initializing();
+                    this._Database.GetGenericDatabaseInteractor().DoAllMigrations(this._Database.GetAllMigrations(), this._TimeService);
+                    this.InitializationState = new Initialized();
+                }
+                catch (Exception ex)
+                {
+                    this.InitializationState = new InitializationFailed();
+                    this._Log.Log("Initialization failed", ex);
+                }
+            }
         }
     }
 }

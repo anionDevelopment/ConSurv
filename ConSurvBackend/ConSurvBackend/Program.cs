@@ -237,7 +237,6 @@ namespace ConSurvBackend.Core
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
                             this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGRYLog>());
                             this._BusinessLogicService = functionalInformationForWebApplication.WebApplication.Services.GetService<IBusinessLogicService>();
-                            logger.Log("Configure webapplication...", LogLevel.Information);
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 

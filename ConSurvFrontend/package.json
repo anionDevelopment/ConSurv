@@ -1,6 +1,6 @@
 {
   "name": "con-surv-frontend",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "scripts": {
     "build": "npm run build-QualityCheck",
     "build-Development": "ng build --localize --configuration Development",
@@ -13,7 +13,6 @@
     "start": "ng serve --configuration Development --host 0.0.0.0 --live-reload=false --disable-host-check",
     "lint": "ng lint"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "19.2.0",
     "@angular/cdk": "19.2.1",
