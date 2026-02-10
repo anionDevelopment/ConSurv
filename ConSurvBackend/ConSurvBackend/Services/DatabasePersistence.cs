@@ -20,11 +20,9 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly ISQLProvider _SQLProvider;
         private static readonly object _Lock = new object();
-        private readonly Semaphore _Semaphore = new Semaphore();
         private readonly ITimeService _TimeService;
         private readonly IGRYLog _Log;
         private readonly IConSurvDatabaseInteractor _Database;
-
         public InitializationState InitializationState { get; private set; }
 
         public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log)
@@ -33,6 +31,7 @@ namespace ConSurvBackend.Core.Services
             this._Database = database;
             this._Log = log;
             this._SQLProvider = database.GetSQLProvider();
+            this.InitializationState = new Uninitialized();
         }
 
         #region AccessDatabase

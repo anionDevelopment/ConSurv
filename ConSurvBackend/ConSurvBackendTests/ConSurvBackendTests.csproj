@@ -65,29 +65,29 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="2.0.5" />
+        <PackageReference Include="GRYLibrary" Version="2.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
         <PackageReference Include="Npgsql" Version="10.0.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
         <PackageReference Include="Moq" Version="4.20.72" />
-        <PackageReference Include="MSTest.TestAdapter" Version="4.0.2" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.0.2" />
+        <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+        <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
         <PackageReference Include="NJsonSchema" Version="11.5.2" />
         <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-        <PackageReference Include="SkiaSharp" Version="3.119.1" />
-        <PackageReference Include="System.Collections.Immutable" Version="10.0.2" />
+        <PackageReference Include="SkiaSharp" Version="3.119.2" />
+        <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
         <PackageReference Include="System.Reactive" Version="6.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.3" />
     </ItemGroup>
     <ItemGroup>
       <None Update="TestUtilities\Constants\GeneralConstants.tt">
