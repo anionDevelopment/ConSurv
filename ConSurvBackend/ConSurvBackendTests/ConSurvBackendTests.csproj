@@ -65,7 +65,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="2.0.7" />
+        <PackageReference Include="GRYLibrary" Version="2.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
@@ -88,21 +88,5 @@
         <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
         <PackageReference Include="System.Reactive" Version="6.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.3" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Update="TestUtilities\Constants\GeneralConstants.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>GeneralConstants.cs</LastGenOutput>
-      </None>
-    </ItemGroup>
-    <ItemGroup>
-      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Update="TestUtilities\Constants\GeneralConstants.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>GeneralConstants.tt</DependentUpon>
-      </Compile>
     </ItemGroup>
 </Project>
