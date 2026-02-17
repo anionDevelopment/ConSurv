@@ -4,6 +4,7 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IConSurvDatabaseInteractor : IProjectSpecificDatabaseInteractor
     {
+        string Id { get; }
         public ISQLProvider GetSQLProvider();
     }
 }

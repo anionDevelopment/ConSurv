@@ -2,7 +2,7 @@ services:
   consurv:
     container_name: consurv
     env_file: Variables.env
-    image: consurv:3.0.6
+    image: consurv:3.0.7
     ports:
     - "443:443"
     volumes:
@@ -15,7 +15,8 @@ services:
     container_name: consurv_database
     image: ${image_postgresql}
     environment:
-      POSTGRES_PASSWORD: R00tpa55w0rd
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pa55w0rd
       POSTGRES_DB: ConSurvDatabase
     ports:
       - "5432:5432"
@@ -27,4 +28,4 @@ services:
     - consurv_database
     image: ${image_adminer}
     ports:
-    - 8080:8080a
+    - 8080:8080

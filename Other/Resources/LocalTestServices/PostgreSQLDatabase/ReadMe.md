@@ -4,7 +4,7 @@
 
 ### Database
 
-connectionstring: `Host=localhost; Port=5432; Username=user; Password=pa55w0rd; Database=ConSurvDatabase;`
+connectionstring: `Host=localhost;Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;`
 
 Data for adminer:
 

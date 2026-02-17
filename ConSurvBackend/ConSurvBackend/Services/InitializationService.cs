@@ -49,6 +49,8 @@ namespace ConSurvBackend.Core.Services
                 this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
                 if (this._Persistence is IInitializable initializablePersistence)
                 {
+                    initializablePersistence.WaitUntilAvailable(TimeSpan.FromMinutes(2));
+
                     initializablePersistence.Initialize();
                 }
                 string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
@@ -111,7 +113,7 @@ namespace ConSurvBackend.Core.Services
             process.StartInfo.FileName = "scespoc";
             string processesFileName = "StartedProcesses.txt";
             process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./{processesFileName}";
-            string processesFile=Path.Combine(configurationFolder, processesFileName);
+            string processesFile = Path.Combine(configurationFolder, processesFileName);
             GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processesFile);
             process.StartInfo.WorkingDirectory = configurationFolder;
             GRYLibrary.Core.Misc.Utilities.AssertCondition(process.Start());

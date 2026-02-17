@@ -21,7 +21,7 @@
 			},
 			{
 				"label": "Base: Example start",
-				"command": "python StartExample.py",
+				"command": "python StartExample.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -33,7 +33,7 @@
 			},
 			{
 				"label": "Base: Example stop",
-				"command": "python StopExample.py",
+				"command": "python StopExample.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -45,7 +45,7 @@
 			},
 			{
 				"label": "Run: Frontend",
-				"command": "npm run start",
+				"command": "npm run start {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -57,7 +57,7 @@
 			},
 			{
 				"label": "LocalTestService: MariaDB start",
-				"command": "python Start.py",
+				"command": "python Start.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -69,7 +69,7 @@
 			},
 			{
 				"label": "LocalTestService: MariaDB stop",
-				"command": "python Stop.py",
+				"command": "python Stop.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -81,7 +81,7 @@
 			},
 			{
 				"label": "LocalTestService: PostgreSQL start",
-				"command": "python Start.py",
+				"command": "python Start.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -93,7 +93,7 @@
 			},
 			{
 				"label": "LocalTestService: PostgreSQL stop",
-				"command": "python Stop.py",
+				"command": "python Stop.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -105,7 +105,7 @@
 			},
 			{
 				"label": "LocalTestService: Reverse-proxy start",
-				"command": "python Start.py",
+				"command": "python Start.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -117,7 +117,7 @@
 			},
 			{
 				"label": "LocalTestService: Reverse-proxy stop",
-				"command": "python Stop.py",
+				"command": "python Stop.py {{.CLI_ARGS}}",
 				"args": [],
 				"type": "shell",
 				"options": {

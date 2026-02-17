@@ -46,30 +46,34 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._Log = log;
             this._Constants = constants;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
+            _Log.Log($"temp: constr", Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
         protected override void Run()
         {
+            _Log.Log($"temp: CameraManagementService run started...", Microsoft.Extensions.Logging.LogLevel.Debug);
             this._Log.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
             {
                 if (this._InitializationService.GetInitializationState() is Initialized)
                 {
+                    _Log.Log($"temp: CameraManagementService running...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     ICollection<Camera> cameras = this._CameraService.GetAllCameras().Values;
-                    this._Log.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Trace);
+                    this._Log.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     foreach (Model.Base.Camera camera in cameras)
                     {
-                        this._Log.Log($"ManageCamera_{camera.Id}", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () => this.ManageCamera(camera));
+                        this._Log.Log($"ManageCamera_{camera.Id}", Microsoft.Extensions.Logging.LogLevel.Debug, false, true, true, true, true, () => this.ManageCamera(camera));
                     }
                 }
                 else
                 {
-                    this._Log.Log($"Wait until initialization is finished...", Microsoft.Extensions.Logging.LogLevel.Trace);
+                    this._Log.Log($"Wait until initialization is finished...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 }
             });
         }
 
         private void ManageCamera(Camera camera)
         {
+            _Log.Log($"temp: manage camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
             CameraInternalsBase? existingState;
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
@@ -78,17 +82,18 @@ namespace ConSurvBackend.Core.BackgroundServices
                     this._RuntimeData.SetCameraInternals(new NotAvailable(camera));
                 }
                 existingState = this._RuntimeData.GetCameraInternals(camera.Id);
-            }
-            CameraInternalsBase currentState = this.GetCurrentInternalState(camera);
-            try
-            {
-                currentState.Accept(new EnsureDesiredConditionIsApplied(existingState));
-            }
-            catch (Exception)
-            {
-                NotAvailable newState = new NotAvailable(camera);
-                this._RuntimeData.SetCameraInternals(newState);
-                newState.Accept(new EnsureDesiredConditionIsApplied(currentState));
+                CameraInternalsBase currentState = this.GetCurrentInternalState(camera);
+                try
+                {
+                    currentState.Accept(new EnsureDesiredConditionIsApplied(existingState, this));
+                }
+                catch (Exception e)
+                {
+                    _Log.Log($"temp: ex1 {camera.Id}...", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                    NotAvailable newState = new NotAvailable(camera);
+                    this._RuntimeData.SetCameraInternals(newState);
+                    newState.Accept(new EnsureDesiredConditionIsApplied(currentState, this));
+                }
             }
 
             //TODO camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
@@ -96,14 +101,18 @@ namespace ConSurvBackend.Core.BackgroundServices
         private class EnsureDesiredConditionIsApplied : ICameraInternalsBaseVisitor
         {
             private readonly CameraInternalsBase _PreviousState;
+            private readonly CameraManagementService _CameraManagementService;
 
-            public EnsureDesiredConditionIsApplied(CameraInternalsBase previousState)
+            public EnsureDesiredConditionIsApplied(CameraInternalsBase previousState, CameraManagementService cameraManagementService)
             {
                 this._PreviousState = previousState;
+                this._CameraManagementService = cameraManagementService;
+                _CameraManagementService._Log.Log($"temp: temp1 {previousState.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
             }
 
             public void Handle(Available available)
             {
+                _CameraManagementService._Log.Log($"temp: temp2 {available.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(available.MediaMTXProcess.IsRunning, $"MediaMTX terminated unexoectedly for {available.Camera.Id}.");
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(available.FFMPEGProcess.IsRunning, $"FFMPEG terminated unexoectedly for {available.Camera.Id}.");
                 bool startProcesses = false;
@@ -121,6 +130,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 if (startProcesses)
                 {
+                    _CameraManagementService._Log.Log($"temp: temp3 {available.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     this.StartProcesses(available);
                 }
             }
@@ -132,8 +142,10 @@ namespace ConSurvBackend.Core.BackgroundServices
 
             public void Handle(NotAvailable notAvailable)
             {
+                _CameraManagementService._Log.Log($"temp: temp4 {notAvailable.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 if (this._PreviousState is Available previousAvailableState)
                 {
+                    _CameraManagementService._Log.Log($"temp: temp5 {notAvailable.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     this.StopProcesses(previousAvailableState);
                 }
             }
@@ -287,7 +299,7 @@ paths:
                 if (camera.RecordMode is RecordAlways)
                 {
                     //record
-                    string target_folder = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, "CameraData", camera.Id, "Videos");
+                    string target_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Recordings");
                     GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(target_folder);
                     target_folder = target_folder.Replace("\\", "/");
                     uint videoLengthInSeconds = (uint)Math.Round(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.VideoLength.TotalSeconds);

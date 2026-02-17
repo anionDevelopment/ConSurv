@@ -11,14 +11,14 @@ Example-content for a valid `Variables.env`-file:
 ```bash
 InitialAdminPassword=Adm1npa55w0rd
 InitialDatabaseType=PostgreSQL
-InitialDatabaseConnectionString=postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase
+InitialDatabaseConnectionString=postgresql://user:pa55w0rd@consurv_database:5432/ConSurvDatabase
 ```
 
 ## Access
 
 ### Database
 
-connectionstring: `postgresql://root:R00tpa55w0rd@consurv_database:5432/ConSurvDatabase`
+connectionstring: `postgresql://user:pa55w0rd@consurv_database:5432/ConSurvDatabase`
 
 Data for adminer:
 
@@ -26,8 +26,8 @@ System: `PostgreSQL`
 
 Server: `consurv_database`
 
-Username: `root`
+Username: `user`
 
-Password: `R00tpa55w0rd`
+Password: `pa55w0rd`
 
 Database: `ConSurvDatabase`

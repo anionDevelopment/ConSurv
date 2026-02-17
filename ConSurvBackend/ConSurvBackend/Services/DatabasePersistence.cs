@@ -7,7 +7,6 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.Misc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace ConSurvBackend.Core.Services
         private static readonly object _Lock = new object();
         private readonly ITimeService _TimeService;
         private readonly IGRYLog _Log;
-        private readonly IConSurvDatabaseInteractor _Database;
+        internal readonly IConSurvDatabaseInteractor _Database;
         public InitializationState InitializationState { get; private set; }
 
         public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log)
@@ -54,11 +53,11 @@ namespace ConSurvBackend.Core.Services
         {
             lock (_Lock)
             {
-                DBUtilities.RunTransaction<IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, runTransactional,actions);
+                DBUtilities.RunTransaction<IConSurvDatabaseInteractor>(nameOfAction, this._Log, this._Database, runTransactional, actions);
             }
         }
 
-        protected T?[] RunTransaction<T>(string nameOfAction,bool runTransactional, params Func<DbCommand, T?>[] functions)
+        protected T?[] RunTransaction<T>(string nameOfAction, bool runTransactional, params Func<DbCommand, T?>[] functions)
         {
             lock (_Lock)
             {
@@ -75,7 +74,7 @@ namespace ConSurvBackend.Core.Services
                 command.CommandText = this._SQLProvider.GetScriptCreateCamera();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", camera.Id));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", camera.Name));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL,typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
@@ -96,7 +95,7 @@ namespace ConSurvBackend.Core.Services
 
         public IDictionary<string, Camera> GetAllCameras()
         {
-            IDictionary<string, Camera> roles = this.RunTransaction(nameof(GetAllCameras),true,(command) =>
+            IDictionary<string, Camera> roles = this.RunTransaction(nameof(GetAllCameras), true, (command) =>
             {
                 IDictionary<string, Camera> cameraDictionary = new Dictionary<string, Camera>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllCameras();
@@ -133,12 +132,12 @@ namespace ConSurvBackend.Core.Services
 
         public void Dispose()
         {
-           //TODO
+            //TODO
         }
 
         public bool UserWithNameExists(string userName)
         {
-            return this.RunTransaction(nameof(UserWithNameExists),true,(cmd) =>
+            return this.RunTransaction(nameof(UserWithNameExists), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithNameExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserName", userName));
@@ -154,7 +153,7 @@ namespace ConSurvBackend.Core.Services
 
         public ISet<Role> GetAllRoles()
         {
-            ISet<Role> roles = this.RunTransaction(nameof(GetAllRoles),true,(command) =>
+            ISet<Role> roles = this.RunTransaction(nameof(GetAllRoles), true, (command) =>
             {
                 ISet<Role> rolesInternal = new HashSet<Role>();
                 command.CommandText = this._SQLProvider.GetScriptGetAllRoles();
@@ -185,7 +184,7 @@ namespace ConSurvBackend.Core.Services
 
         public void AddRole(Role role)
         {
-            this.RunTransaction(nameof(AddRole),true,(command) =>
+            this.RunTransaction(nameof(AddRole), true, (command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptInsertRole();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", role.Id));
@@ -199,7 +198,7 @@ namespace ConSurvBackend.Core.Services
 
         public void UpdateRole(Role role)
         {
-            this.RunTransaction(nameof(UpdateRole),true,(cmd) =>
+            this.RunTransaction(nameof(UpdateRole), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUpdateRole();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", role.Id));
@@ -223,25 +222,25 @@ namespace ConSurvBackend.Core.Services
 
         public void AddUser(User user)
         {
-            this.RunTransaction(nameof(AddUser),true,(command) =>
+            this.RunTransaction(nameof(AddUser), true, (command) =>
             {
                 command.CommandText = this._SQLProvider.GetScriptAddUser();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", user.Id));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", user.Name));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("PasswordHash", user.PasswordHash));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("EMailAddress", user.EMailAddress));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("PasswordHash", user.PasswordHash, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("EMailAddress", user.EMailAddress, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserIsActivated", user.UserIsActivated));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserIsLocked", user.UserIsLocked));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RegistrationMoment", user.RegistrationMoment));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("TOTPActivated", user.TOTP.IsActicated));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("TOTPSecretKey", user.TOTP.SecretKey));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("TOTPActivated", user.TOTP?.IsActicated, typeof(bool)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("TOTPSecretKey", user.TOTP?.SecretKey, typeof(string)));
                 command.ExecuteNonQuery();
             });
         }
 
         public bool UserWithIdExists(string userId)
         {
-            return this.RunTransaction(nameof(UserWithIdExists),true,(cmd) =>
+            return this.RunTransaction(nameof(UserWithIdExists), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserWithIdExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter(nameof(userId), userId));
@@ -252,7 +251,7 @@ namespace ConSurvBackend.Core.Services
 
         public User GetUserById(string userId)
         {
-            User result = this.RunTransaction(nameof(GetUserById),true,(cmd) =>
+            User result = this.RunTransaction(nameof(GetUserById), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserById();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", userId));
@@ -286,7 +285,7 @@ namespace ConSurvBackend.Core.Services
 
         private void EnrichWhichAccessToken(User user)
         {
-            this.RunTransaction(nameof(EnrichWhichAccessToken),true,(cmd) =>
+            this.RunTransaction(nameof(EnrichWhichAccessToken), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetAllAccessTokenForUser();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", user.Id));
@@ -308,7 +307,7 @@ namespace ConSurvBackend.Core.Services
 
         public User GetUserByName(string userName)
         {
-            User result = this.RunTransaction(nameof(GetUserByName),true,(cmd) =>
+            User result = this.RunTransaction(nameof(GetUserByName), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetUserByName();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", userName));
@@ -343,7 +342,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool RoleExists(string roleName)
         {
-            return this.RunTransaction(nameof(RoleExists),true,(cmd) =>
+            return this.RunTransaction(nameof(RoleExists), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptRoleExists();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleName", roleName));
@@ -354,7 +353,7 @@ namespace ConSurvBackend.Core.Services
 
         public void AddRoleToUser(string userId, string roleId)
         {
-            this.RunTransaction(nameof(AddRoleToUser),true,(command) =>
+            this.RunTransaction(nameof(AddRoleToUser), true, (command) =>
             {
                 this._Log.Log($"Adding role '{roleId}' to user '{userId}'", LogLevel.Information);
                 command.CommandText = this._SQLProvider.GetScriptAddRoleToUser();
@@ -371,7 +370,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool UserHasRole(string userId, string roleId)
         {
-            return this.RunTransaction(nameof(UserHasRole),true,(cmd) =>
+            return this.RunTransaction(nameof(UserHasRole), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptUserHasRole();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", userId));
@@ -413,7 +412,7 @@ namespace ConSurvBackend.Core.Services
 
         public Role GetRoleByName(string roleName)
         {
-            Role result = this.RunTransaction(nameof(GetRoleByName),true,(cmd) =>
+            Role result = this.RunTransaction(nameof(GetRoleByName), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetRoleByName();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", roleName));
@@ -422,8 +421,8 @@ namespace ConSurvBackend.Core.Services
                 {
                     reader.Read();
                     Role role = new Role();
-                    role.Id = roleName;
-                    role.Name = reader.GetString(0);
+                    role.Id = reader.GetString(0);
+                    role.Name = roleName;
                     this.EnrichWithInheritedRoles(role);
                     return role;
                 }
@@ -437,7 +436,7 @@ namespace ConSurvBackend.Core.Services
 
         public void Reset()
         {
-            this.RunTransaction(nameof(Reset),false,(cmd) =>
+            this.RunTransaction(nameof(Reset), false, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptResetDatabase();
                 using DbDataReader reader = cmd.ExecuteReader();
@@ -447,7 +446,7 @@ namespace ConSurvBackend.Core.Services
 
         public bool IsCamera(string id)
         {
-            return this.RunTransaction(nameof(IsCamera),true,(cmd) =>
+            return this.RunTransaction(nameof(IsCamera), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptIsCamera();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", id));
@@ -484,9 +483,14 @@ namespace ConSurvBackend.Core.Services
                 catch (Exception ex)
                 {
                     this.InitializationState = new InitializationFailed();
-                    this._Log.Log("Initialization failed", ex);
+                    this._Log.Log("Database-initialization failed", ex);
                 }
             }
+        }
+
+        public void WaitUntilAvailable(TimeSpan timeSpan)
+        {
+            this._Database.GetGenericDatabaseInteractor().WaitUntilAvailable(timeSpan);
         }
     }
 }

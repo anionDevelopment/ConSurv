@@ -27,7 +27,6 @@ namespace ConSurvBackend.Core.Configuration
         public IAuthorizationConfiguration ConfigurationForAuthorizationMiddleware { get { return this.AuthorizationConfiguration; } }
         public IAuthSConfiguration AuthenticationConfiguration { get; set; }
         public IAuthenticationConfiguration ConfigurationForAuthenticationMiddleware { get { return this.AuthenticationConfiguration; } }
-        public string TargetFolder { get; set; }
         public TimeSpan VideoLength { get; set; }
         public bool TimeInUTC { get; set; }
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }

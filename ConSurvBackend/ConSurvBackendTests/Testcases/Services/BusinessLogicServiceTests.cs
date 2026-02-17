@@ -43,7 +43,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
             IRuntimeData runtimeData=new RuntimeData(generalResourceLoader,timeService);
-            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog,persistedAPIServerConfiguration,runtimeData);
+            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog,persistedAPIServerConfiguration,runtimeData, constants);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(persistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
             initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
         }

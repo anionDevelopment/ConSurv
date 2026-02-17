@@ -37,8 +37,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core
@@ -129,7 +129,6 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = initializationInformation.ApplicationConstants.Environment is Productive ? TimeSpan.FromMinutes(10) : TimeSpan.FromSeconds(10);
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TargetFolder = Path.Combine(initializationInformation.ApplicationConstants.GetDataFolder(), "Recordings");
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./AuditLog.log"), true);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
                     {
@@ -147,14 +146,15 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
-                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {initializationInformation.CommandlineParameter.InitialCameraAddresses}", LogLevel.Trace);
+                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {initializationInformation.CommandlineParameter.InitialCameraAddresses}", LogLevel.Debug);
                 };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
                 {
                     functionalInformation.Logger.Log("Run initialization...");
-                    IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog", GRYLog.Create())));
+                    IGRYLog logger = functionalInformation.Logger;
+                    IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog", GRYLog.Create(), logger.Configuration.LogTargets.Where(t => t.LogLevels.Contains(LogLevel.Debug)).Any())));
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
-                    IGeneralLogger logger = functionalInformation.Logger;
+                    _Log = logger;
                     bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != null && functionalInformation.InitializationInformation.CommandlineParameter.RealRun && functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient";
                     if (useDatabase)
                     {
@@ -266,7 +266,7 @@ namespace ConSurvBackend.Core
                         throw;
                     }
                 };
-            }, _Log);
+            }, this._Log);
             this.IsRunning = false;
             return result;
         }

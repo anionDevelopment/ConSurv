@@ -9,6 +9,7 @@ using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Crypto;
 using GRYLibrary.Core.Exceptions;
@@ -32,8 +33,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IRandomnessProvider _RandomnessProvider;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly IRuntimeData _RuntimeData;
+        private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
 
-        public BusinessLogicService(IPersistence persistence, IGRYLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData)
+        public BusinessLogicService(IPersistence persistence, IGRYLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants)
         {
             this._Persistence = persistence;
             this._Log = log;
@@ -43,6 +45,7 @@ namespace ConSurvBackend.Core.Services
             this._AuditLog = auditLog;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
             this._RuntimeData = runtimeData;
+            this._Constants = constants;
         }
         public string CreateCamera(string name, string streamURL)
         {
@@ -172,14 +175,16 @@ namespace ConSurvBackend.Core.Services
 
         public void EnsureUserHasRole(string userId, string roleId)
         {
+            this._AuditLog.AuditLogger.Log($"Add role with id {roleId} to user with id {userId}...", LogLevel.Information);
             this._AuthenticationService.EnsureUserHasRole(userId, roleId);
-            this._AuditLog.AuditLogger.Log($"Role {roleId} has been assigned to user {userId}.", LogLevel.Information);//TODO add information about why and by whom this was done
+            //TODO add information about why and by whom this was done
         }
 
         public void EnsureUserDoesNotHaveRole(string userId, string roleId)
         {
+            this._AuditLog.AuditLogger.Log($"Unassign role with id {roleId} from user with id {userId}.", LogLevel.Information);
             this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
-            this._AuditLog.AuditLogger.Log($"Role {roleId} has been unassigned to user {userId}.", LogLevel.Information);//TODO add information about why and by whom this was done
+            //TODO add information about why and by whom this was done to auditlog
         }
         public User GetUser(string userId)
         {
@@ -194,10 +199,11 @@ namespace ConSurvBackend.Core.Services
         public IDictionary<string, IList<string>> GetVideos()
         {
             Dictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
-            foreach (string folder in Directory.GetDirectories(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder))
+            foreach (string folder in Directory.GetDirectories(Path.Combine(this._Constants.GetDataFolder(), "CameraData")))
             {
                 string cameraId = new DirectoryInfo(folder).Name;
                 List<string> list = new List<string>();
+                string recordingsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings");
                 foreach (string file in Directory.GetFiles(folder))
                 {
                     list.Add(file);
@@ -209,7 +215,7 @@ namespace ConSurvBackend.Core.Services
 
         public void RemoveVideo(string cameraId, string filename)
         {
-            string fullPath = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, cameraId, filename);
+            string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
@@ -227,7 +233,7 @@ namespace ConSurvBackend.Core.Services
 
         public byte[] GetVideo(string cameraId, string filename)
         {
-            string fullPath = Path.Combine(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.TargetFolder, cameraId, filename);
+            string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
             if (File.Exists(fullPath))
             {
                 return File.ReadAllBytes(fullPath);

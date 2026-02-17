@@ -9,9 +9,12 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly MariaDBDatabaseInteractor _DatabaseInteractor;
         private readonly IList<MigrationInstance> _Migrations = GRYMigrator.LoadMigrationsFromResources(Assembly.GetExecutingAssembly(), "ConSurvBackend.Core.Resources.Database.MariaDB.Migrations.");
+
+        public string Id { get; private set; }
         public DatabaseInteractorMariaDB(IGenericDatabaseInteractor interactor)
         {
             this._DatabaseInteractor = (MariaDBDatabaseInteractor)interactor;
+            this.Id = this._DatabaseInteractor.Id; 
         }
         public IList<MigrationInstance> GetAllMigrations()
         {
