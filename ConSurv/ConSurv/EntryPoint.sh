@@ -48,6 +48,10 @@ if [[ -n "${InitialEnableEndpointMetricsValue}" ]]; then
     argument+=" --InitialEnableEndpointMetricsValue $InitialEnableEndpointMetricsValue"
 fi
 
+if [[ -n "${InitialVerboseValue}" ]]; then
+    argument+=" --InitialVerboseValue $InitialVerboseValue"
+fi
+
 if [ -z ${DoNotHostFrontend+x} ]; then
     echo "Frontend will be started.";
 else

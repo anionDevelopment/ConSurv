@@ -29,7 +29,7 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
         <DelaySign>true</DelaySign>
-        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039</NoWarn>
+        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039;IDE0063</NoWarn>
         <WarningsAsErrors>NU1605</WarningsAsErrors>
         <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackendTests.sarif</ErrorLog>
         <OutputType>Library</OutputType>

@@ -22,15 +22,17 @@ namespace ConSurvBackend.Core.Services
         private readonly ITimeService _TimeService;
         private readonly IGRYLog _Log;
         internal readonly IConSurvDatabaseInteractor _Database;
+        private readonly IDatabasePersistenceConfiguration _Configuration;
         public InitializationState InitializationState { get; private set; }
 
-        public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log)
+        public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log, IDatabasePersistenceConfiguration configuration)
         {
             this._TimeService = timeService;
             this._Database = database;
             this._Log = log;
             this._SQLProvider = database.GetSQLProvider();
             this.InitializationState = new Uninitialized();
+            this._Configuration = configuration;
         }
 
         #region AccessDatabase
@@ -483,13 +485,15 @@ namespace ConSurvBackend.Core.Services
                 catch (Exception ex)
                 {
                     this.InitializationState = new InitializationFailed();
-                    this._Log.Log("Database-initialization failed", ex);
+                    this._Log.Log("Database-initialization failed.", ex);
                 }
             }
         }
 
         public void WaitUntilAvailable(TimeSpan timeSpan)
         {
+            this._Log.Log("Wait until database is available...");
+            this._Log.Log($"Used connection-string: \"{_Database.GetGenericDatabaseInteractor().EscapePasswordInConnectionString( _Configuration.DatabaseConnectionString)}\"", LogLevel.Debug);
             this._Database.GetGenericDatabaseInteractor().WaitUntilAvailable(timeSpan);
         }
     }

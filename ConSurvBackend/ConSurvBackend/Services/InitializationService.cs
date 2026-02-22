@@ -50,7 +50,6 @@ namespace ConSurvBackend.Core.Services
                 if (this._Persistence is IInitializable initializablePersistence)
                 {
                     initializablePersistence.WaitUntilAvailable(TimeSpan.FromMinutes(2));
-
                     initializablePersistence.Initialize();
                 }
                 string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;

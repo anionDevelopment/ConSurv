@@ -73,9 +73,6 @@ namespace ConSurvBackend.Core
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
-                    var t1 = initializationInformation.ApplicationConstants.GetDataFolder();
-                    var t2 = initializationInformation.ApplicationConstants.GetConfigurationFolder();
-                    var t3 = initializationInformation.ApplicationConstants.GetLogFolder();
 
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
@@ -146,7 +143,8 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
-                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {initializationInformation.CommandlineParameter.InitialCameraAddresses}", LogLevel.Debug);
+                    var initialCameraAddressesJoined= string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses ?? new List<string>());
+                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {{{initialCameraAddressesJoined}}}", LogLevel.Debug);
                 };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
                 {

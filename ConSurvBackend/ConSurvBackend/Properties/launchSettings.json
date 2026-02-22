@@ -2,6 +2,7 @@
   "profiles": {
     "ConSurvBackend": {
       "commandLineArgs": "Run --RealRun --InitialAdminPassword admin",
+      //"commandLineArgs": "Run --RealRun --InitialAdminPassword admin --InitialCameraAddresses rtsp://192.168.1.141/stream1;rtsp://192.168.1.142/stream1 --InitialDatabaseType PostgreSQL --InitialDatabaseConnectionString Host=consurv_database;Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;",
       "commandName": "Project"
     }
   }

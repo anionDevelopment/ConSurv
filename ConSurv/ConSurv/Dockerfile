@@ -41,4 +41,3 @@ RUN chmod +x /Workspace/Other/EntryPoint/HealthCheck.sh
 HEALTHCHECK CMD ./HealthCheck.sh
 
 ENTRYPOINT ["./EntryPoint.sh"]
-CMD []

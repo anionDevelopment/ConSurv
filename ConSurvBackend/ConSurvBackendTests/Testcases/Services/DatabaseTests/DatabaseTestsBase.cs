@@ -8,6 +8,7 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -115,7 +116,9 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     IConSurvDatabaseInteractor conSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
                     ITimeService timeService = new TimeService();
                     IGRYLog log = GRYLog.Create();
-                    using DatabasePersistence databasePersistence = new DatabasePersistence(conSurvDatabaseInteractor, timeService, log);
+                    Mock<IDatabasePersistenceConfiguration> databasePersistenceConfigurationMock = new Mock<IDatabasePersistenceConfiguration>(MockBehavior.Strict);
+                    databasePersistenceConfigurationMock.SetupGet(m => m.DatabaseConnectionString).Returns(databaseTestFramework.ConnectionString);
+                    using DatabasePersistence databasePersistence = new DatabasePersistence(conSurvDatabaseInteractor, timeService, log, databasePersistenceConfigurationMock.Object);
                     ConSurvBackend.Core.Model.Base.Camera expectedCamera = new ConSurvBackend.Core.Model.Base.Camera("id", "name");
                     databasePersistence.CreateCamera(expectedCamera);
 
