@@ -1,2 +1,3 @@
-
-insert into "Roles"("Id", "Name") values (@Id, @Name);
+insert
+	into "Roles"("Id", "Name")
+	values (@Id, @Name);

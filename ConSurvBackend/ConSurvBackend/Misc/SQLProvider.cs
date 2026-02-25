@@ -7,6 +7,11 @@ namespace ConSurvBackend.Core.Miscellaneous
     {
         public SQLProvider(string databaseType) : base($"ConSurvBackend.Core.Resources.Database.{databaseType}.Statements") { }
 
+        public string GetScriptAddAccessToken()
+        {
+            return this.LoadSQLScript("AddAccessToken");
+        }
+
         public string GetScriptAddRoleToUser()
         {
             return this.LoadSQLScript("AddRoleToUser");
@@ -20,6 +25,11 @@ namespace ConSurvBackend.Core.Miscellaneous
         public string GetScriptCreateCamera()
         {
             return this.LoadSQLScript("CreateCamera");
+        }
+
+        public string GetScriptGetAccessToken()
+        {
+            return this.LoadSQLScript("GetAccessToken");
         }
 
         public string GetScriptGetAllAccessTokenForUser()

@@ -19,5 +19,7 @@
         string GetScriptCreateCamera();
         string GetScriptResetDatabase();
         string GetScriptIsCamera();
+        string GetScriptAddAccessToken();
+        string GetScriptGetAccessToken();
     }
 }

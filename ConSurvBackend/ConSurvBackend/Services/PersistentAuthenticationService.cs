@@ -25,7 +25,8 @@ namespace ConSurvBackend.Core.Services
 
         public bool AccessTokenIsValid(string accessToken)
         {
-            throw new NotImplementedException();
+            var token = this._Persistence.GetAccessToken(accessToken);
+            return token.ExpiredMoment < this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
         }
 
         public void AddRole(string roleName)
@@ -159,7 +160,8 @@ namespace ConSurvBackend.Core.Services
             AccessToken newAccessToken = new AccessToken();
             newAccessToken.Value = Guid.NewGuid().ToString();
             newAccessToken.ExpiredMoment = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset().AddDays(1);//TODO make this configurable
-            this._Persistence.AddAccessToken(user.Id, newAccessToken);
+            newAccessToken.OwnerUserId = user.Id;
+            this._Persistence.AddAccessToken(newAccessToken);
             user.AccessToken.Add(newAccessToken);
             return newAccessToken;
         }

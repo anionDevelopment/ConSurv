@@ -394,14 +394,39 @@ namespace ConSurvBackend.Core.Services
 
         public AccessToken GetAccessToken(string accessToken)
         {
-            throw new NotImplementedException();
+            return this.RunTransaction(nameof(GetAccessToken), true, (cmd) =>
+             {
+                 cmd.CommandText = this._SQLProvider.GetScriptGetAccessToken();
+                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Value", accessToken));
+                 using DbDataReader reader = cmd.ExecuteReader();
+                 if (reader.HasRows)
+                 {
+                     reader.Read();
+                     AccessToken accessTokenResult = new AccessToken();
+                     accessTokenResult.Value = accessToken;
+                     accessTokenResult.OwnerUserId = reader.GetString(0);
+                     accessTokenResult.ExpiredMoment = reader.GetDateTime(1);
+                     return accessTokenResult;
+                 }
+                 else
+                 {
+                     throw new KeyNotFoundException($"Accesstoken '{accessToken}' not found.");
+                 }
+             })[0];
         }
 
-        public void AddAccessToken(string userId, AccessToken newAccessToken)
+        public void AddAccessToken(AccessToken newAccessToken)
         {
-            throw new NotImplementedException();
+            this.RunTransaction(nameof(AddAccessToken), true, (cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptAddAccessToken();
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Value", newAccessToken.Value));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ExpiredMoment", newAccessToken.ExpiredMoment));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", newAccessToken.OwnerUserId));
+                using DbDataReader reader = cmd.ExecuteReader();
+                return reader.HasRows;
+            });
         }
-
         public void RemoveAccessToken(string accessToken)
         {
             throw new NotImplementedException();
@@ -493,7 +518,7 @@ namespace ConSurvBackend.Core.Services
         public void WaitUntilAvailable(TimeSpan timeSpan)
         {
             this._Log.Log("Wait until database is available...");
-            this._Log.Log($"Used connection-string: \"{_Database.GetGenericDatabaseInteractor().EscapePasswordInConnectionString( _Configuration.DatabaseConnectionString)}\"", LogLevel.Debug);
+            this._Log.Log($"Used connection-string: \"{this._Database.GetGenericDatabaseInteractor().EscapePasswordInConnectionString(this._Configuration.DatabaseConnectionString)}\"", LogLevel.Debug);
             this._Database.GetGenericDatabaseInteractor().WaitUntilAvailable(timeSpan);
         }
     }

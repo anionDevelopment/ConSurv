@@ -19,7 +19,7 @@ def start_dockerfile_example():
         'InitialAdminPassword': 'admin',
         'InitialDatabaseType': 'PostgreSQL',
         'InitialDatabaseConnectionString': 'Host=consurv_database;Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;',
-        'InitialCameraAddresses': 'rtsp://192.168.1.141/stream1;rtsp://192.168.1.142/stream1',
+        'InitialCameraAddresses': 'rtsp://tpuser:GgrechuH_fzing655f@192.168.1.141/stream1',
         "image_postgresql":t.oci_image_manager.get_registry_address_for_image_with_default_tag(repository_folder,"PostgreSQL"),
         "image_adminer":t.oci_image_manager.get_registry_address_for_image_with_default_tag(repository_folder,"Adminer"),
     })
