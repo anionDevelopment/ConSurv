@@ -8,7 +8,7 @@ export const authenticationCheckGuard: CanActivateFn = (route, state) => {
   const router: Router = inject(Router);
   return userDataService.userIsLoggedIn().pipe(tap((userIsLoggedIn) => {
     if (!userIsLoggedIn) {
-      router.navigate(['']);
+      router.navigate(['/']);
     }
     return userIsLoggedIn;
   }));
