@@ -5,9 +5,9 @@ import { tap } from 'rxjs';
 
 export const authenticationCheckGuard: CanActivateFn = (route, state) => {
   const userDataService: UserDataService = inject(UserDataService);
+  const router: Router = inject(Router);
   return userDataService.userIsLoggedIn().pipe(tap((userIsLoggedIn) => {
     if (!userIsLoggedIn) {
-      const router: Router = inject(Router);
       router.navigate(['']);
     }
     return userIsLoggedIn;
