@@ -91,7 +91,9 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(TokenIsValid))]
         public IActionResult TokenIsValid([FromHeader] string accessToken)
         {
-            return this.Ok(this._AuthenticationService.AccessTokenIsValid(accessToken));
+            var result = this._AuthenticationService.AccessTokenIsValid(accessToken);
+            _Logger.Log($"Checked if access token {accessToken} is valid. Result: {result}");
+            return this.Ok(result);
         }
 
         [Authenticate]

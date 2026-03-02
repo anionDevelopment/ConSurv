@@ -34,16 +34,15 @@ namespace ConSurvBackend.Tests.Testcases.Services
             };
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
-            ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
             (TransientPersistence, ISet<IDisposable>) databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence.Item1;
             persistence.Reset();
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
-            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence);
+            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence, logger);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            IRuntimeData runtimeData=new RuntimeData(generalResourceLoader,timeService);
-            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog,persistedAPIServerConfiguration,runtimeData, constants);
+            IRuntimeData runtimeData = new RuntimeData(generalResourceLoader, timeService);
+            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog, persistedAPIServerConfiguration, runtimeData, constants);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(persistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
             initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
         }

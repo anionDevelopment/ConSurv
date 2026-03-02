@@ -47,6 +47,7 @@
           },
           "configurations": {
             "Productive": {
+              "localize": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -68,6 +69,7 @@
               ]
             },
             "QualityCheck": {
+              "localize": true,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
@@ -79,6 +81,7 @@
               ]
             },
             "Development": {
+              "localize": true,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,

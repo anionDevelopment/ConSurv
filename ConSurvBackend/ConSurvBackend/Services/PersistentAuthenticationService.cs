@@ -4,6 +4,7 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Crypto;
 using GRYLibrary.Core.Exceptions;
+using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,21 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly IAuthenticationServicePersistence<User> _Persistence;
         private readonly ITimeService _TimeService;
+        private readonly IGRYLog _Log;
 
-        public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence)
+        public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence, IGRYLog log)
         {
             this._Persistence = persistence;
             this._TimeService = timeService;
+            this._Log = log;
         }
 
         public bool AccessTokenIsValid(string accessToken)
         {
             var token = this._Persistence.GetAccessToken(accessToken);
-            return token.ExpiredMoment < this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
+            var now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
+            _Log.Log($"Checked if access token {accessToken} is valid. Expired moment: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(token.ExpiredMoment, false)}; now: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(now, false)}");
+            return now < token.ExpiredMoment;
         }
 
         public void AddRole(string roleName)

@@ -9,7 +9,6 @@ using System;
 
 namespace ConSurvBackend.Core.BackgroundServices
 {
-    [Obsolete]
     public class MotionDetectionService : IteratingBackgroundService, IMotionDetectionService
     {
         private readonly IBusinessLogicService _CameraService;

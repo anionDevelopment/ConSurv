@@ -281,7 +281,7 @@ paths:
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
                 GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(screenshots_folder);
                 string target_file = Path.Combine(screenshots_folder, "frame").Replace("\\", "/");
-                string ffmpegArgument2 = $"-rtsp_transport tcp -i {url} -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 10 -vf fps=1/2 -qscale:v 2 {target_file}_%01d.jpg";
+                string ffmpegArgument2 = $"-rtsp_transport tcp -i {url} -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 10 -vf fps=1/2 -qscale:v 2 -strftime 1 {target_file}_%Y-%m-%dT%H-%M-%S.jpg";
                 ExternalProgramExecutor ffmpegProcess2 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument2, null, null, $"Take screenshots of {camera.Id}", $"TakeScreenshotsOf-{camera.Id}", false);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess2.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess2.ExitCode}.");
 
