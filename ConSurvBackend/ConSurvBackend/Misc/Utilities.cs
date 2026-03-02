@@ -62,7 +62,7 @@ namespace ConSurvBackend.Core.Misc
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-      
+
         internal static byte[] ResizeImage(byte[] image, uint height, uint width)
         {
             MemoryStream inputStream = new MemoryStream(image);
@@ -104,7 +104,7 @@ namespace ConSurvBackend.Core.Misc
 
         public static string EscapeBasicAuthPasswords(string rtspLink)
         {
-             string pattern = @"(?<scheme>[a-z]+):\/\/(?<user>[^:\s@]+):(?<pass>[^@\s]+)@";
+            string pattern = @"(?<scheme>[a-z]+):\/\/(?<user>[^:\s@]+):(?<pass>[^@\s]+)@";
 
             string result = Regex.Replace(rtspLink, pattern, m =>
             {

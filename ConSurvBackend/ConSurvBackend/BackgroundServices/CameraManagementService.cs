@@ -46,17 +46,14 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._Log = log;
             this._Constants = constants;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
-            this._Log.Log($"temp: constr", Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
         protected override void Run()
         {
-            this._Log.Log($"temp: CameraManagementService run started...", Microsoft.Extensions.Logging.LogLevel.Debug);
             this._Log.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
             {
                 if (this._InitializationService.GetInitializationState() is Initialized)
                 {
-                    this._Log.Log($"temp: CameraManagementService running...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     ICollection<Camera> cameras = this._CameraService.GetAllCameras().Values;
                     this._Log.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     foreach (Model.Base.Camera camera in cameras)
@@ -73,7 +70,6 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         private void ManageCamera(Camera camera)
         {
-            this._Log.Log($"temp: manage camera {camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
             CameraInternalsBase? existingState;
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
@@ -89,7 +85,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 catch (Exception e)
                 {
-                    this._Log.Log($"temp: ex1 {camera.Id}...", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Log.Log($"Error while managing camera {camera.Id}.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
                     NotAvailable newState = new NotAvailable(camera);
                     this._RuntimeData.SetCameraInternals(newState);
                     newState.Accept(new EnsureDesiredConditionIsApplied(currentState, this));
@@ -107,12 +103,10 @@ namespace ConSurvBackend.Core.BackgroundServices
             {
                 this._PreviousState = previousState;
                 this._CameraManagementService = cameraManagementService;
-                this._CameraManagementService._Log.Log($"temp: temp1 {previousState.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
             }
 
             public void Handle(Available available)
             {
-                this._CameraManagementService._Log.Log($"temp: temp2 {available.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(available.MediaMTXProcess.IsRunning, $"MediaMTX terminated unexoectedly for {available.Camera.Id}.");
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(available.FFMPEGProcess.IsRunning, $"FFMPEG terminated unexoectedly for {available.Camera.Id}.");
                 bool startProcesses = false;
@@ -130,7 +124,6 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 if (startProcesses)
                 {
-                    this._CameraManagementService._Log.Log($"temp: temp3 {available.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     this.StartProcesses(available);
                 }
             }
@@ -142,10 +135,8 @@ namespace ConSurvBackend.Core.BackgroundServices
 
             public void Handle(NotAvailable notAvailable)
             {
-                this._CameraManagementService._Log.Log($"temp: temp4 {notAvailable.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 if (this._PreviousState is Available previousAvailableState)
                 {
-                    this._CameraManagementService._Log.Log($"temp: temp5 {notAvailable.Camera.Id}...", Microsoft.Extensions.Logging.LogLevel.Debug);
                     this.StopProcesses(previousAvailableState);
                 }
             }
@@ -314,12 +305,11 @@ paths:
 
                 }
 
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-
-                //temp:
                 takescreenshots = ffmpegProcess2;
                 mediamtx = mediaMTXProcess;
                 streamtomediamtx = ffmpegProcess;
+
+                Thread.Sleep(TimeSpan.FromSeconds(5));
 
                 return true;
 

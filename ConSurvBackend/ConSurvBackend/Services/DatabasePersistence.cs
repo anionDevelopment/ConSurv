@@ -276,10 +276,21 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No user found with id '{userId}'");
                 }
             })[0];
+            this.EnrichWhichRoles(result);
             this.EnrichWhichAccessToken(result);
             this.EnrichWhichTOTPToken(result);
             return result;
         }
+
+        private void EnrichWhichRoles(User result)
+        {
+            throw new NotImplementedException();//TODO load directly assigned roles
+            foreach (Role role in result.Roles)
+            {
+                this.EnrichWithInheritedRoles(role);
+            }
+        }
+
         private void EnrichWhichTOTPToken(User result)
         {
             //TODO
@@ -332,6 +343,7 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No user found with username '{userName}'");
                 }
             })[0];
+            this.EnrichWhichRoles(result);
             this.EnrichWhichAccessToken(result);
             this.EnrichWhichTOTPToken(result);
             return result;
@@ -450,7 +462,6 @@ namespace ConSurvBackend.Core.Services
                     Role role = new Role();
                     role.Id = reader.GetString(0);
                     role.Name = roleName;
-                    this.EnrichWithInheritedRoles(role);
                     return role;
                 }
                 else
@@ -458,6 +469,7 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No user found with username '{roleName}'");
                 }
             })[0];
+            this.EnrichWithInheritedRoles(result);
             return result;
         }
 
