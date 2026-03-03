@@ -279,7 +279,7 @@ namespace ConSurvBackend.Core.Services
 
         private void EnrichWhichRoles(User user)
         {
-            var allRoles = GetAllRoles();
+            var allRoles = this.GetAllRoles();
             foreach(var role in allRoles)
             {
                 if (this.UserHasRole(user.Id, role.Id))
@@ -296,7 +296,7 @@ namespace ConSurvBackend.Core.Services
             ISet<string> inheritedRoleIds = this.RunTransaction(nameof(EnrichWithInheritedRoles), true, (command) =>
             {
                 ISet<string> inheritedRoleIdsInternal = new HashSet<string>();
-                command.CommandText = this._SQLProvider.GetScriptGetAllInheritedRoles();
+                command.CommandText = this._SQLProvider.GetScriptGetAllInheritedRoleIds();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleId", role.Id));
                 using (DbDataReader reader = command.ExecuteReader())
                 {
@@ -311,7 +311,7 @@ namespace ConSurvBackend.Core.Services
             })[0];
             foreach (string inheritedRoleId in inheritedRoleIds)
             {
-                role.InheritedRoles.Add(this.GetRoleById(inheritedRoleId));
+                role.DirectlyInheritedRoles.Add(this.GetRoleById(inheritedRoleId));
             }
         }
 

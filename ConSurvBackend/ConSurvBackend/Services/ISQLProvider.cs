@@ -21,7 +21,7 @@
         string GetScriptIsCamera();
         string GetScriptAddAccessToken();
         string GetScriptGetAccessToken();
-        string GetScriptGetAllInheritedRoles();
+        string GetScriptGetAllInheritedRoleIds();
         string GetScriptGetRoleById();
     }
 }

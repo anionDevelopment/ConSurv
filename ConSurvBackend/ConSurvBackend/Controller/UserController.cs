@@ -92,7 +92,7 @@ namespace ConSurvBackend.Core.Controller
         public IActionResult TokenIsValid([FromHeader] string accessToken)
         {
             var result = this._AuthenticationService.AccessTokenIsValid(accessToken);
-            _Logger.Log($"Checked if access token {accessToken} is valid. Result: {result}");
+            this._Logger.Log($"Checked if access token {accessToken} is valid. Result: {result}");
             return this.Ok(result);
         }
 

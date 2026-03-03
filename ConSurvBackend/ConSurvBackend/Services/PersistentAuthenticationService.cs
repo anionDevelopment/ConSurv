@@ -30,7 +30,7 @@ namespace ConSurvBackend.Core.Services
         {
             var token = this._Persistence.GetAccessToken(accessToken);
             var now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
-            _Log.Log($"Checked if access token {accessToken} is valid. Expired moment: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(token.ExpiredMoment, false)}; now: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(now, false)}");
+            this._Log.Log($"Checked if access token {accessToken} is valid. Expired moment: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(token.ExpiredMoment, false)}; now: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(now, false)}");
             return now < token.ExpiredMoment;
         }
 

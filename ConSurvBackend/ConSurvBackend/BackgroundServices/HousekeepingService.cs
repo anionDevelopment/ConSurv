@@ -26,10 +26,10 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IDictionary<string/*camera-id*/, DateTime> _LastUsedScreenshotsForMotionDetection = new Dictionary<string, DateTime>();
         public HousekeepingService(IApplicationConstants constants, IGRYLog logger, ITimeService timeService, IInitializationService<CommandlineParameter> initializationService, IBusinessLogicService cameraService, IRuntimeData runtimeData) : base(constants.ExecutionMode, logger)
         {
-            _Constants = constants;
-            _CameraService = cameraService;
-            _TimeService = timeService;
-            _InitializationService = initializationService;
+            this._Constants = constants;
+            this._CameraService = cameraService;
+            this._TimeService = timeService;
+            this._InitializationService = initializationService;
             this.Enabled = true;
             this.AdditionalDelay = TimeSpan.FromSeconds(3);
             this._RuntimeData = runtimeData;
@@ -40,9 +40,9 @@ namespace ConSurvBackend.Core.BackgroundServices
             if (this._InitializationService.GetInitializationState() is Initialized)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(3));
-                UpdatePreviewsInRuntimeData();
-                DoMotionDetection();
-                CleanupScreenshots();
+                this._Logger.RunTask(this.UpdatePreviewsInRuntimeData, nameof(UpdatePreviewsInRuntimeData),true);
+                this._Logger.RunTask(this.DoMotionDetection, nameof(DoMotionDetection), true);
+                this._Logger.RunTask(this.CleanupScreenshots, nameof(CleanupScreenshots), true);
             }
             else
             {
@@ -63,12 +63,12 @@ namespace ConSurvBackend.Core.BackgroundServices
                          .Where(file => file.EndsWith(".jpg"))
                          .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
                          .OrderBy(dataSet => dataSet.Timestamp)
-                         .Where(f => (_TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)) < f.Timestamp)
+                         .Where(f => (this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)) < f.Timestamp)
                          .Where(f =>
                          {
-                             if (_LastUsedScreenshotsForMotionDetection.ContainsKey(camera.Id))
+                             if (this._LastUsedScreenshotsForMotionDetection.ContainsKey(camera.Id))
                              {
-                                 return _LastUsedScreenshotsForMotionDetection[camera.Id] < f.Timestamp;
+                                 return this._LastUsedScreenshotsForMotionDetection[camera.Id] < f.Timestamp;
                              }
                              else
                              {
@@ -83,8 +83,8 @@ namespace ConSurvBackend.Core.BackgroundServices
                         var screenshot1 = last2Screenshots[0];
                         var screenshot2 = last2Screenshots[1];
                         var creationDate1 = File.GetCreationTimeUtc(screenshot1);
-                        _LastUsedScreenshotsForMotionDetection[camera.Id] = creationDate1;
-                        if (ImagesAreDifferent(screenshot1, screenshot2))
+                        this._LastUsedScreenshotsForMotionDetection[camera.Id] = creationDate1;
+                        if (this.ImagesAreDifferent(screenshot1, screenshot2))
                         {
                             //TODO raise event
                         }
@@ -122,14 +122,14 @@ namespace ConSurvBackend.Core.BackgroundServices
                 byte[] preview;
                 if (availableScreenshots.Count == 0)
                 {
-                    preview = _RuntimeData.GetPreviewFallbackPicture();
+                    preview = this._RuntimeData.GetPreviewFallbackPicture();
                 }
                 else
                 {
                     string screenshot = availableScreenshots.Last();
                     preview = File.ReadAllBytes(screenshot);
                 }
-                _RuntimeData.AddPreview(camera.Id, new Preview(preview, this._TimeService.GetCurrentLocalTimeAsDateTimeOffset()));
+                this._RuntimeData.AddPreview(camera.Id, new Preview(preview, this._TimeService.GetCurrentLocalTimeAsDateTimeOffset()));
             }
         }
 
@@ -145,7 +145,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                         .Where(file => file.EndsWith(".jpg"))
                         .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
                         .OrderBy(dataSet => dataSet.Timestamp)
-                        .Where(f => f.Timestamp < (_TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)))
+                        .Where(f => f.Timestamp < (this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)))
                         .SkipLast(2)
                         .Select(f => f.File)
                         .ToList();

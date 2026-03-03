@@ -62,14 +62,14 @@ namespace ConSurvBackend.Core.Services
 
                     this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameModerators);
                     Role moderatorsRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameModerators);
-                    moderatorsRole.InheritedRoles = new HashSet<Role>();
-                    moderatorsRole.InheritedRoles.Add(usersRole);
+                    moderatorsRole.DirectlyInheritedRoles = new HashSet<Role>();
+                    moderatorsRole.DirectlyInheritedRoles.Add(usersRole);
                     this._AuthenticationService.UpdateRole(moderatorsRole);
 
                     this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameAdmins);
                     Role adminsRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameAdmins);
-                    adminsRole.InheritedRoles = new HashSet<Role>();
-                    adminsRole.InheritedRoles.Add(moderatorsRole);
+                    adminsRole.DirectlyInheritedRoles = new HashSet<Role>();
+                    adminsRole.DirectlyInheritedRoles.Add(moderatorsRole);
                     this._AuthenticationService.UpdateRole(adminsRole);
                     string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                     string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
