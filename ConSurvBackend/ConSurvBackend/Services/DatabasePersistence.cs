@@ -179,11 +179,6 @@ namespace ConSurvBackend.Core.Services
             return roles;
         }
 
-        private void EnrichWithInheritedRoles(Role role)
-        {
-            //TODO load inherited roles transitively
-        }
-
         public void AddRole(Role role)
         {
             this.RunTransaction(nameof(AddRole), true, (command) =>
@@ -282,13 +277,18 @@ namespace ConSurvBackend.Core.Services
             return result;
         }
 
-        private void EnrichWhichRoles(User result)
+        private void EnrichWhichRoles(User user)
         {
             throw new NotImplementedException();//TODO load directly assigned roles
-            foreach (Role role in result.Roles)
+            foreach (Role role in user.Roles)
             {
                 this.EnrichWithInheritedRoles(role);
             }
+        }
+
+        private void EnrichWithInheritedRoles(Role role)
+        {
+            //TODO load inherited roles transitively
         }
 
         private void EnrichWhichTOTPToken(User result)
