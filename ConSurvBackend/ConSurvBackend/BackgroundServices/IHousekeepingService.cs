@@ -2,7 +2,7 @@
 
 namespace ConSurvBackend.Core.BackgroundServices
 {
-    public interface ICleanupService:IIteratingBackgroundService
+    public interface IHousekeepingService:IIteratingBackgroundService
     {
     }
 }

@@ -279,16 +279,40 @@ namespace ConSurvBackend.Core.Services
 
         private void EnrichWhichRoles(User user)
         {
-            throw new NotImplementedException();//TODO load directly assigned roles
-            foreach (Role role in user.Roles)
+            var allRoles = GetAllRoles();
+            foreach(var role in allRoles)
             {
-                this.EnrichWithInheritedRoles(role);
+                if (this.UserHasRole(user.Id, role.Id))
+                {
+                    user.Roles.Add(role);
+                    user.Roles.UnionWith(role.GetAllInheritedRoles());
+                }
             }
         }
 
         private void EnrichWithInheritedRoles(Role role)
         {
-            //TODO load inherited roles transitively
+            //TODO loading inherited roles is very inperformant currently, this should be optimized
+            ISet<string> inheritedRoleIds = this.RunTransaction(nameof(EnrichWithInheritedRoles), true, (command) =>
+            {
+                ISet<string> inheritedRoleIdsInternal = new HashSet<string>();
+                command.CommandText = this._SQLProvider.GetScriptGetAllInheritedRoles();
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleId", role.Id));
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        inheritedRoleIdsInternal.Add(reader.GetString(0));
+                    }
+                    reader.Close();
+                    return inheritedRoleIdsInternal;
+                }
+                ;
+            })[0];
+            foreach (string inheritedRoleId in inheritedRoleIds)
+            {
+                role.InheritedRoles.Add(this.GetRoleById(inheritedRoleId));
+            }
         }
 
         private void EnrichWhichTOTPToken(User result)
@@ -449,6 +473,30 @@ namespace ConSurvBackend.Core.Services
             throw new NotImplementedException();
         }
 
+        public Role GetRoleById(string roleId)
+        {
+            Role result = this.RunTransaction(nameof(GetRoleById), true, (cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetRoleById();
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", roleId));
+                using DbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    Role role = new Role();
+                    role.Id = roleId;
+                    role.Name = reader.GetString(0);
+                    return role;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"No role found with id '{roleId}'");
+                }
+            })[0];
+            this.EnrichWithInheritedRoles(result);
+            return result;
+        }
+
         public Role GetRoleByName(string roleName)
         {
             Role result = this.RunTransaction(nameof(GetRoleByName), true, (cmd) =>
@@ -466,7 +514,7 @@ namespace ConSurvBackend.Core.Services
                 }
                 else
                 {
-                    throw new KeyNotFoundException($"No user found with username '{roleName}'");
+                    throw new KeyNotFoundException($"No role found with rolename '{roleName}'");
                 }
             })[0];
             this.EnrichWithInheritedRoles(result);
@@ -501,13 +549,6 @@ namespace ConSurvBackend.Core.Services
                 }
             })[0];
         }
-
-
-        public Role GetRoleById(string roleId)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public void Initialize()
         {

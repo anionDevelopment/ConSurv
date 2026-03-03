@@ -190,7 +190,7 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                     }
                     bool useMockService = runningUsually;
-                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICleanupService, CleanupService>();
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHousekeepingService, HousekeepingService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementService, CameraManagementService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRuntimeData, RuntimeData>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMotionDetectionService, MotionDetectionService>();
@@ -239,7 +239,7 @@ namespace ConSurvBackend.Core
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
-                            ICleanupService cleanupService= GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICleanupService>());
+                            IHousekeepingService housekeepingService= GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());
@@ -248,14 +248,14 @@ namespace ConSurvBackend.Core
                             {
                                 //initialize
                                 this._InitializationService.Initialize(apiServerConfiguration.CommandlineParameter);
-                                cleanupService.StartAsync();
+                                housekeepingService.StartAsync();
                                 metricsService.StartAsync();
                                 motionDetectionService.StartAsync();
                                 cameraManagementService.StartAsync();
                             };
                             functionalInformationForWebApplication.PostRun = () =>
                             {
-                                cleanupService.Stop().Wait();
+                                housekeepingService.Stop().Wait();
                                 metricsService.Stop().Wait();
                                 motionDetectionService.Stop().Wait();
                                 cameraManagementService.Stop().Wait();

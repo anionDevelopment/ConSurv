@@ -42,9 +42,19 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("GetAllCameras");
         }
 
+        public string GetScriptGetAllInheritedRoles()
+        {
+            return this.LoadSQLScript("GetAllInheritedRoles");
+        }
+
         public string GetScriptGetAllRoles()
         {
             return this.LoadSQLScript("GetAllRoles");
+        }
+
+        public string GetScriptGetRoleById()
+        {
+            return this.LoadSQLScript("GetRoleById");
         }
 
         public string GetScriptGetRoleByName()
