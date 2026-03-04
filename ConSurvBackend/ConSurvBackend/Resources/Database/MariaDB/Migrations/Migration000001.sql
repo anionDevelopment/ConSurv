@@ -54,7 +54,6 @@ CREATE TABLE `Role_InheritedRoles` (
     CONSTRAINT `PK_Role_InheritedRoles` PRIMARY KEY (`RoleId`, `InheritedRoleId`)
 ) CHARACTER SET=utf8mb4;
 
-
 CREATE TABLE `Cameras` (
     `Id` VARCHAR(256) not null,
     `Name` VARCHAR(256) not null,

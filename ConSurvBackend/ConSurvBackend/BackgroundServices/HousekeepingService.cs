@@ -7,6 +7,7 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -40,9 +41,10 @@ namespace ConSurvBackend.Core.BackgroundServices
             if (this._InitializationService.GetInitializationState() is Initialized)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(3));
-                this._Logger.RunTask(this.UpdatePreviewsInRuntimeData, nameof(UpdatePreviewsInRuntimeData),true);
-                this._Logger.RunTask(this.DoMotionDetection, nameof(DoMotionDetection), true);
-                this._Logger.RunTask(this.CleanupScreenshots, nameof(CleanupScreenshots), true);
+                LogLevel logLevelForOverhead=LogLevel.Debug;
+                this._Logger.RunTask(this.UpdatePreviewsInRuntimeData, nameof(UpdatePreviewsInRuntimeData),true, logLevelForOverhead);
+                this._Logger.RunTask(this.DoMotionDetection, nameof(DoMotionDetection), true, logLevelForOverhead);
+                this._Logger.RunTask(this.CleanupScreenshots, nameof(CleanupScreenshots), true, logLevelForOverhead);
             }
             else
             {

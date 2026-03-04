@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Role = GRYLibrary.Core.APIServer.CommonDBTypes.Role;
 
 namespace ConSurvBackend.Core.Services
@@ -174,7 +176,7 @@ namespace ConSurvBackend.Core.Services
             })[0];
             foreach (Role role in roles)
             {
-                this.EnrichWithInheritedRoles(role);
+                this.EnrichWithDirectlyInheritedRoles(role);
             }
             return roles;
         }
@@ -200,10 +202,29 @@ namespace ConSurvBackend.Core.Services
                 cmd.CommandText = this._SQLProvider.GetScriptUpdateRole();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", role.Id));
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", role.Name));
-                using DbDataReader reader = cmd.ExecuteReader();
+                cmd.ExecuteNonQuery();
             }, (cmd) =>
             {
-                //TODO update inherited roles
+                cmd.CommandText = this._SQLProvider.GetScriptDeleteDirectlyInheritedRoles();
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleId", role.Id));
+                cmd.ExecuteNonQuery();
+            }, (cmd) =>
+            {
+                if (role.DirectlyInheritedRoles.Any())
+                {
+                    List<string> insertLines = new List<string>();
+                    uint index = 0;
+                    cmd.Parameters.Clear();
+                    foreach (Role directlyInheritedRole in role.DirectlyInheritedRoles)
+                    {
+                        insertLines.Add($"(@RoleId{index}, @InheritedRoleId{index})");//attention: this syntax must always be both: mariadb-compliant and postgresql-compliant
+                        cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter($"RoleId{index}", role.Id));
+                        cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter($"InheritedRoleId{index}", directlyInheritedRole.Id));
+                        index++;
+                    }
+                    cmd.CommandText = this._SQLProvider.GetScriptAddDirectlyInheritedRoles().Replace("__generated__", string.Join(",\n        ", insertLines));
+                    cmd.ExecuteNonQuery();
+                }
             });
         }
 
@@ -280,23 +301,22 @@ namespace ConSurvBackend.Core.Services
         private void EnrichWhichRoles(User user)
         {
             var allRoles = this.GetAllRoles();
-            foreach(var role in allRoles)
+            foreach (var role in allRoles)
             {
                 if (this.UserHasRole(user.Id, role.Id))
                 {
                     user.Roles.Add(role);
-                    user.Roles.UnionWith(role.GetAllInheritedRoles());
                 }
             }
         }
 
-        private void EnrichWithInheritedRoles(Role role)
+        private void EnrichWithDirectlyInheritedRoles(Role role)
         {
             //TODO loading inherited roles is very inperformant currently, this should be optimized
-            ISet<string> inheritedRoleIds = this.RunTransaction(nameof(EnrichWithInheritedRoles), true, (command) =>
+            ISet<string> inheritedRoleIds = this.RunTransaction(nameof(EnrichWithDirectlyInheritedRoles), true, (command) =>
             {
                 ISet<string> inheritedRoleIdsInternal = new HashSet<string>();
-                command.CommandText = this._SQLProvider.GetScriptGetAllInheritedRoleIds();
+                command.CommandText = this._SQLProvider.GetScriptGetDirectlyInheritedRoleIds();
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RoleId", role.Id));
                 using (DbDataReader reader = command.ExecuteReader())
                 {
@@ -493,7 +513,7 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No role found with id '{roleId}'");
                 }
             })[0];
-            this.EnrichWithInheritedRoles(result);
+            this.EnrichWithDirectlyInheritedRoles(result);
             return result;
         }
 
@@ -517,7 +537,7 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No role found with rolename '{roleName}'");
                 }
             })[0];
-            this.EnrichWithInheritedRoles(result);
+            this.EnrichWithDirectlyInheritedRoles(result);
             return result;
         }
 

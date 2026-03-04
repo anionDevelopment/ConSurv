@@ -243,6 +243,8 @@ paths:
                 url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
                 Thread.Sleep(TimeSpan.FromSeconds(3));
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(mediaMTXProcess.IsRunning, () => $"Process terminated unexpectedly with {mediaMTXProcess.ExitCode}.");
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url), $"Media-Hub for {camera.Id} is not available.");
 
                 //stream to media hub
                 ushort ffmpegPort = this.GetNewFreePort();
@@ -261,8 +263,6 @@ paths:
                 ffmpegProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Send stream of camera {camera.Id} to media-hub", $"StreamToMediaHubFrom-{camera.Id}", false);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess.ExitCode}.");
 
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url), $"Media-Hub for {camera.Id} is not available.");
                 ffmpegProcessResult = ffmpegProcess;
                 mediaMTXProcessResult = mediaMTXProcess;
                 this._RuntimeData.SetCameraInternals(new Available(camera, ffmpegProcessResult, mediaMTXProcessResult, url));
@@ -316,7 +316,7 @@ paths:
             }
             catch (Exception e)
             {
-                this._Log.Log($"Could not start Media-hub for {camera.Id}", e);
+                this._Log.Log($"Could not start media-processes for {camera.Id}", e);
                 ffmpegProcessResult = null;
                 mediaMTXProcessResult = null;
                 url = null;

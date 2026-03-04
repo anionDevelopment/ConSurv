@@ -52,6 +52,11 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("GetAllRoles");
         }
 
+        public string GetScriptGetDirectlyInheritedRoleIds()
+        {
+            return this.LoadSQLScript("GetDirectlyInheritedRoleIds");
+        }
+
         public string GetScriptGetRoleById()
         {
             return this.LoadSQLScript("GetRoleById");
@@ -90,6 +95,16 @@ namespace ConSurvBackend.Core.Miscellaneous
         public string GetScriptRoleExists()
         {
             return this.LoadSQLScript("RoleExists");
+        }
+
+        public string GetScriptAddDirectlyInheritedRoles()
+        {
+            return this.LoadSQLScript("AddDirectlyInheritedRoles");
+        }
+
+        public string GetScriptDeleteDirectlyInheritedRoles()
+        {
+            return this.LoadSQLScript("DeleteDirectlyInheritedRoles");
         }
 
         public string GetScriptUpdateRole()
