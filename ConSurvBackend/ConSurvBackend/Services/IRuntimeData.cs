@@ -13,6 +13,5 @@ namespace ConSurvBackend.Core.Services
         public byte[] GetPreviewFallbackPicture();
         public void AddPreview(string cameraId, Preview preview);
         public Preview GetLatestPreview(string cameraId);
-        public IList<Preview> GetLatestPreviews(string cameraId);
     }
 }

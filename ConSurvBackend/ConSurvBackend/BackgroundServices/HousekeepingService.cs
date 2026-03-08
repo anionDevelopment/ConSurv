@@ -32,7 +32,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._TimeService = timeService;
             this._InitializationService = initializationService;
             this.Enabled = true;
-            this.AdditionalDelay = TimeSpan.FromSeconds(3);
+            this.AdditionalDelay = TimeSpan.FromSeconds(1);
             this._RuntimeData = runtimeData;
         }
 
@@ -40,7 +40,6 @@ namespace ConSurvBackend.Core.BackgroundServices
         {
             if (this._InitializationService.GetInitializationState() is Initialized)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(3));
                 LogLevel logLevelForOverhead=LogLevel.Debug;
                 this._Logger.RunTask(this.UpdatePreviewsInRuntimeData, nameof(UpdatePreviewsInRuntimeData),true, logLevelForOverhead);
                 this._Logger.RunTask(this.DoMotionDetection, nameof(DoMotionDetection), true, logLevelForOverhead);
@@ -57,7 +56,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             foreach (var camera in this._CameraService.GetAllCameras().Values)
             {
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
-                List<string> availableScreenshots;
+                List<string> availableScreenshots;//TODO get the available screenshots from _RuntimeData instead
                 if (Directory.Exists(screenshots_folder))
                 {
                     availableScreenshots = Directory

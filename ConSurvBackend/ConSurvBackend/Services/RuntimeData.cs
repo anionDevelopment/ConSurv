@@ -4,6 +4,7 @@ using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.Misc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -75,7 +76,7 @@ namespace ConSurvBackend.Core.Services
             {
                 this.EnsurePreviewQueueIsAvailable(cameraId);
                 this.EnsureQueueIsNotEmpty(cameraId);
-                return this._Previews[cameraId].GetEntries()[0];
+                return this._Previews[cameraId].GetEntries().Last();
             }
         }
 
