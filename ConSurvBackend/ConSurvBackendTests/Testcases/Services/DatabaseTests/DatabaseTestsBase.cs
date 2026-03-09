@@ -1,6 +1,12 @@
 ﻿using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.Services.Database;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
+using GRYLibrary.Core.APIServer.Utilities;
+using GRYLibrary.Core.Logging.GRYLogger;
+using GRYLibrary.Core.Misc.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
@@ -59,11 +65,11 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     migrator.InitializeDatabaseAndMigrateIfRequired();
 
                     //assert
-                    Assert.AreEqual(1, migrator.GetExecutedMigrations().Count);
+                    Assert.HasCount(1, migrator.GetExecutedMigrations());
                     Assert.AreEqual("Migration000001", migrator.GetExecutedMigrations().First().MigrationName);
 
                     List<string> tables2 = databaseInteractor.GetAllTableNames().ToList();
-                    Assert.IsTrue(1 < tables2.Count);
+                    Assert.IsLessThan(tables2.Count, 1);
                     //TODO add more migration-specific assertions
                 }
             }
@@ -90,10 +96,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     migrator.InitializeDatabaseAndMigrateIfRequired();
 
                     //assert
-                    Assert.AreEqual(migrations.Count, migrator.GetExecutedMigrations().Count);
+                    Assert.HasCount(migrations.Count, migrator.GetExecutedMigrations());
 
                     List<string> tables2 = databaseInteractor.GetAllTableNames().ToList();
-                    Assert.IsTrue(1 < tables2.Count);
+                    Assert.IsLessThan(tables2.Count, 1);
                 }
             }
         }
@@ -120,7 +126,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     IDictionary<string, Camera> cameras = databasePersistence.GetAllCameras();
 
                     //assert
-                    Assert.AreEqual(1, cameras.Count);
+                    Assert.HasCount(1, cameras);
                     Assert.IsTrue(cameras.ContainsKey(expectedCamera.Id));
                     Assert.AreEqual(expectedCamera, cameras[expectedCamera.Id]);
                 }

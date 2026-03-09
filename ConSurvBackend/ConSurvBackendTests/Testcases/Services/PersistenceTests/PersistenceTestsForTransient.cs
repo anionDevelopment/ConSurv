@@ -1,5 +1,6 @@
 ﻿using ConSurvBackend.Core.Services;
 using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             return new PersistenceDisposable(result.Item1, result.Item2);
         }
 
-        [TestMethod(nameof(PersistCameraTest))]
+        [TestMethod(DisplayName = nameof(PersistCameraTest))]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
         public override void PersistCameraTest()
         {

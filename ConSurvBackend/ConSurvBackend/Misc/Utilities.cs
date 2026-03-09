@@ -61,7 +61,7 @@ namespace ConSurvBackend.Core.Misc
 
         internal static bool IsRunningInContainer()
         {
-            return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
+            return "true".Equals(Environment.GetEnvironmentVariable("ISRUNNINGINCONTAINER"));
         }
 
         internal static byte[] ResizeImage(byte[] image, uint height, uint width)
