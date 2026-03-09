@@ -1,12 +1,6 @@
 ﻿using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.APIServer.Services.Database;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.Services.OtherServices;
-using GRYLibrary.Core.APIServer.Utilities;
-using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.Misc.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;

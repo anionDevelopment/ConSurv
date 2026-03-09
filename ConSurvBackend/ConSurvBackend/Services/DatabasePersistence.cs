@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Role = GRYLibrary.Core.APIServer.CommonDBTypes.Role;
 
 namespace ConSurvBackend.Core.Services

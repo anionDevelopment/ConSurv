@@ -1,19 +1,7 @@
 ﻿using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.APIServer.ConcreteEnvironments;
-using GRYLibrary.Core.APIServer.ExecutionModes;
-using GRYLibrary.Core.APIServer.Services.Init;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.Services.OtherServices;
-using GRYLibrary.Core.APIServer.Services.Res;
-using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System.Collections.Generic;
 using System;
 

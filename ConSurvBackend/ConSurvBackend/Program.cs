@@ -239,7 +239,7 @@ namespace ConSurvBackend.Core
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
-                            IHousekeepingService housekeepingService= GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
+                            IHousekeepingService housekeepingService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());
