@@ -142,7 +142,7 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
-                    var initialCameraAddressesJoined= string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses ?? new List<string>());
+                    var initialCameraAddressesJoined = string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses ?? new List<string>());
                     this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {{{initialCameraAddressesJoined}}}", LogLevel.Debug);
                 };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
@@ -239,7 +239,7 @@ namespace ConSurvBackend.Core
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
-                            IHousekeepingService housekeepingService= GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
+                            IHousekeepingService housekeepingService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());

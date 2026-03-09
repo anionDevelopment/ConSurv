@@ -1,7 +1,5 @@
 using ConSurvBackend.Core.Controller;
 using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

@@ -1,7 +1,6 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
-using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
@@ -10,10 +9,8 @@ using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -87,9 +84,12 @@ namespace ConSurvBackend.Core.Services
                         }
                     }
 
-                    if (commandlineParameter.RealRun && this._Constants.Environment is Development)
+                    if (commandlineParameter.RealRun)
                     {
-                        this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
+                        if (!ConSurvBackend.Core.Misc.Utilities.IsRunningInContainer())
+                        {
+                            this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
+                        }
                         this._ExampleDataCreator.AddExampleData();
                     }
                 }
@@ -107,17 +107,9 @@ namespace ConSurvBackend.Core.Services
         private void StartWatchDogProcess(string configurationFolder)
         {
             this._GeneralLogger.Log($"Start watch-dog-process in {configurationFolder}...", Microsoft.Extensions.Logging.LogLevel.Information);
-            int currentProcessId = Environment.ProcessId;
-            Process process = new Process();
-            process.StartInfo.FileName = "scespoc";
             string processesFileName = "StartedProcesses.txt";
-            process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./{processesFileName}";
             string processesFile = Path.Combine(configurationFolder, processesFileName);
-            GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processesFile);
-            process.StartInfo.WorkingDirectory = configurationFolder;
-            GRYLibrary.Core.Misc.Utilities.AssertCondition(process.Start());
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-            GRYLibrary.Core.Misc.Utilities.AssertCondition(!process.HasExited, "Watchdog exited unexpectedly.");
+            GRYLibrary.Core.Misc.Utilities.RunEspoc(processesFile, null);
         }
     }
 }
