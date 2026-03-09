@@ -3,6 +3,8 @@ using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using OpenCvSharp;
+using OpenCvSharp.ImgHash;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
@@ -62,7 +64,6 @@ namespace ConSurvBackend.Core.Misc
             return "true".Equals(Environment.GetEnvironmentVariable("IsRunningInDockerContainer"));
         }
 
-
         internal static byte[] ResizeImage(byte[] image, uint height, uint width)
         {
             MemoryStream inputStream = new MemoryStream(image);
@@ -114,6 +115,30 @@ namespace ConSurvBackend.Core.Misc
             });
 
             return result;
+        }
+        public static bool ImagesAreDifferent(byte[] img1Bytes, byte[] img2Bytes, double thresold)
+        {
+            GRYLibrary.Core.Misc.Utilities.AssertCondition(thresold >= 0 && thresold <= 1, "Thresold must be between 0 and 1.");
+            return CalculateImageSimilarity(img1Bytes, img2Bytes) < thresold;
+        }
+        public static double CalculateImageSimilarity(byte[] img1Bytes, byte[] img2Bytes)
+        {
+            Mat img1 = Cv2.ImDecode(img1Bytes, ImreadModes.Grayscale);
+            Mat img2 = Cv2.ImDecode(img2Bytes, ImreadModes.Grayscale);
+
+            var phash = PHash.Create();
+
+            Mat hash1 = new Mat();
+            Mat hash2 = new Mat();
+
+            phash.Compute(img1, hash1);
+            phash.Compute(img2, hash2);
+
+            double distance = Cv2.Norm(hash1, hash2, NormTypes.Hamming);
+
+            double similarity = (1.0 - distance / 64.0) * 100.0;
+
+            return similarity;
         }
     }
 }

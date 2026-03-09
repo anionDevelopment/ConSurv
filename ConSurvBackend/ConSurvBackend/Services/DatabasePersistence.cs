@@ -300,8 +300,8 @@ namespace ConSurvBackend.Core.Services
 
         private void EnrichWhichRoles(User user)
         {
-            var allRoles = this.GetAllRoles();
-            foreach (var role in allRoles)
+            ISet<Role> allRoles = this.GetAllRoles();
+            foreach (Role role in allRoles)
             {
                 if (this.UserHasRole(user.Id, role.Id))
                 {

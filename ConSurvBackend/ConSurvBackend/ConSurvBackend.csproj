@@ -68,6 +68,10 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+        <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.3" />

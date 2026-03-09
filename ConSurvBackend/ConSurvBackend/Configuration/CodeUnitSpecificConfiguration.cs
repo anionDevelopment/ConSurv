@@ -19,6 +19,10 @@ namespace ConSurvBackend.Core.Configuration
     {
         public bool RegistrationIsEnabled { get; set; }
         public bool LoginIsEnabled { get; set; }
+        /// <summary>
+        /// When 2 consecutive images from a camera have a similarity above this threshold, the camera is considered to be currently showing no motion. The similarity is calculated by OpenCV's AverageHash algorithm and is a value between 0 and 1, where 1 means identical images and 0 means completely different images.
+        /// </summary>
+        public double MotionDetectionThreshold { get; set; } = 0.95;
         public ICommonRoutesInformation CommonRoutesInformation { get; set; }
         public IMaintenanceRoutesInformation MaintenanceRoutesInformation { get; set; }
         public IDRequestLoggingConfiguration ConfigurationForDLoggingMiddleware { get; set; }
