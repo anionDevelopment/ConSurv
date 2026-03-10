@@ -10,18 +10,19 @@
 		"tasks": [
 			{
 				"label": "Base: Build all codeunits",
-				"command": "scbuildcodeunits {{.CLI_ARGS}}",
+				"command": "scbuildcodeunits",
 				"type": "shell",
 				"options": {
 					"cwd": "${workspaceFolder}"
 				},
 				"aliases": [
 					"bb"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "Base: Example start",
-				"command": "python StartExample.py {{.CLI_ARGS}}",
+				"command": "python StartExample.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -29,11 +30,12 @@
 				},
 				"aliases": [
 					"beu"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "Base: Example stop",
-				"command": "python StopExample.py {{.CLI_ARGS}}",
+				"command": "python StopExample.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -41,11 +43,12 @@
 				},
 				"aliases": [
 					"bed"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "Run: Frontend",
-				"command": "npm run start {{.CLI_ARGS}}",
+				"command": "npm run start",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -53,11 +56,12 @@
 				},
 				"aliases": [
 					"rf"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: MariaDB start",
-				"command": "python Start.py {{.CLI_ARGS}}",
+				"command": "python Start.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -65,11 +69,12 @@
 				},
 				"aliases": [
 					"ldmu"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: MariaDB stop",
-				"command": "python Stop.py {{.CLI_ARGS}}",
+				"command": "python Stop.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -77,11 +82,12 @@
 				},
 				"aliases": [
 					"ldmd"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: PostgreSQL start",
-				"command": "python Start.py {{.CLI_ARGS}}",
+				"command": "python Start.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -89,11 +95,12 @@
 				},
 				"aliases": [
 					"ldpu"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: PostgreSQL stop",
-				"command": "python Stop.py {{.CLI_ARGS}}",
+				"command": "python Stop.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -101,11 +108,12 @@
 				},
 				"aliases": [
 					"ldpd"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: Reverse-proxy start",
-				"command": "python Start.py {{.CLI_ARGS}}",
+				"command": "python Start.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -113,11 +121,12 @@
 				},
 				"aliases": [
 					"lru"
-				]
+				],
+				"allowcustomarguments": true
 			},
 			{
 				"label": "LocalTestService: Reverse-proxy stop",
-				"command": "python Stop.py {{.CLI_ARGS}}",
+				"command": "python Stop.py",
 				"args": [],
 				"type": "shell",
 				"options": {
@@ -125,7 +134,8 @@
 				},
 				"aliases": [
 					"lrd"
-				]
+				],
+				"allowcustomarguments": true
 			}
 		]
 	},
