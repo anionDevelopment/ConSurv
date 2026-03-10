@@ -38,7 +38,8 @@ export class UserDataService {
 
   userIsLoggedIn(): Observable<boolean> {
     if (this.storageService.hasAccessToken()) {
-      return this.userService.aPIV3UserControllerTokenIsValidGet(this.storageService.getAccessToken());
+      const result = this.userService.aPIV3UserControllerTokenIsValidGet(this.storageService.getAccessToken());
+      return result;
     } else {
       return of(false);
     }

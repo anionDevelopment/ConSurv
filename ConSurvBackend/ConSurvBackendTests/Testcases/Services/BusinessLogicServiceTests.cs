@@ -1,21 +1,21 @@
 ﻿using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.APIServer.ConcreteEnvironments;
-using GRYLibrary.Core.APIServer.ExecutionModes;
-using GRYLibrary.Core.APIServer.Services.Init;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.Services.OtherServices;
-using GRYLibrary.Core.APIServer.Services.Res;
-using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Logging.GRYLogger;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
-using GRYLibrary.Core.APIServer.CommonDBTypes;
 using System.Collections.Generic;
 using System;
+using GRYLibrary.Core.Misc;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Services.Init;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
+using GRYLibrary.Core.APIServer.ExecutionModes;
+using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+using GRYLibrary.Core.APIServer.Services.Res;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.Logging.GRYLogger;
 
 namespace ConSurvBackend.Tests.Testcases.Services
 {
@@ -34,16 +34,15 @@ namespace ConSurvBackend.Tests.Testcases.Services
             };
             IGRYLog logger = GeneralLogger.CreateUsingConsole();
             IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
-            ISQLProvider sqlProvider = new SQLProviderPostgreSQL();
             (TransientPersistence, ISet<IDisposable>) databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence.Item1;
             persistence.Reset();
             IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
-            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence);
+            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence, logger);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            IRuntimeData runtimeData=new RuntimeData(generalResourceLoader,timeService);
-            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog,persistedAPIServerConfiguration,runtimeData);
+            IRuntimeData runtimeData = new RuntimeData(generalResourceLoader, timeService);
+            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog, persistedAPIServerConfiguration, runtimeData, constants);
             IExampleDataCreator exampleDataCreator = new ExampleDataCreator(persistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
             initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
         }

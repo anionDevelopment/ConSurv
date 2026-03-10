@@ -16,7 +16,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             return new PersistenceDisposable(result.Item1, result.Item2);
         }
 
-        [TestMethod(nameof(PersistCameraTest))]
+        [TestMethod(DisplayName = nameof(PersistCameraTest))]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
         public override void PersistCameraTest()
         {

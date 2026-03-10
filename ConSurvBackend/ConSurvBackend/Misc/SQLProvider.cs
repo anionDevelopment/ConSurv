@@ -7,6 +7,11 @@ namespace ConSurvBackend.Core.Miscellaneous
     {
         public SQLProvider(string databaseType) : base($"ConSurvBackend.Core.Resources.Database.{databaseType}.Statements") { }
 
+        public string GetScriptAddAccessToken()
+        {
+            return this.LoadSQLScript("AddAccessToken");
+        }
+
         public string GetScriptAddRoleToUser()
         {
             return this.LoadSQLScript("AddRoleToUser");
@@ -22,6 +27,11 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("CreateCamera");
         }
 
+        public string GetScriptGetAccessToken()
+        {
+            return this.LoadSQLScript("GetAccessToken");
+        }
+
         public string GetScriptGetAllAccessTokenForUser()
         {
             return this.LoadSQLScript("GetAllAccessTokenForUser");
@@ -32,9 +42,24 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("GetAllCameras");
         }
 
+        public string GetScriptGetAllInheritedRoleIds()
+        {
+            return this.LoadSQLScript("GetAllInheritedRoleIds");
+        }
+
         public string GetScriptGetAllRoles()
         {
             return this.LoadSQLScript("GetAllRoles");
+        }
+
+        public string GetScriptGetDirectlyInheritedRoleIds()
+        {
+            return this.LoadSQLScript("GetDirectlyInheritedRoleIds");
+        }
+
+        public string GetScriptGetRoleById()
+        {
+            return this.LoadSQLScript("GetRoleById");
         }
 
         public string GetScriptGetRoleByName()
@@ -70,6 +95,16 @@ namespace ConSurvBackend.Core.Miscellaneous
         public string GetScriptRoleExists()
         {
             return this.LoadSQLScript("RoleExists");
+        }
+
+        public string GetScriptAddDirectlyInheritedRoles()
+        {
+            return this.LoadSQLScript("AddDirectlyInheritedRoles");
+        }
+
+        public string GetScriptDeleteDirectlyInheritedRoles()
+        {
+            return this.LoadSQLScript("DeleteDirectlyInheritedRoles");
         }
 
         public string GetScriptUpdateRole()

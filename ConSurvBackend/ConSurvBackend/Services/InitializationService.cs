@@ -1,7 +1,6 @@
 ﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
-using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
@@ -10,10 +9,8 @@ using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
@@ -49,6 +46,7 @@ namespace ConSurvBackend.Core.Services
                 this._GeneralLogger.Log("Initialize service...", Microsoft.Extensions.Logging.LogLevel.Information);
                 if (this._Persistence is IInitializable initializablePersistence)
                 {
+                    initializablePersistence.WaitUntilAvailable(TimeSpan.FromMinutes(2));
                     initializablePersistence.Initialize();
                 }
                 string adminUsername = CodeUnitSpecificConstants.UsernameAdmin;
@@ -61,14 +59,14 @@ namespace ConSurvBackend.Core.Services
 
                     this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameModerators);
                     Role moderatorsRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameModerators);
-                    moderatorsRole.InheritedRoles = new HashSet<Role>();
-                    moderatorsRole.InheritedRoles.Add(usersRole);
+                    moderatorsRole.DirectlyInheritedRoles = new HashSet<Role>();
+                    moderatorsRole.DirectlyInheritedRoles.Add(usersRole);
                     this._AuthenticationService.UpdateRole(moderatorsRole);
 
                     this._AuthenticationService.EnsureRoleExists(CodeUnitSpecificConstants.RolenameAdmins);
                     Role adminsRole = this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameAdmins);
-                    adminsRole.InheritedRoles = new HashSet<Role>();
-                    adminsRole.InheritedRoles.Add(moderatorsRole);
+                    adminsRole.DirectlyInheritedRoles = new HashSet<Role>();
+                    adminsRole.DirectlyInheritedRoles.Add(moderatorsRole);
                     this._AuthenticationService.UpdateRole(adminsRole);
                     string initialAdminPassword = string.IsNullOrWhiteSpace(commandlineParameter.InitialAdminPassword) ? CodeUnitSpecificConstants.UsernameAdmin : commandlineParameter.InitialAdminPassword;//only initial password. should be changed as soon as possible by the admin of course.
                     string adminUserId = this._CameraService.Register(adminUsername, initialAdminPassword);
@@ -86,9 +84,12 @@ namespace ConSurvBackend.Core.Services
                         }
                     }
 
-                    if (commandlineParameter.RealRun && this._Constants.Environment is Development)
+                    if (commandlineParameter.RealRun)
                     {
-                        this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
+                        if (!ConSurvBackend.Core.Misc.Utilities.IsRunningInContainer())
+                        {
+                            this.StartWatchDogProcess(this._Constants.GetConfigurationFolder());
+                        }
                         this._ExampleDataCreator.AddExampleData();
                     }
                 }
@@ -106,17 +107,9 @@ namespace ConSurvBackend.Core.Services
         private void StartWatchDogProcess(string configurationFolder)
         {
             this._GeneralLogger.Log($"Start watch-dog-process in {configurationFolder}...", Microsoft.Extensions.Logging.LogLevel.Information);
-            int currentProcessId = Environment.ProcessId;
-            Process process = new Process();
-            process.StartInfo.FileName = "scespoc";
             string processesFileName = "StartedProcesses.txt";
-            process.StartInfo.Arguments = $"--processid {currentProcessId} --file ./{processesFileName}";
-            string processesFile=Path.Combine(configurationFolder, processesFileName);
-            GRYLibrary.Core.Misc.Utilities.EnsureFileExists(processesFile);
-            process.StartInfo.WorkingDirectory = configurationFolder;
-            GRYLibrary.Core.Misc.Utilities.AssertCondition(process.Start());
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-            GRYLibrary.Core.Misc.Utilities.AssertCondition(!process.HasExited, "Watchdog exited unexpectedly.");
+            string processesFile = Path.Combine(configurationFolder, processesFileName);
+            GRYLibrary.Core.Misc.Utilities.RunEspoc(processesFile, null);
         }
     }
 }

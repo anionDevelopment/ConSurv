@@ -8,7 +8,7 @@ using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,11 +65,11 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     migrator.InitializeDatabaseAndMigrateIfRequired();
 
                     //assert
-                    Assert.AreEqual(1, migrator.GetExecutedMigrations().Count);
+                    Assert.HasCount(1, migrator.GetExecutedMigrations());
                     Assert.AreEqual("Migration000001", migrator.GetExecutedMigrations().First().MigrationName);
 
                     List<string> tables2 = databaseInteractor.GetAllTableNames().ToList();
-                    Assert.IsTrue(1 < tables2.Count);
+                    Assert.IsLessThan(tables2.Count, 1);
                     //TODO add more migration-specific assertions
                 }
             }
@@ -96,10 +96,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     migrator.InitializeDatabaseAndMigrateIfRequired();
 
                     //assert
-                    Assert.AreEqual(migrations.Count, migrator.GetExecutedMigrations().Count);
+                    Assert.HasCount(migrations.Count, migrator.GetExecutedMigrations());
 
                     List<string> tables2 = databaseInteractor.GetAllTableNames().ToList();
-                    Assert.IsTrue(1 < tables2.Count);
+                    Assert.IsLessThan(tables2.Count, 1);
                 }
             }
         }
@@ -116,7 +116,9 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     IConSurvDatabaseInteractor conSurvDatabaseInteractor = databaseInteractor.Accept(new GetConSurvDatabaseInteractorVisitor());
                     ITimeService timeService = new TimeService();
                     IGRYLog log = GRYLog.Create();
-                    using DatabasePersistence databasePersistence = new DatabasePersistence(conSurvDatabaseInteractor, timeService, log);
+                    Mock<IDatabasePersistenceConfiguration> databasePersistenceConfigurationMock = new Mock<IDatabasePersistenceConfiguration>(MockBehavior.Strict);
+                    databasePersistenceConfigurationMock.SetupGet(m => m.DatabaseConnectionString).Returns(databaseTestFramework.ConnectionString);
+                    using DatabasePersistence databasePersistence = new DatabasePersistence(conSurvDatabaseInteractor, timeService, log, databasePersistenceConfigurationMock.Object);
                     ConSurvBackend.Core.Model.Base.Camera expectedCamera = new ConSurvBackend.Core.Model.Base.Camera("id", "name");
                     databasePersistence.CreateCamera(expectedCamera);
 
@@ -124,7 +126,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
                     IDictionary<string, Camera> cameras = databasePersistence.GetAllCameras();
 
                     //assert
-                    Assert.AreEqual(1, cameras.Count);
+                    Assert.HasCount(1, cameras);
                     Assert.IsTrue(cameras.ContainsKey(expectedCamera.Id));
                     Assert.AreEqual(expectedCamera, cameras[expectedCamera.Id]);
                 }

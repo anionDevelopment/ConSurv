@@ -108,7 +108,7 @@ namespace ConSurvBackend.Core.Services
 
         public User GetUserById(string userId)
         {
-          return this._TransientAuthenticationServicePersistence.GetUserById(userId);
+            return this._TransientAuthenticationServicePersistence.GetUserById(userId);
         }
 
         public User GetUserByName(string userName)
@@ -156,9 +156,9 @@ namespace ConSurvBackend.Core.Services
             return this._TransientAuthenticationServicePersistence.GetAccessToken(accessToken);
         }
 
-        public void AddAccessToken(string userId, AccessToken newAccessToken)
+        public void AddAccessToken(AccessToken newAccessToken)
         {
-            this._TransientAuthenticationServicePersistence.AddAccessToken(userId, newAccessToken);
+            this._TransientAuthenticationServicePersistence.AddAccessToken(newAccessToken);
         }
 
         public void RemoveAccessToken(string accessToken)

@@ -21,7 +21,6 @@ namespace ConSurvBackend.Core.Configuration
 
         [Option(nameof(InitialDomain), Required = false)]
         public string? InitialDomain { get; set; }
-
         [Option(nameof(InitialEnableEndpointAvailabilityCheckValue), Required = false, Default = true)]
         public bool InitialEnableEndpointAvailabilityCheckValue { get; set; }
 

@@ -1,2 +1,5 @@
 
-SELECT 1 FROM Cameras WHERE Id=@Id limit 1;
+SELECT 1
+	FROM `Cameras`
+	WHERE `Id`=@Id
+	limit 1;

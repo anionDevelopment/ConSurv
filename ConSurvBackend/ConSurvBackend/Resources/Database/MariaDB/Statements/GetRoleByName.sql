@@ -1,2 +1,4 @@
 
-select `Id` from Roles where `Name`=@Name;
+select `Id`
+	from Roles
+	where `Name`=@Name;

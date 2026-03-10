@@ -2,9 +2,9 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Authors>Marius Göcke</Authors>
-        <Version>3.0.6</Version>
-        <AssemblyVersion>3.0.6</AssemblyVersion>
-        <FileVersion>3.0.6</FileVersion>
+        <Version>3.0.7</Version>
+        <AssemblyVersion>3.0.7</AssemblyVersion>
+        <FileVersion>3.0.7</FileVersion>
         <SelfContained>false</SelfContained>
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>false</PreserveCompilationContext>
@@ -29,7 +29,7 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
         <DelaySign>true</DelaySign>
-        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039</NoWarn>
+        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039;IDE0063</NoWarn>
         <WarningsAsErrors>NU1605</WarningsAsErrors>
         <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackendTests.sarif</ErrorLog>
         <OutputType>Library</OutputType>
@@ -65,7 +65,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GRYLibrary" Version="2.0.8" />
+        <PackageReference Include="GRYLibrary" Version="2.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
@@ -81,10 +81,15 @@
         <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
         <PackageReference Include="NJsonSchema" Version="11.5.2" />
         <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
+        <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
         <PackageReference Include="SkiaSharp" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.2" />
         <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
         <PackageReference Include="System.Reactive" Version="6.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.3" />

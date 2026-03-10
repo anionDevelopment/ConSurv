@@ -2,9 +2,9 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Authors>Marius Göcke</Authors>
-        <Version>3.0.6</Version>
-        <AssemblyVersion>3.0.6</AssemblyVersion>
-        <FileVersion>3.0.6</FileVersion>
+        <Version>3.0.7</Version>
+        <AssemblyVersion>3.0.7</AssemblyVersion>
+        <FileVersion>3.0.7</FileVersion>
         <SelfContained>false</SelfContained>
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>false</PreserveCompilationContext>
@@ -61,13 +61,17 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="FFmpeg.AutoGen" Version="8.0.0" />
         <PackageReference Include="ExtendedXmlSerializer" Version="3.10.0" />
-        <PackageReference Include="GRYLibrary" Version="2.0.8" />
+        <PackageReference Include="GRYLibrary" Version="2.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+        <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260308" />
+        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.3" />
@@ -75,6 +79,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
         <PackageReference Include="SkiaSharp" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.2" />
         <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
@@ -84,7 +89,7 @@
         <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
         <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.3" />
         <PackageReference Include="System.Reactive" Version="6.1.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\**">

@@ -19,5 +19,12 @@
         string GetScriptCreateCamera();
         string GetScriptResetDatabase();
         string GetScriptIsCamera();
+        string GetScriptAddAccessToken();
+        string GetScriptGetAccessToken();
+        string GetScriptGetAllInheritedRoleIds();
+        string GetScriptGetRoleById();
+        string GetScriptGetDirectlyInheritedRoleIds();
+        string GetScriptAddDirectlyInheritedRoles();
+        string GetScriptDeleteDirectlyInheritedRoles();
     }
 }
