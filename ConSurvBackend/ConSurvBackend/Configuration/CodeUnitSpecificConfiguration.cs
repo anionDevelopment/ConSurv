@@ -23,6 +23,9 @@ namespace ConSurvBackend.Core.Configuration
         /// When 2 consecutive images from a camera have a similarity above this threshold, the camera is considered to be currently showing no motion. The similarity is calculated by OpenCV's AverageHash algorithm and is a value between 0 and 1, where 1 means identical images and 0 means completely different images.
         /// </summary>
         public double MotionDetectionThreshold { get; set; } = 0.95;
+        public TimeSpan VideoRetentionPeriod { get; set; } = TimeSpan.FromDays(7 * 5);
+        public TimeSpan VideoLength { get; set; }
+        public bool TimeInUTC { get; set; }
         public ICommonRoutesInformation CommonRoutesInformation { get; set; }
         public IMaintenanceRoutesInformation MaintenanceRoutesInformation { get; set; }
         public IDRequestLoggingConfiguration ConfigurationForDLoggingMiddleware { get; set; }
@@ -31,10 +34,8 @@ namespace ConSurvBackend.Core.Configuration
         public IAuthorizationConfiguration ConfigurationForAuthorizationMiddleware { get { return this.AuthorizationConfiguration; } }
         public IAuthSConfiguration AuthenticationConfiguration { get; set; }
         public IAuthenticationConfiguration ConfigurationForAuthenticationMiddleware { get { return this.AuthenticationConfiguration; } }
-        public TimeSpan VideoLength { get; set; }
-        public bool TimeInUTC { get; set; }
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
-        public IHeaderServiceConfiguration HeaderServiceConfiguration { get;  set; }
+        public IHeaderServiceConfiguration HeaderServiceConfiguration { get; set; }
         public IGRYLogConfiguration AuditLogConfiguration { get; set; }
         public IDatabasePersistenceConfiguration DatabasePersistenceConfiguration { get; set; }
         public IAuthenticationServiceSettings AuthenticationServiceSettings { get; set; }
