@@ -55,11 +55,6 @@ namespace ConSurvBackend.Tests.TestUtilities
             return GUtilities.ResolveToFullPath(@$"{GeneralConstants.CodeUnitFolder}\Other\Artifacts\${databaseName}DatabaseCreationScript");
         }
 
-        internal static string GetOCRDataFolder()
-        {
-            string result = @$"{ConSurvBackend.Tests.TestUtilities.Constants.GeneralConstants.CodeUnitFolder}\Other\Resources\OCRData";
-            return result;
-        }
         public static DatabaseTestFrameworkForMariaDB GetDatabaseTestFrameworkForMariaDB()
         {
             return new DatabaseTestFrameworkForMariaDB(GeneralLogger.CreateUsingConsole());

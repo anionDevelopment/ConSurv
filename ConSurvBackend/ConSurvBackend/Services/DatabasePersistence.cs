@@ -190,7 +190,7 @@ namespace ConSurvBackend.Core.Services
                 command.ExecuteNonQuery();
             }, (command) =>
             {
-                //TODO add inherited roles
+                //TODO check if inherited roles must be updated
             });
         }
 
@@ -291,13 +291,13 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No user found with id '{userId}'");
                 }
             })[0];
-            this.EnrichWhichRoles(result);
-            this.EnrichWhichAccessToken(result);
-            this.EnrichWhichTOTPToken(result);
+            this.EnrichWithRoles(result);
+            this.EnrichWithAccessToken(result);
+            this.EnrichWithTOTPToken(result);
             return result;
         }
 
-        private void EnrichWhichRoles(User user)
+        private void EnrichWithRoles(User user)
         {
             ISet<Role> allRoles = this.GetAllRoles();
             foreach (Role role in allRoles)
@@ -334,14 +334,14 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
-        private void EnrichWhichTOTPToken(User result)
+        private void EnrichWithTOTPToken(User result)
         {
             //TODO
         }
 
-        private void EnrichWhichAccessToken(User user)
+        private void EnrichWithAccessToken(User user)
         {
-            this.RunTransaction(nameof(EnrichWhichAccessToken), true, (cmd) =>
+            this.RunTransaction(nameof(EnrichWithAccessToken), true, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptGetAllAccessTokenForUser();
                 cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", user.Id));
@@ -386,9 +386,9 @@ namespace ConSurvBackend.Core.Services
                     throw new KeyNotFoundException($"No user found with username '{userName}'");
                 }
             })[0];
-            this.EnrichWhichRoles(result);
-            this.EnrichWhichAccessToken(result);
-            this.EnrichWhichTOTPToken(result);
+            this.EnrichWithRoles(result);
+            this.EnrichWithAccessToken(result);
+            this.EnrichWithTOTPToken(result);
             return result;
         }
 
