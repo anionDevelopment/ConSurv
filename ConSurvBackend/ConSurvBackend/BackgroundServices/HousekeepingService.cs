@@ -9,15 +9,11 @@ using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
-using Microsoft.Extensions.Logging;
-using OpenCvSharp;
-using OpenCvSharp.ImgHash;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace ConSurvBackend.Core.BackgroundServices
@@ -53,6 +49,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 this._Logger.RunTask(this.UpdatePreviewsInRuntimeData, nameof(UpdatePreviewsInRuntimeData), true, logLevelForOverhead);
                 this._Logger.RunTask(this.DoMotionDetection, nameof(DoMotionDetection), true, logLevelForOverhead);
                 this._Logger.RunTask(this.CleanupScreenshots, nameof(CleanupScreenshots), true, logLevelForOverhead);
+                this._Logger.RunTask(this.CleanupRecordings, nameof(CleanupRecordings), true, logLevelForOverhead);
             }
             else
             {
@@ -68,17 +65,18 @@ namespace ConSurvBackend.Core.BackgroundServices
                 List<string> availableScreenshots;//TODO get the available screenshots from _RuntimeData instead
                 if (Directory.Exists(screenshotsFolder))
                 {
+                    DateTimeOffset now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
                     availableScreenshots = Directory
                          .GetFiles(screenshotsFolder)
                          .Where(file => file.EndsWith(".jpg"))
                          .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
+                         .Where(f => (now - TimeSpan.FromSeconds(20)) < f.Timestamp)
                          .OrderBy(dataSet => dataSet.Timestamp)
-                         .Where(f => (this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)) < f.Timestamp)
                          .Where(f =>
                          {
-                             if (this._LastUsedScreenshotsForMotionDetection.ContainsKey(camera.Id))
+                             if (this._LastUsedScreenshotsForMotionDetection.TryGetValue(camera.Id, out DateTime value))
                              {
-                                 return this._LastUsedScreenshotsForMotionDetection[camera.Id] < f.Timestamp;
+                                 return value < f.Timestamp;
                              }
                              else
                              {
@@ -114,12 +112,12 @@ namespace ConSurvBackend.Core.BackgroundServices
         {
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
             {
-                string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
+                string screenshotsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
                 List<string> availableScreenshots;
-                if (Directory.Exists(screenshots_folder))
+                if (Directory.Exists(screenshotsFolder))
                 {
                     availableScreenshots = Directory
-                         .GetFiles(screenshots_folder)
+                         .GetFiles(screenshotsFolder)
                          .Where(file => file.EndsWith(".jpg"))
                          .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
                          .OrderBy(dataSet => dataSet.Timestamp)
@@ -148,16 +146,39 @@ namespace ConSurvBackend.Core.BackgroundServices
         {
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
             {
-                string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
-                if (Directory.Exists(screenshots_folder))
+                string screenshotsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
+                if (Directory.Exists(screenshotsFolder))
                 {
+                    DateTimeOffset now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
                     List<string> filesToDelete = Directory
-                        .GetFiles(screenshots_folder)
+                        .GetFiles(screenshotsFolder)
                         .Where(file => file.EndsWith(".jpg"))
                         .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
+                        .Where(f => f.Timestamp < (now - TimeSpan.FromSeconds(20)))
                         .OrderBy(dataSet => dataSet.Timestamp)
-                        .Where(f => f.Timestamp < (this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset() - TimeSpan.FromSeconds(20)))
                         .SkipLast(2)
+                        .Select(f => f.File)
+                        .ToList();
+                    foreach (string fileToDelete in filesToDelete)
+                    {
+                        GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(fileToDelete);
+                    }
+                }
+            }
+        }
+        private void CleanupRecordings()
+        {
+            foreach (Camera camera in this._CameraService.GetAllCameras().Values)
+            {
+                string recordingsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Recordings");
+                if (Directory.Exists(recordingsFolder))
+                {
+                    DateTimeOffset now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
+                    List<string> filesToDelete = Directory
+                        .GetFiles(recordingsFolder)
+                        .Where(file => file.EndsWith(".mp4"))
+                        .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
+                        .Where(f => f.Timestamp < (now - _Configuration.ApplicationSpecificConfiguration.VideoRetentionPeriod))
                         .Select(f => f.File)
                         .ToList();
                     foreach (string fileToDelete in filesToDelete)

@@ -48,7 +48,6 @@ namespace ConSurvBackend.Tests.TestUtilities
                     };
 
                     string[] args = new string[] {
-                        Utilities.GetOCRDataFolder()
                     };//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
                     int exitCode = this._Program.MainImplementation(args);
                     Thread.Sleep(TimeSpan.FromSeconds(5));
