@@ -59,6 +59,7 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         private void DoMotionDetection()
         {
+            return;//TODO re-activate motion detection problem: open-cv is currently not loadable on linux
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
             {
                 string screenshotsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
