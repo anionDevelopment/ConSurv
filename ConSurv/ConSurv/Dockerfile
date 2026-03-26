@@ -3,7 +3,7 @@ ARG image_debian
 FROM ${image_debian}
 LABEL version=${CodeUnitVersion}
 ENV ISRUNNINGINCONTAINER="true"
-
+#TODO make it possible to have an own apt-server for apt-packages to get rid of rate limits
 RUN mkdir /Workspace && \
     mkdir /Workspace/Application && \
     mkdir /Workspace/Application/Backend && \
