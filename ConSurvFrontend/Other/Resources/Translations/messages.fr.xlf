@@ -1,37 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
-  <file id="ngi18n" original="ng.template">
-    <unit id="admindashobardtitle">
-      <notes>
-        <note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:3,4</note>
-      </notes>
-      <segment>
-        <source> Admin dashboard </source>
-      </segment>
-    </unit>
-    <unit id="logingreeting">
-      <notes>
-        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:2,4</note>
-      </notes>
-      <segment>
-        <source>Welcome back, please login</source>
-      </segment>
-    </unit>
-    <unit id="username">
-      <notes>
-        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:5,6</note>
-      </notes>
-      <segment>
-        <source>Username</source>
-      </segment>
-    </unit>
-    <unit id="password">
-      <notes>
-        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:12,13</note>
-      </notes>
-      <segment>
-        <source>Password</source>
-      </segment>
-    </unit>
-  </file>
-</xliff>
+<ns0:xliff xmlns:ns0="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en">
+  <ns0:file id="ngi18n" original="ng.template">
+    <ns0:unit id="admindashobardtitle">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:3,4</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source> Admin dashboard </ns0:source>
+      </ns0:segment>
+    </ns0:unit>
+    <ns0:unit id="siteNotFound">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/home-page/hint-not-found/hint-not-found.component.html:4,6</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source>Site not found</ns0:source>
+      </ns0:segment>
+    </ns0:unit>
+    <ns0:unit id="logingreeting">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/home-page/login-form/login-form.component.html:2,4</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source>Welcome back, please login</ns0:source>
+      </ns0:segment>
+    </ns0:unit>
+    <ns0:unit id="username">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/home-page/login-form/login-form.component.html:5,6</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source>Username</ns0:source>
+      </ns0:segment>
+    </ns0:unit>
+    <ns0:unit id="password">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/home-page/login-form/login-form.component.html:12,13</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source>Password</ns0:source>
+      </ns0:segment>
+    </ns0:unit>
+  </ns0:file>
+</ns0:xliff>

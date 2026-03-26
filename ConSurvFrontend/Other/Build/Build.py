@@ -8,7 +8,31 @@ import copy
 from pathlib import Path
 
 @GeneralUtilities.check_arguments
-def __sync_xlf2_files(self,base_file:ET.ElementTree, language_files:dict [
+def is_xliff2_file(file: str) -> bool:
+    tree = ET.parse(file)
+    root = tree.getroot()
+
+    tag = root.tag  # "{urn:oasis:names:tc:xliff:document:2.0}xliff"
+
+    if tag.startswith("{"):
+        namespace, localname = tag[1:].split("}", 1)
+    else:
+        namespace = None
+        localname = tag
+
+    if localname != "xliff":
+        return False
+
+    if namespace != "urn:oasis:names:tc:xliff:document:2.0":
+        return False
+
+    if root.get("version") != "2.0":
+        return False
+
+    return True
+
+@GeneralUtilities.check_arguments
+def __sync_xlf2_files(base_file:ET.ElementTree, language_files:dict [
     str,#filepath
     ET.ElementTree#parsed file
     ]):
@@ -98,7 +122,7 @@ def __sync_xlf2_files(self,base_file:ET.ElementTree, language_files:dict [
         # Write file back to disk
         Path(filepath).write_bytes(
             ET.tostring(
-                lang_tree,
+                lang_tree.getroot(),
                 xml_declaration=True,
                 encoding="UTF-8"
             )
@@ -106,11 +130,11 @@ def __sync_xlf2_files(self,base_file:ET.ElementTree, language_files:dict [
         ScriptCollectionCore().format_xml_file(filepath)
 
 @GeneralUtilities.check_arguments
-def sync_xlf2_files(self,prefix:str, languages:list[str], folder:str):
+def sync_xlf2_files(prefix:str, languages:list[str], folder:str):
     #languages=["de", "fr"] for example. the default-language (usually english) must not be included.
     base_file=os.path.join(folder, f"{prefix}.xlf")
     base_file_xml:ET.ElementTree=ET.parse(base_file)
-    GeneralUtilities.assert_condition(self.is_xliff2_file(base_file), f"The base file '{base_file}' is not a valid XLIFF 2.0 file.")
+    GeneralUtilities.assert_condition(is_xliff2_file(base_file), f"The base file '{base_file}' is not a valid XLIFF 2.0 file.")
     GeneralUtilities.assert_file_exists(base_file)
     if len(languages)==0:
         raise ValueError("No files provided for syncing.")
@@ -121,7 +145,7 @@ def sync_xlf2_files(self,prefix:str, languages:list[str], folder:str):
     not_existing_files:list[str]=[]
     for language_file in language_files_list:
         if os.path.isfile(language_file):
-            GeneralUtilities.assert_condition(self.is_xliff2_file(base_file), f"The base file '{base_file}' is not a valid XLIFF 2.0 file.")
+            GeneralUtilities.assert_condition(is_xliff2_file(base_file), f"The base file '{base_file}' is not a valid XLIFF 2.0 file.")
             language_files_with_content[language_file]=ET.parse(language_file)
         else:
             not_existing_files.append(language_file)
@@ -143,8 +167,8 @@ def build():
     #tf.add_maintenance_site(tf.get_product_name())
     #tf._protected_sc.run_program()
     #tf._protected_sc.run_with_epew("ng","extract-i18n",tf.get_codeunit_folder())
-    tf._protected_sc.sync_xlf2_files("messages",["de","fr"],os.path.join(tf.get_codeunit_folder(),"Other","Resources","Translations"))
-    #TODO "ng extract-i18n --output-path src/locale" in the codeunit-folder
+    #tf._protected_sc.sync_xlf2_files("messages",["de","fr"],os.path.join(tf.get_codeunit_folder(),"Other","Resources","Translations"))
+    sync_xlf2_files("messages",["de","fr"],os.path.join(tf.get_codeunit_folder(),"Other","Resources","Translations"))
 
 
 
