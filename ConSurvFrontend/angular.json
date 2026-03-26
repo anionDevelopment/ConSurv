@@ -16,8 +16,8 @@
       "i18n": {
         "sourceLocale": "en",
         "locales": {
-          "de": "src/locale/messages.de.xlf",
-          "fr": "src/locale/messages.fr.xlf"
+          "de": "Other/Resources/Translations/messages.de.xlf",
+          "fr": "Other/Resources/Translations/messages.fr.xlf"
         }
       },
       "architect": {
@@ -112,7 +112,12 @@
           "defaultConfiguration": "QualityCheck"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "outputPath": "Other/Resources/Translations",
+            "format": "xlf2",
+            "outFile": "messages.xlf"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
