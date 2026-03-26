@@ -9,6 +9,14 @@
         <ns0:source> Admin dashboard </ns0:source>
       </ns0:segment>
     </ns0:unit>
+    <ns0:unit id="settings">
+      <ns0:notes>
+        <ns0:note category="location">src/app/modules/admin-area/admin-settings/admin-settings.component.html:3,4</ns0:note>
+      </ns0:notes>
+      <ns0:segment>
+        <ns0:source> Settings </ns0:source>
+      </ns0:segment>
+    </ns0:unit>
     <ns0:unit id="siteNotFound">
       <ns0:notes>
         <ns0:note category="location">src/app/modules/home-page/hint-not-found/hint-not-found.component.html:4,6</ns0:note>

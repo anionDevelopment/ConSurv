@@ -166,7 +166,7 @@ def build():
     #tf.add_culture_chooser(tf.get_product_name(),tf.get_available_cultures_for_angular_app())
     #tf.add_maintenance_site(tf.get_product_name())
     #tf._protected_sc.run_program()
-    #tf._protected_sc.run_with_epew("ng","extract-i18n",tf.get_codeunit_folder())
+    tf._protected_sc.run_with_epew("ng","extract-i18n",tf.get_codeunit_folder())
     #tf._protected_sc.sync_xlf2_files("messages",["de","fr"],os.path.join(tf.get_codeunit_folder(),"Other","Resources","Translations"))
     sync_xlf2_files("messages",["de","fr"],os.path.join(tf.get_codeunit_folder(),"Other","Resources","Translations"))
 
