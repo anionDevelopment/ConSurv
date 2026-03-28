@@ -5,40 +5,45 @@
       <notes>
         <note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:3,4</note>
       </notes>
-      <segment state="initial">
+      <segment state="translated">
         <source>Admin dashboard</source>
+        <target>Admin dashboard</target>
       </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
         <note category="location">src/app/modules/home-page/hint-not-found/hint-not-found.component.html:4,6</note>
       </notes>
-      <segment state="initial">
+      <segment state="translated">
         <source>Site not found</source>
+        <target>Lokasi tak ditemukan</target>
       </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
         <note category="location">src/app/modules/home-page/login-form/login-form.component.html:2,4</note>
       </notes>
-      <segment state="initial">
+      <segment state="translated">
         <source>Welcome back, please login</source>
+        <target>Selamat datang kembali, silakan masuk</target>
       </segment>
     </unit>
     <unit id="username">
       <notes>
         <note category="location">src/app/modules/home-page/login-form/login-form.component.html:5,6</note>
       </notes>
-      <segment state="initial">
+      <segment state="translated">
         <source>Username</source>
+        <target>Nama pengguna</target>
       </segment>
     </unit>
     <unit id="password">
       <notes>
         <note category="location">src/app/modules/home-page/login-form/login-form.component.html:12,13</note>
       </notes>
-      <segment state="initial">
+      <segment state="translated">
         <source>Password</source>
+        <target>Sandi</target>
       </segment>
     </unit>
   </file>

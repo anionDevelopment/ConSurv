@@ -418,5 +418,13 @@ paths:
                 return false;
             }
         }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //add dispose logic here if required
+            }
+            base.Dispose(disposing);
+        }
     }
 }
