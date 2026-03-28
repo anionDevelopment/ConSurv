@@ -1,6 +1,6 @@
 {
   "name": "con-surv-frontend",
-  "version": "3.0.11",
+  "version": "3.0.12",
   "scripts": {
     "build": "npm run build-QualityCheck",
     "build-Development": "ng build --localize --configuration Development",
@@ -11,7 +11,8 @@
     "test-QualityCheck": "ng test --configuration QualityCheck --browsers ChromeHeadless --watch false",
     "test-Productive": "ng test --configuration Productive --browsers ChromeHeadless --watch false",
     "start": "ng serve --configuration Development --host 0.0.0.0 --live-reload=false --disable-host-check",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "extract-translations": "ng extract-i18n"
   },
   "dependencies": {
     "@angular/animations": "19.2.0",
