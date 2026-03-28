@@ -1,6 +1,5 @@
 from pathlib import Path
 from ScriptCollection.GeneralUtilities import GeneralUtilities
-from ScriptCollection.ImageUpdater import ImageUpdaterHelper, ConcreteImageUpdaterForDebian
 from ScriptCollection.TFCPS.TFCPS_Tools_General import TFCPS_Tools_General
 from ScriptCollection.ScriptCollectionCore import ScriptCollectionCore
 
