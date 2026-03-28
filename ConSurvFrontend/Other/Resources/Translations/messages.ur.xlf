@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>یمن</target></segment>
+        <target>یمن</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>مت تلاش کریں</target></segment>
+        <target>مت تلاش کریں</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>دوبارہ خوش آمدید، براہ مہربانی</target></segment>
+        <target>دوبارہ خوش آمدید، براہ مہربانی</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>پرنٹ</target></segment>
+        <target>پرنٹ</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>پاس ورڈ</target></segment>
+        <target>پاس ورڈ</target>
+      </segment>
     </unit>
   </file>
 </xliff>

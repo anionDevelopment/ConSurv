@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>管理者ダッシュボード</target></segment>
+        <target>管理者ダッシュボード</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>サイトが見つかりません</target></segment>
+        <target>サイトが見つかりません</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>歓迎の背部、ログインして下さい</target></segment>
+        <target>歓迎の背部、ログインして下さい</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>ユーザ名</target></segment>
+        <target>ユーザ名</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>パスワード</target></segment>
+        <target>パスワード</target>
+      </segment>
     </unit>
   </file>
 </xliff>

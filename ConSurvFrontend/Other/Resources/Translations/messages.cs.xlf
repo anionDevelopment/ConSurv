@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Admin palubní deska</target></segment>
+        <target>Admin palubní deska</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Místo nenalezeno</target></segment>
+        <target>Místo nenalezeno</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Vítejte zpět, prosím přihlaste se</target></segment>
+        <target>Vítejte zpět, prosím přihlaste se</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Uživatelské jméno</target></segment>
+        <target>Uživatelské jméno</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Heslo</target></segment>
+        <target>Heslo</target>
+      </segment>
     </unit>
   </file>
 </xliff>

@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Beheerdersdashboard</target></segment>
+        <target>Beheerdersdashboard</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Niet gevonden</target></segment>
+        <target>Niet gevonden</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Welkom terug, log in</target></segment>
+        <target>Welkom terug, log in</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Gebruikersnaam</target></segment>
+        <target>Gebruikersnaam</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Wachtwoord</target></segment>
+        <target>Wachtwoord</target>
+      </segment>
     </unit>
   </file>
 </xliff>

@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Papan dash-board Admin</target></segment>
+        <target>Papan dash-board Admin</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Situs mata air tidak ditemukan</target></segment>
+        <target>Situs mata air tidak ditemukan</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Selamat datang kembali, silakan log masuk</target></segment>
+        <target>Selamat datang kembali, silakan log masuk</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Namapengguna</target></segment>
+        <target>Namapengguna</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Kata Sandi</target></segment>
+        <target>Kata Sandi</target>
+      </segment>
     </unit>
   </file>
 </xliff>

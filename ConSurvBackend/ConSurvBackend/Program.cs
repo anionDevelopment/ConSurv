@@ -48,7 +48,7 @@ namespace ConSurvBackend.Core
         internal bool RunAsync { get; set; } = false;
         internal bool IsRunning { get; set; } = false;
         internal IBusinessLogicService? _BusinessLogicService;
-        internal IInitializationService? _InitializationService;
+        internal IInitializationService<CommandlineParameter>? _InitializationService;
         internal IGRYLog _Log;
 
         internal IHostApplicationLifetime? _HostApplicationLifetime;
@@ -243,7 +243,7 @@ namespace ConSurvBackend.Core
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
                             this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGRYLog>());
                             this._BusinessLogicService = functionalInformationForWebApplication.WebApplication.Services.GetService<IBusinessLogicService>();
-                            this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService>());
+                            this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;
 
                             IHousekeepingService housekeepingService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());

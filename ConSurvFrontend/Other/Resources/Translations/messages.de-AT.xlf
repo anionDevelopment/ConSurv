@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Admin dashboard</target></segment>
+        <target>Admin dashboard</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Seite nicht gefunden</target></segment>
+        <target>Seite nicht gefunden</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Willkommen zurück, bitte anmelden</target></segment>
+        <target>Willkommen zurück, bitte anmelden</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Benutzername</target></segment>
+        <target>Benutzername</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Passwort vergessen</target></segment>
+        <target>Passwort vergessen</target>
+      </segment>
     </unit>
   </file>
 </xliff>

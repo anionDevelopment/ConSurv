@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>แถบชุดลวดลายStencils</target></segment>
+        <target>แถบชุดลวดลายStencils</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>ไม่พบไซต์</target></segment>
+        <target>ไม่พบไซต์</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>ยินดีต้อนรับกลับ โปรดล็อกอิน</target></segment>
+        <target>ยินดีต้อนรับกลับ โปรดล็อกอิน</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>ชื่อผู้ใช้</target></segment>
+        <target>ชื่อผู้ใช้</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>รหัสผ่าน</target></segment>
+        <target>รหัสผ่าน</target>
+      </segment>
     </unit>
   </file>
 </xliff>

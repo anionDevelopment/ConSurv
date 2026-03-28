@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Bảng điều khiển</target></segment>
+        <target>Bảng điều khiển</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Không tìm thấy chỗ ngồi</target></segment>
+        <target>Không tìm thấy chỗ ngồi</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Chào mừng trở lại, xin vui lòng đăng nhập</target></segment>
+        <target>Chào mừng trở lại, xin vui lòng đăng nhập</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Tên người dùng</target></segment>
+        <target>Tên người dùng</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Mật khẩu</target></segment>
+        <target>Mật khẩu</target>
+      </segment>
     </unit>
   </file>
 </xliff>

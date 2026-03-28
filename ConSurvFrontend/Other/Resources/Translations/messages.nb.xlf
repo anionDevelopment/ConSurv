@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>Admin dashboard</target></segment>
+        <target>Admin dashboard</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>Nettstedet ble ikke funnet</target></segment>
+        <target>Nettstedet ble ikke funnet</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>Velkommen tilbake, vennligst logg inn</target></segment>
+        <target>Velkommen tilbake, vennligst logg inn</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>Brukernavn</target></segment>
+        <target>Brukernavn</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>Passord</target></segment>
+        <target>Passord</target>
+      </segment>
     </unit>
   </file>
 </xliff>

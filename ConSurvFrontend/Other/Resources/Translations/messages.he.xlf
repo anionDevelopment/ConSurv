@@ -7,7 +7,8 @@
       </notes>
       <segment state="translated">
         <source>Admin dashboard</source>
-      <target>עקבו אחרי Admin</target></segment>
+        <target>עקבו אחרי Admin</target>
+      </segment>
     </unit>
     <unit id="siteNotFound">
       <notes>
@@ -15,7 +16,8 @@
       </notes>
       <segment state="translated">
         <source>Site not found</source>
-      <target>האתר לא נמצא</target></segment>
+        <target>האתר לא נמצא</target>
+      </segment>
     </unit>
     <unit id="logingreeting">
       <notes>
@@ -23,7 +25,8 @@
       </notes>
       <segment state="translated">
         <source>Welcome back, please login</source>
-      <target>ברוכים הבאים, אנא הכנס</target></segment>
+        <target>ברוכים הבאים, אנא הכנס</target>
+      </segment>
     </unit>
     <unit id="username">
       <notes>
@@ -31,7 +34,8 @@
       </notes>
       <segment state="translated">
         <source>Username</source>
-      <target>שם המשתמש</target></segment>
+        <target>שם המשתמש</target>
+      </segment>
     </unit>
     <unit id="password">
       <notes>
@@ -39,7 +43,8 @@
       </notes>
       <segment state="translated">
         <source>Password</source>
-      <target>סיסמה</target></segment>
+        <target>סיסמה</target>
+      </segment>
     </unit>
   </file>
 </xliff>
