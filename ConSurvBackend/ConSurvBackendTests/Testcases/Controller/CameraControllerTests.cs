@@ -14,7 +14,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     {
         [TestMethod]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
-        public void TestSomeFunction()
+        public void TestCreateCamera()
         {
             // arrange
             Mock<IPersistence> persistence = new Mock<IPersistence>();
