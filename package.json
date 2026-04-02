@@ -3,7 +3,7 @@
   "scripts": {
     "prepare": "husky"
   },
-  "version": "3.0.14",
+  "version": "3.0.15",
   "dependencies": {
     "@angular/cli": "^21.2.4"
   }
