@@ -405,7 +405,7 @@ paths:
                 ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
                 {
                     Program = "ffprobe",
-                    Argument = $"-v error -rtsp_transport tcp -i \"{rtspUrl}\"",
+                    Argument = $"-v error -i \"{rtspUrl}\"",
                     TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
                     WaitingState = new RunSynchronously(),
                     Verbosity = Verbosity.Quiet
