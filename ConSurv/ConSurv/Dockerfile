@@ -16,17 +16,15 @@ RUN mkdir /Workspace && \
     mkdir /Workspace/Other/Certificates && \
     mkdir /Workspace/Other/EntryPoint && \
     apt-get update && \
-    apt-get install -y curl nginx ffmpeg wget
-
-WORKDIR /Workspace/Other/EntryPoint
-
-RUN wget https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    apt-get install -y curl nginx ffmpeg wget libfontconfig1 libgdiplus uuid-runtime libuuid1 libicu-dev libssl-dev && \
+    wget https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y aspnetcore-runtime-10.0
+    apt-get install -y aspnetcore-runtime-10.0 && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN rm -rf /var/lib/apt/lists/*
+WORKDIR /Workspace/Other/EntryPoint
 
 ADD Other/Resources/DependentCodeUnits/ConSurvBackend/BuildResult_DotNet_${DotNetRuntime} /Workspace/Application/Backend
 ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplication /Workspace/Application/Frontend/WebApplicationFiles
@@ -36,9 +34,9 @@ COPY ConSurv/nginx.conf /Workspace/Application/Frontend
 COPY ConSurv/nginx.loadings-settings.conf /Workspace/Application/Frontend
 
 COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
-RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh
 COPY ConSurv/HealthCheck.sh /Workspace/Other/EntryPoint
-RUN chmod +x /Workspace/Other/EntryPoint/HealthCheck.sh
+RUN chmod +x /Workspace/Other/EntryPoint/EntryPoint.sh && \
+    chmod +x /Workspace/Other/EntryPoint/HealthCheck.sh
 
 HEALTHCHECK CMD ./HealthCheck.sh
 
