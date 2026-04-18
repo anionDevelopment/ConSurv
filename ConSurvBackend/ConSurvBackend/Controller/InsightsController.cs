@@ -24,6 +24,10 @@ namespace ConSurvBackend.Core.Controller
             this._ApplicationConstants = applicationConstants;
         }
 
+        /// <summary>
+        /// Returns information about all OS-level processes currently managed and monitored by the application.
+        /// </summary>
+        /// <returns>200 OK with a list of process DTOs describing each running process.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]

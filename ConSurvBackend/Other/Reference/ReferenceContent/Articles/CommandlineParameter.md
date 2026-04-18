@@ -7,7 +7,7 @@ Currently the following commandline-parameter:
 - `InitialDatabaseConnectionString`
 - `InitialCameraAddresses`
 
-This arguments will be used when there is no persisted configuration-file where the values can be loaded from.
+These arguments will be used when there is no persisted configuration-file where the values can be loaded from.
 This is typically the case on first run when the configuration is generated.
 So these values can be used as "seed" to fill it directly in the correct fields in the configuration without the requirement to change the configuration later.
 After the first run when the configuration is generated then these commandline-parameter will not be used anymore.

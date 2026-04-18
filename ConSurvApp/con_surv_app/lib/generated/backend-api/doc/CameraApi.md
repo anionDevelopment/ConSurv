@@ -9,30 +9,30 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV3CameraControllerCameraCameraIdGet**](CameraApi.md#apiv3cameracontrollercameracameraidget) | **GET** /API/v3/CameraController/Camera/{cameraId} | 
-[**aPIV3CameraControllerCamerasGet**](CameraApi.md#apiv3cameracontrollercamerasget) | **GET** /API/v3/CameraController/Cameras | 
-[**aPIV3CameraControllerCreateCameraPost**](CameraApi.md#apiv3cameracontrollercreatecamerapost) | **POST** /API/v3/CameraController/CreateCamera | 
-[**aPIV3CameraControllerDownloadVideoCameraIdFilenameGet**](CameraApi.md#apiv3cameracontrollerdownloadvideocameraidfilenameget) | **GET** /API/v3/CameraController/DownloadVideo/{cameraId}/{filename} | 
-[**aPIV3CameraControllerGetPreviewCameraIdGet**](CameraApi.md#apiv3cameracontrollergetpreviewcameraidget) | **GET** /API/v3/CameraController/GetPreview/{cameraId} | 
-[**aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet**](CameraApi.md#apiv3cameracontrollergetpreviewofvideocameraidfilenameget) | **GET** /API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename} | 
-[**aPIV3CameraControllerListVideosGet**](CameraApi.md#apiv3cameracontrollerlistvideosget) | **GET** /API/v3/CameraController/ListVideos | 
-[**aPIV3CameraControllerRemoveCameraCameraIdDelete**](CameraApi.md#apiv3cameracontrollerremovecameracameraiddelete) | **DELETE** /API/v3/CameraController/RemoveCamera/{cameraId} | 
-[**aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete**](CameraApi.md#apiv3cameracontrollerremovevideocameraidfilenamedelete) | **DELETE** /API/v3/CameraController/RemoveVideo/{cameraId}/{filename} | 
-[**aPIV3CameraControllerRunONVIFCommandCameraIdPost**](CameraApi.md#apiv3cameracontrollerrunonvifcommandcameraidpost) | **POST** /API/v3/CameraController/RunONVIFCommand/{cameraId} | 
-[**aPIV3CameraControllerUpdateCameraPut**](CameraApi.md#apiv3cameracontrollerupdatecameraput) | **PUT** /API/v3/CameraController/UpdateCamera | 
+[**aPIV3CameraControllerCameraCameraIdGet**](CameraApi.md#apiv3cameracontrollercameracameraidget) | **GET** /API/v3/CameraController/Camera/{cameraId} | Retrieves the full configuration details of a specific camera.
+[**aPIV3CameraControllerCamerasGet**](CameraApi.md#apiv3cameracontrollercamerasget) | **GET** /API/v3/CameraController/Cameras | Returns the list of all configured cameras visible to the current user.
+[**aPIV3CameraControllerCreateCameraPost**](CameraApi.md#apiv3cameracontrollercreatecamerapost) | **POST** /API/v3/CameraController/CreateCamera | Creates a new camera with default name and RTSP address and returns its generated identifier.
+[**aPIV3CameraControllerDownloadVideoCameraIdFilenameGet**](CameraApi.md#apiv3cameracontrollerdownloadvideocameraidfilenameget) | **GET** /API/v3/CameraController/DownloadVideo/{cameraId}/{filename} | Downloads the raw bytes of a specific recorded video file for a given camera.
+[**aPIV3CameraControllerGetPreviewCameraIdGet**](CameraApi.md#apiv3cameracontrollergetpreviewcameraidget) | **GET** /API/v3/CameraController/GetPreview/{cameraId} | Returns the latest preview image (as raw bytes) for the specified camera.
+[**aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet**](CameraApi.md#apiv3cameracontrollergetpreviewofvideocameraidfilenameget) | **GET** /API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename} | Returns a preview thumbnail image for the specified recorded video file of a camera.
+[**aPIV3CameraControllerListVideosGet**](CameraApi.md#apiv3cameracontrollerlistvideosget) | **GET** /API/v3/CameraController/ListVideos | Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
+[**aPIV3CameraControllerRemoveCameraCameraIdDelete**](CameraApi.md#apiv3cameracontrollerremovecameracameraiddelete) | **DELETE** /API/v3/CameraController/RemoveCamera/{cameraId} | Permanently removes the specified camera and all associated data.
+[**aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete**](CameraApi.md#apiv3cameracontrollerremovevideocameraidfilenamedelete) | **DELETE** /API/v3/CameraController/RemoveVideo/{cameraId}/{filename} | Permanently deletes a specific recorded video file belonging to the given camera.
+[**aPIV3CameraControllerRunONVIFCommandCameraIdPost**](CameraApi.md#apiv3cameracontrollerrunonvifcommandcameraidpost) | **POST** /API/v3/CameraController/RunONVIFCommand/{cameraId} | Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+[**aPIV3CameraControllerUpdateCameraPut**](CameraApi.md#apiv3cameracontrollerupdatecameraput) | **PUT** /API/v3/CameraController/UpdateCamera | Updates the properties of an existing camera using the values provided in the request body.
 
 
 # **aPIV3CameraControllerCameraCameraIdGet**
 > CameraDTO aPIV3CameraControllerCameraCameraIdGet(cameraId, xAccessToken)
 
-
+Retrieves the full configuration details of a specific camera.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera to retrieve.
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
@@ -47,7 +47,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera to retrieve. | 
  **xAccessToken** | **String**| Access Token | 
 
 ### Return type
@@ -68,7 +68,7 @@ No authorization required
 # **aPIV3CameraControllerCamerasGet**
 > List<CameraDTO> aPIV3CameraControllerCamerasGet(xAccessToken)
 
-
+Returns the list of all configured cameras visible to the current user.
 
 ### Example
 ```dart
@@ -109,7 +109,7 @@ No authorization required
 # **aPIV3CameraControllerCreateCameraPost**
 > String aPIV3CameraControllerCreateCameraPost(xAccessToken)
 
-
+Creates a new camera with default name and RTSP address and returns its generated identifier.
 
 ### Example
 ```dart
@@ -150,15 +150,15 @@ No authorization required
 # **aPIV3CameraControllerDownloadVideoCameraIdFilenameGet**
 > aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename)
 
-
+Downloads the raw bytes of a specific recorded video file for a given camera.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
-final filename = filename_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
+final filename = filename_example; // String | The filename of the recorded video to download.
 
 try {
     api_instance.aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename);
@@ -171,8 +171,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
- **filename** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
+ **filename** | **String**| The filename of the recorded video to download. | 
 
 ### Return type
 
@@ -192,14 +192,14 @@ No authorization required
 # **aPIV3CameraControllerGetPreviewCameraIdGet**
 > String aPIV3CameraControllerGetPreviewCameraIdGet(cameraId, xAccessToken)
 
-
+Returns the latest preview image (as raw bytes) for the specified camera.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera whose preview should be retrieved.
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
@@ -214,7 +214,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera whose preview should be retrieved. | 
  **xAccessToken** | **String**| Access Token | 
 
 ### Return type
@@ -235,15 +235,15 @@ No authorization required
 # **aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet**
 > aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename)
 
-
+Returns a preview thumbnail image for the specified recorded video file of a camera.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
-final filename = filename_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
+final filename = filename_example; // String | The filename of the recorded video for which the preview is requested.
 
 try {
     api_instance.aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename);
@@ -256,8 +256,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
- **filename** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
+ **filename** | **String**| The filename of the recorded video for which the preview is requested. | 
 
 ### Return type
 
@@ -277,7 +277,7 @@ No authorization required
 # **aPIV3CameraControllerListVideosGet**
 > aPIV3CameraControllerListVideosGet()
 
-
+Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
 
 ### Example
 ```dart
@@ -313,14 +313,14 @@ No authorization required
 # **aPIV3CameraControllerRemoveCameraCameraIdDelete**
 > aPIV3CameraControllerRemoveCameraCameraIdDelete(cameraId, xAccessToken)
 
-
+Permanently removes the specified camera and all associated data.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera to remove.
 final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
@@ -334,7 +334,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera to remove. | 
  **xAccessToken** | **String**| Access Token | 
 
 ### Return type
@@ -355,15 +355,15 @@ No authorization required
 # **aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete**
 > aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename)
 
-
+Permanently deletes a specific recorded video file belonging to the given camera.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
-final filename = filename_example; // String | 
+final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
+final filename = filename_example; // String | The filename of the recorded video to delete.
 
 try {
     api_instance.aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename);
@@ -376,8 +376,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
- **filename** | **String**|  | 
+ **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
+ **filename** | **String**| The filename of the recorded video to delete. | 
 
 ### Return type
 
@@ -397,15 +397,15 @@ No authorization required
 # **aPIV3CameraControllerRunONVIFCommandCameraIdPost**
 > aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO)
 
-
+Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
-final cameraId = cameraId_example; // String | 
-final oNVIFCommandDTO = ONVIFCommandDTO(); // ONVIFCommandDTO | 
+final cameraId = cameraId_example; // String | The unique identifier of the target camera.
+final oNVIFCommandDTO = ONVIFCommandDTO(); // ONVIFCommandDTO | The ONVIF command to execute, including its type and parameters.
 
 try {
     api_instance.aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO);
@@ -418,8 +418,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cameraId** | **String**|  | 
- **oNVIFCommandDTO** | [**ONVIFCommandDTO**](ONVIFCommandDTO.md)|  | [optional] 
+ **cameraId** | **String**| The unique identifier of the target camera. | 
+ **oNVIFCommandDTO** | [**ONVIFCommandDTO**](ONVIFCommandDTO.md)| The ONVIF command to execute, including its type and parameters. | [optional] 
 
 ### Return type
 
@@ -439,7 +439,7 @@ No authorization required
 # **aPIV3CameraControllerUpdateCameraPut**
 > aPIV3CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO)
 
-
+Updates the properties of an existing camera using the values provided in the request body.
 
 ### Example
 ```dart
@@ -447,7 +447,7 @@ import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
-final updateCameraDTO = UpdateCameraDTO(); // UpdateCameraDTO | 
+final updateCameraDTO = UpdateCameraDTO(); // UpdateCameraDTO | The DTO containing the updated camera properties.
 
 try {
     api_instance.aPIV3CameraControllerUpdateCameraPut(xAccessToken, updateCameraDTO);
@@ -461,7 +461,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xAccessToken** | **String**| Access Token | 
- **updateCameraDTO** | [**UpdateCameraDTO**](UpdateCameraDTO.md)|  | [optional] 
+ **updateCameraDTO** | [**UpdateCameraDTO**](UpdateCameraDTO.md)| The DTO containing the updated camera properties. | [optional] 
 
 ### Return type
 

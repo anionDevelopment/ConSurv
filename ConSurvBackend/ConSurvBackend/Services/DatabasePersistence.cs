@@ -37,6 +37,10 @@ namespace ConSurvBackend.Core.Services
         }
 
         #region AccessDatabase
+        /// <summary>
+        /// Executes the given <paramref name="action"/> against the database interactor within an exclusive lock.
+        /// </summary>
+        /// <param name="action">The database operation to perform.</param>
         protected void AccessDatabase(Action<IConSurvDatabaseInteractor> action)
         {
             lock (_Lock)
@@ -45,6 +49,12 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <summary>
+        /// Executes the given <paramref name="function"/> against the database interactor within an exclusive lock and returns its result.
+        /// </summary>
+        /// <typeparam name="T">The return type of the database operation.</typeparam>
+        /// <param name="function">The database operation to perform.</param>
+        /// <returns>The value returned by <paramref name="function"/>.</returns>
         protected T AccessDatabase<T>(Func<IConSurvDatabaseInteractor, T> function)
         {
             lock (_Lock)
@@ -52,6 +62,12 @@ namespace ConSurvBackend.Core.Services
                 return DBUtilities.AccessDatabase<T, IConSurvDatabaseInteractor>(this._Database, function);
             }
         }
+        /// <summary>
+        /// Executes one or more database commands within an exclusive lock, optionally wrapped in a transaction.
+        /// </summary>
+        /// <param name="nameOfAction">A label for the operation, used in log messages.</param>
+        /// <param name="runTransactional">If <c>true</c>, all actions are executed in a single database transaction.</param>
+        /// <param name="actions">The commands to execute in order.</param>
         protected void RunTransaction(string nameOfAction, bool runTransactional, params Action<DbCommand>[] actions)
         {
             lock (_Lock)
@@ -60,6 +76,14 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <summary>
+        /// Executes one or more database functions within an exclusive lock, optionally wrapped in a transaction, and collects their return values.
+        /// </summary>
+        /// <typeparam name="T">The return type of each function.</typeparam>
+        /// <param name="nameOfAction">A label for the operation, used in log messages.</param>
+        /// <param name="runTransactional">If <c>true</c>, all functions are executed in a single database transaction.</param>
+        /// <param name="functions">The functions to execute in order.</param>
+        /// <returns>An array containing the return value of each function in the same order.</returns>
         protected T?[] RunTransaction<T>(string nameOfAction, bool runTransactional, params Func<DbCommand, T?>[] functions)
         {
             lock (_Lock)
@@ -70,6 +94,7 @@ namespace ConSurvBackend.Core.Services
 
         #endregion
 
+        /// <inheritdoc />
         public void CreateCamera(Camera camera)
         {
             this.RunTransaction(nameof(CreateCamera), true, (command) =>
@@ -86,16 +111,19 @@ namespace ConSurvBackend.Core.Services
             });
         }
 
+        /// <inheritdoc />
         public void RemoveCamera(string cameraId)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public void UpdateCamera(Camera camera)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public IDictionary<string, Camera> GetAllCameras()
         {
             IDictionary<string, Camera> roles = this.RunTransaction(nameof(GetAllCameras), true, (command) =>
@@ -127,6 +155,7 @@ namespace ConSurvBackend.Core.Services
             return roles;
         }
 
+        /// <inheritdoc />
         public (bool, Exception?) IsAvailable()
         {
             bool result = this._Database.GetGenericDatabaseInteractor().TryGetConnection(out _, out Exception? e);
@@ -138,6 +167,7 @@ namespace ConSurvBackend.Core.Services
             //TODO
         }
 
+        /// <inheritdoc />
         public bool UserWithNameExists(string userName)
         {
             return this.RunTransaction(nameof(UserWithNameExists), true, (cmd) =>
@@ -149,11 +179,13 @@ namespace ConSurvBackend.Core.Services
             })[0];
         }
 
+        /// <inheritdoc />
         public IDictionary<string, User> GetAllUsers()
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public ISet<Role> GetAllRoles()
         {
             ISet<Role> roles = this.RunTransaction(nameof(GetAllRoles), true, (command) =>
@@ -180,6 +212,7 @@ namespace ConSurvBackend.Core.Services
             return roles;
         }
 
+        /// <inheritdoc />
         public void AddRole(Role role)
         {
             this.RunTransaction(nameof(AddRole), true, (command) =>
@@ -194,6 +227,7 @@ namespace ConSurvBackend.Core.Services
             });
         }
 
+        /// <inheritdoc />
         public void UpdateRole(Role role)
         {
             this.RunTransaction(nameof(UpdateRole), true, (cmd) =>
@@ -227,16 +261,19 @@ namespace ConSurvBackend.Core.Services
             });
         }
 
+        /// <inheritdoc />
         public void DeleteRoleByName(string roleName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public bool AccessTokenExists(string accessToken, out User user)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public void AddUser(User user)
         {
             this.RunTransaction(nameof(AddUser), true, (command) =>
@@ -255,6 +292,7 @@ namespace ConSurvBackend.Core.Services
             });
         }
 
+        /// <inheritdoc />
         public bool UserWithIdExists(string userId)
         {
             return this.RunTransaction(nameof(UserWithIdExists), true, (cmd) =>
@@ -266,6 +304,7 @@ namespace ConSurvBackend.Core.Services
             })[0];
         }
 
+        /// <inheritdoc />
         public User GetUserById(string userId)
         {
             User result = this.RunTransaction(nameof(GetUserById), true, (cmd) =>

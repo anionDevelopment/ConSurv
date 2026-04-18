@@ -2,6 +2,10 @@
 
 namespace ConSurvBackend.Core.Model.Base
 {
+    /// <summary>
+    /// Defines the overlay configuration applied to a camera's video feed,
+    /// including the reference resolution and the list of motion-detection polygons.
+    /// </summary>
     public class Overlay
     {
         public uint Width { get; internal set; } = 1920;

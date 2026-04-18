@@ -16,15 +16,20 @@ class UserApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'PUT /API/v3/UserController/CreateUser' operation and returns the [Response].
+  /// Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
   ///
   /// * [String] user:
+  ///   The desired username, provided via request header.
   ///
   /// * [String] password:
+  ///   The plain-text password that will be hashed before storage, provided via request header.
   Future<Response> aPIV3UserControllerCreateUserPutWithHttpInfo(String xAccessToken, { String? user, String? password, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/UserController/CreateUser';
@@ -58,14 +63,18 @@ class UserApi {
     );
   }
 
+  /// Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
   ///
   /// * [String] user:
+  ///   The desired username, provided via request header.
   ///
   /// * [String] password:
+  ///   The plain-text password that will be hashed before storage, provided via request header.
   Future<void> aPIV3UserControllerCreateUserPut(String xAccessToken, { String? user, String? password, }) async {
     final response = await aPIV3UserControllerCreateUserPutWithHttpInfo(xAccessToken,  user: user, password: password, );
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -73,7 +82,10 @@ class UserApi {
     }
   }
 
-  /// Performs an HTTP 'PUT /API/v3/UserController/GetRoles' operation and returns the [Response].
+  /// Returns the list of role names assigned to the currently authenticated user.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -105,6 +117,8 @@ class UserApi {
     );
   }
 
+  /// Returns the list of role names assigned to the currently authenticated user.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -127,7 +141,10 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v3/UserController/GetUserInformation' operation and returns the [Response].
+  /// Returns profile information (e.g., username, roles) for the currently authenticated user.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -159,6 +176,8 @@ class UserApi {
     );
   }
 
+  /// Returns profile information (e.g., username, roles) for the currently authenticated user.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -178,12 +197,17 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'PUT /API/v3/UserController/Login' operation and returns the [Response].
+  /// Authenticates a user with the supplied credentials and returns a new access token on success.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xUser:
+  ///   The username, provided via the `x-user` HTTP header.
   ///
   /// * [String] xPassword:
+  ///   The plain-text password, provided via the `x-password` HTTP header.
   Future<Response> aPIV3UserControllerLoginPutWithHttpInfo({ String? xUser, String? xPassword, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/UserController/Login';
@@ -216,11 +240,15 @@ class UserApi {
     );
   }
 
+  /// Authenticates a user with the supplied credentials and returns a new access token on success.
+  ///
   /// Parameters:
   ///
   /// * [String] xUser:
+  ///   The username, provided via the `x-user` HTTP header.
   ///
   /// * [String] xPassword:
+  ///   The plain-text password, provided via the `x-password` HTTP header.
   Future<AccessToken?> aPIV3UserControllerLoginPut({ String? xUser, String? xPassword, }) async {
     final response = await aPIV3UserControllerLoginPutWithHttpInfo( xUser: xUser, xPassword: xPassword, );
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -236,7 +264,10 @@ class UserApi {
     return null;
   }
 
-  /// Performs an HTTP 'PUT /API/v3/UserController/Logout' operation and returns the [Response].
+  /// Invalidates the access token of the currently authenticated user, effectively logging them out.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -268,6 +299,8 @@ class UserApi {
     );
   }
 
+  /// Invalidates the access token of the currently authenticated user, effectively logging them out.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -279,10 +312,14 @@ class UserApi {
     }
   }
 
-  /// Performs an HTTP 'GET /API/v3/UserController/TokenIsValid' operation and returns the [Response].
+  /// Checks whether the supplied access token is still valid (not expired and not revoked).
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] accessToken:
+  ///   The access token to validate, provided via request header.
   Future<Response> aPIV3UserControllerTokenIsValidGetWithHttpInfo({ String? accessToken, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/UserController/TokenIsValid';
@@ -312,9 +349,12 @@ class UserApi {
     );
   }
 
+  /// Checks whether the supplied access token is still valid (not expired and not revoked).
+  ///
   /// Parameters:
   ///
   /// * [String] accessToken:
+  ///   The access token to validate, provided via request header.
   Future<bool?> aPIV3UserControllerTokenIsValidGet({ String? accessToken, }) async {
     final response = await aPIV3UserControllerTokenIsValidGetWithHttpInfo( accessToken: accessToken, );
     if (response.statusCode >= HttpStatus.badRequest) {

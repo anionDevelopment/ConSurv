@@ -15,6 +15,9 @@ components:
       type: object
     CameraDTO:
       additionalProperties: false
+      description: "Data transfer object that exposes the full observable state of\
+        \ a camera to clients,\r\ncombining its identity, video source, recording\
+        \ configuration, and current record state."
       properties:
         cameraId:
           nullable: true
@@ -31,6 +34,10 @@ components:
       type: object
     ONVIFCommandDTO:
       additionalProperties: false
+      description: "Data transfer object used to deserialize an ONVIF PTZ command\
+        \ received from a client.\r\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType\
+        \ discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand\
+        \ subtype."
       properties:
         commandType:
           nullable: true
@@ -38,6 +45,9 @@ components:
       type: object
     RecordModeDTO:
       additionalProperties: false
+      description: "Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode\
+        \ as its type name\r\nfor serialization and deserialization across the API\
+        \ boundary."
       properties:
         recordMode:
           nullable: true
@@ -45,6 +55,8 @@ components:
       type: object
     RecordStateDTO:
       additionalProperties: false
+      description: "Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState\
+        \ of a camera\r\nas its type name for transport over the API."
       properties:
         recordState:
           nullable: true
@@ -52,6 +64,8 @@ components:
       type: object
     UpdateCameraDTO:
       additionalProperties: false
+      description: Data transfer object that carries the fields a client wishes to
+        update for an existing camera.
       properties:
         cameraId:
           nullable: true
@@ -66,6 +80,8 @@ components:
       type: object
     UserInformationDTO:
       additionalProperties: false
+      description: "Data transfer object that exposes basic identity and role information\
+        \ about\r\na logged-in user to the client."
       properties:
         id:
           nullable: true
@@ -80,6 +96,8 @@ components:
       type: object
     VideoInformationDTO:
       additionalProperties: false
+      description: "Data transfer object for the video-source configuration of a camera,\r\
+        \ncarrying only the fields that are safe to expose over the API."
       properties:
         isONVIFCamera:
           type: boolean
@@ -96,8 +114,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v3.0.18 API documentation
-  version: v3.0.18
+  title: ConSurvBackend v3.0.19 API documentation
+  version: v3.0.19
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:
@@ -166,7 +184,8 @@ paths:
   /API/v3/CameraController/Camera/{cameraId}:
     get:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera to retrieve.
+        in: path
         name: cameraId
         required: true
         schema:
@@ -190,6 +209,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CameraDTO'
           description: OK
+      summary: Retrieves the full configuration details of a specific camera.
       tags:
       - Camera
   /API/v3/CameraController/Cameras:
@@ -220,6 +240,7 @@ paths:
                   $ref: '#/components/schemas/CameraDTO'
                 type: array
           description: OK
+      summary: Returns the list of all configured cameras visible to the current user.
       tags:
       - Camera
   /API/v3/CameraController/CreateCamera:
@@ -244,17 +265,21 @@ paths:
               schema:
                 type: string
           description: OK
+      summary: Creates a new camera with default name and RTSP address and returns
+        its generated identifier.
       tags:
       - Camera
   /API/v3/CameraController/DownloadVideo/{cameraId}/{filename}:
     get:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera that owns the video.
+        in: path
         name: cameraId
         required: true
         schema:
           type: string
-      - in: path
+      - description: The filename of the recorded video to download.
+        in: path
         name: filename
         required: true
         schema:
@@ -262,12 +287,15 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Downloads the raw bytes of a specific recorded video file for a given
+        camera.
       tags:
       - Camera
   /API/v3/CameraController/GetPreview/{cameraId}:
     get:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera whose preview should be retrieved.
+        in: path
         name: cameraId
         required: true
         schema:
@@ -294,17 +322,20 @@ paths:
                 format: byte
                 type: string
           description: OK
+      summary: Returns the latest preview image (as raw bytes) for the specified camera.
       tags:
       - Camera
   /API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}:
     get:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera that owns the video.
+        in: path
         name: cameraId
         required: true
         schema:
           type: string
-      - in: path
+      - description: The filename of the recorded video for which the preview is requested.
+        in: path
         name: filename
         required: true
         schema:
@@ -312,6 +343,8 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Returns a preview thumbnail image for the specified recorded video
+        file of a camera.
       tags:
       - Camera
   /API/v3/CameraController/ListVideos:
@@ -319,12 +352,15 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Returns a dictionary mapping each camera identifier to the list of
+        recorded video filenames available for that camera.
       tags:
       - Camera
   /API/v3/CameraController/RemoveCamera/{cameraId}:
     delete:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera to remove.
+        in: path
         name: cameraId
         required: true
         schema:
@@ -338,17 +374,20 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Permanently removes the specified camera and all associated data.
       tags:
       - Camera
   /API/v3/CameraController/RemoveVideo/{cameraId}/{filename}:
     delete:
       parameters:
-      - in: path
+      - description: The unique identifier of the camera that owns the video.
+        in: path
         name: cameraId
         required: true
         schema:
           type: string
-      - in: path
+      - description: The filename of the recorded video to delete.
+        in: path
         name: filename
         required: true
         schema:
@@ -356,12 +395,15 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Permanently deletes a specific recorded video file belonging to the
+        given camera.
       tags:
       - Camera
   /API/v3/CameraController/RunONVIFCommand/{cameraId}:
     post:
       parameters:
-      - in: path
+      - description: The unique identifier of the target camera.
+        in: path
         name: cameraId
         required: true
         schema:
@@ -377,9 +419,12 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/ONVIFCommandDTO'
+        description: The ONVIF command to execute, including its type and parameters.
       responses:
         '200':
           description: OK
+      summary: Executes an ONVIF command on the specified camera (e.g., PTZ control,
+        preset recall).
       tags:
       - Camera
   /API/v3/CameraController/UpdateCamera:
@@ -402,9 +447,12 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/UpdateCameraDTO'
+        description: The DTO containing the updated camera properties.
       responses:
         '200':
           description: OK
+      summary: Updates the properties of an existing camera using the values provided
+        in the request body.
       tags:
       - Camera
   /API/v3/InsightsController/GetRunningProcesses:
@@ -429,17 +477,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/CameraDTO'
           description: OK
+      summary: Returns information about all OS-level processes currently managed
+        and monitored by the application.
       tags:
       - Insights
   /API/v3/StreamingController/Stream/{streamId}/{filename}:
     get:
       parameters:
-      - in: path
+      - description: The identifier of the stream (typically a camera ID).
+        in: path
         name: streamId
         required: true
         schema:
           type: string
-      - in: path
+      - description: The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\.[0-9A-Za-z]+$`).
+        in: path
         name: filename
         required: true
         schema:
@@ -453,16 +505,23 @@ paths:
       responses:
         '200':
           description: OK
+      summary: "Serves an HLS stream segment or playlist file for the specified stream.\r\
+        \nValidates the filename format, resolves the file from the camera's fragment\
+        \ folder,\r\nand returns it with the appropriate MIME type (`application/vnd.apple.mpegurl`\
+        \ for\r\n`.m3u8` playlists, `video/MP2T` for `.ts` segments)."
       tags:
       - Streaming
   /API/v3/UserController/CreateUser:
     put:
       parameters:
-      - in: header
+      - description: The desired username, provided via request header.
+        in: header
         name: user
         schema:
           type: string
-      - in: header
+      - description: The plain-text password that will be hashed before storage, provided
+          via request header.
+        in: header
         name: password
         schema:
           type: string
@@ -475,6 +534,8 @@ paths:
       responses:
         '200':
           description: OK
+      summary: "Creates a new user account with the given credentials and assigns\
+        \ the admin role to it.\r\nRequires the caller to hold the admin role."
       tags:
       - User
   /API/v3/UserController/GetRoles:
@@ -505,6 +566,8 @@ paths:
                   type: string
                 type: array
           description: OK
+      summary: Returns the list of role names assigned to the currently authenticated
+        user.
       tags:
       - User
   /API/v3/UserController/GetUserInformation:
@@ -529,16 +592,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserInformationDTO'
           description: OK
+      summary: Returns profile information (e.g., username, roles) for the currently
+        authenticated user.
       tags:
       - User
   /API/v3/UserController/Login:
     put:
       parameters:
-      - in: header
+      - description: The username, provided via the `x-user` HTTP header.
+        in: header
         name: x-user
         schema:
           type: string
-      - in: header
+      - description: The plain-text password, provided via the `x-password` HTTP header.
+        in: header
         name: x-password
         schema:
           type: string
@@ -555,6 +622,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessToken'
           description: OK
+      summary: Authenticates a user with the supplied credentials and returns a new
+        access token on success.
       tags:
       - User
   /API/v3/UserController/Logout:
@@ -569,12 +638,15 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Invalidates the access token of the currently authenticated user, effectively
+        logging them out.
       tags:
       - User
   /API/v3/UserController/TokenIsValid:
     get:
       parameters:
-      - in: header
+      - description: The access token to validate, provided via request header.
+        in: header
         name: accessToken
         schema:
           type: string
@@ -591,6 +663,8 @@ paths:
               schema:
                 type: boolean
           description: OK
+      summary: Checks whether the supplied access token is still valid (not expired
+        and not revoked).
       tags:
       - User
 tags:

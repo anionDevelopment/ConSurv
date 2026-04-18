@@ -16,12 +16,17 @@ class StreamingApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v3/StreamingController/Stream/{streamId}/{filename}' operation and returns the [Response].
+  /// Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera's fragment folder,  and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for  `.m3u8` playlists, `video/MP2T` for `.ts` segments).
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] streamId (required):
+  ///   The identifier of the stream (typically a camera ID).
   ///
   /// * [String] filename (required):
+  ///   The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$`).
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -54,11 +59,15 @@ class StreamingApi {
     );
   }
 
+  /// Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera's fragment folder,  and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for  `.m3u8` playlists, `video/MP2T` for `.ts` segments).
+  ///
   /// Parameters:
   ///
   /// * [String] streamId (required):
+  ///   The identifier of the stream (typically a camera ID).
   ///
   /// * [String] filename (required):
+  ///   The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$`).
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token

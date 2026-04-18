@@ -23,6 +23,19 @@ namespace ConSurvBackend.Core.Controller
             this._Log = log;
         }
 
+        /// <summary>
+        /// Serves an HLS stream segment or playlist file for the specified stream.
+        /// Validates the filename format, resolves the file from the camera's fragment folder,
+        /// and returns it with the appropriate MIME type (<c>application/vnd.apple.mpegurl</c> for
+        /// <c>.m3u8</c> playlists, <c>video/MP2T</c> for <c>.ts</c> segments).
+        /// </summary>
+        /// <param name="streamId">The identifier of the stream (typically a camera ID).</param>
+        /// <param name="filename">The HLS segment or playlist filename to serve (must match <c>^[0-9A-Za-z_]+\.[0-9A-Za-z]+$</c>).</param>
+        /// <returns>
+        /// 200 OK with the file bytes and the correct content type;
+        /// 400 Bad Request if the filename is invalid;
+        /// 404 Not Found if the file does not exist.
+        /// </returns>
         [HttpGet()]
         [Route($"{nameof(Stream)}/{{{nameof(streamId)}}}/{{{nameof(filename)}}}")]
         [Authenticate]

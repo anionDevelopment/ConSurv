@@ -1,10 +1,10 @@
 <div class="image-wrapper"
      (mousemove)="updatePopupPosition($event)"
      (mouseleave)="popupVisible=false">
-  <img [src]="image" width="100" height="75" alt="preview"/>
-  
+  <img [src]="image" width="100" height="75" alt="preview" i18n-alt="@@camera-preview.img.alt"/>
+
   <div class="image-popup" *ngIf="popupVisible"
        [ngStyle]="{'top.px': popupY, 'left.px': popupX}">
-    <img [src]="image" alt="large preview" class="popup-img"/>
+    <img [src]="image" alt="large preview" class="popup-img" i18n-alt="@@camera-preview.img.alt.large"/>
   </div>
 </div>

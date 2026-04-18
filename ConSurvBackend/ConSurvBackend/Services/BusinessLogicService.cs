@@ -47,6 +47,7 @@ namespace ConSurvBackend.Core.Services
             this._RuntimeData = runtimeData;
             this._Constants = constants;
         }
+        /// <inheritdoc />
         public string CreateCamera(string name, string streamURL)
         {
             Camera camera = new Camera(this.GetId(streamURL), name);
@@ -57,11 +58,17 @@ namespace ConSurvBackend.Core.Services
             return camera.Id;
         }
 
+        /// <summary>
+        /// Computes a short deterministic id from an RTSP link by hashing the URL (after escaping embedded credentials) and taking the first 6 hex characters.
+        /// </summary>
+        /// <param name="rtspLink">The stream URL to derive the id from.</param>
+        /// <returns>A 6-character hex string used as the camera id.</returns>
         private string GetId(string rtspLink)
         {
             return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
         }
 
+        /// <inheritdoc />
         public (bool, Exception?) IsAvailable(Camera camera)
         {
             if (this.GetCurrentRecordingInformation(camera) is Available)
@@ -74,6 +81,7 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public RecordState GetCurrentRecordingInformation(Camera camera)
         {
             try
@@ -85,6 +93,7 @@ namespace ConSurvBackend.Core.Services
                 return new Unavailable();
             }
         }
+        /// <inheritdoc />
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
             Camera camera = this.GetCameraById(cameraId);
@@ -98,6 +107,7 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public void RemoveCamera(string cameraId)
         {
             //TODO check permission
@@ -107,6 +117,7 @@ namespace ConSurvBackend.Core.Services
             this._AuditLog.AuditLogger.Log($"Removed camera {camera.Id}.", LogLevel.Information);
         }
 
+        /// <inheritdoc />
         public void UpdateCamera(Camera camera)
         {
             //TODO check permission
@@ -115,6 +126,7 @@ namespace ConSurvBackend.Core.Services
             this._AuditLog.AuditLogger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done
         }
 
+        /// <inheritdoc />
         public Camera GetCameraById(string cameraId)
         {
             //TODO check permission
@@ -128,6 +140,7 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public double GetRateOfAvailableCameras()
         {
             if (this.GetAllCameras().Count == 0)
@@ -140,6 +153,7 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public string Register(string username, string password)
         {
             lock (_LockObject)
@@ -151,16 +165,19 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public bool UserWithNameExists(string username)
         {
             return this._Persistence.UserWithNameExists(username);
         }
 
+        /// <inheritdoc />
         public IDictionary<string, Camera> GetAllCameras()
         {
             //TODO check permission
             return this._Persistence.GetAllCameras();
         }
+        /// <inheritdoc />
         public CameraDTO ToDTO(Camera camera)
         {
             return new CameraDTO()
@@ -173,6 +190,7 @@ namespace ConSurvBackend.Core.Services
             };
         }
 
+        /// <inheritdoc />
         public void EnsureUserHasRole(string userId, string roleId)
         {
             this._AuditLog.AuditLogger.Log($"Add role with id {roleId} to user with id {userId}...", LogLevel.Information);
@@ -180,22 +198,26 @@ namespace ConSurvBackend.Core.Services
             //TODO add information about why and by whom this was done
         }
 
+        /// <inheritdoc />
         public void EnsureUserDoesNotHaveRole(string userId, string roleId)
         {
             this._AuditLog.AuditLogger.Log($"Unassign role with id {roleId} from user with id {userId}.", LogLevel.Information);
             this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
             //TODO add information about why and by whom this was done to auditlog
         }
+        /// <inheritdoc />
         public User GetUser(string userId)
         {
             return this._AuthenticationService.GetUserTyped(userId);
         }
 
+        /// <inheritdoc />
         public AccessToken Login(string username, string password)
         {
             return this._AuthenticationService.Login(username, password);
         }
 
+        /// <inheritdoc />
         public IDictionary<string, IList<string>> GetVideos()
         {
             Dictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
@@ -213,6 +235,7 @@ namespace ConSurvBackend.Core.Services
             return result;
         }
 
+        /// <inheritdoc />
         public void RemoveVideo(string cameraId, string filename)
         {
             string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
@@ -226,11 +249,13 @@ namespace ConSurvBackend.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public byte[] GetPreviewOfVideo(string cameraId, string filename)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public byte[] GetVideo(string cameraId, string filename)
         {
             string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);

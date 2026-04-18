@@ -35,6 +35,18 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IGRYLog _Log;
         private const ushort _LastUsedPortRangeBegin = 10_000;
         private ushort _LastUsedPort = _LastUsedPortRangeBegin;
+        /// <summary>
+        /// Initializes a new instance of <see cref="CameraManagementService"/> with all required dependencies.
+        /// </summary>
+        /// <param name="businessLogicService">Service used to retrieve camera data.</param>
+        /// <param name="logger">Logger used by the base class.</param>
+        /// <param name="commandlineParameter">Parsed command-line parameters for the current run.</param>
+        /// <param name="processManager">Manager for spawning and tracking external processes.</param>
+        /// <param name="runtimeData">Shared in-memory runtime state.</param>
+        /// <param name="initializationService">Service that tracks the application initialization state.</param>
+        /// <param name="log">Logger used for camera-management-specific log entries.</param>
+        /// <param name="constants">Application-wide constants including data-folder paths.</param>
+        /// <param name="codeUnitSpecificConfiguration">Persisted configuration containing video settings.</param>
         public CameraManagementService(IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger)
         {
             this._CameraService = businessLogicService;
@@ -49,6 +61,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
         }
 
+        /// <inheritdoc />
         protected override void Run()
         {
             this._Log.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
@@ -170,6 +183,15 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
             }
         }
+        /// <summary>
+        /// Determines the current internal availability state of a camera by checking whether its
+        /// associated media processes (MediaMTX and FFMPEG) are running and the RTSP stream is reachable.
+        /// </summary>
+        /// <param name="camera">The camera whose internal state is evaluated.</param>
+        /// <returns>
+        /// An <see cref="Available"/> instance when all processes are running and the RTSP endpoint is
+        /// reachable; otherwise a <see cref="NotAvailable"/> instance.
+        /// </returns>
         private CameraInternalsBase GetCurrentInternalState(Camera camera)
         {
             if (this.TryGetMediaMTXProcess(camera, out ExternalProgramExecutor? ffmpegProcess, out ExternalProgramExecutor? mediaMTXProcess, out string? url))
@@ -186,6 +208,30 @@ namespace ConSurvBackend.Core.BackgroundServices
         private static ExternalProgramExecutor takescreenshots;
         private static ExternalProgramExecutor m3u8;
         private static ExternalProgramExecutor record;
+        /// <summary>
+        /// Tries to obtain (or create) the MediaMTX and FFMPEG processes that expose the camera's
+        /// RTSP stream internally.  When no running processes exist yet the method starts MediaMTX,
+        /// pipes the camera stream into it via FFMPEG, spawns a screenshot-capture process, an HLS
+        /// segmenter process, and – if the camera is configured for continuous recording – a recording
+        /// process.
+        /// </summary>
+        /// <param name="camera">The camera for which the media processes are required.</param>
+        /// <param name="ffmpegProcessResult">
+        /// When the method returns <see langword="true"/>, contains the running FFMPEG process;
+        /// otherwise <see langword="null"/>.
+        /// </param>
+        /// <param name="mediaMTXProcessResult">
+        /// When the method returns <see langword="true"/>, contains the running MediaMTX process;
+        /// otherwise <see langword="null"/>.
+        /// </param>
+        /// <param name="url">
+        /// When the method returns <see langword="true"/>, contains the internal RTSP URL under which
+        /// the camera stream is available via MediaMTX; otherwise <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if all required processes are running and the internal RTSP stream is
+        /// reachable; <see langword="false"/> if any step failed.
+        /// </returns>
         private bool TryGetMediaMTXProcess(Camera camera, out ExternalProgramExecutor? ffmpegProcessResult, out ExternalProgramExecutor? mediaMTXProcessResult, out string? url)
         {
             bool isAlreadyAvailable;
@@ -351,6 +397,12 @@ paths:
             }
         }
 
+        /// <summary>
+        /// Renders the camera's overlay polygon configuration into a PNG file that can be composited
+        /// on top of the live video stream by FFMPEG.
+        /// </summary>
+        /// <param name="camera">The camera whose overlay configuration is used.</param>
+        /// <param name="overlayFile">Absolute path of the PNG file to write.</param>
         private void CreateOverlayFile(Camera camera, string overlayFile)
         {
             int width = (int)camera.Overlay.Width;
@@ -387,6 +439,12 @@ paths:
             data.SaveTo(stream);
         }
 
+        /// <summary>
+        /// Returns the next port number in the sequentially allocated port range starting at
+        /// <see cref="_LastUsedPortRangeBegin"/>. Wraps around to the range begin when
+        /// <see cref="ushort.MaxValue"/> is reached.
+        /// </summary>
+        /// <returns>A port number that has not been handed out since the last wrap-around.</returns>
         private ushort GetNewFreePort()
         {
             if (this._LastUsedPort == ushort.MaxValue)
@@ -398,6 +456,15 @@ paths:
             return this._LastUsedPort;
         }
 
+        /// <summary>
+        /// Probes the given RTSP URL with <c>ffprobe</c> to determine whether the stream is currently
+        /// accessible.
+        /// </summary>
+        /// <param name="rtspUrl">The RTSP URL to probe.</param>
+        /// <returns>
+        /// <see langword="true"/> if <c>ffprobe</c> exits with code 0; <see langword="false"/> if the
+        /// URL is unreachable or probing fails for any reason.
+        /// </returns>
         private static bool IsRtspAvailable(string rtspUrl)
         {
             try
@@ -418,6 +485,7 @@ paths:
                 return false;
             }
         }
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing)

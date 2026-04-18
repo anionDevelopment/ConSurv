@@ -17,6 +17,8 @@ void main() {
   // final instance = StreamingApi();
 
   group('tests for StreamingApi', () {
+    // Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera's fragment folder,  and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for  `.m3u8` playlists, `video/MP2T` for `.ts` segments).
+    //
     //Future aPIV3StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken) async
     test('test aPIV3StreamingControllerStreamStreamIdFilenameGet', () async {
       // TODO

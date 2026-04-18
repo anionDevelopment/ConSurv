@@ -30,7 +30,7 @@ And because complexity should be reduced and the development-, quality-check- an
 ## Security-considerations
 
 The routes `/API/Other/Maintenance` may contain sensitive information.
-Please block or protect them in your reverse-proxy if you do not want them to be accessable from outside.
+Please block or protect them in your reverse-proxy if you do not want them to be accessible from outside.
 The currently available maintenance-routes are:
 
 - `/API/Other/Maintenance/AvailabilityCheck`

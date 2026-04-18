@@ -101,3 +101,13 @@ tasks:
     aliases:
       - runfrontend
       - rf
+
+  Translate:
+    desc: "Translate"
+    silent: true
+    dir: "./ConSurvFrontend/Other"
+    cmds:
+      - "python Translate.py {{.CLI_ARGS}}"
+    aliases:
+      - translate
+      - t

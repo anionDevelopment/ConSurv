@@ -63,6 +63,13 @@ namespace ConSurvBackend.Core
         {
             return new Program().MainImplementation(commandlineArguments);
         }
+
+        /// <summary>
+        /// Configures and starts the API server with all required services, middleware, and background workers.
+        /// Handles both productive runs (with real initialization and background services) and test/mock runs.
+        /// </summary>
+        /// <param name="commandlineArguments">The raw command-line arguments passed to the application entry point.</param>
+        /// <returns>An integer exit code; <c>0</c> indicates success.</returns>
         internal int MainImplementation(string[] commandlineArguments)
         {
             bool runningUsually = false;
@@ -280,6 +287,9 @@ namespace ConSurvBackend.Core
         }
 
 
+        /// <summary>
+        /// Requests a graceful shutdown of the running API server and blocks until it has fully stopped.
+        /// </summary>
         internal void Stop()
         {
             GUtilities.AssertNotNull(this._Constants, nameof(this._Constants)).CancellationTokenSource.Cancel();

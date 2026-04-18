@@ -1,37 +1,37 @@
-<title mat-dialog-title>Edit camera</title>
+<title mat-dialog-title i18n="@@edit-camera-dialog.title">Edit camera</title>
 <mat-dialog-content>
     <form [formGroup]="form" (ngSubmit)="save()">
 
         <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input type="text" matInput placeholder="Example: Entrance-camera" formControlName="name">
+            <mat-label i18n="@@edit-camera-dialog.field.name">Name</mat-label>
+            <input type="text" matInput placeholder="Example: Entrance-camera" i18n-placeholder="@@edit-camera-dialog.field.name.placeholder" formControlName="name">
         </mat-form-field>
 
         <br />
 
         <mat-form-field>
-            <mat-label>Stream-URL</mat-label>
-            <input type="text" matInput placeholder="Example: rtsp://example.com" formControlName="rtspstreamurl">
+            <mat-label i18n="@@edit-camera-dialog.field.stream-url">Stream-URL</mat-label>
+            <input type="text" matInput placeholder="Example: rtsp://example.com" i18n-placeholder="@@edit-camera-dialog.field.stream-url.placeholder" formControlName="rtspstreamurl">
         </mat-form-field>
 
         <br />
 
-        <mat-checkbox formControlName="isonvifcamera">Can receive ONVIF-commands.</mat-checkbox>
+        <mat-checkbox formControlName="isonvifcamera" i18n="@@edit-camera-dialog.field.onvif">Can receive ONVIF-commands.</mat-checkbox>
 
         <br />
         <app-record-mode-indicator [recordMode$]="recordmode$"></app-record-mode-indicator>
         <mat-form-field>
-            <mat-label>Record-mode</mat-label>
+            <mat-label i18n="@@edit-camera-dialog.field.record-mode">Record-mode</mat-label>
             <mat-select formControlName="recordmodeselect">
-                <mat-option value="NoRecording">No recording</mat-option>
-                <mat-option value="RecordAlways">Record always</mat-option>
-                <mat-option value="RecordOnMovements">Record on movements</mat-option>
+                <mat-option value="NoRecording" i18n="@@edit-camera-dialog.record-mode.no-recording">No recording</mat-option>
+                <mat-option value="RecordAlways" i18n="@@edit-camera-dialog.record-mode.record-always">Record always</mat-option>
+                <mat-option value="RecordOnMovements" i18n="@@edit-camera-dialog.record-mode.record-on-movements">Record on movements</mat-option>
             </mat-select>
         </mat-form-field>
     </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="cancel()" cdkFocusInitial>Cancel</button>
-    <button mat-button (click)="save()">Save</button>
+    <button mat-button (click)="cancel()" cdkFocusInitial i18n="@@edit-camera-dialog.button.cancel">Cancel</button>
+    <button mat-button (click)="save()" i18n="@@edit-camera-dialog.button.save">Save</button>
 </mat-dialog-actions>

@@ -9,13 +9,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV3InsightsControllerGetRunningProcessesGet**](InsightsApi.md#apiv3insightscontrollergetrunningprocessesget) | **GET** /API/v3/InsightsController/GetRunningProcesses | 
+[**aPIV3InsightsControllerGetRunningProcessesGet**](InsightsApi.md#apiv3insightscontrollergetrunningprocessesget) | **GET** /API/v3/InsightsController/GetRunningProcesses | Returns information about all OS-level processes currently managed and monitored by the application.
 
 
 # **aPIV3InsightsControllerGetRunningProcessesGet**
 > CameraDTO aPIV3InsightsControllerGetRunningProcessesGet(xAccessToken)
 
-
+Returns information about all OS-level processes currently managed and monitored by the application.
 
 ### Example
 ```dart

@@ -3,3 +3,6 @@ Other/Resources/PlantUML
 Other/Resources/DevelopmentCertificate
 Other/Resources/CycloneDXCLI
 ConSurvApp/con_surv_app/coverage/lcov.info
+
+CLAUDE.local.md
+.claude/settings.local.json

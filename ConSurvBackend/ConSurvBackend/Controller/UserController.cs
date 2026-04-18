@@ -33,6 +33,16 @@ namespace ConSurvBackend.Core.Controller
             this._TimeService = timeService;
         }
 
+        /// <summary>
+        /// Authenticates a user with the supplied credentials and returns a new access token on success.
+        /// </summary>
+        /// <param name="user">The username, provided via the <c>x-user</c> HTTP header.</param>
+        /// <param name="password">The plain-text password, provided via the <c>x-password</c> HTTP header.</param>
+        /// <returns>
+        /// 200 OK with an <see cref="AccessToken"/> on successful authentication;
+        /// 400 Bad Request if the username or password header is missing;
+        /// 500 Internal Server Error on an unexpected authentication failure.
+        /// </returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccessToken))]
         [Route(nameof(Login))]
@@ -57,6 +67,13 @@ namespace ConSurvBackend.Core.Controller
             }
         }
 
+        /// <summary>
+        /// Creates a new user account with the given credentials and assigns the admin role to it.
+        /// Requires the caller to hold the admin role.
+        /// </summary>
+        /// <param name="user">The desired username, provided via request header.</param>
+        /// <param name="password">The plain-text password that will be hashed before storage, provided via request header.</param>
+        /// <returns>200 OK when the user has been created and the admin role assigned successfully.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameAdmins)]
         [HttpPut]
@@ -70,6 +87,13 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
+        /// <summary>
+        /// Invalidates the access token of the currently authenticated user, effectively logging them out.
+        /// </summary>
+        /// <returns>
+        /// 200 OK when the token has been revoked;
+        /// 401 Unauthorized if no valid access token is present in the current request context.
+        /// </returns>
         [Authenticate]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
@@ -86,6 +110,11 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
+        /// <summary>
+        /// Checks whether the supplied access token is still valid (not expired and not revoked).
+        /// </summary>
+        /// <param name="accessToken">The access token to validate, provided via request header.</param>
+        /// <returns>200 OK with <c>true</c> if the token is valid, or <c>false</c> otherwise.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [Route(nameof(TokenIsValid))]
@@ -96,6 +125,10 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Returns the list of role names assigned to the currently authenticated user.
+        /// </summary>
+        /// <returns>200 OK with an array of role name strings.</returns>
         [Authenticate]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
@@ -105,6 +138,10 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this.GetUser().Roles);
         }
 
+        /// <summary>
+        /// Returns profile information (e.g., username, roles) for the currently authenticated user.
+        /// </summary>
+        /// <returns>200 OK with a <see cref="UserInformationDTO"/> for the current user.</returns>
         [Authenticate]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInformationDTO))]

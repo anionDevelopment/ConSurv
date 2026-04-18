@@ -1,20 +1,20 @@
 <div *ngIf="recordMode$!=null && (recordMode$|async)!=null">
     <ng-container [ngSwitch]="true">
         <ng-container *ngSwitchCase="(recordMode$|async)!.recordMode=='NoRecording'">
-            <mat-icon matTooltip="No recording">videocam_off</mat-icon>
+            <mat-icon matTooltip="No recording" i18n-matTooltip="@@record-mode-indicator.tooltip.no-recording">videocam_off</mat-icon>
         </ng-container>
         <ng-container *ngSwitchCase="(recordMode$|async)!.recordMode =='RecordAlways'">
-            <mat-icon matTooltip="Record always">videocam</mat-icon>
+            <mat-icon matTooltip="Record always" i18n-matTooltip="@@record-mode-indicator.tooltip.record-always">videocam</mat-icon>
         </ng-container>
         <ng-container *ngSwitchCase="(recordMode$|async)!.recordMode =='RecordOnMovements'">
-            <mat-icon matTooltip="Record on movements">emergency_recording</mat-icon>
+            <mat-icon matTooltip="Record on movements" i18n-matTooltip="@@record-mode-indicator.tooltip.record-on-movements">emergency_recording</mat-icon>
         </ng-container>
         <ng-container *ngSwitchDefault>
-            <mat-icon matTooltip="Record-mode unknown">question_mark</mat-icon>
+            <mat-icon matTooltip="Record-mode unknown" i18n-matTooltip="@@record-mode-indicator.tooltip.unknown">question_mark</mat-icon>
         </ng-container>
     </ng-container>
 </div>
 
 <div *ngIf="!(recordMode$!=null && (recordMode$|async)!=null)">
-    <mat-icon matTooltip="Record-state not available">question_mark</mat-icon>
+    <mat-icon matTooltip="Record-state not available" i18n-matTooltip="@@record-mode-indicator.tooltip.not-available">question_mark</mat-icon>
 </div>

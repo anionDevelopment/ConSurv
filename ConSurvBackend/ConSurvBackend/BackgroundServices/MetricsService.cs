@@ -12,6 +12,13 @@ namespace ConSurvBackend.Core.BackgroundServices
     {
         public Gauge MetricAvailableCamerasRate { get; private set; }
         private readonly IBusinessLogicService _CameraService;
+        /// <summary>
+        /// Initializes a new instance of <see cref="MetricsService"/> and registers the Prometheus
+        /// gauge for the available-cameras rate.
+        /// </summary>
+        /// <param name="constants">Application-wide constants used to retrieve the execution mode.</param>
+        /// <param name="logger">Logger passed to the base class.</param>
+        /// <param name="cameraService">Service used to query the rate of available cameras.</param>
         public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IGRYLog logger, IBusinessLogicService cameraService) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
@@ -20,6 +27,11 @@ namespace ConSurvBackend.Core.BackgroundServices
             this.MetricAvailableCamerasRate = Metrics.CreateGauge(CodeUnitSpecificConstants.MetricsNameAvailableCamerasRate, "Rate of available cameras");
         }
 
+        /// <summary>
+        /// Queries the current rate of available cameras and updates the
+        /// <see cref="MetricAvailableCamerasRate"/> Prometheus gauge.
+        /// Any exception raised during the calculation is caught and logged without propagating.
+        /// </summary>
         public void CalculateHealthAndMetrics()
         {
             try
@@ -32,10 +44,12 @@ namespace ConSurvBackend.Core.BackgroundServices
             }
         }
 
+        /// <inheritdoc />
         protected override void Run()
         {
             this.CalculateHealthAndMetrics();
         }
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing)

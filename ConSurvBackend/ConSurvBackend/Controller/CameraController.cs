@@ -28,6 +28,11 @@ namespace ConSurvBackend.Core.Controller
             this._RuntimeData = runtimeData;
         }
 
+        /// <summary>
+        /// Returns the latest preview image (as raw bytes) for the specified camera.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera whose preview should be retrieved.</param>
+        /// <returns>200 OK with the JPEG/PNG preview bytes.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
@@ -39,6 +44,10 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this._RuntimeData.GetLatestPreview(cameraId).Data);
         }
 
+        /// <summary>
+        /// Creates a new camera with default name and RTSP address and returns its generated identifier.
+        /// </summary>
+        /// <returns>200 OK with the new camera's unique identifier as a string.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
@@ -49,6 +58,11 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this._CameraService.CreateCamera("New camera", "rtsp://mycamera.example.com/stream"));
         }
 
+        /// <summary>
+        /// Permanently removes the specified camera and all associated data.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera to remove.</param>
+        /// <returns>200 OK on success.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpDelete]
@@ -60,6 +74,11 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
+        /// <summary>
+        /// Updates the properties of an existing camera using the values provided in the request body.
+        /// </summary>
+        /// <param name="updateCameraDTO">The DTO containing the updated camera properties.</param>
+        /// <returns>200 OK on success.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPut]
@@ -71,6 +90,11 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok();
         }
 
+        /// <summary>
+        /// Retrieves the full configuration details of a specific camera.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera to retrieve.</param>
+        /// <returns>200 OK with a <see cref="CameraDTO"/> representing the camera.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
@@ -81,6 +105,10 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(this._CameraService.ToDTO(this._CameraService.GetCameraById(cameraId)));
         }
 
+        /// <summary>
+        /// Returns the list of all configured cameras visible to the current user.
+        /// </summary>
+        /// <returns>200 OK with an array of <see cref="CameraDTO"/> objects.</returns>
         [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
@@ -94,6 +122,12 @@ namespace ConSurvBackend.Core.Controller
 
         #region ONVIF-specific
 
+        /// <summary>
+        /// Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the target camera.</param>
+        /// <param name="onvifCommandDTO">The ONVIF command to execute, including its type and parameters.</param>
+        /// <returns>200 OK on success.</returns>
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -106,6 +140,10 @@ namespace ConSurvBackend.Core.Controller
 
         #endregion
 
+        /// <summary>
+        /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
+        /// </summary>
+        /// <returns>200 OK with a dictionary of camera IDs to file name lists.</returns>
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -116,6 +154,12 @@ namespace ConSurvBackend.Core.Controller
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Returns a preview thumbnail image for the specified recorded video file of a camera.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
+        /// <param name="filename">The filename of the recorded video for which the preview is requested.</param>
+        /// <returns>200 OK with the thumbnail image bytes.</returns>
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -126,6 +170,12 @@ namespace ConSurvBackend.Core.Controller
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Downloads the raw bytes of a specific recorded video file for a given camera.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
+        /// <param name="filename">The filename of the recorded video to download.</param>
+        /// <returns>200 OK with the video file bytes.</returns>
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -136,6 +186,12 @@ namespace ConSurvBackend.Core.Controller
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Permanently deletes a specific recorded video file belonging to the given camera.
+        /// </summary>
+        /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
+        /// <param name="filename">The filename of the recorded video to delete.</param>
+        /// <returns>200 OK on success.</returns>
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]

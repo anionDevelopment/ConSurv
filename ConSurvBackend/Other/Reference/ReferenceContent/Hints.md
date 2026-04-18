@@ -18,7 +18,7 @@ The following tools from the [tools-list](https://github.com/anionDev/ScriptColl
 
 The recommended IDE for this code-unit is [Visual Studio](https://visualstudio.microsoft.com/).
 
-Start the project using the usual usual debug-button in Visual Studio.
+Start the project using the usual debug-button in Visual Studio.
 When you start the backend the first time then a configuration-file will be generated which will be used.
 This configuration-file is located in `<repository-root>\ConSurvBackend\Other\Workspace\Configuration\Configuration.xml`.
 This configuration-file will always be used if available when running the backend locally.

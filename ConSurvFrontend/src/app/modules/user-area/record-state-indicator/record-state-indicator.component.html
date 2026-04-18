@@ -1,20 +1,20 @@
 <div *ngIf="recordState!=null">
     <ng-container [ngSwitch]="true">
         <ng-container *ngSwitchCase="recordState!.recordState=='CurrentlyRecording'">
-            <mat-icon matTooltip="Currently recording">radio_button_checked</mat-icon>
+            <mat-icon matTooltip="Currently recording" i18n-matTooltip="@@record-state-indicator.tooltip.currently-recording">radio_button_checked</mat-icon>
         </ng-container>
         <ng-container *ngSwitchCase="recordState!.recordState =='Idle'">
-            <mat-icon matTooltip="Idle">radio_button_unchecked</mat-icon>
+            <mat-icon matTooltip="Idle" i18n-matTooltip="@@record-state-indicator.tooltip.idle">radio_button_unchecked</mat-icon>
         </ng-container>
         <ng-container *ngSwitchCase="recordState!.recordState =='Unavailable'">
-            <mat-icon matTooltip="Not available">block</mat-icon>
+            <mat-icon matTooltip="Not available" i18n-matTooltip="@@record-state-indicator.tooltip.not-available">block</mat-icon>
         </ng-container>
         <ng-container *ngSwitchDefault>
-            <mat-icon matTooltip="Record-state unknown">question_mark</mat-icon>
+            <mat-icon matTooltip="Record-state unknown" i18n-matTooltip="@@record-state-indicator.tooltip.unknown">question_mark</mat-icon>
         </ng-container>
     </ng-container>
 </div>
 
 <div *ngIf="recordState==null">
-    <mat-icon matTooltip="Record-state not available">question_mark</mat-icon>
+    <mat-icon matTooltip="Record-state not available" i18n-matTooltip="@@record-state-indicator.tooltip.not-available">question_mark</mat-icon>
 </div>
