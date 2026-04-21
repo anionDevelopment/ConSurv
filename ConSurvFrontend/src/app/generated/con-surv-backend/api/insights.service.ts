@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -36,6 +36,7 @@ export class InsightsService extends BaseService {
     }
 
     /**
+     * Returns information about all OS-level processes currently managed and monitored by the application.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

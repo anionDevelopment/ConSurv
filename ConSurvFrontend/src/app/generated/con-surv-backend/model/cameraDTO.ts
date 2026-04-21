@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -12,6 +12,9 @@ import { RecordStateDTO } from './recordStateDTO';
 import { VideoInformationDTO } from './videoInformationDTO';
 
 
+/**
+ * Data transfer object that exposes the full observable state of a camera to clients,  combining its identity, video source, recording configuration, and current record state.
+ */
 export interface CameraDTO { 
     cameraId?: string | null;
     name?: string | null;
