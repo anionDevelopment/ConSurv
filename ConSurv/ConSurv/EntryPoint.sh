@@ -52,6 +52,10 @@ if [[ -n "${InitialVerboseValue}" ]]; then
     argument+=" --InitialVerboseValue $InitialVerboseValue"
 fi
 
+if [[ -n "${Verbose}" ]]; then
+    argument+=" --Verbose"
+fi
+
 if [ -z ${DoNotHostFrontend+x} ]; then
     echo "Frontend will be started.";
 else
