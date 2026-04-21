@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Data transfer object for the video-source configuration of a camera,  carrying only the fields that are safe to expose over the API.
+ */
 export interface VideoInformationDTO { 
     streamURL?: string | null;
     isONVIFCamera?: boolean;

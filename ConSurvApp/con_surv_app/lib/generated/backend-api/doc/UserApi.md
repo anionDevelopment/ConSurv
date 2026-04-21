@@ -9,18 +9,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV3UserControllerCreateUserPut**](UserApi.md#apiv3usercontrollercreateuserput) | **PUT** /API/v3/UserController/CreateUser | 
-[**aPIV3UserControllerGetRolesPut**](UserApi.md#apiv3usercontrollergetrolesput) | **PUT** /API/v3/UserController/GetRoles | 
-[**aPIV3UserControllerGetUserInformationGet**](UserApi.md#apiv3usercontrollergetuserinformationget) | **GET** /API/v3/UserController/GetUserInformation | 
-[**aPIV3UserControllerLoginPut**](UserApi.md#apiv3usercontrollerloginput) | **PUT** /API/v3/UserController/Login | 
-[**aPIV3UserControllerLogoutPut**](UserApi.md#apiv3usercontrollerlogoutput) | **PUT** /API/v3/UserController/Logout | 
-[**aPIV3UserControllerTokenIsValidGet**](UserApi.md#apiv3usercontrollertokenisvalidget) | **GET** /API/v3/UserController/TokenIsValid | 
+[**aPIV3UserControllerCreateUserPut**](UserApi.md#apiv3usercontrollercreateuserput) | **PUT** /API/v3/UserController/CreateUser | Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+[**aPIV3UserControllerGetRolesPut**](UserApi.md#apiv3usercontrollergetrolesput) | **PUT** /API/v3/UserController/GetRoles | Returns the list of role names assigned to the currently authenticated user.
+[**aPIV3UserControllerGetUserInformationGet**](UserApi.md#apiv3usercontrollergetuserinformationget) | **GET** /API/v3/UserController/GetUserInformation | Returns profile information (e.g., username, roles) for the currently authenticated user.
+[**aPIV3UserControllerLoginPut**](UserApi.md#apiv3usercontrollerloginput) | **PUT** /API/v3/UserController/Login | Authenticates a user with the supplied credentials and returns a new access token on success.
+[**aPIV3UserControllerLogoutPut**](UserApi.md#apiv3usercontrollerlogoutput) | **PUT** /API/v3/UserController/Logout | Invalidates the access token of the currently authenticated user, effectively logging them out.
+[**aPIV3UserControllerTokenIsValidGet**](UserApi.md#apiv3usercontrollertokenisvalidget) | **GET** /API/v3/UserController/TokenIsValid | Checks whether the supplied access token is still valid (not expired and not revoked).
 
 
 # **aPIV3UserControllerCreateUserPut**
 > aPIV3UserControllerCreateUserPut(xAccessToken, user, password)
 
-
+Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
 
 ### Example
 ```dart
@@ -28,8 +28,8 @@ import 'package:openapi/api.dart';
 
 final api_instance = UserApi();
 final xAccessToken = xAccessToken_example; // String | Access Token
-final user = user_example; // String | 
-final password = password_example; // String | 
+final user = user_example; // String | The desired username, provided via request header.
+final password = password_example; // String | The plain-text password that will be hashed before storage, provided via request header.
 
 try {
     api_instance.aPIV3UserControllerCreateUserPut(xAccessToken, user, password);
@@ -43,8 +43,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xAccessToken** | **String**| Access Token | 
- **user** | **String**|  | [optional] 
- **password** | **String**|  | [optional] 
+ **user** | **String**| The desired username, provided via request header. | [optional] 
+ **password** | **String**| The plain-text password that will be hashed before storage, provided via request header. | [optional] 
 
 ### Return type
 
@@ -64,7 +64,7 @@ No authorization required
 # **aPIV3UserControllerGetRolesPut**
 > List<String> aPIV3UserControllerGetRolesPut(xAccessToken)
 
-
+Returns the list of role names assigned to the currently authenticated user.
 
 ### Example
 ```dart
@@ -105,7 +105,7 @@ No authorization required
 # **aPIV3UserControllerGetUserInformationGet**
 > UserInformationDTO aPIV3UserControllerGetUserInformationGet(xAccessToken)
 
-
+Returns profile information (e.g., username, roles) for the currently authenticated user.
 
 ### Example
 ```dart
@@ -146,15 +146,15 @@ No authorization required
 # **aPIV3UserControllerLoginPut**
 > AccessToken aPIV3UserControllerLoginPut(xUser, xPassword)
 
-
+Authenticates a user with the supplied credentials and returns a new access token on success.
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = UserApi();
-final xUser = xUser_example; // String | 
-final xPassword = xPassword_example; // String | 
+final xUser = xUser_example; // String | The username, provided via the `x-user` HTTP header.
+final xPassword = xPassword_example; // String | The plain-text password, provided via the `x-password` HTTP header.
 
 try {
     final result = api_instance.aPIV3UserControllerLoginPut(xUser, xPassword);
@@ -168,8 +168,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xUser** | **String**|  | [optional] 
- **xPassword** | **String**|  | [optional] 
+ **xUser** | **String**| The username, provided via the `x-user` HTTP header. | [optional] 
+ **xPassword** | **String**| The plain-text password, provided via the `x-password` HTTP header. | [optional] 
 
 ### Return type
 
@@ -189,7 +189,7 @@ No authorization required
 # **aPIV3UserControllerLogoutPut**
 > aPIV3UserControllerLogoutPut(xAccessToken)
 
-
+Invalidates the access token of the currently authenticated user, effectively logging them out.
 
 ### Example
 ```dart
@@ -229,14 +229,14 @@ No authorization required
 # **aPIV3UserControllerTokenIsValidGet**
 > bool aPIV3UserControllerTokenIsValidGet(accessToken)
 
-
+Checks whether the supplied access token is still valid (not expired and not revoked).
 
 ### Example
 ```dart
 import 'package:openapi/api.dart';
 
 final api_instance = UserApi();
-final accessToken = accessToken_example; // String | 
+final accessToken = accessToken_example; // String | The access token to validate, provided via request header.
 
 try {
     final result = api_instance.aPIV3UserControllerTokenIsValidGet(accessToken);
@@ -250,7 +250,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **accessToken** | **String**|  | [optional] 
+ **accessToken** | **String**| The access token to validate, provided via request header. | [optional] 
 
 ### Return type
 

@@ -136,6 +136,19 @@
 					"lrd"
 				],
 				"allowcustomarguments": true
+			},
+			{
+				"label": "Translate",
+				"command": "python Translate.py",
+				"args": [],
+				"type": "shell",
+				"options": {
+					"cwd": "${workspaceFolder}/ConSurvFrontend/Other"
+				},
+				"aliases": [
+					"t"
+				],
+				"allowcustomarguments": true
 			}
 		]
 	},

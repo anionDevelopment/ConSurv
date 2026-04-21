@@ -16,7 +16,10 @@ class InsightsApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v3/InsightsController/GetRunningProcesses' operation and returns the [Response].
+  /// Returns information about all OS-level processes currently managed and monitored by the application.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -48,6 +51,8 @@ class InsightsApi {
     );
   }
 
+  /// Returns information about all OS-level processes currently managed and monitored by the application.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):

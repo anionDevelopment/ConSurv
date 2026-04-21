@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -40,7 +40,8 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
+     * Retrieves the full configuration details of a specific camera.
+     * @param cameraId The unique identifier of the camera to retrieve.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -102,6 +103,7 @@ export class CameraService extends BaseService {
     }
 
     /**
+     * Returns the list of all configured cameras visible to the current user.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -160,6 +162,7 @@ export class CameraService extends BaseService {
     }
 
     /**
+     * Creates a new camera with default name and RTSP address and returns its generated identifier.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -218,8 +221,9 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
-     * @param filename 
+     * Downloads the raw bytes of a specific recorded video file for a given camera.
+     * @param cameraId The unique identifier of the camera that owns the video.
+     * @param filename The filename of the recorded video to download.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -274,7 +278,8 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
+     * Returns the latest preview image (as raw bytes) for the specified camera.
+     * @param cameraId The unique identifier of the camera whose preview should be retrieved.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -336,8 +341,9 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
-     * @param filename 
+     * Returns a preview thumbnail image for the specified recorded video file of a camera.
+     * @param cameraId The unique identifier of the camera that owns the video.
+     * @param filename The filename of the recorded video for which the preview is requested.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -392,6 +398,7 @@ export class CameraService extends BaseService {
     }
 
     /**
+     * Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -440,7 +447,8 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
+     * Permanently removes the specified camera and all associated data.
+     * @param cameraId The unique identifier of the camera to remove.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -499,8 +507,9 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
-     * @param filename 
+     * Permanently deletes a specific recorded video file belonging to the given camera.
+     * @param cameraId The unique identifier of the camera that owns the video.
+     * @param filename The filename of the recorded video to delete.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -555,8 +564,9 @@ export class CameraService extends BaseService {
     }
 
     /**
-     * @param cameraId 
-     * @param oNVIFCommandDTO 
+     * Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+     * @param cameraId The unique identifier of the target camera.
+     * @param oNVIFCommandDTO The ONVIF command to execute, including its type and parameters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -620,8 +630,9 @@ export class CameraService extends BaseService {
     }
 
     /**
+     * Updates the properties of an existing camera using the values provided in the request body.
      * @param xAccessToken Access Token
-     * @param updateCameraDTO 
+     * @param updateCameraDTO The DTO containing the updated camera properties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

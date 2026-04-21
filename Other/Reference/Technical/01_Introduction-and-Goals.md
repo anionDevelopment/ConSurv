@@ -2,7 +2,7 @@
 
 ## Overview
 
-ConSurv claims to be a useful ip-camaera-organization-system.
+ConSurv claims to be a useful ip-camera-organization-system.
 
 ## Quality goals
 

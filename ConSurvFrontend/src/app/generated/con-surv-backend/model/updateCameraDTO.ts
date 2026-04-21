@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -11,6 +11,9 @@ import { RecordModeDTO } from './recordModeDTO';
 import { VideoInformationDTO } from './videoInformationDTO';
 
 
+/**
+ * Data transfer object that carries the fields a client wishes to update for an existing camera.
+ */
 export interface UpdateCameraDTO { 
     cameraId?: string | null;
     name?: string | null;

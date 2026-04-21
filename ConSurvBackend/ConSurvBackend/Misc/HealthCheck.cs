@@ -17,6 +17,13 @@ namespace ConSurvBackend.Core.Misc
         private readonly IPersistence _Persistence;
         private readonly IBusinessLogicService _CameraService;
         private readonly IInitializationService _InitializationService;
+        /// <summary>
+        /// Initializes a new instance of <see cref="HealthCheck"/> with all required dependencies.
+        /// </summary>
+        /// <param name="logger">Logger used for diagnostic output during health checks.</param>
+        /// <param name="persistence">Persistence layer whose availability is checked.</param>
+        /// <param name="cameraSchedulerService">Service used to enumerate cameras and query their availability.</param>
+        /// <param name="initializationService">Service that tracks the application initialization state.</param>
         public HealthCheck(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraSchedulerService, IInitializationService initializationService)
         {
             this._Logger = logger;
@@ -24,6 +31,7 @@ namespace ConSurvBackend.Core.Misc
             this._CameraService = cameraSchedulerService;
             this._InitializationService = initializationService;
         }
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             return Tools.CheckHealthAsync(this._Logger, () =>

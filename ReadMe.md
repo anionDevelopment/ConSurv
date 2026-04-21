@@ -25,7 +25,7 @@
 
 ## Development
 
-## Additional information
+### Additional information
 
 See the codeunit-specific information:
 
@@ -34,7 +34,7 @@ See the codeunit-specific information:
 - [ConSurvClient](./ConSurvClient/ReadMe.md)
 - [ConSurv](./ConSurvx/ReadMe.md)
 
-## Run locally
+### Run locally
 
 In short:
 
@@ -69,13 +69,23 @@ Open `https://consurv.test.local` in your browser. You should see the homepage o
 
 You can now also use the REST-API directly. The graphical API-documentation should be available on `https://consurv.test.local/API`.
 
-## Contribue
+## Reference
+
+The OpenDMS-reference can be found [here](./Other/Resources/Reference/Reference.md).
+
+## Build
+
+This product requires to use `scbuildcodeunits` implemented/provided by [ScriptCollection](https://github.com/anionDev/ScriptCollection) to build the project.
+
+## Changelog
+
+See the [Changelog-folder](./Other/Resources/Changelog).
+
+## Contribute
 
 Contributions are always welcome.
 
 See [Contributing.md](./Contributing.md) for information about that.
-
-This product has the contribution-requirements defines by [DefaultOpenSourceContributionProcess](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/Contributing/DefaultOpenSourceContributionProcess/DefaultOpenSourceContributionProcess.md).
 
 ## Repository-structure
 

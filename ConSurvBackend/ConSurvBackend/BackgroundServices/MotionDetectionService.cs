@@ -15,6 +15,15 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IRuntimeData _RuntimeData;
         private readonly IInitializationService<CommandlineParameter> _InitializationService;
         private readonly CommandlineParameter _CommandlineParameter;
+        /// <summary>
+        /// Initializes a new instance of <see cref="MotionDetectionService"/> with all required dependencies.
+        /// </summary>
+        /// <param name="constants">Application-wide constants used to retrieve the execution mode.</param>
+        /// <param name="logger">Logger passed to the base class.</param>
+        /// <param name="cameraService">Service used to enumerate all configured cameras.</param>
+        /// <param name="runtimeData">Shared in-memory runtime state containing camera previews.</param>
+        /// <param name="initializationService">Service that tracks the application initialization state.</param>
+        /// <param name="commandlineParameter">Parsed command-line parameters; used to check whether a real run is active.</param>
         public MotionDetectionService(IApplicationConstants constants, IGRYLog logger, IBusinessLogicService cameraService, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, CommandlineParameter commandlineParameter) : base(constants.ExecutionMode, logger)
         {
             this.Enabled = true;
@@ -25,6 +34,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._CommandlineParameter = commandlineParameter;
         }
 
+        /// <inheritdoc />
         protected override void Run()
         {
             if (this._CommandlineParameter.RealRun && this._InitializationService.GetInitializationState() is Initialized)
@@ -35,6 +45,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
             }
         }
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing)

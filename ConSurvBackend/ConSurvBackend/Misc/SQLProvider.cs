@@ -3,8 +3,20 @@ using GRYLibrary.Core.Misc;
 
 namespace ConSurvBackend.Core.Miscellaneous
 {
+    /// <summary>
+    /// Base class for database-type-specific SQL providers that load SQL scripts from embedded
+    /// resources located under <c>ConSurvBackend.Core.Resources.Database.{databaseType}.Statements</c>.
+    /// </summary>
     public abstract class SQLProvider : AbstractSQLProvider, ISQLProvider
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="SQLProvider"/> and configures the embedded-resource
+        /// namespace for the given database type.
+        /// </summary>
+        /// <param name="databaseType">
+        /// The database-type folder name (e.g. <c>MariaDB</c>, <c>PostgreSQL</c>) used to build the
+        /// embedded-resource path.
+        /// </param>
         public SQLProvider(string databaseType) : base($"ConSurvBackend.Core.Resources.Database.{databaseType}.Statements") { }
 
         public string GetScriptAddAccessToken()

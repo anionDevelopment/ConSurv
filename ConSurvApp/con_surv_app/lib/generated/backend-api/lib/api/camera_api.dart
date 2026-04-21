@@ -16,10 +16,14 @@ class CameraApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/Camera/{cameraId}' operation and returns the [Response].
+  /// Retrieves the full configuration details of a specific camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera to retrieve.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -51,9 +55,12 @@ class CameraApi {
     );
   }
 
+  /// Retrieves the full configuration details of a specific camera.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera to retrieve.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -72,7 +79,10 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/Cameras' operation and returns the [Response].
+  /// Returns the list of all configured cameras visible to the current user.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -104,6 +114,8 @@ class CameraApi {
     );
   }
 
+  /// Returns the list of all configured cameras visible to the current user.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -126,7 +138,10 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'POST /API/v3/CameraController/CreateCamera' operation and returns the [Response].
+  /// Creates a new camera with default name and RTSP address and returns its generated identifier.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -158,6 +173,8 @@ class CameraApi {
     );
   }
 
+  /// Creates a new camera with default name and RTSP address and returns its generated identifier.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
@@ -177,12 +194,17 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/DownloadVideo/{cameraId}/{filename}' operation and returns the [Response].
+  /// Downloads the raw bytes of a specific recorded video file for a given camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video to download.
   Future<Response> aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/DownloadVideo/{cameraId}/{filename}'
@@ -210,11 +232,15 @@ class CameraApi {
     );
   }
 
+  /// Downloads the raw bytes of a specific recorded video file for a given camera.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video to download.
   Future<void> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename,) async {
     final response = await aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -222,10 +248,14 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/GetPreview/{cameraId}' operation and returns the [Response].
+  /// Returns the latest preview image (as raw bytes) for the specified camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera whose preview should be retrieved.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -257,9 +287,12 @@ class CameraApi {
     );
   }
 
+  /// Returns the latest preview image (as raw bytes) for the specified camera.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera whose preview should be retrieved.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -278,12 +311,17 @@ class CameraApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}' operation and returns the [Response].
+  /// Returns a preview thumbnail image for the specified recorded video file of a camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video for which the preview is requested.
   Future<Response> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}'
@@ -311,11 +349,15 @@ class CameraApi {
     );
   }
 
+  /// Returns a preview thumbnail image for the specified recorded video file of a camera.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video for which the preview is requested.
   Future<void> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename,) async {
     final response = await aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -323,7 +365,9 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'GET /API/v3/CameraController/ListVideos' operation and returns the [Response].
+  /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
   Future<Response> aPIV3CameraControllerListVideosGetWithHttpInfo() async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/ListVideos';
@@ -349,6 +393,7 @@ class CameraApi {
     );
   }
 
+  /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
   Future<void> aPIV3CameraControllerListVideosGet() async {
     final response = await aPIV3CameraControllerListVideosGetWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -356,10 +401,14 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'DELETE /API/v3/CameraController/RemoveCamera/{cameraId}' operation and returns the [Response].
+  /// Permanently removes the specified camera and all associated data.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera to remove.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -391,9 +440,12 @@ class CameraApi {
     );
   }
 
+  /// Permanently removes the specified camera and all associated data.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera to remove.
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
@@ -404,12 +456,17 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'DELETE /API/v3/CameraController/RemoveVideo/{cameraId}/{filename}' operation and returns the [Response].
+  /// Permanently deletes a specific recorded video file belonging to the given camera.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video to delete.
   Future<Response> aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RemoveVideo/{cameraId}/{filename}'
@@ -437,11 +494,15 @@ class CameraApi {
     );
   }
 
+  /// Permanently deletes a specific recorded video file belonging to the given camera.
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the camera that owns the video.
   ///
   /// * [String] filename (required):
+  ///   The filename of the recorded video to delete.
   Future<void> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename,) async {
     final response = await aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename,);
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -449,12 +510,17 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'POST /API/v3/CameraController/RunONVIFCommand/{cameraId}' operation and returns the [Response].
+  /// Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the target camera.
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
+  ///   The ONVIF command to execute, including its type and parameters.
   Future<Response> aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RunONVIFCommand/{cameraId}'
@@ -481,11 +547,15 @@ class CameraApi {
     );
   }
 
+  /// Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+  ///
   /// Parameters:
   ///
   /// * [String] cameraId (required):
+  ///   The unique identifier of the target camera.
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
+  ///   The ONVIF command to execute, including its type and parameters.
   Future<void> aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
     final response = await aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId,  oNVIFCommandDTO: oNVIFCommandDTO, );
     if (response.statusCode >= HttpStatus.badRequest) {
@@ -493,13 +563,17 @@ class CameraApi {
     }
   }
 
-  /// Performs an HTTP 'PUT /API/v3/CameraController/UpdateCamera' operation and returns the [Response].
+  /// Updates the properties of an existing camera using the values provided in the request body.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
+  ///   The DTO containing the updated camera properties.
   Future<Response> aPIV3CameraControllerUpdateCameraPutWithHttpInfo(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/UpdateCamera';
@@ -527,12 +601,15 @@ class CameraApi {
     );
   }
 
+  /// Updates the properties of an existing camera using the values provided in the request body.
+  ///
   /// Parameters:
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
+  ///   The DTO containing the updated camera properties.
   Future<void> aPIV3CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
     final response = await aPIV3CameraControllerUpdateCameraPutWithHttpInfo(xAccessToken,  updateCameraDTO: updateCameraDTO, );
     if (response.statusCode >= HttpStatus.badRequest) {

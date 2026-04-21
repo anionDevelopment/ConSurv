@@ -28,6 +28,17 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IAuditLog _AuditLog;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _Configuration;
         private readonly IDictionary<string/*camera-id*/, DateTime> _LastUsedScreenshotsForMotionDetection = new Dictionary<string, DateTime>();
+        /// <summary>
+        /// Initializes a new instance of <see cref="HousekeepingService"/> with all required dependencies.
+        /// </summary>
+        /// <param name="constants">Application-wide constants, including the data-folder path.</param>
+        /// <param name="logger">Logger used by the base class and this service.</param>
+        /// <param name="timeService">Service used to obtain the current date/time.</param>
+        /// <param name="initializationService">Service that tracks the application initialization state.</param>
+        /// <param name="cameraService">Service used to retrieve camera data.</param>
+        /// <param name="runtimeData">Shared in-memory runtime state (previews, fallback picture, etc.).</param>
+        /// <param name="config">Persisted configuration containing retention and motion-detection settings.</param>
+        /// <param name="auditLog">Audit log used to record detected motion events.</param>
         public HousekeepingService(IApplicationConstants constants, IGRYLog logger, ITimeService timeService, IInitializationService<CommandlineParameter> initializationService, IBusinessLogicService cameraService, IRuntimeData runtimeData, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> config, IAuditLog auditLog) : base(constants.ExecutionMode, logger)
         {
             this._Constants = constants;
@@ -41,6 +52,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._RuntimeData = runtimeData;
         }
 
+        /// <inheritdoc />
         protected override void Run()
         {
             if (this._InitializationService.GetInitializationState() is Initialized)
@@ -103,12 +115,28 @@ namespace ConSurvBackend.Core.BackgroundServices
             }
         }
 
+        /// <summary>
+        /// Determines whether two screenshot files represent different frames by comparing their
+        /// perceptual hash similarity against the configured motion-detection threshold.
+        /// </summary>
+        /// <param name="screenshot1">Absolute path of the first (older) screenshot file.</param>
+        /// <param name="screenshot2">Absolute path of the second (newer) screenshot file.</param>
+        /// <returns>
+        /// <see langword="true"/> if the similarity score is below the configured
+        /// <see cref="CodeUnitSpecificConfiguration.MotionDetectionThreshold"/>; otherwise
+        /// <see langword="false"/>.
+        /// </returns>
         private bool ImagesAreDifferent(string screenshot1, string screenshot2)
         {
             return Misc.Utilities.CalculateImageSimilarity(File.ReadAllBytes(screenshot1), File.ReadAllBytes(screenshot2)) < this._Configuration.ApplicationSpecificConfiguration.MotionDetectionThreshold;
         }
 
 
+        /// <summary>
+        /// Reads the most recent screenshot for every configured camera and stores it as the
+        /// current preview in the shared runtime data.  If no screenshot exists for a camera,
+        /// the fallback picture is used instead.
+        /// </summary>
         private void UpdatePreviewsInRuntimeData()
         {
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
@@ -143,6 +171,10 @@ namespace ConSurvBackend.Core.BackgroundServices
             }
         }
 
+        /// <summary>
+        /// Deletes outdated screenshot files for all cameras, keeping only screenshots that are
+        /// newer than 20 seconds or are among the two most recent files.
+        /// </summary>
         private void CleanupScreenshots()
         {
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
@@ -167,6 +199,10 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
             }
         }
+        /// <summary>
+        /// Deletes recording files that have exceeded the configured video retention period
+        /// (<see cref="CodeUnitSpecificConfiguration.VideoRetentionPeriod"/>) for all cameras.
+        /// </summary>
         private void CleanupRecordings()
         {
             foreach (Camera camera in this._CameraService.GetAllCameras().Values)
@@ -189,6 +225,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
             }
         }
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing)

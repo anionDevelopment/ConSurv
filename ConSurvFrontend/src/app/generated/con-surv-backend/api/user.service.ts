@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -38,9 +38,10 @@ export class UserService extends BaseService {
     }
 
     /**
+     * Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
      * @param xAccessToken Access Token
-     * @param user 
-     * @param password 
+     * @param user The desired username, provided via request header.
+     * @param password The plain-text password that will be hashed before storage, provided via request header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -101,6 +102,7 @@ export class UserService extends BaseService {
     }
 
     /**
+     * Returns the list of role names assigned to the currently authenticated user.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -159,6 +161,7 @@ export class UserService extends BaseService {
     }
 
     /**
+     * Returns profile information (e.g., username, roles) for the currently authenticated user.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -217,8 +220,9 @@ export class UserService extends BaseService {
     }
 
     /**
-     * @param xUser 
-     * @param xPassword 
+     * Authenticates a user with the supplied credentials and returns a new access token on success.
+     * @param xUser The username, provided via the &#x60;x-user&#x60; HTTP header.
+     * @param xPassword The plain-text password, provided via the &#x60;x-password&#x60; HTTP header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -276,6 +280,7 @@ export class UserService extends BaseService {
     }
 
     /**
+     * Invalidates the access token of the currently authenticated user, effectively logging them out.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -331,7 +336,8 @@ export class UserService extends BaseService {
     }
 
     /**
-     * @param accessToken 
+     * Checks whether the supplied access token is still valid (not expired and not revoked).
+     * @param accessToken The access token to validate, provided via request header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

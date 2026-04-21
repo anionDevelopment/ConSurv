@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v3.0.20 API documentation",
+    "title": "ConSurvBackend v3.0.21 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,7 +12,7 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v3.0.20"
+    "version": "v3.0.21"
   },
   "paths": {
     "/API/v3/CameraController/GetPreview/{cameraId}": {
@@ -20,10 +20,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Returns the latest preview image (as raw bytes) for the specified camera.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera whose preview should be retrieved.",
             "required": true,
             "schema": {
               "type": "string"
@@ -71,6 +73,7 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Creates a new camera with default name and RTSP address and returns its generated identifier.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -111,10 +114,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Permanently removes the specified camera and all associated data.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera to remove.",
             "required": true,
             "schema": {
               "type": "string"
@@ -142,6 +147,7 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Updates the properties of an existing camera using the values provided in the request body.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -154,6 +160,7 @@
           }
         ],
         "requestBody": {
+          "description": "The DTO containing the updated camera properties.",
           "content": {
             "application/json": {
               "schema": {
@@ -184,10 +191,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Retrieves the full configuration details of a specific camera.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera to retrieve.",
             "required": true,
             "schema": {
               "type": "string"
@@ -232,6 +241,7 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Returns the list of all configured cameras visible to the current user.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -281,10 +291,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the target camera.",
             "required": true,
             "schema": {
               "type": "string"
@@ -292,6 +304,7 @@
           }
         ],
         "requestBody": {
+          "description": "The ONVIF command to execute, including its type and parameters.",
           "content": {
             "application/json": {
               "schema": {
@@ -322,6 +335,7 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.",
         "responses": {
           "200": {
             "description": "OK"
@@ -334,10 +348,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Returns a preview thumbnail image for the specified recorded video file of a camera.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera that owns the video.",
             "required": true,
             "schema": {
               "type": "string"
@@ -346,6 +362,7 @@
           {
             "name": "filename",
             "in": "path",
+            "description": "The filename of the recorded video for which the preview is requested.",
             "required": true,
             "schema": {
               "type": "string"
@@ -364,10 +381,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Downloads the raw bytes of a specific recorded video file for a given camera.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera that owns the video.",
             "required": true,
             "schema": {
               "type": "string"
@@ -376,6 +395,7 @@
           {
             "name": "filename",
             "in": "path",
+            "description": "The filename of the recorded video to download.",
             "required": true,
             "schema": {
               "type": "string"
@@ -394,10 +414,12 @@
         "tags": [
           "Camera"
         ],
+        "summary": "Permanently deletes a specific recorded video file belonging to the given camera.",
         "parameters": [
           {
             "name": "cameraId",
             "in": "path",
+            "description": "The unique identifier of the camera that owns the video.",
             "required": true,
             "schema": {
               "type": "string"
@@ -406,6 +428,7 @@
           {
             "name": "filename",
             "in": "path",
+            "description": "The filename of the recorded video to delete.",
             "required": true,
             "schema": {
               "type": "string"
@@ -460,6 +483,7 @@
         "tags": [
           "Insights"
         ],
+        "summary": "Returns information about all OS-level processes currently managed and monitored by the application.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -572,10 +596,12 @@
         "tags": [
           "Streaming"
         ],
+        "summary": "Serves an HLS stream segment or playlist file for the specified stream.\r\nValidates the filename format, resolves the file from the camera's fragment folder,\r\nand returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for\r\n`.m3u8` playlists, `video/MP2T` for `.ts` segments).",
         "parameters": [
           {
             "name": "streamId",
             "in": "path",
+            "description": "The identifier of the stream (typically a camera ID).",
             "required": true,
             "schema": {
               "type": "string"
@@ -584,6 +610,7 @@
           {
             "name": "filename",
             "in": "path",
+            "description": "The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$`).",
             "required": true,
             "schema": {
               "type": "string"
@@ -611,10 +638,12 @@
         "tags": [
           "User"
         ],
+        "summary": "Authenticates a user with the supplied credentials and returns a new access token on success.",
         "parameters": [
           {
             "name": "x-user",
             "in": "header",
+            "description": "The username, provided via the `x-user` HTTP header.",
             "schema": {
               "type": "string"
             }
@@ -622,6 +651,7 @@
           {
             "name": "x-password",
             "in": "header",
+            "description": "The plain-text password, provided via the `x-password` HTTP header.",
             "schema": {
               "type": "string"
             }
@@ -656,10 +686,12 @@
         "tags": [
           "User"
         ],
+        "summary": "Creates a new user account with the given credentials and assigns the admin role to it.\r\nRequires the caller to hold the admin role.",
         "parameters": [
           {
             "name": "user",
             "in": "header",
+            "description": "The desired username, provided via request header.",
             "schema": {
               "type": "string"
             }
@@ -667,6 +699,7 @@
           {
             "name": "password",
             "in": "header",
+            "description": "The plain-text password that will be hashed before storage, provided via request header.",
             "schema": {
               "type": "string"
             }
@@ -693,6 +726,7 @@
         "tags": [
           "User"
         ],
+        "summary": "Invalidates the access token of the currently authenticated user, effectively logging them out.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -716,10 +750,12 @@
         "tags": [
           "User"
         ],
+        "summary": "Checks whether the supplied access token is still valid (not expired and not revoked).",
         "parameters": [
           {
             "name": "accessToken",
             "in": "header",
+            "description": "The access token to validate, provided via request header.",
             "schema": {
               "type": "string"
             }
@@ -754,6 +790,7 @@
         "tags": [
           "User"
         ],
+        "summary": "Returns the list of role names assigned to the currently authenticated user.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -803,6 +840,7 @@
         "tags": [
           "User"
         ],
+        "summary": "Returns profile information (e.g., username, roles) for the currently authenticated user.",
         "parameters": [
           {
             "name": "X-AccessToken",
@@ -880,7 +918,8 @@
             "$ref": "#/components/schemas/RecordStateDTO"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object that exposes the full observable state of a camera to clients,\r\ncombining its identity, video source, recording configuration, and current record state."
       },
       "ONVIFCommandDTO": {
         "type": "object",
@@ -890,7 +929,8 @@
             "nullable": true
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object used to deserialize an ONVIF PTZ command received from a client.\r\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype."
       },
       "RecordModeDTO": {
         "type": "object",
@@ -900,7 +940,8 @@
             "nullable": true
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode as its type name\r\nfor serialization and deserialization across the API boundary."
       },
       "RecordStateDTO": {
         "type": "object",
@@ -910,7 +951,8 @@
             "nullable": true
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState of a camera\r\nas its type name for transport over the API."
       },
       "UpdateCameraDTO": {
         "type": "object",
@@ -930,7 +972,8 @@
             "$ref": "#/components/schemas/RecordModeDTO"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object that carries the fields a client wishes to update for an existing camera."
       },
       "UserInformationDTO": {
         "type": "object",
@@ -950,7 +993,8 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object that exposes basic identity and role information about\r\na logged-in user to the client."
       },
       "VideoInformationDTO": {
         "type": "object",
@@ -963,7 +1007,8 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Data transfer object for the video-source configuration of a camera,\r\ncarrying only the fields that are safe to expose over the API."
       }
     }
   },

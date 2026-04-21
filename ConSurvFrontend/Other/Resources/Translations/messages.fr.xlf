@@ -1,6 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en">
   <file id="ngi18n" original="ng.template">
+    <unit id="admin.menu.title">
+      <notes>
+        <note category="location">src/app/modules/admin-area/admin-area-container/admin-area-container.component.html:4,5</note>
+      </notes>
+      <segment>
+        <source>Admin-menu:</source>
+      </segment>
+    </unit>
     <unit id="admindashobardtitle">
       <notes>
         <note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:3,4</note>
@@ -8,6 +16,46 @@
       <segment state="translated">
         <source>Admin dashboard</source>
         <target>Tableau de bord Admin</target>
+      </segment>
+    </unit>
+    <unit id="admin.settings.title">
+      <notes>
+        <note category="location">src/app/modules/admin-area/admin-settings/admin-settings.component.html:3,4</note>
+      </notes>
+      <segment>
+        <source>Settings</source>
+      </segment>
+    </unit>
+    <unit id="admin.user.works">
+      <notes>
+        <note category="location">src/app/modules/admin-area/user/user.component.html:2,3</note>
+      </notes>
+      <segment>
+        <source>user works!</source>
+      </segment>
+    </unit>
+    <unit id="admin.users-list.title">
+      <notes>
+        <note category="location">src/app/modules/admin-area/users-list/users-list.component.html:3,4</note>
+      </notes>
+      <segment>
+        <source>users</source>
+      </segment>
+    </unit>
+    <unit id="hint.not-authenticated.message">
+      <notes>
+        <note category="location">src/app/modules/home-page/hint-not-authenticated/hint-not-authenticated.component.html:2,4</note>
+      </notes>
+      <segment>
+        <source>You must be authenticated for this action.</source>
+      </segment>
+    </unit>
+    <unit id="hint.not-authorized.message">
+      <notes>
+        <note category="location">src/app/modules/home-page/hint-not-authorized/hint-not-authorized.component.html:2,4</note>
+      </notes>
+      <segment>
+        <source>You are not authorized for this action.</source>
       </segment>
     </unit>
     <unit id="siteNotFound">
@@ -44,6 +92,289 @@
       <segment state="translated">
         <source>Password</source>
         <target>Mot de passe</target>
+      </segment>
+    </unit>
+    <unit id="login.button.submit">
+      <notes>
+        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:18,21</note>
+      </notes>
+      <segment>
+        <source>Login</source>
+      </segment>
+    </unit>
+    <unit id="camera-preview.img.alt">
+      <notes>
+        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:4</note>
+      </notes>
+      <segment>
+        <source>preview</source>
+      </segment>
+    </unit>
+    <unit id="camera-preview.img.alt.large">
+      <notes>
+        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:8</note>
+      </notes>
+      <segment>
+        <source>large preview</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.preview">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:5,6</note>
+      </notes>
+      <segment>
+        <source>Preview</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.id">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:11,12</note>
+      </notes>
+      <segment>
+        <source>Id</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.name">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:15,16</note>
+      </notes>
+      <segment>
+        <source>Name</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.mode">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:23,24</note>
+      </notes>
+      <segment>
+        <source>Mode</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.state">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:30,31</note>
+      </notes>
+      <segment>
+        <source>State</source>
+      </segment>
+    </unit>
+    <unit id="cameras-list.header.options">
+      <notes>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:36,37</note>
+      </notes>
+      <segment>
+        <source>Options</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.title">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:1,3</note>
+      </notes>
+      <segment>
+        <source>Edit camera</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.name">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:6,7</note>
+      </notes>
+      <segment>
+        <source>Name</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.name.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Example: Entrance-camera</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.stream-url">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:13,14</note>
+      </notes>
+      <segment>
+        <source>Stream-URL</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.stream-url.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:14</note>
+      </notes>
+      <segment>
+        <source>Example: rtsp://example.com</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:19,22</note>
+      </notes>
+      <segment>
+        <source>Can receive ONVIF-commands.</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.record-mode">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:24,25</note>
+      </notes>
+      <segment>
+        <source>Record-mode</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.record-mode.no-recording">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:26,27</note>
+      </notes>
+      <segment>
+        <source>No recording</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.record-mode.record-always">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:27,28</note>
+      </notes>
+      <segment>
+        <source>Record always</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.record-mode.record-on-movements">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:28,30</note>
+      </notes>
+      <segment>
+        <source>Record on movements</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.button.cancel">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:35,36</note>
+      </notes>
+      <segment>
+        <source>Cancel</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.button.save">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:36,38</note>
+      </notes>
+      <segment>
+        <source>Save</source>
+      </segment>
+    </unit>
+    <unit id="record-mode-indicator.tooltip.no-recording">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:4</note>
+      </notes>
+      <segment>
+        <source>No recording</source>
+      </segment>
+    </unit>
+    <unit id="record-mode-indicator.tooltip.record-always">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Record always</source>
+      </segment>
+    </unit>
+    <unit id="record-mode-indicator.tooltip.record-on-movements">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:10</note>
+      </notes>
+      <segment>
+        <source>Record on movements</source>
+      </segment>
+    </unit>
+    <unit id="record-mode-indicator.tooltip.unknown">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Record-mode unknown</source>
+      </segment>
+    </unit>
+    <unit id="record-mode-indicator.tooltip.not-available">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:19</note>
+      </notes>
+      <segment>
+        <source>Record-state not available</source>
+      </segment>
+    </unit>
+    <unit id="record-state-indicator.tooltip.currently-recording">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:4</note>
+      </notes>
+      <segment>
+        <source>Currently recording</source>
+      </segment>
+    </unit>
+    <unit id="record-state-indicator.tooltip.idle">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:7</note>
+      </notes>
+      <segment>
+        <source>Idle</source>
+      </segment>
+    </unit>
+    <unit id="record-state-indicator.tooltip.not-available">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:10</note>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:19</note>
+      </notes>
+      <segment>
+        <source>Not available</source>
+      </segment>
+    </unit>
+    <unit id="record-state-indicator.tooltip.unknown">
+      <notes>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Record-state unknown</source>
+      </segment>
+    </unit>
+    <unit id="user.menu.title">
+      <notes>
+        <note category="location">src/app/modules/user-area/user-area-container/user-area-container.component.html:4,5</note>
+      </notes>
+      <segment>
+        <source>User-menu:</source>
+      </segment>
+    </unit>
+    <unit id="user.dashboard.greeting">
+      <notes>
+        <note category="location">src/app/modules/user-area/user-dashboard/user-dashboard.component.html:3,4</note>
+      </notes>
+      <segment>
+        <source>Hello<ph id="0" equiv="INTERPOLATION" disp="{{this.userName}}" />
+        </source>
+      </segment>
+    </unit>
+    <unit id="user.icon.menu.greeting">
+      <notes>
+        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:7,8</note>
+      </notes>
+      <segment>
+        <source>Hello<ph id="0" equiv="INTERPOLATION" disp="{{this.userName}}" />
+        </source>
+      </segment>
+    </unit>
+    <unit id="user.icon.menu.logout">
+      <notes>
+        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:8,10</note>
+      </notes>
+      <segment>
+        <source>Logout</source>
+      </segment>
+    </unit>
+    <unit id="user.settings.title">
+      <notes>
+        <note category="location">src/app/modules/user-area/user-settings/user-settings.component.html:3,4</note>
+      </notes>
+      <segment>
+        <source>settings</source>
       </segment>
     </unit>
   </file>

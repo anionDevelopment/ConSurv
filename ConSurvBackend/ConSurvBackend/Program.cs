@@ -63,6 +63,13 @@ namespace ConSurvBackend.Core
         {
             return new Program().MainImplementation(commandlineArguments);
         }
+
+        /// <summary>
+        /// Configures and starts the API server with all required services, middleware, and background workers.
+        /// Handles both productive runs (with real initialization and background services) and test/mock runs.
+        /// </summary>
+        /// <param name="commandlineArguments">The raw command-line arguments passed to the application entry point.</param>
+        /// <returns>An integer exit code; <c>0</c> indicates success.</returns>
         internal int MainImplementation(string[] commandlineArguments)
         {
             bool runningUsually = false;
@@ -123,6 +130,7 @@ namespace ConSurvBackend.Core
                     };
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthorizationConfiguration = new AutSRConfiguration();
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HeaderServiceConfiguration = new HeaderServiceConfiguration();
+                    //TODO use cmd.Verbose-value to overwrite the verbose-value defined in the grylog-config
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = initializationInformation.ApplicationConstants.Environment is Productive ? TimeSpan.FromMinutes(10) : TimeSpan.FromSeconds(10);
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./AuditLog.log"), true);
@@ -280,6 +288,9 @@ namespace ConSurvBackend.Core
         }
 
 
+        /// <summary>
+        /// Requests a graceful shutdown of the running API server and blocks until it has fully stopped.
+        /// </summary>
         internal void Stop()
         {
             GUtilities.AssertNotNull(this._Constants, nameof(this._Constants)).CancellationTokenSource.Cancel();

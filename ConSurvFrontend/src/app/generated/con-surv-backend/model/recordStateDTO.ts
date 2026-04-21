@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.20 API documentation
+ * ConSurvBackend v3.0.21 API documentation
  *
  * 
  *
@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState of a camera  as its type name for transport over the API.
+ */
 export interface RecordStateDTO { 
     recordState?: string | null;
 }
