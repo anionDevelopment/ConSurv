@@ -38,8 +38,5 @@ namespace ConSurvBackend.Core.Configuration
 
         [Option(nameof(InitialEnableEndpointMetricsValue), Required = false, Default = false)]
         public bool InitialEnableEndpointMetricsValue { get; set; }
-
-        [Option(nameof(Verbose), Required = false, Default = true)]//TODO set default to false
-        public bool Verbose { get; set; }
     }
 }

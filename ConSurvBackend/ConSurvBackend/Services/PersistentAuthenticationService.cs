@@ -1,10 +1,10 @@
 ﻿using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.Crypto;
 using GRYLibrary.Core.Exceptions;
-using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,9 @@ namespace ConSurvBackend.Core.Services
     {
         private readonly IAuthenticationServicePersistence<User> _Persistence;
         private readonly ITimeService _TimeService;
-        private readonly IGRYLog _Log;
+        private readonly IServerLog _Log;
 
-        public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence, IGRYLog log)
+        public PersistentAuthenticationService(ITimeService timeService, IAuthenticationServicePersistence<User> persistence, IServerLog log)
         {
             this._Persistence = persistence;
             this._TimeService = timeService;
@@ -30,7 +30,7 @@ namespace ConSurvBackend.Core.Services
         {
             AccessToken token = this._Persistence.GetAccessToken(accessToken);
             DateTimeOffset now = this._TimeService.GetCurrentTimeInUTCAsDateTimeOffset();
-            this._Log.Log($"Checked if access token {accessToken} is valid. Expired moment: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(token.ExpiredMoment, false)}; now: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(now, false)}");
+            this._Log.Logger.Log($"Checked if access token {accessToken} is valid. Expired moment: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(token.ExpiredMoment, false)}; now: {GRYLibrary.Core.Misc.Utilities.FormatTimestamp(now, false)}");
             return now < token.ExpiredMoment;
         }
 

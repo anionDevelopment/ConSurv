@@ -2,8 +2,9 @@
 using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
+using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using System;
 
@@ -20,12 +21,12 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _Configuration;
         private static readonly Random _Random = new Random();
 
-        public ExampleDataCreator(IPersistence persistence, IAuthenticationService<User> authenticationService, ITimeService timeService, IGeneralLogger logger, IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> configuration)
+        public ExampleDataCreator(IPersistence persistence, IAuthenticationService<User> authenticationService, ITimeService timeService, IServerLog log, IApplicationConstants<CodeUnitSpecificConstants> constants, IBusinessLogicService cameraService, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> configuration)
         {
             this._Persistence = persistence;
             this._AuthenticationService = authenticationService;
             this._TimeService = timeService;
-            this._Logger = logger;
+            this._Logger = log.Logger;
             this._Constants = constants;
             this._CameraService = cameraService;
             this._Configuration = configuration;

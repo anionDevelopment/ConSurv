@@ -2,6 +2,7 @@
 using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.ExecutePrograms.WaitingStates;
@@ -21,9 +22,9 @@ namespace ConSurvBackend.Core.Services
         private readonly IApplicationConstants<CodeUnitSpecificConstants> _Constants;
         private readonly ISet<ProcessInformation> _Processes;
         private readonly CommandlineParameter _CMDParameter;    
-        public ProcessManager(IGRYLog log, IApplicationConstants<CodeUnitSpecificConstants> applicationConstants,CommandlineParameter cmdParameter)
+        public ProcessManager(IServerLog log, IApplicationConstants<CodeUnitSpecificConstants> applicationConstants,CommandlineParameter cmdParameter)
         {
-            this._Log = log;
+            this._Log = log.Logger;
             this._Constants = applicationConstants;
             this._Processes = new HashSet<ProcessInformation>();
             this._CMDParameter = cmdParameter;
@@ -31,7 +32,7 @@ namespace ConSurvBackend.Core.Services
         public ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, Action<Process>? configureProcess, string purpose, string purposeForLogfile, bool runSynchronous)
         {
             bool verbose = false;
-            if (_CMDParameter.Verbose)
+            if (_CMDParameter.EnforceVerbose)
             {
                 verbose= true;
             }
@@ -61,7 +62,7 @@ namespace ConSurvBackend.Core.Services
                 Argument = argument,
                 WorkingDirectory = workingDirectory,
                 LogFile = logfile,
-                Verbosity = verbose ? Verbosity.Full : Verbosity.Normal
+                Verbosity = verbose ? Verbosity.Full : Verbosity.Normal,
             })
             {
                 LogObject = eLog

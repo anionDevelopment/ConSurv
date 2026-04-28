@@ -37,6 +37,10 @@ namespace ConSurvBackend.Core.Configuration
         public IExceptionManagerConfiguration ConfigurationForExceptionManagerMiddleware { get; set; }
         public IHeaderServiceConfiguration HeaderServiceConfiguration { get; set; }
         public IGRYLogConfiguration AuditLogConfiguration { get; set; }
+        public IGRYLogConfiguration HousekeepingServiceLogConfiguration { get; set; }
+        public IGRYLogConfiguration CameraManagementServiceLogConfiguration { get; set; }
+        public IGRYLogConfiguration MetricsServiceLogConfiguration { get; set; }
+        public IGRYLogConfiguration MotionDetectionServiceLogConfiguration { get; set; }
         public IDatabasePersistenceConfiguration DatabasePersistenceConfiguration { get; set; }
         public IAuthenticationServiceSettings AuthenticationServiceSettings { get; set; }
     }

@@ -3,6 +3,7 @@ using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
@@ -23,13 +24,13 @@ namespace ConSurvBackend.Core.Services
         private readonly IExampleDataCreator _ExampleDataCreator;
         private readonly IPersistence _Persistence;
         private InitializationState _InitializationState = new Uninitialized();
-        public InitializationService(IAuthenticationService authenticationService, IGeneralLogger generalLogger, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IPersistence persistence)
+        public InitializationService(IAuthenticationService authenticationService, IServerLog log, IBusinessLogicService cameraService, IApplicationConstants<CodeUnitSpecificConstants> constants, IExampleDataCreator exampleDataCreator, IPersistence persistence)
         {
             this._AuthenticationService = authenticationService;
             this._Persistence = persistence;
             this._Constants = constants;
             this._CameraService = cameraService;
-            this._GeneralLogger = generalLogger;
+            this._GeneralLogger = log.Logger;
             this._ExampleDataCreator = exampleDataCreator;
         }
 
