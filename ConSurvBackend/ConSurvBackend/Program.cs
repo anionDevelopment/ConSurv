@@ -2,6 +2,7 @@ using ConSurvBackend.Core.BackgroundServices;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Misc;
+using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.CommonRoutes;
@@ -21,13 +22,13 @@ using GRYLibrary.Core.APIServer.Services.CredH;
 using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.APIServer.Services.Trans;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.Logging.GRYLogger;
 using GRYLibrary.Core.Misc;
 using GRYLibrary.Core.Misc.FilePath;
@@ -37,7 +38,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GUtilities = GRYLibrary.Core.Misc.Utilities;
 
 namespace ConSurvBackend.Core
@@ -52,12 +52,12 @@ namespace ConSurvBackend.Core
         internal IGRYLog _Log;
 
         internal IHostApplicationLifetime? _HostApplicationLifetime;
-        internal APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter> _Constants;
+        internal APIServerConfiguration<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>? _Constants;
 
-        internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; }
+        internal Action<FunctionalInformation<CodeUnitSpecificConstants, CodeUnitSpecificConfiguration, CommandlineParameter>> SetupMocks { get; set; } = (_) => { };
         public Program()
         {
-            this._Log = GRYLog.Create();
+            this._Log = new InitialLog().Logger;
         }
         internal static int Main(string[] commandlineArguments)
         {
@@ -78,8 +78,11 @@ namespace ConSurvBackend.Core
             {
                 apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
                 {
+                    if (initializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
-
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
@@ -110,7 +113,6 @@ namespace ConSurvBackend.Core
                         DatabaseConnectionString = initializationInformation.CommandlineParameter.InitialDatabaseConnectionString ?? "insert your connection-string here",
                         DatabaseType = initializationInformation.CommandlineParameter.InitialDatabaseType ?? "Transient",
                     };
-                    bool runServices = !runningUsually;
                     bool verbose = initializationInformation.ApplicationConstants.Environment is not Productive;
 
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuthenticationConfiguration = new AuthSConfiguration()
@@ -133,7 +135,11 @@ namespace ConSurvBackend.Core
                     //TODO use cmd.Verbose-value to overwrite the verbose-value defined in the grylog-config
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.TimeInUTC = false;
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.VideoLength = initializationInformation.ApplicationConstants.Environment is Productive ? TimeSpan.FromMinutes(10) : TimeSpan.FromSeconds(10);
-                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./AuditLog.log"), true);
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./Audit.log"));
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./HousekeepingService.log"));
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./CameraManagementService.log"));
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./MetricsService.log"));
+                    initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration = GRYLogConfiguration.GetCommonConfiguration(AbstractFilePath.FromString("./MotionDetectionService.log"));
                     initializationInformation.InitialApplicationConfiguration.ApplicationSpecificConfiguration.ConfigurationForDLoggingMiddleware = new DRequestLoggingConfiguration()
                     {
                         NotLoggedRoutes = new HashSet<string>()
@@ -151,19 +157,56 @@ namespace ConSurvBackend.Core
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
                     string initialCameraAddressesJoined = string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses ?? new List<string>());
-                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {{{initialCameraAddressesJoined}}}", LogLevel.Debug);
+                    this._Log.Log($"{nameof(initializationInformation.CommandlineParameter.InitialCameraAddresses)}: {{{initialCameraAddressesJoined}}}", LogLevel.Debug);//this is initial log
                 };
                 apiServerConfiguration.SetFunctionalInformationAction = (functionalInformation) => //technical initialization for every run
                 {
-                    functionalInformation.Logger.Log("Run initialization...");
-                    IGRYLog logger = functionalInformation.Logger;
-                    IAuditLog auditLog = new AuditLog(functionalInformation.InitializationInformation.ApplicationConstants.ExecutionMode.Accept(new GetLoggerVisitor(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder(), "AuditLog", GRYLog.Create(), logger.Configuration.LogTargets.Where(t => t.LogLevels.Contains(LogLevel.Debug)).Any())));
+                    this._Log = functionalInformation.Logger;//this is now server.log
+                    this._Log.Log("Run initialization...");
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
+
+                    var auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        auditLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
-                    this._Log = logger;
+
+                    var houseKeepingLog = new HousekeepingServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        houseKeepingLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHousekeepingServiceLog>(houseKeepingLog);
+
+                    var cameraManagementServiceLog = new CameraManagementServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        cameraManagementServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementServiceLog>(cameraManagementServiceLog);
+
+                    var metricsServiceLog = new MetricsServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        metricsServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsServiceLog>(metricsServiceLog);
+
+                    var motionDetectionServiceLog = new MotionDetectionServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
+                    {
+                        motionDetectionServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
+                    }
+                    functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMotionDetectionServiceLog>(motionDetectionServiceLog);
+
                     bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != null && functionalInformation.InitializationInformation.CommandlineParameter.RealRun && functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient";
                     if (useDatabase)
                     {
-                        logger.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
+                        _Log.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, PersistentAuthenticationService>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<IPersistence>());
@@ -187,7 +230,7 @@ namespace ConSurvBackend.Core
                     }
                     else
                     {
-                        logger.Log($"Run transient.", LogLevel.Information);
+                        _Log.Log($"Run transient.", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServiceSettings>(new AuthenticationServiceSettings()
                         {
@@ -247,9 +290,8 @@ namespace ConSurvBackend.Core
                         this._Constants = apiServerConfiguration;
                         if (runningUsually)
                         {
-                            IGeneralLogger logger = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGeneralLogger>());
+                            this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IServerLog>()).Logger;
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
-                            this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IGRYLog>());
                             this._BusinessLogicService = functionalInformationForWebApplication.WebApplication.Services.GetService<IBusinessLogicService>();
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
                             functionalInformationForWebApplication.RunAsync = this.RunAsync;

@@ -1,4 +1,5 @@
 ﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.Internals;
 using ConSurvBackend.Core.Model.RecordModes;
@@ -11,7 +12,6 @@ using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.ExecutePrograms;
 using GRYLibrary.Core.ExecutePrograms.WaitingStates;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
-using GRYLibrary.Core.Logging.GRYLogger;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,6 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IInitializationService<CommandlineParameter> _InitializationService;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly CommandlineParameter _CommandlineParameter;
-        private readonly IGRYLog _Log;
         private const ushort _LastUsedPortRangeBegin = 10_000;
         private ushort _LastUsedPort = _LastUsedPortRangeBegin;
         /// <summary>
@@ -47,7 +46,7 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <param name="log">Logger used for camera-management-specific log entries.</param>
         /// <param name="constants">Application-wide constants including data-folder paths.</param>
         /// <param name="codeUnitSpecificConfiguration">Persisted configuration containing video settings.</param>
-        public CameraManagementService(IBusinessLogicService businessLogicService, IGRYLog logger, CommandlineParameter commandlineParameter, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IGRYLog log, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger)
+        public CameraManagementService(IBusinessLogicService businessLogicService, ICameraManagementServiceLog logger, CommandlineParameter commandlineParameter, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger.Logger)
         {
             this._CameraService = businessLogicService;
             this._CommandlineParameter = commandlineParameter;
@@ -56,7 +55,6 @@ namespace ConSurvBackend.Core.BackgroundServices
             this.AdditionalDelay = TimeSpan.FromSeconds(2);
             this._InitializationService = initializationService;
             this._RuntimeData = runtimeData;
-            this._Log = log;
             this._Constants = constants;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
         }
@@ -64,20 +62,20 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <inheritdoc />
         protected override void Run()
         {
-            this._Log.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
+            this._Logger.Log($"ManageCameras", Microsoft.Extensions.Logging.LogLevel.Trace, false, true, true, true, true, () =>
             {
                 if (this._InitializationService.GetInitializationState() is Initialized)
                 {
                     ICollection<Camera> cameras = this._CameraService.GetAllCameras().Values;
-                    this._Log.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Logger.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     foreach (Model.Base.Camera camera in cameras)
                     {
-                        this._Log.Log($"ManageCamera_{camera.Id}", Microsoft.Extensions.Logging.LogLevel.Debug, false, true, true, true, true, () => this.ManageCamera(camera));
+                        this._Logger.Log($"ManageCamera_{camera.Id}", Microsoft.Extensions.Logging.LogLevel.Debug, false, true, true, true, true, () => this.ManageCamera(camera));
                     }
                 }
                 else
                 {
-                    this._Log.Log($"Wait until initialization is finished...", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Logger.Log($"Wait until initialization is finished...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 }
             });
         }
@@ -99,7 +97,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 catch (Exception e)
                 {
-                    this._Log.Log($"Error while managing camera {camera.Id}.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Logger.Log($"Error while managing camera {camera.Id}.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
                     NotAvailable newState = new NotAvailable(camera);
                     this._RuntimeData.SetCameraInternals(newState);
                     newState.Accept(new EnsureDesiredConditionIsApplied(currentState, this));
@@ -291,7 +289,7 @@ paths:
                 string configFile = Path.Combine(mediaMTXFolder, configFileName);
                 GRYLibrary.Core.Misc.Utilities.EnsureFileExists(configFile);
                 File.WriteAllText(configFile, configurationFileContent);
-                this._Log.Log($"Content of {configFile}:\n\""+File.ReadAllText(configFile,new UTF8Encoding(false))+"\"");
+                this._Logger.Log($"Content of {configFile}:\n\""+File.ReadAllText(configFile,new UTF8Encoding(false))+"\"");
                 mediaMTXProcess = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, configFileName, mediaMTXFolder, null, $"Media-hub for {camera.Id}", $"MediaHubFor{camera.Id}", false);
                 url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
                 Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -343,7 +341,7 @@ paths:
                 ffmpegProcessResult = ffmpegProcess;
                 mediaMTXProcessResult = mediaMTXProcess;
                 this._RuntimeData.SetCameraInternals(new Available(camera, ffmpegProcessResult, mediaMTXProcessResult, url));
-                this._Log.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
+                this._Logger.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
 
                 //take screenshots (means: previews)
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
@@ -388,7 +386,7 @@ paths:
             }
             catch (Exception e)
             {
-                this._Log.Log($"Could not start media-processes for {camera.Id}", e);
+                this._Logger.Log($"Could not start media-processes for {camera.Id}", e);
                 ffmpegProcessResult = null;
                 mediaMTXProcessResult = null;
                 url = null;

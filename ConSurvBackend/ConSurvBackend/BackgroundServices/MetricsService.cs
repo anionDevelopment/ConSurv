@@ -1,8 +1,8 @@
 ﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.Logging.GRYLogger;
 using Prometheus;
 using System;
 
@@ -19,7 +19,7 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <param name="constants">Application-wide constants used to retrieve the execution mode.</param>
         /// <param name="logger">Logger passed to the base class.</param>
         /// <param name="cameraService">Service used to query the rate of available cameras.</param>
-        public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IGRYLog logger, IBusinessLogicService cameraService) : base(constants.ExecutionMode, logger)
+        public MetricsService(IApplicationConstants<CodeUnitSpecificConstants> constants, IMetricsServiceLog logger, IBusinessLogicService cameraService) : base(constants.ExecutionMode, logger.Logger)
         {
             this.Enabled = true;
             this.AdditionalDelay = TimeSpan.FromMinutes(1);

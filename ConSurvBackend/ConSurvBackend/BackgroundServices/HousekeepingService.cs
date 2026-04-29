@@ -1,14 +1,15 @@
 ﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Model;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
-using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,7 +40,7 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <param name="runtimeData">Shared in-memory runtime state (previews, fallback picture, etc.).</param>
         /// <param name="config">Persisted configuration containing retention and motion-detection settings.</param>
         /// <param name="auditLog">Audit log used to record detected motion events.</param>
-        public HousekeepingService(IApplicationConstants constants, IGRYLog logger, ITimeService timeService, IInitializationService<CommandlineParameter> initializationService, IBusinessLogicService cameraService, IRuntimeData runtimeData, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> config, IAuditLog auditLog) : base(constants.ExecutionMode, logger)
+        public HousekeepingService(IApplicationConstants constants, IHousekeepingServiceLog logger, ITimeService timeService, IInitializationService<CommandlineParameter> initializationService, IBusinessLogicService cameraService, IRuntimeData runtimeData, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> config, IAuditLog auditLog) : base(constants.ExecutionMode, logger.Logger)
         {
             this._Constants = constants;
             this._CameraService = cameraService;
@@ -107,7 +108,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                         this._LastUsedScreenshotsForMotionDetection[camera.Id] = creationDate1;
                         if (this.ImagesAreDifferent(screenshot1, screenshot2))
                         {
-                            this._AuditLog.AuditLogger.Log($"Motion detected for camera '{camera.Name}'. (Camera-id: {camera.Id})");
+                            this._AuditLog.Logger.Log($"Motion detected for camera '{camera.Name}'. (Camera-id: {camera.Id})");
                             //TODO raise event
                         }
                     }

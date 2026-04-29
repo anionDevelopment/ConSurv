@@ -3,6 +3,7 @@ using ConSurvBackend.Core.Services;
 using ConSurvBackend.Tests.TestUtilities;
 using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -23,7 +24,7 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
         {
             DatabaseTestFrameworkTemplate databaseTestFramework = this.GetDatabaseTestFramework();
             ITimeService timeService = new TimeService();
-            IGRYLog logger = GeneralLogger.CreateUsingConsole();
+            IServerLog logger = ServerLog.GetTransientLog();
             Mock<IDatabasePersistenceConfiguration> databasePersistenceConfigurationMock = new Mock<IDatabasePersistenceConfiguration>(MockBehavior.Strict) ;
             databasePersistenceConfigurationMock.SetupGet(m => m.DatabaseConnectionString).Returns(databaseTestFramework.ConnectionString);
             IPersistence result = new DatabasePersistence(databaseTestFramework.GenericDatabaseInteractor().Accept(new GetConSurvDatabaseInteractorVisitor()), timeService, logger, databasePersistenceConfigurationMock.Object);

@@ -1,10 +1,10 @@
 ﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
-using GRYLibrary.Core.Logging.GRYLogger;
 using System;
 
 namespace ConSurvBackend.Core.BackgroundServices
@@ -24,7 +24,7 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <param name="runtimeData">Shared in-memory runtime state containing camera previews.</param>
         /// <param name="initializationService">Service that tracks the application initialization state.</param>
         /// <param name="commandlineParameter">Parsed command-line parameters; used to check whether a real run is active.</param>
-        public MotionDetectionService(IApplicationConstants constants, IGRYLog logger, IBusinessLogicService cameraService, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, CommandlineParameter commandlineParameter) : base(constants.ExecutionMode, logger)
+        public MotionDetectionService(IApplicationConstants constants, IMotionDetectionServiceLog logger, IBusinessLogicService cameraService, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, CommandlineParameter commandlineParameter) : base(constants.ExecutionMode, logger.Logger)
         {
             this.Enabled = true;
             this.AdditionalDelay = TimeSpan.FromSeconds(2);

@@ -52,8 +52,8 @@ if [[ -n "${InitialVerboseValue}" ]]; then
     argument+=" --InitialVerboseValue $InitialVerboseValue"
 fi
 
-if [[ -n "${Verbose}" ]]; then
-    argument+=" --Verbose"
+if [[ "${EnforceVerbose}" == "true" ]]; then
+    argument+=" --EnforceVerbose true"
 fi
 
 if [ -z ${DoNotHostFrontend+x} ]; then

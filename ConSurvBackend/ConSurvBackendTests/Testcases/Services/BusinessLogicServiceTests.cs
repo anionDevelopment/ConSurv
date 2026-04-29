@@ -7,15 +7,15 @@ using System;
 using GRYLibrary.Core.Misc;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Services.Init;
 using GRYLibrary.Core.APIServer.Services.OtherServices;
 using GRYLibrary.Core.APIServer.ExecutionModes;
-using GRYLibrary.Core.APIServer.ConcreteEnvironments;
 using GRYLibrary.Core.APIServer.Services.Res;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.Logging.GRYLogger;
+using GRYLibrary.Core.APIServer.Services.Logger;
+using GRYLibrary.Core.APIServer;
 
 namespace ConSurvBackend.Tests.Testcases.Services
 {
@@ -32,12 +32,13 @@ namespace ConSurvBackend.Tests.Testcases.Services
                     RegistrationIsEnabled = registrationIsEnabled
                 }
             };
-            IGRYLog logger = GeneralLogger.CreateUsingConsole();
-            IAuditLog auditLog = new AuditLog(GeneralLogger.CreateUsingConsole());
+            ApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), TestRun.Instance, ConSurvBackend.Core.Misc.Utilities.GetEnvironmentTargetType(), new CodeUnitSpecificConstants());
+            constants.BaseFolder = APIServer<CodeUnitSpecificConstants, PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>, CommandlineParameter>.GetDefaultBaseFolder(constants, true);
+            IServerLog logger = new ServerLog(new GRYLogConfiguration(true), constants.GetLogFolder());
+            IAuditLog auditLog = new AuditLog(new GRYLogConfiguration(true), constants.GetLogFolder());
             (TransientPersistence, ISet<IDisposable>) databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence.Item1;
             persistence.Reset();
-            IApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), RunProgram.Instance, QualityCheck.Instance, new CodeUnitSpecificConstants());
             IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence, logger);
             IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
             IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());

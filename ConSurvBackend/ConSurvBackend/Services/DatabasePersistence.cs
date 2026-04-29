@@ -4,6 +4,7 @@ using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Database;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.APIServer.Utilities.InitializationStates;
 using GRYLibrary.Core.Logging.GRYLogger;
@@ -26,11 +27,11 @@ namespace ConSurvBackend.Core.Services
         private readonly IDatabasePersistenceConfiguration _Configuration;
         public InitializationState InitializationState { get; private set; }
 
-        public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IGRYLog log, IDatabasePersistenceConfiguration configuration)
+        public DatabasePersistence(IConSurvDatabaseInteractor database, ITimeService timeService, IServerLog log, IDatabasePersistenceConfiguration configuration)
         {
             this._TimeService = timeService;
             this._Database = database;
-            this._Log = log;
+            this._Log = log.Logger;
             this._SQLProvider = database.GetSQLProvider();
             this.InitializationState = new Uninitialized();
             this._Configuration = configuration;

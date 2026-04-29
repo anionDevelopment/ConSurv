@@ -9,6 +9,7 @@ using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.Crypto;
@@ -35,10 +36,10 @@ namespace ConSurvBackend.Core.Services
         private readonly IRuntimeData _RuntimeData;
         private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
 
-        public BusinessLogicService(IPersistence persistence, IGRYLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants)
+        public BusinessLogicService(IPersistence persistence, IServerLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants)
         {
             this._Persistence = persistence;
-            this._Log = log;
+            this._Log = log.Logger;
             this._TimeService = timeService;
             this._AuthenticationService = authenticationService;
             this._RandomnessProvider = randomnessProvider;
@@ -54,7 +55,7 @@ namespace ConSurvBackend.Core.Services
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCameras()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
-            this._AuditLog.AuditLogger.Log($"Created camera {camera.Id}.", LogLevel.Information);
+            this._AuditLog.Logger.Log($"Created camera {camera.Id}.", LogLevel.Information);
             return camera.Id;
         }
 
@@ -114,7 +115,7 @@ namespace ConSurvBackend.Core.Services
             Camera camera = this.GetCameraById(cameraId);
             camera.RecordMode = new NoRecording();
             this._Persistence.RemoveCamera(cameraId);
-            this._AuditLog.AuditLogger.Log($"Removed camera {camera.Id}.", LogLevel.Information);
+            this._AuditLog.Logger.Log($"Removed camera {camera.Id}.", LogLevel.Information);
         }
 
         /// <inheritdoc />
@@ -123,7 +124,7 @@ namespace ConSurvBackend.Core.Services
             //TODO check permission
             this._Persistence.UpdateCamera(camera);
             camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RuntimeData));
-            this._AuditLog.AuditLogger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done
+            this._AuditLog.Logger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done
         }
 
         /// <inheritdoc />
@@ -160,7 +161,7 @@ namespace ConSurvBackend.Core.Services
             {
                 User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
                 this._AuthenticationService.AddUserTyped(newUser);
-                this._AuditLog.AuditLogger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
+                this._AuditLog.Logger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
                 return newUser.Id;
             }
         }
@@ -193,7 +194,7 @@ namespace ConSurvBackend.Core.Services
         /// <inheritdoc />
         public void EnsureUserHasRole(string userId, string roleId)
         {
-            this._AuditLog.AuditLogger.Log($"Add role with id {roleId} to user with id {userId}...", LogLevel.Information);
+            this._AuditLog.Logger.Log($"Add role with id {roleId} to user with id {userId}...", LogLevel.Information);
             this._AuthenticationService.EnsureUserHasRole(userId, roleId);
             //TODO add information about why and by whom this was done
         }
@@ -201,7 +202,7 @@ namespace ConSurvBackend.Core.Services
         /// <inheritdoc />
         public void EnsureUserDoesNotHaveRole(string userId, string roleId)
         {
-            this._AuditLog.AuditLogger.Log($"Unassign role with id {roleId} from user with id {userId}.", LogLevel.Information);
+            this._AuditLog.Logger.Log($"Unassign role with id {roleId} from user with id {userId}.", LogLevel.Information);
             this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
             //TODO add information about why and by whom this was done to auditlog
         }
@@ -226,7 +227,7 @@ namespace ConSurvBackend.Core.Services
                 string cameraId = new DirectoryInfo(folder).Name;
                 List<string> list = new List<string>();
                 string recordingsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings");
-                foreach (string file in Directory.GetFiles(folder))
+                foreach (string file in Directory.GetFiles(recordingsFolder))
                 {
                     list.Add(file);
                 }
