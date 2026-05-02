@@ -216,7 +216,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                         .GetFiles(recordingsFolder)
                         .Where(file => file.EndsWith(".mp4"))
                         .Select(f => new { File = f, Timestamp = File.GetCreationTimeUtc(f) })
-                        .Where(f => f.Timestamp < (now - _Configuration.ApplicationSpecificConfiguration.VideoRetentionPeriod))
+                        .Where(f => f.Timestamp < (now - this._Configuration.ApplicationSpecificConfiguration.VideoRetentionPeriod))
                         .Select(f => f.File)
                         .ToList();
                     foreach (string fileToDelete in filesToDelete)

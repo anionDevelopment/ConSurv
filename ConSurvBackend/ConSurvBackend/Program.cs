@@ -80,7 +80,7 @@ namespace ConSurvBackend.Core
                 {
                     if (initializationInformation.CommandlineParameter.EnforceVerbose)
                     {
-                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                        this._Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
@@ -165,7 +165,7 @@ namespace ConSurvBackend.Core
                     this._Log.Log("Run initialization...");
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
-                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                        this._Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
 
                     AuditLog auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
@@ -206,7 +206,7 @@ namespace ConSurvBackend.Core
                     bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != null && functionalInformation.InitializationInformation.CommandlineParameter.RealRun && functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient";
                     if (useDatabase)
                     {
-                        _Log.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
+                        this._Log.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, PersistentAuthenticationService>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<IPersistence>());
@@ -230,7 +230,7 @@ namespace ConSurvBackend.Core
                     }
                     else
                     {
-                        _Log.Log($"Run transient.", LogLevel.Information);
+                        this._Log.Log($"Run transient.", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServiceSettings>(new AuthenticationServiceSettings()
                         {
