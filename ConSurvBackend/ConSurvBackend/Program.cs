@@ -168,35 +168,35 @@ namespace ConSurvBackend.Core
                         _Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
 
-                    var auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    AuditLog auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         auditLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
 
-                    var houseKeepingLog = new HousekeepingServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    HousekeepingServiceLog houseKeepingLog = new HousekeepingServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         houseKeepingLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHousekeepingServiceLog>(houseKeepingLog);
 
-                    var cameraManagementServiceLog = new CameraManagementServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    CameraManagementServiceLog cameraManagementServiceLog = new CameraManagementServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         cameraManagementServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementServiceLog>(cameraManagementServiceLog);
 
-                    var metricsServiceLog = new MetricsServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    MetricsServiceLog metricsServiceLog = new MetricsServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         metricsServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsServiceLog>(metricsServiceLog);
 
-                    var motionDetectionServiceLog = new MotionDetectionServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    MotionDetectionServiceLog motionDetectionServiceLog = new MotionDetectionServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         motionDetectionServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
