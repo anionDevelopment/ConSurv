@@ -16,6 +16,7 @@ import Player from 'video.js/dist/types/player';
 export class CameraComponent implements OnInit, OnDestroy {
 
   player: Player | null = null;
+  camera: CameraDTO | null = null;
   private destroy$ = new Subject<void>();
   options: any = {}
   information: string = "";
@@ -50,6 +51,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   }
 
   initializeCamera(camera: CameraDTO): void {
+    this.camera = camera;
     const apiURL: string = this.configurationService.getAPIURL();
     this.information = `Camera ${camera.name} (Id: ${camera.cameraId})`;
     const majorVersion = 3;//TODO retrieve this from package.json
@@ -66,5 +68,13 @@ export class CameraComponent implements OnInit, OnDestroy {
     }, function onPlayerReady() {
       //nothing to do
     });
+  }
+
+  sendONVIFCommand(commandType: string, direction: string): void {
+    if (!this.camera?.cameraId) { return; }
+    this.cameraService.aPIV3CameraControllerRunONVIFCommandCameraIdPost(
+      this.camera.cameraId,
+      { commandType, direction }
+    ).pipe(takeUntil(this.destroy$)).subscribe();
   }
 }

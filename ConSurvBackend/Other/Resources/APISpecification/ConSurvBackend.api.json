@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v3.0.22 API documentation",
+    "title": "ConSurvBackend v3.0.23 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,7 +12,7 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v3.0.22"
+    "version": "v3.0.23"
   },
   "paths": {
     "/API/v3/CameraController/GetPreview/{cameraId}": {
@@ -927,6 +927,10 @@
           "commandType": {
             "type": "string",
             "nullable": true
+          },
+          "direction": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1003,8 +1007,21 @@
             "type": "string",
             "nullable": true
           },
-          "isONVIFCamera": {
+          "supportsPTZViaONVIF": {
             "type": "boolean"
+          },
+          "onvifPort": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "onvifUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "onvifPassword": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false,

@@ -47,7 +47,9 @@ namespace ConSurvBackend.Core.Misc
         private OnvifCamera GetOnvifCamera()
         {
             var info = this._Camera.VideoInformation;
-            var account = new Account(info.ONVIFHost!, info.ONVIFUsername!, info.ONVIFPassword!);
+            var host = new Uri(info.StreamURL).Host;
+            var accountHost = info.ONVIFPort.HasValue ? $"{host}:{info.ONVIFPort}" : host;
+            var account = new Account(accountHost, info.ONVIFUsername!, info.ONVIFPassword!);
             return OnvifCamera.CreateAsync(account, null).GetAwaiter().GetResult()
                 ?? throw new InvalidOperationException($"Could not connect to ONVIF camera {this._Camera}");
         }

@@ -21,6 +21,11 @@ void main() {
       // TODO
     });
 
+    // String direction
+    test('to test the property `direction`', () async {
+      // TODO
+    });
+
 
   });
 

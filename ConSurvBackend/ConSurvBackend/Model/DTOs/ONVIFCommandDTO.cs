@@ -1,4 +1,6 @@
 ﻿using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
 using System;
 
 namespace ConSurvBackend.Core.Model.DTOs
@@ -9,7 +11,8 @@ namespace ConSurvBackend.Core.Model.DTOs
     /// </summary>
     public class ONVIFCommandDTO
     {
-        public string CommandType {  get; set; }
+        public string CommandType { get; set; }
+        public string Direction { get; set; }
 
         /// <summary>
         /// Converts this DTO into the appropriate <see cref="ONVIFCommand"/> subtype
@@ -29,18 +32,32 @@ namespace ConSurvBackend.Core.Model.DTOs
             };
         }
 
-        private Move LoadZoom()
+        private Move LoadMove()
         {
-            Move result = new Move();
-            //TODO set properties
-            return result;
+            return new Move
+            {
+                MoveDirection = this.Direction switch
+                {
+                    nameof(MoveUp) => (MoveDirection)new MoveUp(),
+                    nameof(MoveDown) => new MoveDown(),
+                    nameof(MoveLeft) => new MoveLeft(),
+                    nameof(MoveRight) => new MoveRight(),
+                    _ => throw new NotSupportedException($"Unsupported move direction: '{this.Direction}'"),
+                }
+            };
         }
 
-        private Zoom LoadMove()
+        private Zoom LoadZoom()
         {
-            Zoom result = new Zoom();
-            //TODO set properties
-            return result;
+            return new Zoom
+            {
+                ZoomDirection = this.Direction switch
+                {
+                    nameof(ZoomIn) => (ZoomDirection)new ZoomIn(),
+                    nameof(ZoomOut) => new ZoomOut(),
+                    _ => throw new NotSupportedException($"Unsupported zoom direction: '{this.Direction}'"),
+                }
+            };
         }
     }
 }

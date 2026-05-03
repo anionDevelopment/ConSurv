@@ -21,8 +21,23 @@ void main() {
       // TODO
     });
 
-    // bool isONVIFCamera
-    test('to test the property `isONVIFCamera`', () async {
+    // bool supportsPTZViaONVIF
+    test('to test the property `supportsPTZViaONVIF`', () async {
+      // TODO
+    });
+
+    // int onvifPort
+    test('to test the property `onvifPort`', () async {
+      // TODO
+    });
+
+    // String onvifUsername
+    test('to test the property `onvifUsername`', () async {
+      // TODO
+    });
+
+    // String onvifPassword
+    test('to test the property `onvifPassword`', () async {
       // TODO
     });
 

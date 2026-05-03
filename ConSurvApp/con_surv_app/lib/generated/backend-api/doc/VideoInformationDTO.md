@@ -9,7 +9,10 @@ import 'package:openapi/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **streamURL** | **String** |  | [optional] 
-**isONVIFCamera** | **bool** |  | [optional] 
+**supportsPTZViaONVIF** | **bool** |  | [optional] 
+**onvifPort** | **int** |  | [optional] 
+**onvifUsername** | **String** |  | [optional] 
+**onvifPassword** | **String** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -42,6 +42,9 @@ components:
         commandType:
           nullable: true
           type: string
+        direction:
+          nullable: true
+          type: string
       type: object
     RecordModeDTO:
       additionalProperties: false
@@ -99,11 +102,21 @@ components:
       description: "Data transfer object for the video-source configuration of a camera,\r\
         \ncarrying only the fields that are safe to expose over the API."
       properties:
-        isONVIFCamera:
-          type: boolean
+        onvifPassword:
+          nullable: true
+          type: string
+        onvifPort:
+          format: int32
+          nullable: true
+          type: integer
+        onvifUsername:
+          nullable: true
+          type: string
         streamURL:
           nullable: true
           type: string
+        supportsPTZViaONVIF:
+          type: boolean
       type: object
 info:
   contact:
@@ -114,8 +127,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v3.0.22 API documentation
-  version: v3.0.22
+  title: ConSurvBackend v3.0.23 API documentation
+  version: v3.0.23
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:

@@ -98,7 +98,7 @@ namespace ConSurvBackend.Core.Services
         public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
         {
             Camera camera = this.GetCameraById(cameraId);
-            if (camera.VideoInformation.IsONVIFCamera)
+            if (camera.VideoInformation.SupportsPTZViaONVIF)
             {
                 onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
             }

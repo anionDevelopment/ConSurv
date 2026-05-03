@@ -9,7 +9,10 @@ namespace ConSurvBackend.Core.Model.DTOs
     public class VideoInformationDTO
     {
         public string StreamURL { get; set; }
-        public bool IsONVIFCamera { get;  set; }
+        public bool SupportsPTZViaONVIF { get;  set; }
+        public int? ONVIFPort { get; set; }
+        public string? ONVIFUsername { get; set; }
+        public string? ONVIFPassword { get; set; }
 
         /// <summary>
         /// Converts this DTO back into a <see cref="VideoInformation"/> domain object.
@@ -20,7 +23,10 @@ namespace ConSurvBackend.Core.Model.DTOs
             return new VideoInformation()
             {
                 StreamURL = this.StreamURL,
-                IsONVIFCamera = this.IsONVIFCamera,
+                SupportsPTZViaONVIF = this.SupportsPTZViaONVIF,
+                ONVIFPort = this.ONVIFPort,
+                ONVIFUsername = this.ONVIFUsername,
+                ONVIFPassword = this.ONVIFPassword,
             };
         }
     }

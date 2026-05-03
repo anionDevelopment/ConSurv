@@ -4,5 +4,29 @@
         <div class="videocontainer">
             <video id="videoPlayer" class="video-js vjs-default-skin vjs-16-9" autoplay></video>
         </div>
+        <div class="ptz-controls" *ngIf="camera?.videoInformationDTO?.supportsPTZViaONVIF">
+            <div class="ptz-pad">
+                <button mat-icon-button class="ptz-up" (click)="sendONVIFCommand('Move', 'MoveUp')">
+                    <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button mat-icon-button class="ptz-left" (click)="sendONVIFCommand('Move', 'MoveLeft')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <button mat-icon-button class="ptz-right" (click)="sendONVIFCommand('Move', 'MoveRight')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+                <button mat-icon-button class="ptz-down" (click)="sendONVIFCommand('Move', 'MoveDown')">
+                    <mat-icon>arrow_downward</mat-icon>
+                </button>
+            </div>
+            <div class="zoom-controls">
+                <button mat-icon-button (click)="sendONVIFCommand('Zoom', 'ZoomIn')">
+                    <mat-icon>zoom_in</mat-icon>
+                </button>
+                <button mat-icon-button (click)="sendONVIFCommand('Zoom', 'ZoomOut')">
+                    <mat-icon>zoom_out</mat-icon>
+                </button>
+            </div>
+        </div>
     </app-user-area-container>
 </app-frame-work>

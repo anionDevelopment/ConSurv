@@ -14,21 +14,26 @@ class ONVIFCommandDTO {
   /// Returns a new [ONVIFCommandDTO] instance.
   ONVIFCommandDTO({
     this.commandType,
+    this.direction,
   });
 
   String? commandType;
 
+  String? direction;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is ONVIFCommandDTO &&
-    other.commandType == commandType;
+    other.commandType == commandType &&
+    other.direction == direction;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (commandType == null ? 0 : commandType!.hashCode);
+    (commandType == null ? 0 : commandType!.hashCode) +
+    (direction == null ? 0 : direction!.hashCode);
 
   @override
-  String toString() => 'ONVIFCommandDTO[commandType=$commandType]';
+  String toString() => 'ONVIFCommandDTO[commandType=$commandType, direction=$direction]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -36,6 +41,11 @@ class ONVIFCommandDTO {
       json[r'commandType'] = this.commandType;
     } else {
       json[r'commandType'] = null;
+    }
+    if (this.direction != null) {
+      json[r'direction'] = this.direction;
+    } else {
+      json[r'direction'] = null;
     }
     return json;
   }
@@ -60,6 +70,7 @@ class ONVIFCommandDTO {
 
       return ONVIFCommandDTO(
         commandType: mapValueOfType<String>(json, r'commandType'),
+        direction: mapValueOfType<String>(json, r'direction'),
       );
     }
     return null;
