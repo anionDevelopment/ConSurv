@@ -30,7 +30,7 @@ namespace ConSurvBackend.Core.Model.Base
             this.VideoInformation = new VideoInformation()
             {
                 Certificate = null,
-                IsONVIFCamera = false,
+                SupportsPTZViaONVIF = false,
                 StreamURL=$"rtsp://{name}"
             };
             this.RecordMode = new RecordAlways();

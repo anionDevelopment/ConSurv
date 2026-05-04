@@ -67,7 +67,7 @@ describe('EditCameraDialogComponent', () => {
               name: "cameraname",
               videoInformationDTO: {
                 streamURL: "rtsp://example.com/stream",
-                isONVIFCamera: true,
+                supportsPTZViaONVIF: true,
               },
               recordModeDTO: {
                 recordMode: "NoRecording"

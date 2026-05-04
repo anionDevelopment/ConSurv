@@ -18,7 +18,7 @@ export class EditCameraDialogComponent {
   form: FormGroup;
   nameFormControl: FormControl<string>;
   rtspstreamurlFormControl: FormControl<string>;
-  isonvifcameraFormControl: FormControl<boolean>;
+  supportsPTZViaONVIFFormControl: FormControl<boolean>;
   recordmodeFormControl: FormControl<RecordModeDTO>;
   recordmodeSelectFormControl: FormControl<string>;
   recordmode$: BehaviorSubject<RecordModeDTO>;
@@ -28,13 +28,13 @@ export class EditCameraDialogComponent {
     this.cameraData = data.camera;
     this.nameFormControl = new FormControl<any>(this.cameraData.name!);
     this.rtspstreamurlFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.streamURL!);
-    this.isonvifcameraFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.isONVIFCamera!);
+    this.supportsPTZViaONVIFFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.supportsPTZViaONVIF!);
     this.recordmodeFormControl = new FormControl<any>(this.cameraData.recordModeDTO!);
     this.recordmodeSelectFormControl = new FormControl<any>(this.cameraData.recordModeDTO!.recordMode);
     this.form = new FormGroup({
       name: this.nameFormControl,
       rtspstreamurl: this.rtspstreamurlFormControl,
-      isonvifcamera: this.isonvifcameraFormControl,
+      supportsPTZViaONVIF: this.supportsPTZViaONVIFFormControl,
       recordmode: this.recordmodeFormControl,
       recordmodeselect: this.recordmodeSelectFormControl,
     });
@@ -52,7 +52,7 @@ export class EditCameraDialogComponent {
       recordModeDTO: this.form.get('recordmode')!.value,
       videoInformationDTO: {
         streamURL: this.form.get('rtspstreamurl')!.value,
-        isONVIFCamera: this.form.get('isonvifcamera')!.value,
+        supportsPTZViaONVIF: this.form.get('supportsPTZViaONVIF')!.value,
       },
     };
     this.cameraService.aPIV3CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(

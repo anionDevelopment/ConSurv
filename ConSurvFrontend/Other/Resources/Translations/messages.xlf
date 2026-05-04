@@ -179,7 +179,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.name.placeholder">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:7</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:7,8</note>
       </notes>
       <segment>
         <source>Example: Entrance-camera</source>
@@ -187,7 +187,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.stream-url">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:13,14</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:14,15</note>
       </notes>
       <segment>
         <source>Stream-URL</source>
@@ -195,7 +195,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.stream-url.placeholder">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:14</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:15,16</note>
       </notes>
       <segment>
         <source>Example: rtsp://example.com</source>
@@ -203,7 +203,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.onvif">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:19,22</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:21,24</note>
       </notes>
       <segment>
         <source>Can receive ONVIF-commands.</source>
@@ -211,7 +211,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.record-mode">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:24,25</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:27,28</note>
       </notes>
       <segment>
         <source>Record-mode</source>
@@ -219,7 +219,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.no-recording">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:26,27</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:30,31</note>
       </notes>
       <segment>
         <source>No recording</source>
@@ -227,7 +227,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.record-always">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:27,28</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:32,33</note>
       </notes>
       <segment>
         <source>Record always</source>
@@ -235,7 +235,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.record-on-movements">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:28,30</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:34,36</note>
       </notes>
       <segment>
         <source>Record on movements</source>
@@ -243,7 +243,7 @@
     </unit>
     <unit id="edit-camera-dialog.button.cancel">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:35,36</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:41,42</note>
       </notes>
       <segment>
         <source>Cancel</source>
@@ -251,7 +251,7 @@
     </unit>
     <unit id="edit-camera-dialog.button.save">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:36,38</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:42,44</note>
       </notes>
       <segment>
         <source>Save</source>

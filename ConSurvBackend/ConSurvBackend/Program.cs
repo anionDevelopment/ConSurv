@@ -80,7 +80,7 @@ namespace ConSurvBackend.Core
                 {
                     if (initializationInformation.CommandlineParameter.EnforceVerbose)
                     {
-                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                        this._Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
@@ -165,38 +165,38 @@ namespace ConSurvBackend.Core
                     this._Log.Log("Run initialization...");
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
-                        _Log.Configuration.AddLogLevel(LogLevel.Debug);
+                        this._Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
 
-                    var auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    AuditLog auditLog = new AuditLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.AuditLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         auditLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuditLog>(auditLog);
 
-                    var houseKeepingLog = new HousekeepingServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    HousekeepingServiceLog houseKeepingLog = new HousekeepingServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.HousekeepingServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         houseKeepingLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHousekeepingServiceLog>(houseKeepingLog);
 
-                    var cameraManagementServiceLog = new CameraManagementServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    CameraManagementServiceLog cameraManagementServiceLog = new CameraManagementServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.CameraManagementServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         cameraManagementServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementServiceLog>(cameraManagementServiceLog);
 
-                    var metricsServiceLog = new MetricsServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    MetricsServiceLog metricsServiceLog = new MetricsServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MetricsServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         metricsServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
                     }
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IMetricsServiceLog>(metricsServiceLog);
 
-                    var motionDetectionServiceLog = new MotionDetectionServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
+                    MotionDetectionServiceLog motionDetectionServiceLog = new MotionDetectionServiceLog(functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.MotionDetectionServiceLogConfiguration, functionalInformation.InitializationInformation.ApplicationConstants.GetLogFolder());
                     if (functionalInformation.InitializationInformation.CommandlineParameter.EnforceVerbose)
                     {
                         motionDetectionServiceLog.Logger.Configuration.AddLogLevel(LogLevel.Debug);
@@ -206,7 +206,7 @@ namespace ConSurvBackend.Core
                     bool useDatabase = functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != null && functionalInformation.InitializationInformation.CommandlineParameter.RealRun && functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType != "Transient";
                     if (useDatabase)
                     {
-                        _Log.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
+                        this._Log.Log($"Run persistent using database \"{functionalInformation.PersistedAPIServerConfiguration.ApplicationSpecificConfiguration.DatabasePersistenceConfiguration.DatabaseType}\".", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationService<User>, PersistentAuthenticationService>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, DatabasePersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<IPersistence>());
@@ -230,7 +230,7 @@ namespace ConSurvBackend.Core
                     }
                     else
                     {
-                        _Log.Log($"Run transient.", LogLevel.Information);
+                        this._Log.Log($"Run transient.", LogLevel.Information);
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IPersistence, TransientPersistence>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServiceSettings>(new AuthenticationServiceSettings()
                         {

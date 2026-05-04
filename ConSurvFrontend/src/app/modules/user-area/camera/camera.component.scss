@@ -9,3 +9,30 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.ptz-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.ptz-pad {
+    display: grid;
+    grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down .";
+    grid-template-columns: 40px 40px 40px;
+    grid-template-rows: 40px 40px 40px;
+
+    .ptz-up    { grid-area: up; }
+    .ptz-left  { grid-area: left; }
+    .ptz-right { grid-area: right; }
+    .ptz-down  { grid-area: down; }
+}
+
+.zoom-controls {
+    display: flex;
+    flex-direction: column;
+}

@@ -14,7 +14,10 @@ class VideoInformationDTO {
   /// Returns a new [VideoInformationDTO] instance.
   VideoInformationDTO({
     this.streamURL,
-    this.isONVIFCamera,
+    this.supportsPTZViaONVIF,
+    this.onvifPort,
+    this.onvifUsername,
+    this.onvifPassword,
   });
 
   String? streamURL;
@@ -25,21 +28,33 @@ class VideoInformationDTO {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  bool? isONVIFCamera;
+  bool? supportsPTZViaONVIF;
+
+  int? onvifPort;
+
+  String? onvifUsername;
+
+  String? onvifPassword;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is VideoInformationDTO &&
     other.streamURL == streamURL &&
-    other.isONVIFCamera == isONVIFCamera;
+    other.supportsPTZViaONVIF == supportsPTZViaONVIF &&
+    other.onvifPort == onvifPort &&
+    other.onvifUsername == onvifUsername &&
+    other.onvifPassword == onvifPassword;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (streamURL == null ? 0 : streamURL!.hashCode) +
-    (isONVIFCamera == null ? 0 : isONVIFCamera!.hashCode);
+    (supportsPTZViaONVIF == null ? 0 : supportsPTZViaONVIF!.hashCode) +
+    (onvifPort == null ? 0 : onvifPort!.hashCode) +
+    (onvifUsername == null ? 0 : onvifUsername!.hashCode) +
+    (onvifPassword == null ? 0 : onvifPassword!.hashCode);
 
   @override
-  String toString() => 'VideoInformationDTO[streamURL=$streamURL, isONVIFCamera=$isONVIFCamera]';
+  String toString() => 'VideoInformationDTO[streamURL=$streamURL, supportsPTZViaONVIF=$supportsPTZViaONVIF, onvifPort=$onvifPort, onvifUsername=$onvifUsername, onvifPassword=$onvifPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -48,10 +63,25 @@ class VideoInformationDTO {
     } else {
       json[r'streamURL'] = null;
     }
-    if (this.isONVIFCamera != null) {
-      json[r'isONVIFCamera'] = this.isONVIFCamera;
+    if (this.supportsPTZViaONVIF != null) {
+      json[r'supportsPTZViaONVIF'] = this.supportsPTZViaONVIF;
     } else {
-      json[r'isONVIFCamera'] = null;
+      json[r'supportsPTZViaONVIF'] = null;
+    }
+    if (this.onvifPort != null) {
+      json[r'onvifPort'] = this.onvifPort;
+    } else {
+      json[r'onvifPort'] = null;
+    }
+    if (this.onvifUsername != null) {
+      json[r'onvifUsername'] = this.onvifUsername;
+    } else {
+      json[r'onvifUsername'] = null;
+    }
+    if (this.onvifPassword != null) {
+      json[r'onvifPassword'] = this.onvifPassword;
+    } else {
+      json[r'onvifPassword'] = null;
     }
     return json;
   }
@@ -76,7 +106,10 @@ class VideoInformationDTO {
 
       return VideoInformationDTO(
         streamURL: mapValueOfType<String>(json, r'streamURL'),
-        isONVIFCamera: mapValueOfType<bool>(json, r'isONVIFCamera'),
+        supportsPTZViaONVIF: mapValueOfType<bool>(json, r'supportsPTZViaONVIF'),
+        onvifPort: mapValueOfType<int>(json, r'onvifPort'),
+        onvifUsername: mapValueOfType<String>(json, r'onvifUsername'),
+        onvifPassword: mapValueOfType<String>(json, r'onvifPassword'),
       );
     }
     return null;

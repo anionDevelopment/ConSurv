@@ -206,7 +206,7 @@ namespace ConSurvBackend.Core.Misc
             Mat img1 = Cv2.ImDecode(img1Bytes, ImreadModes.Grayscale);
             Mat img2 = Cv2.ImDecode(img2Bytes, ImreadModes.Grayscale);
 
-            var phash = PHash.Create();
+            PHash phash = PHash.Create();
 
             Mat hash1 = new Mat();
             Mat hash2 = new Mat();

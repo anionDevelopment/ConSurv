@@ -10,7 +10,10 @@ namespace ConSurvBackend.Core.Model.Base
     {
         public string StreamURL { get; set; }
         public string? Certificate { get; set; }
-        public bool IsONVIFCamera { get; internal set; }//probably ptz command is meant here
+        public bool SupportsPTZViaONVIF { get; internal set; }
+        public int? ONVIFPort { get; set; }
+        public string? ONVIFUsername { get; set; }
+        public string? ONVIFPassword { get; set; }
 
         /// <summary>
         /// Projects this instance into a <see cref="VideoInformationDTO"/> for client transfer.
@@ -22,7 +25,10 @@ namespace ConSurvBackend.Core.Model.Base
             VideoInformationDTO result = new VideoInformationDTO()
             {
                 StreamURL = this.StreamURL,
-                IsONVIFCamera = this.IsONVIFCamera,
+                SupportsPTZViaONVIF = this.SupportsPTZViaONVIF,
+                ONVIFPort = this.ONVIFPort,
+                ONVIFUsername = this.ONVIFUsername,
+                ONVIFPassword = this.ONVIFPassword,
             };
             return result;
         }

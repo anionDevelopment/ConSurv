@@ -32,7 +32,7 @@ namespace ConSurvBackend.Core.Services
         public ExternalProgramExecutor GetBackgroundProcess(string program, string argument, string? workingFolder, Action<Process>? configureProcess, string purpose, string purposeForLogfile, bool runSynchronous)
         {
             bool verbose = false;
-            if (_CMDParameter.EnforceVerbose)
+            if (this._CMDParameter.EnforceVerbose)
             {
                 verbose= true;
             }

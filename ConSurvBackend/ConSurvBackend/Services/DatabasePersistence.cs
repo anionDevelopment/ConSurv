@@ -104,7 +104,7 @@ namespace ConSurvBackend.Core.Services
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", camera.Id));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", camera.Name));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL, typeof(string)));
-                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("IsONVIFCamera", camera.VideoInformation.IsONVIFCamera));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("SupportsPTZViaONVIF", camera.VideoInformation.SupportsPTZViaONVIF));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Enabled", camera.Enabled));
@@ -141,7 +141,7 @@ namespace ConSurvBackend.Core.Services
                         camera.VideoInformation = new VideoInformation()
                         {
                             StreamURL = reader.GetString(2),
-                            IsONVIFCamera = reader.GetBoolean(3),
+                            SupportsPTZViaONVIF = reader.GetBoolean(3),
                             Certificate = DBUtilities.GetNullableValue<string>(reader, 4),
                         };
                         camera.RecordMode = RecordMode.FromNumberToInstance(reader.GetByte(5));
