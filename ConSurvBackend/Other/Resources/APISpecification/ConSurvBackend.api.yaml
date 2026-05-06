@@ -105,10 +105,9 @@ components:
         onvifPassword:
           nullable: true
           type: string
-        onvifPort:
-          format: int32
+        onvifUrl:
           nullable: true
-          type: integer
+          type: string
         onvifUsername:
           nullable: true
           type: string
@@ -127,8 +126,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v3.0.23 API documentation
-  version: v3.0.23
+  title: ConSurvBackend v3.0.24 API documentation
+  version: v3.0.24
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:
@@ -297,6 +296,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: Access Token
+        in: header
+        name: X-AccessToken
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: OK
@@ -353,6 +358,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: Access Token
+        in: header
+        name: X-AccessToken
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: OK
@@ -362,6 +373,13 @@ paths:
       - Camera
   /API/v3/CameraController/ListVideos:
     get:
+      parameters:
+      - description: Access Token
+        in: header
+        name: X-AccessToken
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: OK
@@ -405,6 +423,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: Access Token
+        in: header
+        name: X-AccessToken
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: OK
@@ -418,6 +442,12 @@ paths:
       - description: The unique identifier of the target camera.
         in: path
         name: cameraId
+        required: true
+        schema:
+          type: string
+      - description: Access Token
+        in: header
+        name: X-AccessToken
         required: true
         schema:
           type: string

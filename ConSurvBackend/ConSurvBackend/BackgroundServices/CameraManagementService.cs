@@ -253,7 +253,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                     ffmpegProcessResult = available.FFMPEGProcess;
                     mediaMTXProcessResult = available.MediaMTXProcess;
                     url = available.MediaMTXURL;
-                    if (IsRtspAvailable(url))
+                    if (IsRtspAvailable(url,out string? errorMessage))
                     {
                         return true;
                     }
@@ -263,7 +263,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             ExternalProgramExecutor mediaMTXProcess;
             try
             {
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL), $"Camera {camera.Id} is not available.");
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL, out string? errorMessage), $"Camera {camera.Id} is not available: "+errorMessage);
                 Thread.Sleep(TimeSpan.FromSeconds(2));//wait until the camera is available again after probing it
                 string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
@@ -289,7 +289,8 @@ paths:
                 string configFile = Path.Combine(mediaMTXFolder, configFileName);
                 GRYLibrary.Core.Misc.Utilities.EnsureFileExists(configFile);
                 File.WriteAllText(configFile, configurationFileContent);
-                this._Logger.Log($"Content of {configFile}:\n\""+File.ReadAllText(configFile,new UTF8Encoding(false))+"\"");
+                this._Logger.Log($"Content of {configFile}:\n\"" + File.ReadAllText(configFile, new UTF8Encoding(false)) + "\"",Microsoft.Extensions.Logging.LogLevel.Trace);
+                //FIXME: mediamtx will not be exited after terminating consurvbackend, even if it should be (by espoc)
                 mediaMTXProcess = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, configFileName, mediaMTXFolder, null, $"Media-hub for {camera.Id}", $"MediaHubFor{camera.Id}", false);
                 url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
                 Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -312,9 +313,9 @@ paths:
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess.IsRunning, () => $"Process \"{purpose}\" terminated unexpectedly with {ffmpegProcess.ExitCode}.");
 
                 //assert stream is available
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url), () =>
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url,out string? message), () =>
                 {
-                    string result = $"Media-Hub for {camera.Id} is not available.";
+                    string result = $"{message}\nMedia-Hub for {camera.Id} is not available.";
                     try
                     {
                         string[] stdOut;
@@ -463,7 +464,7 @@ paths:
         /// <see langword="true"/> if <c>ffprobe</c> exits with code 0; <see langword="false"/> if the
         /// URL is unreachable or probing fails for any reason.
         /// </returns>
-        private static bool IsRtspAvailable(string rtspUrl)
+        private static bool IsRtspAvailable(string rtspUrl,out string? message)
         {
             try
             {
@@ -473,13 +474,27 @@ paths:
                     Argument = $"-v error -i \"{rtspUrl}\"",
                     TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
                     WaitingState = new RunSynchronously(),
-                    Verbosity = Verbosity.Quiet
+                    Verbosity = Verbosity.Quiet,
                 });
+                e.Configuration.WaitingState = new RunSynchronously()
+                {
+                    ThrowErrorIfExitCodeIsNotZero = false,
+                };
                 e.Run();
-                return e.ExitCode == 0;
+                bool success = e.ExitCode == 0;
+                if (success)
+                {
+                    message = null;
+                }
+                else
+                {
+                    message = $"Failed to probe RTSP URL \"{rtspUrl}\". StdOut: {String.Join('\n', e.AllStdOutLines)}; StdErr: {String.Join('\n', e.AllStdErrLines)}";
+                }
+                return success;
             }
-            catch
+            catch (Exception ex)
             {
+                message = GRYLibrary.Core.Misc.Utilities.GetExceptionMessage(ex);
                 return false;
             }
         }

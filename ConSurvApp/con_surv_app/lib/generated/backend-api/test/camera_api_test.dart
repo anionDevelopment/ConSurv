@@ -40,7 +40,7 @@ void main() {
 
     // Downloads the raw bytes of a specific recorded video file for a given camera.
     //
-    //Future aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename) async
+    //Future aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename, String xAccessToken) async
     test('test aPIV3CameraControllerDownloadVideoCameraIdFilenameGet', () async {
       // TODO
     });
@@ -54,14 +54,14 @@ void main() {
 
     // Returns a preview thumbnail image for the specified recorded video file of a camera.
     //
-    //Future aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename) async
+    //Future aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename, String xAccessToken) async
     test('test aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet', () async {
       // TODO
     });
 
     // Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
     //
-    //Future aPIV3CameraControllerListVideosGet() async
+    //Future aPIV3CameraControllerListVideosGet(String xAccessToken) async
     test('test aPIV3CameraControllerListVideosGet', () async {
       // TODO
     });
@@ -75,14 +75,14 @@ void main() {
 
     // Permanently deletes a specific recorded video file belonging to the given camera.
     //
-    //Future aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename) async
+    //Future aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename, String xAccessToken) async
     test('test aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete', () async {
       // TODO
     });
 
     // Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
     //
-    //Future aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO oNVIFCommandDTO }) async
+    //Future aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, String xAccessToken, { ONVIFCommandDTO oNVIFCommandDTO }) async
     test('test aPIV3CameraControllerRunONVIFCommandCameraIdPost', () async {
       // TODO
     });

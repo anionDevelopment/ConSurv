@@ -1,6 +1,7 @@
 ﻿using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -20,9 +21,9 @@ namespace ConSurvBackend.Core.Controller
         private readonly IPersistence _Persistence;
         private readonly IBusinessLogicService _CameraService;
         private readonly IRuntimeData _RuntimeData;
-        public CameraController(IGeneralLogger logger, IPersistence persistence, IBusinessLogicService cameraService, IRuntimeData runtimeData)
+        public CameraController(IServerLog logger, IPersistence persistence, IBusinessLogicService cameraService, IRuntimeData runtimeData)
         {
-            this._Logger = logger;
+            this._Logger = logger.Logger;
             this._Persistence = persistence;
             this._CameraService = cameraService;
             this._RuntimeData = runtimeData;
@@ -128,6 +129,7 @@ namespace ConSurvBackend.Core.Controller
         /// <param name="cameraId">The unique identifier of the target camera.</param>
         /// <param name="onvifCommandDTO">The ONVIF command to execute, including its type and parameters.</param>
         /// <returns>200 OK on success.</returns>
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -144,6 +146,7 @@ namespace ConSurvBackend.Core.Controller
         /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
         /// </summary>
         /// <returns>200 OK with a dictionary of camera IDs to file name lists.</returns>
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameUsers)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -160,6 +163,7 @@ namespace ConSurvBackend.Core.Controller
         /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
         /// <param name="filename">The filename of the recorded video for which the preview is requested.</param>
         /// <returns>200 OK with the thumbnail image bytes.</returns>
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -176,6 +180,7 @@ namespace ConSurvBackend.Core.Controller
         /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
         /// <param name="filename">The filename of the recorded video to download.</param>
         /// <returns>200 OK with the video file bytes.</returns>
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -192,6 +197,7 @@ namespace ConSurvBackend.Core.Controller
         /// <param name="cameraId">The unique identifier of the camera that owns the video.</param>
         /// <param name="filename">The filename of the recorded video to delete.</param>
         /// <returns>200 OK on success.</returns>
+        [Authenticate]
         [Authorize(CodeUnitSpecificConstants.RolenameModerators)]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]

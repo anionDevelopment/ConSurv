@@ -1,6 +1,6 @@
 using ConSurvBackend.Core.Controller;
 using ConSurvBackend.Core.Services;
-using GRYLibrary.Core.Logging.GeneralPurposeLogger;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,7 +22,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             Mock<IRuntimeData> runtimeData = new Mock<IRuntimeData>(MockBehavior.Strict);
             string cameraId = Guid.NewGuid().ToString();
             cameraServiceMock.Setup(mock => mock.CreateCamera("New camera", "rtsp://mycamera.example.com/stream")).Returns(cameraId);
-            CameraController controller = new CameraController(GeneralLogger.NoLog(), persistence.Object, cameraServiceMock.Object, runtimeData.Object);
+            CameraController controller = new CameraController(ServerLog.GetTransientLog(), persistence.Object, cameraServiceMock.Object, runtimeData.Object);
 
             // act
             IActionResult actualResult = controller.CreateCamera();

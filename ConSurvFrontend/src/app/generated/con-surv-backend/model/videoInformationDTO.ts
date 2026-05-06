@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.23 API documentation
+ * ConSurvBackend v3.0.24 API documentation
  *
  * 
  *
@@ -15,7 +15,7 @@
 export interface VideoInformationDTO { 
     streamURL?: string | null;
     supportsPTZViaONVIF?: boolean;
-    onvifPort?: number | null;
+    onvifUrl?: string | null;
     onvifUsername?: string | null;
     onvifPassword?: string | null;
 }

@@ -2,9 +2,9 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Authors>Marius Göcke</Authors>
-        <Version>3.0.23</Version>
-        <AssemblyVersion>3.0.23</AssemblyVersion>
-        <FileVersion>3.0.23</FileVersion>
+        <Version>3.0.24</Version>
+        <AssemblyVersion>3.0.24</AssemblyVersion>
+        <FileVersion>3.0.24</FileVersion>
         <SelfContained>false</SelfContained>
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>false</PreserveCompilationContext>
@@ -66,7 +66,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="FFmpeg.AutoGen" Version="8.0.0.1" />
-        <PackageReference Include="GRYLibrary" Version="2.0.14" />
+        <PackageReference Include="GRYLibrary" Version="2.0.15" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />

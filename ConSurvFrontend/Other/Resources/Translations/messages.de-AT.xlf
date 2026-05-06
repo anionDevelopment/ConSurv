@@ -214,6 +214,46 @@
         <source>Can receive ONVIF-commands.</source>
       </segment>
     </unit>
+    <unit id="edit-camera-dialog.field.onvif-url">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:28,29</note>
+      </notes>
+      <segment>
+        <source>ONVIF-URL</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-url.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:29,30</note>
+      </notes>
+      <segment>
+        <source>Example: http://192.168.1.100:8000</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-username">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:36,37</note>
+      </notes>
+      <segment>
+        <source>ONVIF-Username</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-username.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:37,38</note>
+      </notes>
+      <segment>
+        <source>Example: admin</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-password">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:44,45</note>
+      </notes>
+      <segment>
+        <source>ONVIF-Password</source>
+      </segment>
+    </unit>
     <unit id="edit-camera-dialog.field.record-mode">
       <notes>
         <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:24,25</note>

@@ -108,6 +108,9 @@ namespace ConSurvBackend.Core.Services
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
                 command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Enabled", camera.Enabled));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFUrl", camera.VideoInformation.ONVIFUrl, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFUsername", camera.VideoInformation.ONVIFUsername, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFPassword", camera.VideoInformation.ONVIFPassword, typeof(string)));
                 command.ExecuteNonQuery();
             });
         }
@@ -146,6 +149,9 @@ namespace ConSurvBackend.Core.Services
                         };
                         camera.RecordMode = RecordMode.FromNumberToInstance(reader.GetByte(5));
                         camera.Enabled = reader.GetBoolean(6);
+                        camera.VideoInformation.ONVIFUrl = DBUtilities.GetNullableValue<string>(reader, 7);
+                        camera.VideoInformation.ONVIFUsername = DBUtilities.GetNullableValue<string>(reader, 8);
+                        camera.VideoInformation.ONVIFPassword = DBUtilities.GetNullableValue<string>(reader, 9);
                         cameraDictionary[id] = camera;
                     }
                     reader.Close();

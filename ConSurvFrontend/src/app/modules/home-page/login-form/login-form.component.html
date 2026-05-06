@@ -1,20 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="login()">
-    <span i18n="@@logingreeting">Welcome back, please login</span><br />
-
-    <mat-form-field>
-        <mat-label i18n="@@username">Username</mat-label>
-        <input type="text" matInput formControlName="username" id="username">
-    </mat-form-field>
-
-    <br />
-
-    <mat-form-field>
-        <mat-label i18n="@@password">Password</mat-label>
-        <input type="password" matInput formControlName="password" id="password">
-    </mat-form-field>
-
-    <br />
-
-    <button mat-flat-button i18n="@@login.button.submit">Login</button>
-
+  <span i18n="@@logingreeting">Welcome back, please login</span>
+  <br>
+  <mat-form-field>
+    <mat-label i18n="@@username">Username</mat-label>
+    <input type="text" matInput formControlName="username" id="username">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label i18n="@@password">Password</mat-label>
+    <input type="password" matInput formControlName="password" id="password">
+  </mat-form-field>
+  <br>
+  <button mat-flat-button i18n="@@login.button.submit">Login</button>
 </form>

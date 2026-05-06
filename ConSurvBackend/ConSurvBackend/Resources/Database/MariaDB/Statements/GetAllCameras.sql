@@ -4,5 +4,8 @@ select `Id`,
 	`SupportsPTZViaONVIF`,
 	`Certificate`,
 	`RecordMode`,
-	`Enabled`
+	`Enabled`,
+	`ONVIFUrl`,
+	`ONVIFUsername`,
+	`ONVIFPassword`
 from `Cameras`;

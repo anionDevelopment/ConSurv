@@ -40,7 +40,7 @@ namespace ConSurvBackend.Core.Services
             DateTime now = DateTime.Now;
             string processId = Guid.NewGuid().ToString()[..8];
             string logfile = Path.Combine(this._Constants.GetLogFolder(), $"Background-process_{GUtilities.DateTimeForFilename(now)}_{purposeForLogfile}_{processId}.log");
-            GRYLog eLog = GRYLog.Create(logfile);
+            GRYLog eLog = GRYLog.Create(logfile, default(string), default(string));
             foreach (GRYLogTarget item in eLog.Configuration.LogTargets)
             {
                 item.Enabled = true;

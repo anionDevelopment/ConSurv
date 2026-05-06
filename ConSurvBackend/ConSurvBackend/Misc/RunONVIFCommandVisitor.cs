@@ -1,4 +1,3 @@
-using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
@@ -13,7 +12,7 @@ namespace ConSurvBackend.Core.Misc
     /// <summary>
     /// Visitor that executes ONVIF commands (e.g. zoom, move) on a specific camera via the ONVIF protocol.
     /// </summary>
-    internal class RunONVIFCommandVisitor : IONVIFCommandVisitor
+    internal class RunONVIFCommandVisitor : IONVIFCommandVisitor<(bool, Exception?)>
     {
         private const float StepSize = 0.1f;
 
@@ -29,26 +28,41 @@ namespace ConSurvBackend.Core.Misc
         }
 
         /// <inheritdoc />
-        public void Handle(Zoom zoom)
+        public (bool, Exception?) Handle(Zoom zoom)
         {
-            float delta = zoom.ZoomDirection.Accept(new ZoomDeltaVisitor());
-            var vector = new PTZVector { Zoom = new Vector1D { x = delta } };
-            this.GetOnvifCamera().MoveAsync(MoveType.Relative, vector, null).GetAwaiter().GetResult();
+            try
+            {
+                float delta = zoom.ZoomDirection.Accept(new ZoomDeltaVisitor());
+                var vector = new PTZVector { Zoom = new Vector1D { x = delta } };
+                var result = this.GetOnvifCamera().MoveAsync(MoveType.Relative, vector, null).GetAwaiter().GetResult();
+                return (true, null);
+            }
+            catch (Exception exception)
+            {
+                return (false, exception);
+            }
         }
 
         /// <inheritdoc />
-        public void Handle(Move move)
+        public (bool, Exception?) Handle(Move move)
         {
-            (float panX, float panY) = move.MoveDirection.Accept(new PanTiltDeltaVisitor());
-            var vector = new PTZVector { PanTilt = new Vector2D { x = panX, y = panY } };
-            this.GetOnvifCamera().MoveAsync(MoveType.Relative, vector, null).GetAwaiter().GetResult();
+            try
+            {
+                (float panX, float panY) = move.MoveDirection.Accept(new PanTiltDeltaVisitor());
+                var vector = new PTZVector { PanTilt = new Vector2D { x = panX, y = panY } };
+                var result = this.GetOnvifCamera().MoveAsync(MoveType.Relative, vector, null).GetAwaiter().GetResult();
+                return (true, null);
+            }
+            catch (Exception exception)
+            {
+                return (false, exception);
+            }
         }
 
         private OnvifCamera GetOnvifCamera()
         {
             var info = this._Camera.VideoInformation;
-            var host = new Uri(info.StreamURL).Host;
-            var accountHost = info.ONVIFPort.HasValue ? $"{host}:{info.ONVIFPort}" : host;
+            var accountHost = info.ONVIFUrl;
             var account = new Account(accountHost, info.ONVIFUsername!, info.ONVIFPassword!);
             return OnvifCamera.CreateAsync(account, null).GetAwaiter().GetResult()
                 ?? throw new InvalidOperationException($"Could not connect to ONVIF camera {this._Camera}");

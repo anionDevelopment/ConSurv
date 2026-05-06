@@ -6,6 +6,7 @@ using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.MidT.Auth;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
 using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Logging.GeneralPurposeLogger;
@@ -25,9 +26,9 @@ namespace ConSurvBackend.Core.Controller
         private readonly IPersistence _Persistence;
         private readonly IAuthenticationService _AuthenticationService;
         private readonly ITimeService _TimeService;
-        public UserController(IGeneralLogger logger, IPersistence persistence, IAuthenticationService authenticationService, ITimeService timeService)
+        public UserController(IServerLog logger, IPersistence persistence, IAuthenticationService authenticationService, ITimeService timeService)
         {
-            this._Logger = logger;
+            this._Logger = logger.Logger;
             this._Persistence = persistence;
             this._AuthenticationService = authenticationService;
             this._TimeService = timeService;
