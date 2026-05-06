@@ -1,6 +1,6 @@
 {
   "name": "con-surv-frontend",
-  "version": "3.0.23",
+  "version": "3.0.24",
   "scripts": {
     "build": "npm run build-QualityCheck",
     "build-Development": "ng build --localize --configuration Development",

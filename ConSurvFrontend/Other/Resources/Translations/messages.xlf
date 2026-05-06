@@ -3,7 +3,7 @@
   <file id="ngi18n" original="ng.template">
     <unit id="admin.menu.title">
       <notes>
-        <note category="location">src/app/modules/admin-area/admin-area-container/admin-area-container.component.html:4,5</note>
+        <note category="location">src/app/modules/admin-area/admin-area-container/admin-area-container.component.html:4,6</note>
       </notes>
       <segment>
         <source>Admin-menu:</source>
@@ -11,10 +11,10 @@
     </unit>
     <unit id="admindashobardtitle">
       <notes>
-        <note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:3,4</note>
+        <note category="location">src/app/modules/admin-area/admin-dashboard/admin-dashboard.component.html:2,3</note>
       </notes>
       <segment>
-        <source> Admin dashboard </source>
+        <source>Admin dashboard</source>
       </segment>
     </unit>
     <unit id="admin.settings.title">
@@ -43,7 +43,7 @@
     </unit>
     <unit id="hint.not-authenticated.message">
       <notes>
-        <note category="location">src/app/modules/home-page/hint-not-authenticated/hint-not-authenticated.component.html:2,4</note>
+        <note category="location">src/app/modules/home-page/hint-not-authenticated/hint-not-authenticated.component.html:2,3</note>
       </notes>
       <segment>
         <source>You must be authenticated for this action.</source>
@@ -51,7 +51,7 @@
     </unit>
     <unit id="hint.not-authorized.message">
       <notes>
-        <note category="location">src/app/modules/home-page/hint-not-authorized/hint-not-authorized.component.html:2,4</note>
+        <note category="location">src/app/modules/home-page/hint-not-authorized/hint-not-authorized.component.html:2,3</note>
       </notes>
       <segment>
         <source>You are not authorized for this action.</source>
@@ -59,7 +59,7 @@
     </unit>
     <unit id="siteNotFound">
       <notes>
-        <note category="location">src/app/modules/home-page/hint-not-found/hint-not-found.component.html:4,6</note>
+        <note category="location">src/app/modules/home-page/hint-not-found/hint-not-found.component.html:3,5</note>
       </notes>
       <segment>
         <source>Site not found</source>
@@ -83,7 +83,7 @@
     </unit>
     <unit id="password">
       <notes>
-        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:12,13</note>
+        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:10,11</note>
       </notes>
       <segment>
         <source>Password</source>
@@ -91,7 +91,7 @@
     </unit>
     <unit id="login.button.submit">
       <notes>
-        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:18,21</note>
+        <note category="location">src/app/modules/home-page/login-form/login-form.component.html:14,15</note>
       </notes>
       <segment>
         <source>Login</source>
@@ -99,7 +99,7 @@
     </unit>
     <unit id="camera-preview.img.alt">
       <notes>
-        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:4</note>
+        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:2</note>
       </notes>
       <segment>
         <source>preview</source>
@@ -107,7 +107,7 @@
     </unit>
     <unit id="camera-preview.img.alt.large">
       <notes>
-        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:8</note>
+        <note category="location">src/app/modules/user-area/camera-preview/camera-preview.component.html:4</note>
       </notes>
       <segment>
         <source>large preview</source>
@@ -118,15 +118,15 @@
         <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:5,6</note>
       </notes>
       <segment>
-        <source> Preview </source>
+        <source>Preview</source>
       </segment>
     </unit>
     <unit id="cameras-list.header.id">
       <notes>
-        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:11,12</note>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:12</note>
       </notes>
       <segment>
-        <source> Id </source>
+        <source>Id</source>
       </segment>
     </unit>
     <unit id="cameras-list.header.name">
@@ -134,31 +134,31 @@
         <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:15,16</note>
       </notes>
       <segment>
-        <source> Name </source>
+        <source>Name</source>
       </segment>
     </unit>
     <unit id="cameras-list.header.mode">
       <notes>
-        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:23,24</note>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:21,22</note>
       </notes>
       <segment>
-        <source> Mode </source>
+        <source>Mode</source>
       </segment>
     </unit>
     <unit id="cameras-list.header.state">
       <notes>
-        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:30,31</note>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:27,28</note>
       </notes>
       <segment>
-        <source> State </source>
+        <source>State</source>
       </segment>
     </unit>
     <unit id="cameras-list.header.options">
       <notes>
-        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:36,37</note>
+        <note category="location">src/app/modules/user-area/cameras-list/cameras-list.component.html:33,34</note>
       </notes>
       <segment>
-        <source> Options </source>
+        <source>Options</source>
       </segment>
     </unit>
     <unit id="edit-camera-dialog.title">
@@ -171,7 +171,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.name">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:6,7</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:5,6</note>
       </notes>
       <segment>
         <source>Name</source>
@@ -179,7 +179,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.name.placeholder">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:7,8</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:6</note>
       </notes>
       <segment>
         <source>Example: Entrance-camera</source>
@@ -187,7 +187,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.stream-url">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:14,15</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:10,11</note>
       </notes>
       <segment>
         <source>Stream-URL</source>
@@ -195,7 +195,7 @@
     </unit>
     <unit id="edit-camera-dialog.field.stream-url.placeholder">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:15,16</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:11</note>
       </notes>
       <segment>
         <source>Example: rtsp://example.com</source>
@@ -203,15 +203,55 @@
     </unit>
     <unit id="edit-camera-dialog.field.onvif">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:21,24</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:14,15</note>
       </notes>
       <segment>
         <source>Can receive ONVIF-commands.</source>
       </segment>
     </unit>
+    <unit id="edit-camera-dialog.field.onvif-url">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:18,19</note>
+      </notes>
+      <segment>
+        <source>ONVIF-URL</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-url.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:19</note>
+      </notes>
+      <segment>
+        <source>Example: http://192.168.1.100:8000</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-username">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:23,24</note>
+      </notes>
+      <segment>
+        <source>ONVIF-Username</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-username.placeholder">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:24</note>
+      </notes>
+      <segment>
+        <source>Example: admin</source>
+      </segment>
+    </unit>
+    <unit id="edit-camera-dialog.field.onvif-password">
+      <notes>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:28,29</note>
+      </notes>
+      <segment>
+        <source>ONVIF-Password</source>
+      </segment>
+    </unit>
     <unit id="edit-camera-dialog.field.record-mode">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:27,28</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:35,36</note>
       </notes>
       <segment>
         <source>Record-mode</source>
@@ -219,7 +259,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.no-recording">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:30,31</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:37,38</note>
       </notes>
       <segment>
         <source>No recording</source>
@@ -227,7 +267,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.record-always">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:32,33</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:38,39</note>
       </notes>
       <segment>
         <source>Record always</source>
@@ -235,7 +275,7 @@
     </unit>
     <unit id="edit-camera-dialog.record-mode.record-on-movements">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:34,36</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:39,42</note>
       </notes>
       <segment>
         <source>Record on movements</source>
@@ -243,7 +283,7 @@
     </unit>
     <unit id="edit-camera-dialog.button.cancel">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:41,42</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:45,46</note>
       </notes>
       <segment>
         <source>Cancel</source>
@@ -251,7 +291,7 @@
     </unit>
     <unit id="edit-camera-dialog.button.save">
       <notes>
-        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:42,44</note>
+        <note category="location">src/app/modules/user-area/edit-camera-dialog/edit-camera-dialog.component.html:46,47</note>
       </notes>
       <segment>
         <source>Save</source>
@@ -291,7 +331,7 @@
     </unit>
     <unit id="record-mode-indicator.tooltip.not-available">
       <notes>
-        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:19</note>
+        <note category="location">src/app/modules/user-area/record-mode-indicator/record-mode-indicator.component.html:18</note>
       </notes>
       <segment>
         <source>Record-state not available</source>
@@ -316,7 +356,7 @@
     <unit id="record-state-indicator.tooltip.not-available">
       <notes>
         <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:10</note>
-        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:19</note>
+        <note category="location">src/app/modules/user-area/record-state-indicator/record-state-indicator.component.html:18</note>
       </notes>
       <segment>
         <source>Not available</source>
@@ -332,7 +372,7 @@
     </unit>
     <unit id="user.menu.title">
       <notes>
-        <note category="location">src/app/modules/user-area/user-area-container/user-area-container.component.html:4,5</note>
+        <note category="location">src/app/modules/user-area/user-area-container/user-area-container.component.html:4,6</note>
       </notes>
       <segment>
         <source>User-menu:</source>
@@ -348,7 +388,7 @@
     </unit>
     <unit id="user.icon.menu.greeting">
       <notes>
-        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:7,8</note>
+        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:5,6</note>
       </notes>
       <segment>
         <source>Hello <ph id="0" equiv="INTERPOLATION" disp="{{this.userName}}"/></source>
@@ -356,7 +396,7 @@
     </unit>
     <unit id="user.icon.menu.logout">
       <notes>
-        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:8,10</note>
+        <note category="location">src/app/modules/user-area/user-icon/user-icon.component.html:6,7</note>
       </notes>
       <segment>
         <source>Logout</source>

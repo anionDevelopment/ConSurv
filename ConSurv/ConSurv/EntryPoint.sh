@@ -56,15 +56,14 @@ if [[ "${EnforceVerbose}" == "true" ]]; then
     argument+=" --EnforceVerbose true"
 fi
 
+{ cd /Workspace/Application/Backend && dotnet ./ConSurvBackend.dll $argument; } &
 if [ -z ${DoNotHostFrontend+x} ]; then
     echo "Frontend will be started.";
+    { cd /Workspace/Application/Frontend && nginx -c /Workspace/Application/Frontend/nginx.conf -g "daemon off;"; } &
 else
     echo "Frontend will not be started.";
-    #TODO ensure frontend will really not be started.
+    { cd /Workspace/Application/Frontend && nginx -c /Workspace/Application/Frontend/nginx-api-only.conf -g "daemon off;"; } &
 fi
-
-{ cd /Workspace/Application/Backend && dotnet ./ConSurvBackend.dll $argument; } &
-{ cd /Workspace/Application/Frontend && nginx -c /Workspace/Application/Frontend/nginx.conf -g "daemon off;"; } &
 
 wait -n
 

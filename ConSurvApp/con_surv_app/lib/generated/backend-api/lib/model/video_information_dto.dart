@@ -15,7 +15,7 @@ class VideoInformationDTO {
   VideoInformationDTO({
     this.streamURL,
     this.supportsPTZViaONVIF,
-    this.onvifPort,
+    this.onvifUrl,
     this.onvifUsername,
     this.onvifPassword,
   });
@@ -30,7 +30,7 @@ class VideoInformationDTO {
   ///
   bool? supportsPTZViaONVIF;
 
-  int? onvifPort;
+  String? onvifUrl;
 
   String? onvifUsername;
 
@@ -40,7 +40,7 @@ class VideoInformationDTO {
   bool operator ==(Object other) => identical(this, other) || other is VideoInformationDTO &&
     other.streamURL == streamURL &&
     other.supportsPTZViaONVIF == supportsPTZViaONVIF &&
-    other.onvifPort == onvifPort &&
+    other.onvifUrl == onvifUrl &&
     other.onvifUsername == onvifUsername &&
     other.onvifPassword == onvifPassword;
 
@@ -49,12 +49,12 @@ class VideoInformationDTO {
     // ignore: unnecessary_parenthesis
     (streamURL == null ? 0 : streamURL!.hashCode) +
     (supportsPTZViaONVIF == null ? 0 : supportsPTZViaONVIF!.hashCode) +
-    (onvifPort == null ? 0 : onvifPort!.hashCode) +
+    (onvifUrl == null ? 0 : onvifUrl!.hashCode) +
     (onvifUsername == null ? 0 : onvifUsername!.hashCode) +
     (onvifPassword == null ? 0 : onvifPassword!.hashCode);
 
   @override
-  String toString() => 'VideoInformationDTO[streamURL=$streamURL, supportsPTZViaONVIF=$supportsPTZViaONVIF, onvifPort=$onvifPort, onvifUsername=$onvifUsername, onvifPassword=$onvifPassword]';
+  String toString() => 'VideoInformationDTO[streamURL=$streamURL, supportsPTZViaONVIF=$supportsPTZViaONVIF, onvifUrl=$onvifUrl, onvifUsername=$onvifUsername, onvifPassword=$onvifPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -68,10 +68,10 @@ class VideoInformationDTO {
     } else {
       json[r'supportsPTZViaONVIF'] = null;
     }
-    if (this.onvifPort != null) {
-      json[r'onvifPort'] = this.onvifPort;
+    if (this.onvifUrl != null) {
+      json[r'onvifUrl'] = this.onvifUrl;
     } else {
-      json[r'onvifPort'] = null;
+      json[r'onvifUrl'] = null;
     }
     if (this.onvifUsername != null) {
       json[r'onvifUsername'] = this.onvifUsername;
@@ -107,7 +107,7 @@ class VideoInformationDTO {
       return VideoInformationDTO(
         streamURL: mapValueOfType<String>(json, r'streamURL'),
         supportsPTZViaONVIF: mapValueOfType<bool>(json, r'supportsPTZViaONVIF'),
-        onvifPort: mapValueOfType<int>(json, r'onvifPort'),
+        onvifUrl: mapValueOfType<String>(json, r'onvifUrl'),
         onvifUsername: mapValueOfType<String>(json, r'onvifUsername'),
         onvifPassword: mapValueOfType<String>(json, r'onvifPassword'),
       );

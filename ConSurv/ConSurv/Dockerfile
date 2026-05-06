@@ -31,7 +31,9 @@ ADD Other/Resources/DependentCodeUnits/ConSurvFrontend/BuildResult_WebApplicatio
 COPY Other/Resources/DevelopmentCertificate/ConSurvDevelopmentCertificate.crt /Workspace/Other/Certificates
 COPY Other/Resources/DevelopmentCertificate/ConSurvDevelopmentCertificate.key /Workspace/Other/Certificates
 COPY ConSurv/nginx.conf /Workspace/Application/Frontend
+COPY ConSurv/nginx-api-only.conf /Workspace/Application/Frontend
 COPY ConSurv/nginx.loadings-settings.conf /Workspace/Application/Frontend
+COPY ConSurv/nginx.loadings-settings-api-only.conf /Workspace/Application/Frontend
 
 COPY ConSurv/EntryPoint.sh /Workspace/Other/EntryPoint
 COPY ConSurv/HealthCheck.sh /Workspace/Other/EntryPoint

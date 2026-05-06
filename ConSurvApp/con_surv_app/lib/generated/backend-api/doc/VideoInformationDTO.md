@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **streamURL** | **String** |  | [optional] 
 **supportsPTZViaONVIF** | **bool** |  | [optional] 
-**onvifPort** | **int** |  | [optional] 
+**onvifUrl** | **String** |  | [optional] 
 **onvifUsername** | **String** |  | [optional] 
 **onvifPassword** | **String** |  | [optional] 
 

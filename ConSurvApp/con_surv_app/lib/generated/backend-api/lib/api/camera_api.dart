@@ -205,7 +205,10 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video to download.
-  Future<Response> aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<Response> aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/DownloadVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -217,6 +220,8 @@ class CameraApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>[];
 
@@ -241,8 +246,11 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video to download.
-  Future<void> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename,) async {
-    final response = await aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename,);
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<void> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename, String xAccessToken,) async {
+    final response = await aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -322,7 +330,10 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video for which the preview is requested.
-  Future<Response> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename,) async {
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<Response> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -334,6 +345,8 @@ class CameraApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>[];
 
@@ -358,8 +371,11 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video for which the preview is requested.
-  Future<void> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename,) async {
-    final response = await aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename,);
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<void> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename, String xAccessToken,) async {
+    final response = await aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -368,7 +384,12 @@ class CameraApi {
   /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
   ///
   /// Note: This method returns the HTTP [Response].
-  Future<Response> aPIV3CameraControllerListVideosGetWithHttpInfo() async {
+  ///
+  /// Parameters:
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<Response> aPIV3CameraControllerListVideosGetWithHttpInfo(String xAccessToken,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/ListVideos';
 
@@ -378,6 +399,8 @@ class CameraApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>[];
 
@@ -394,8 +417,13 @@ class CameraApi {
   }
 
   /// Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
-  Future<void> aPIV3CameraControllerListVideosGet() async {
-    final response = await aPIV3CameraControllerListVideosGetWithHttpInfo();
+  ///
+  /// Parameters:
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<void> aPIV3CameraControllerListVideosGet(String xAccessToken,) async {
+    final response = await aPIV3CameraControllerListVideosGetWithHttpInfo(xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -467,7 +495,10 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video to delete.
-  Future<Response> aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename,) async {
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<Response> aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RemoveVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -479,6 +510,8 @@ class CameraApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>[];
 
@@ -503,8 +536,11 @@ class CameraApi {
   ///
   /// * [String] filename (required):
   ///   The filename of the recorded video to delete.
-  Future<void> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename,) async {
-    final response = await aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename,);
+  ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  Future<void> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename, String xAccessToken,) async {
+    final response = await aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename, xAccessToken,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -519,9 +555,12 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///   The unique identifier of the target camera.
   ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
   ///   The ONVIF command to execute, including its type and parameters.
-  Future<Response> aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
+  Future<Response> aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RunONVIFCommand/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
@@ -532,6 +571,8 @@ class CameraApi {
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
+
+    headerParams[r'X-AccessToken'] = parameterToString(xAccessToken);
 
     const contentTypes = <String>['application/json', 'text/json', 'application/*+json'];
 
@@ -554,10 +595,13 @@ class CameraApi {
   /// * [String] cameraId (required):
   ///   The unique identifier of the target camera.
   ///
+  /// * [String] xAccessToken (required):
+  ///   Access Token
+  ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
   ///   The ONVIF command to execute, including its type and parameters.
-  Future<void> aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
-    final response = await aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId,  oNVIFCommandDTO: oNVIFCommandDTO, );
+  Future<void> aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
+    final response = await aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId, xAccessToken,  oNVIFCommandDTO: oNVIFCommandDTO, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

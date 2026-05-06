@@ -10,7 +10,7 @@ namespace ConSurvBackend.Core.Model.DTOs
     {
         public string StreamURL { get; set; }
         public bool SupportsPTZViaONVIF { get;  set; }
-        public int? ONVIFPort { get; set; }
+        public string? ONVIFUrl { get; set; }
         public string? ONVIFUsername { get; set; }
         public string? ONVIFPassword { get; set; }
 
@@ -24,7 +24,7 @@ namespace ConSurvBackend.Core.Model.DTOs
             {
                 StreamURL = this.StreamURL,
                 SupportsPTZViaONVIF = this.SupportsPTZViaONVIF,
-                ONVIFPort = this.ONVIFPort,
+                ONVIFUrl = this.ONVIFUrl,
                 ONVIFUsername = this.ONVIFUsername,
                 ONVIFPassword = this.ONVIFPassword,
             };

@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.23 API documentation
+ * ConSurvBackend v3.0.24 API documentation
  *
  * 
  *
@@ -224,21 +224,28 @@ export class CameraService extends BaseService {
      * Downloads the raw bytes of a specific recorded video file for a given camera.
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video to download.
+     * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cameraId === null || cameraId === undefined) {
             throw new Error('Required parameter cameraId was null or undefined when calling aPIV3CameraControllerDownloadVideoCameraIdFilenameGet.');
         }
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling aPIV3CameraControllerDownloadVideoCameraIdFilenameGet.');
         }
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV3CameraControllerDownloadVideoCameraIdFilenameGet.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);
@@ -344,21 +351,28 @@ export class CameraService extends BaseService {
      * Returns a preview thumbnail image for the specified recorded video file of a camera.
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video for which the preview is requested.
+     * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cameraId === null || cameraId === undefined) {
             throw new Error('Required parameter cameraId was null or undefined when calling aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet.');
         }
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet.');
         }
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);
@@ -399,15 +413,22 @@ export class CameraService extends BaseService {
 
     /**
      * Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
+     * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV3CameraControllerListVideosGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV3CameraControllerListVideosGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV3CameraControllerListVideosGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV3CameraControllerListVideosGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV3CameraControllerListVideosGet.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);
@@ -510,21 +531,28 @@ export class CameraService extends BaseService {
      * Permanently deletes a specific recorded video file belonging to the given camera.
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video to delete.
+     * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cameraId === null || cameraId === undefined) {
             throw new Error('Required parameter cameraId was null or undefined when calling aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete.');
         }
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete.');
         }
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);
@@ -566,19 +594,26 @@ export class CameraService extends BaseService {
     /**
      * Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
      * @param cameraId The unique identifier of the target camera.
+     * @param xAccessToken Access Token
      * @param oNVIFCommandDTO The ONVIF command to execute, including its type and parameters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cameraId === null || cameraId === undefined) {
             throw new Error('Required parameter cameraId was null or undefined when calling aPIV3CameraControllerRunONVIFCommandCameraIdPost.');
         }
+        if (xAccessToken === null || xAccessToken === undefined) {
+            throw new Error('Required parameter xAccessToken was null or undefined when calling aPIV3CameraControllerRunONVIFCommandCameraIdPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (xAccessToken !== undefined && xAccessToken !== null) {
+            localVarHeaders = localVarHeaders.set('X-AccessToken', String(xAccessToken));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
         ]);

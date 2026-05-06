@@ -26,8 +26,8 @@ void main() {
       // TODO
     });
 
-    // int onvifPort
-    test('to test the property `onvifPort`', () async {
+    // String onvifUrl
+    test('to test the property `onvifUrl`', () async {
       // TODO
     });
 

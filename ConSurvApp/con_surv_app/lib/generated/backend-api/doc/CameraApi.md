@@ -148,7 +148,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV3CameraControllerDownloadVideoCameraIdFilenameGet**
-> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename)
+> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename, xAccessToken)
 
 Downloads the raw bytes of a specific recorded video file for a given camera.
 
@@ -159,9 +159,10 @@ import 'package:openapi/api.dart';
 final api_instance = CameraApi();
 final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
 final filename = filename_example; // String | The filename of the recorded video to download.
+final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename);
+    api_instance.aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId, filename, xAccessToken);
 } catch (e) {
     print('Exception when calling CameraApi->aPIV3CameraControllerDownloadVideoCameraIdFilenameGet: $e\n');
 }
@@ -173,6 +174,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
  **filename** | **String**| The filename of the recorded video to download. | 
+ **xAccessToken** | **String**| Access Token | 
 
 ### Return type
 
@@ -233,7 +235,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet**
-> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename)
+> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename, xAccessToken)
 
 Returns a preview thumbnail image for the specified recorded video file of a camera.
 
@@ -244,9 +246,10 @@ import 'package:openapi/api.dart';
 final api_instance = CameraApi();
 final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
 final filename = filename_example; // String | The filename of the recorded video for which the preview is requested.
+final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename);
+    api_instance.aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId, filename, xAccessToken);
 } catch (e) {
     print('Exception when calling CameraApi->aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet: $e\n');
 }
@@ -258,6 +261,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
  **filename** | **String**| The filename of the recorded video for which the preview is requested. | 
+ **xAccessToken** | **String**| Access Token | 
 
 ### Return type
 
@@ -275,7 +279,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV3CameraControllerListVideosGet**
-> aPIV3CameraControllerListVideosGet()
+> aPIV3CameraControllerListVideosGet(xAccessToken)
 
 Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
 
@@ -284,16 +288,20 @@ Returns a dictionary mapping each camera identifier to the list of recorded vide
 import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
+final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV3CameraControllerListVideosGet();
+    api_instance.aPIV3CameraControllerListVideosGet(xAccessToken);
 } catch (e) {
     print('Exception when calling CameraApi->aPIV3CameraControllerListVideosGet: $e\n');
 }
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xAccessToken** | **String**| Access Token | 
 
 ### Return type
 
@@ -353,7 +361,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete**
-> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename)
+> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename, xAccessToken)
 
 Permanently deletes a specific recorded video file belonging to the given camera.
 
@@ -364,9 +372,10 @@ import 'package:openapi/api.dart';
 final api_instance = CameraApi();
 final cameraId = cameraId_example; // String | The unique identifier of the camera that owns the video.
 final filename = filename_example; // String | The filename of the recorded video to delete.
+final xAccessToken = xAccessToken_example; // String | Access Token
 
 try {
-    api_instance.aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename);
+    api_instance.aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId, filename, xAccessToken);
 } catch (e) {
     print('Exception when calling CameraApi->aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete: $e\n');
 }
@@ -378,6 +387,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cameraId** | **String**| The unique identifier of the camera that owns the video. | 
  **filename** | **String**| The filename of the recorded video to delete. | 
+ **xAccessToken** | **String**| Access Token | 
 
 ### Return type
 
@@ -395,7 +405,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **aPIV3CameraControllerRunONVIFCommandCameraIdPost**
-> aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO)
+> aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, xAccessToken, oNVIFCommandDTO)
 
 Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
 
@@ -405,10 +415,11 @@ import 'package:openapi/api.dart';
 
 final api_instance = CameraApi();
 final cameraId = cameraId_example; // String | The unique identifier of the target camera.
+final xAccessToken = xAccessToken_example; // String | Access Token
 final oNVIFCommandDTO = ONVIFCommandDTO(); // ONVIFCommandDTO | The ONVIF command to execute, including its type and parameters.
 
 try {
-    api_instance.aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, oNVIFCommandDTO);
+    api_instance.aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId, xAccessToken, oNVIFCommandDTO);
 } catch (e) {
     print('Exception when calling CameraApi->aPIV3CameraControllerRunONVIFCommandCameraIdPost: $e\n');
 }
@@ -419,6 +430,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cameraId** | **String**| The unique identifier of the target camera. | 
+ **xAccessToken** | **String**| Access Token | 
  **oNVIFCommandDTO** | [**ONVIFCommandDTO**](ONVIFCommandDTO.md)| The ONVIF command to execute, including its type and parameters. | [optional] 
 
 ### Return type

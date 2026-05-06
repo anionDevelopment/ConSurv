@@ -20,12 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace ConSurvBackend.Core.Services
 {
     public class BusinessLogicService : IBusinessLogicService
     {
-        private static readonly object _LockObject = new object();
+        private static readonly SemaphoreSlim _Semaphore = new SemaphoreSlim(1, 1);
         private readonly IGRYLog _Log;
         private readonly IAuthenticationService<User> _AuthenticationService;
         private readonly IPersistence _Persistence;
@@ -48,12 +49,28 @@ namespace ConSurvBackend.Core.Services
             this._RuntimeData = runtimeData;
             this._Constants = constants;
         }
+
+        private static void Semaphore(SemaphoreSlim semaphore, Action action)
+        {
+            semaphore.Wait();
+            try { action(); }
+            finally { semaphore.Release(); }
+        }
+
+        private static T Semaphore<T>(SemaphoreSlim semaphore, Func<T> func)
+        {
+            semaphore.Wait();
+            try { return func(); }
+            finally { semaphore.Release(); }
+        }
+
         /// <inheritdoc />
-        public string CreateCamera(string name, string streamURL)
+        public string CreateCamera(string name, string streamURL) => Semaphore(_Semaphore, () => this.CreateCameraCore(name, streamURL));
+        private string CreateCameraCore(string name, string streamURL)
         {
             Camera camera = new Camera(this.GetId(streamURL), name);
             camera.VideoInformation.StreamURL = streamURL;
-            this.GetAllCameras()[camera.Id] = camera;
+            this.GetAllCamerasCore()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
             this._AuditLog.Logger.Log($"Created camera {camera.Id}.", LogLevel.Information);
             return camera.Id;
@@ -70,9 +87,10 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public (bool, Exception?) IsAvailable(Camera camera)
+        public (bool, Exception?) IsAvailable(Camera camera) => Semaphore(_Semaphore, () => this.IsAvailableCore(camera));
+        private (bool, Exception?) IsAvailableCore(Camera camera)
         {
-            if (this.GetCurrentRecordingInformation(camera) is Available)
+            if (this.GetCurrentRecordingInformationCore(camera) is Available)
             {
                 return (true, null);
             }
@@ -83,7 +101,8 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public RecordState GetCurrentRecordingInformation(Camera camera)
+        public RecordState GetCurrentRecordingInformation(Camera camera) => Semaphore(_Semaphore, () => this.GetCurrentRecordingInformationCore(camera));
+        private RecordState GetCurrentRecordingInformationCore(Camera camera)
         {
             try
             {
@@ -94,13 +113,19 @@ namespace ConSurvBackend.Core.Services
                 return new Unavailable();
             }
         }
+
         /// <inheritdoc />
-        public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand)
+        public void RunONVIFCommand(string cameraId, ONVIFCommand onvifCommand) => Semaphore(_Semaphore, () => this.RunONVIFCommandCore(cameraId, onvifCommand));
+        private void RunONVIFCommandCore(string cameraId, ONVIFCommand onvifCommand)
         {
-            Camera camera = this.GetCameraById(cameraId);
+            Camera camera = this.GetCameraByIdCore(cameraId);
             if (camera.VideoInformation.SupportsPTZViaONVIF)
             {
-                onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
+                (bool, Exception?) result = onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
+                if (!result.Item1)
+                {
+                    throw result.Item2!;
+                }
             }
             else
             {
@@ -109,17 +134,19 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public void RemoveCamera(string cameraId)
+        public void RemoveCamera(string cameraId) => Semaphore(_Semaphore, () => this.RemoveCameraCore(cameraId));
+        private void RemoveCameraCore(string cameraId)
         {
             //TODO check permission
-            Camera camera = this.GetCameraById(cameraId);
+            Camera camera = this.GetCameraByIdCore(cameraId);
             camera.RecordMode = new NoRecording();
             this._Persistence.RemoveCamera(cameraId);
             this._AuditLog.Logger.Log($"Removed camera {camera.Id}.", LogLevel.Information);
         }
 
         /// <inheritdoc />
-        public void UpdateCamera(Camera camera)
+        public void UpdateCamera(Camera camera) => Semaphore(_Semaphore, () => this.UpdateCameraCore(camera));
+        private void UpdateCameraCore(Camera camera)
         {
             //TODO check permission
             this._Persistence.UpdateCamera(camera);
@@ -128,10 +155,11 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public Camera GetCameraById(string cameraId)
+        public Camera GetCameraById(string cameraId) => Semaphore(_Semaphore, () => this.GetCameraByIdCore(cameraId));
+        private Camera GetCameraByIdCore(string cameraId)
         {
             //TODO check permission
-            if (this.GetAllCameras().TryGetValue(cameraId, out Camera? value))
+            if (this.GetAllCamerasCore().TryGetValue(cameraId, out Camera? value))
             {
                 return value;
             }
@@ -142,44 +170,47 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public double GetRateOfAvailableCameras()
+        public double GetRateOfAvailableCameras() => Semaphore(_Semaphore, this.GetRateOfAvailableCamerasCore);
+        private double GetRateOfAvailableCamerasCore()
         {
-            if (this.GetAllCameras().Count == 0)
+            if (this.GetAllCamerasCore().Count == 0)
             {
                 return 0;
             }
             else
             {
-                return this.GetAllCameras().Where(kvp => this.IsAvailable(kvp.Value).Item1).Count() / this.GetAllCameras().Count;
+                return this.GetAllCamerasCore().Where(kvp => this.IsAvailableCore(kvp.Value).Item1).Count() / this.GetAllCamerasCore().Count;
             }
         }
 
         /// <inheritdoc />
-        public string Register(string username, string password)
+        public string Register(string username, string password) => Semaphore(_Semaphore, () => this.RegisterCore(username, password));
+        private string RegisterCore(string username, string password)
         {
-            lock (_LockObject)
-            {
-                User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
-                this._AuthenticationService.AddUserTyped(newUser);
-                this._AuditLog.Logger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
-                return newUser.Id;
-            }
+            User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
+            this._AuthenticationService.AddUserTyped(newUser);
+            this._AuditLog.Logger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
+            return newUser.Id;
         }
 
         /// <inheritdoc />
-        public bool UserWithNameExists(string username)
+        public bool UserWithNameExists(string username) => Semaphore(_Semaphore, () => this.UserWithNameExistsCore(username));
+        private bool UserWithNameExistsCore(string username)
         {
             return this._Persistence.UserWithNameExists(username);
         }
 
         /// <inheritdoc />
-        public IDictionary<string, Camera> GetAllCameras()
+        public IDictionary<string, Camera> GetAllCameras() => Semaphore(_Semaphore, this.GetAllCamerasCore);
+        private IDictionary<string, Camera> GetAllCamerasCore()
         {
             //TODO check permission
             return this._Persistence.GetAllCameras();
         }
+
         /// <inheritdoc />
-        public CameraDTO ToDTO(Camera camera)
+        public CameraDTO ToDTO(Camera camera) => Semaphore(_Semaphore, () => this.ToDTOCore(camera));
+        private CameraDTO ToDTOCore(Camera camera)
         {
             return new CameraDTO()
             {
@@ -187,12 +218,13 @@ namespace ConSurvBackend.Core.Services
                 Name = camera.Name,
                 RecordModeDTO = camera.RecordMode.ToDTO(),
                 VideoInformationDTO = camera.VideoInformation.ToDTO(),
-                RecordStateDTO = this.GetCurrentRecordingInformation(camera).ToDTO(),
+                RecordStateDTO = this.GetCurrentRecordingInformationCore(camera).ToDTO(),
             };
         }
 
         /// <inheritdoc />
-        public void EnsureUserHasRole(string userId, string roleId)
+        public void EnsureUserHasRole(string userId, string roleId) => Semaphore(_Semaphore, () => this.EnsureUserHasRoleCore(userId, roleId));
+        private void EnsureUserHasRoleCore(string userId, string roleId)
         {
             this._AuditLog.Logger.Log($"Add role with id {roleId} to user with id {userId}...", LogLevel.Information);
             this._AuthenticationService.EnsureUserHasRole(userId, roleId);
@@ -200,26 +232,31 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public void EnsureUserDoesNotHaveRole(string userId, string roleId)
+        public void EnsureUserDoesNotHaveRole(string userId, string roleId) => Semaphore(_Semaphore, () => this.EnsureUserDoesNotHaveRoleCore(userId, roleId));
+        private void EnsureUserDoesNotHaveRoleCore(string userId, string roleId)
         {
             this._AuditLog.Logger.Log($"Unassign role with id {roleId} from user with id {userId}.", LogLevel.Information);
             this._AuthenticationService.EnsureUserDoesNotHaveRole(userId, roleId);
             //TODO add information about why and by whom this was done to auditlog
         }
+
         /// <inheritdoc />
-        public User GetUser(string userId)
+        public User GetUser(string userId) => Semaphore(_Semaphore, () => this.GetUserCore(userId));
+        private User GetUserCore(string userId)
         {
             return this._AuthenticationService.GetUserTyped(userId);
         }
 
         /// <inheritdoc />
-        public AccessToken Login(string username, string password)
+        public AccessToken Login(string username, string password) => Semaphore(_Semaphore, () => this.LoginCore(username, password));
+        private AccessToken LoginCore(string username, string password)
         {
             return this._AuthenticationService.Login(username, password);
         }
 
         /// <inheritdoc />
-        public IDictionary<string, IList<string>> GetVideos()
+        public IDictionary<string, IList<string>> GetVideos() => Semaphore(_Semaphore, this.GetVideosCore);
+        private IDictionary<string, IList<string>> GetVideosCore()
         {
             Dictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
             foreach (string folder in Directory.GetDirectories(Path.Combine(this._Constants.GetDataFolder(), "CameraData")))
@@ -237,7 +274,8 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public void RemoveVideo(string cameraId, string filename)
+        public void RemoveVideo(string cameraId, string filename) => Semaphore(_Semaphore, () => this.RemoveVideoCore(cameraId, filename));
+        private void RemoveVideoCore(string cameraId, string filename)
         {
             string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
             if (File.Exists(fullPath))
@@ -251,13 +289,15 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
-        public byte[] GetPreviewOfVideo(string cameraId, string filename)
+        public byte[] GetPreviewOfVideo(string cameraId, string filename) => Semaphore(_Semaphore, () => this.GetPreviewOfVideoCore(cameraId, filename));
+        private byte[] GetPreviewOfVideoCore(string cameraId, string filename)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public byte[] GetVideo(string cameraId, string filename)
+        public byte[] GetVideo(string cameraId, string filename) => Semaphore(_Semaphore, () => this.GetVideoCore(cameraId, filename));
+        private byte[] GetVideoCore(string cameraId, string filename)
         {
             string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
             if (File.Exists(fullPath))

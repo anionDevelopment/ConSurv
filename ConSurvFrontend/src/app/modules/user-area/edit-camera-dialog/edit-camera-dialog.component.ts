@@ -19,6 +19,9 @@ export class EditCameraDialogComponent {
   nameFormControl: FormControl<string>;
   rtspstreamurlFormControl: FormControl<string>;
   supportsPTZViaONVIFFormControl: FormControl<boolean>;
+  onvifUrlFormControl: FormControl<string | null>;
+  onvifUsernameFormControl: FormControl<string | null>;
+  onvifPasswordFormControl: FormControl<string | null>;
   recordmodeFormControl: FormControl<RecordModeDTO>;
   recordmodeSelectFormControl: FormControl<string>;
   recordmode$: BehaviorSubject<RecordModeDTO>;
@@ -29,12 +32,18 @@ export class EditCameraDialogComponent {
     this.nameFormControl = new FormControl<any>(this.cameraData.name!);
     this.rtspstreamurlFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.streamURL!);
     this.supportsPTZViaONVIFFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.supportsPTZViaONVIF!);
+    this.onvifUrlFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.onvifUrl ?? null);
+    this.onvifUsernameFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.onvifUsername ?? null);
+    this.onvifPasswordFormControl = new FormControl<any>(this.cameraData.videoInformationDTO!.onvifPassword ?? null);
     this.recordmodeFormControl = new FormControl<any>(this.cameraData.recordModeDTO!);
     this.recordmodeSelectFormControl = new FormControl<any>(this.cameraData.recordModeDTO!.recordMode);
     this.form = new FormGroup({
       name: this.nameFormControl,
       rtspstreamurl: this.rtspstreamurlFormControl,
       supportsPTZViaONVIF: this.supportsPTZViaONVIFFormControl,
+      onvifUrl: this.onvifUrlFormControl,
+      onvifUsername: this.onvifUsernameFormControl,
+      onvifPassword: this.onvifPasswordFormControl,
       recordmode: this.recordmodeFormControl,
       recordmodeselect: this.recordmodeSelectFormControl,
     });
@@ -53,6 +62,9 @@ export class EditCameraDialogComponent {
       videoInformationDTO: {
         streamURL: this.form.get('rtspstreamurl')!.value,
         supportsPTZViaONVIF: this.form.get('supportsPTZViaONVIF')!.value,
+        onvifUrl: this.form.get('onvifUrl')!.value,
+        onvifUsername: this.form.get('onvifUsername')!.value,
+        onvifPassword: this.form.get('onvifPassword')!.value,
       },
     };
     this.cameraService.aPIV3CameraControllerUpdateCameraPut(this.storageService.getAccessToken(), updated).pipe(

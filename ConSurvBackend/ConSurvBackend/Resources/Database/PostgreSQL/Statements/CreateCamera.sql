@@ -5,7 +5,10 @@ insert into "Cameras"(
 		"SupportsPTZViaONVIF",
 		"Certificate",
 		"RecordMode",
-		"Enabled"
+		"Enabled",
+		"ONVIFUrl",
+		"ONVIFUsername",
+		"ONVIFPassword"
 	)
 values (
 		@Id,
@@ -14,5 +17,8 @@ values (
 		@SupportsPTZViaONVIF,
 		@Certificate,
 		@RecordMode,
-		@Enabled
+		@Enabled,
+		@ONVIFUrl,
+		@ONVIFUsername,
+		@ONVIFPassword
 	);

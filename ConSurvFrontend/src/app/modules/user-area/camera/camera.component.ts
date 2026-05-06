@@ -53,7 +53,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   initializeCamera(camera: CameraDTO): void {
     this.camera = camera;
     const apiURL: string = this.configurationService.getAPIURL();
-    this.information = `Camera ${camera.name} (Id: ${camera.cameraId})`;
+    this.information = `Camera: ${camera.name} (Id: ${camera.cameraId})`;
     const majorVersion = 3;//TODO retrieve this from package.json
     const url = `${apiURL}/API/v${majorVersion}/StreamingController/Stream/${camera.cameraId}/stream.m3u8`;
     this.player = videojs("videoPlayer", {
@@ -74,6 +74,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     if (!this.camera?.cameraId) { return; }
     this.cameraService.aPIV3CameraControllerRunONVIFCommandCameraIdPost(
       this.camera.cameraId,
+      this.storgeService.getAccessToken(),
       { commandType, direction }
     ).pipe(takeUntil(this.destroy$)).subscribe();
   }
