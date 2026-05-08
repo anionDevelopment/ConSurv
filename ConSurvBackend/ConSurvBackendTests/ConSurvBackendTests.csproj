@@ -1,98 +1,98 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <Authors>Marius Göcke</Authors>
-        <Version>3.0.24</Version>
-        <AssemblyVersion>3.0.24</AssemblyVersion>
-        <FileVersion>3.0.24</FileVersion>
-        <SelfContained>false</SelfContained>
-        <IsPackable>false</IsPackable>
-        <PreserveCompilationContext>false</PreserveCompilationContext>
-        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-        <Copyright>Copyright © 2025 Marius Göcke</Copyright>
-        <Description>ConSurvBackendTests is the test-project for ConSurvBackend.</Description>
-        <PackageProjectUrl>https://github.com/anionDev/CommonProjectStructureExamples</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/anionDev/CommonProjectStructureExamples.git</RepositoryUrl>
-        <RootNamespace>ConSurvBackend.Tests</RootNamespace>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <Nullable>enable</Nullable>
-        <Configurations>Development;QualityCheck;Productive</Configurations>
-        <IsTestProject>true</IsTestProject>
-        <LangVersion>11.0</LangVersion>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <OutputPath>..\Other\Artifacts\BuildResultTests_DotNet_win-x64</OutputPath>
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <WarningLevel>4</WarningLevel>
-        <Prefer32Bit>false</Prefer32Bit>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
-        <DelaySign>true</DelaySign>
-        <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039;IDE0063</NoWarn>
-        <WarningsAsErrors>NU1605</WarningsAsErrors>
-        <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackendTests.sarif</ErrorLog>
-        <OutputType>Library</OutputType>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='Development'">
-        <DebugType>full</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <Optimize>false</Optimize>
-        <DefineConstants>TRACE;DEBUG;Development</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='QualityCheck'">
-        <DebugType>portable</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <Optimize>false</Optimize>
-        <DefineConstants>TRACE;QualityCheck</DefineConstants>
-        <ErrorReport>none</ErrorReport>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='Productive'">
-        <DebugType>portable</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <Optimize>false</Optimize>
-        <DefineConstants>Productive</DefineConstants>
-        <ErrorReport>none</ErrorReport>
-    </PropertyGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\ConSurvBackend\ConSurvBackend.csproj" />
-        <PackageReference Include="coverlet.collector" Version="6.0.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.msbuild" Version="6.0.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="FFmpeg.AutoGen" Version="8.0.0.1" />
-        <PackageReference Include="GRYLibrary" Version="2.0.15" />
-        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
-        <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-        <PackageReference Include="Npgsql" Version="10.0.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-        <PackageReference Include="Moq" Version="4.20.72" />
-        <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
-        <PackageReference Include="NJsonSchema" Version="11.5.2" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
-        <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260308" />
-        <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260308" />
-        <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260308" />
-        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-        <PackageReference Include="prometheus-net" Version="8.2.1" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-		<PackageReference Include="SkiaSharp" Version="3.119.3-preview.1.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.3-preview.1.1" />
-        <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
-        <PackageReference Include="System.Reactive" Version="6.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.3" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Authors>Marius Göcke</Authors>
+    <Version>3.0.25</Version>
+    <AssemblyVersion>3.0.25</AssemblyVersion>
+    <FileVersion>3.0.25</FileVersion>
+    <SelfContained>false</SelfContained>
+    <IsPackable>false</IsPackable>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <Copyright>Copyright © 2025 Marius Göcke</Copyright>
+    <Description>ConSurvBackendTests is the test-project for ConSurvBackend.</Description>
+    <PackageProjectUrl>https://github.com/anionDev/CommonProjectStructureExamples</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/anionDev/CommonProjectStructureExamples.git</RepositoryUrl>
+    <RootNamespace>ConSurvBackend.Tests</RootNamespace>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <Nullable>enable</Nullable>
+    <Configurations>Development;QualityCheck;Productive</Configurations>
+    <IsTestProject>true</IsTestProject>
+    <LangVersion>11.0</LangVersion>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\Other\Artifacts\BuildResultTests_DotNet_win-x64</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Other\Resources\PublicKeys\StronglyNamedKey\ConSurvPublicKey.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <NoWarn>1701;1702;CA1822;CS1591;CS1573;IDE0045;IDE0046;IDE0054;IDE0058;IDE0074;IDE0090;CA1859;CA1860;IDE0039;IDE0063</NoWarn>
+    <WarningsAsErrors>NU1605</WarningsAsErrors>
+    <ErrorLog>..\Other\Resources\CodeAnalysisResult\ConSurvBackendTests.sarif</ErrorLog>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Development'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;Development</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='QualityCheck'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;QualityCheck</DefineConstants>
+    <ErrorReport>none</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Productive'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>Productive</DefineConstants>
+    <ErrorReport>none</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConSurvBackend\ConSurvBackend.csproj" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FFmpeg.AutoGen" Version="8.0.0.1" />
+    <PackageReference Include="GRYLibrary" Version="2.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+    <PackageReference Include="Microsoft.CodeCoverage" Version="18.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="Npgsql" Version="10.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Include="NJsonSchema" Version="11.5.2" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
+    <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260308" />
+    <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260308" />
+    <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260308" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <PackageReference Include="prometheus-net" Version="8.2.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="SkiaSharp" Version="3.119.3-preview.1.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.3-preview.1.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
+    <PackageReference Include="System.Reactive" Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.3" />
+  </ItemGroup>
 </Project>
