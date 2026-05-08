@@ -31,6 +31,27 @@ namespace ConSurvBackend.Tests.Testcases.Misc
         }
 
         [TestMethod]
+        public void GetVideoTargetFileTests_LocalTime()
+        {
+            // arrange
+            Mock<ITimeService> timeServiceMock = new Mock<ITimeService>();
+            string cameraId = "789";
+            bool inUTC = false;
+
+            DateTime dateTime = new DateTime(2025, 12, 31, 23, 59, 59);
+            timeServiceMock.Setup(timeService => timeService.GetCurrentLocalTimeAsDateTimeOffset()).Returns(dateTime);
+            string expectedName = $"{cameraId}_{dateTime.Year:D4}_{dateTime.Month:D2}_{dateTime.Day:D2}_{dateTime.Hour:D2}_{dateTime.Minute:D2}_{dateTime.Second:D2}.mp4";
+
+            // act
+            string actualName = Core.Misc.Utilities.GetVideoTargetFile(cameraId, inUTC, timeServiceMock.Object);
+
+            // assert
+            Assert.AreEqual(expectedName, actualName);
+            timeServiceMock.Verify(timeService => timeService.GetCurrentLocalTimeAsDateTimeOffset(), Times.Once);
+            timeServiceMock.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
         public void EscapeBasicAuthPasswords()
         {
             // arrange

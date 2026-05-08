@@ -47,7 +47,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         public static string GetTestPostgreSQLConnectionString()
         {
-            return @$"Host=localhost; Port=5432; Username=user; Password=pa55w0rd; Database=ConSurvDatabase;";
+            return @$"Host=localhost;Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;";
         }
 
         public static string GetTestDatabaseCreationScriptArtifactFolder(string databaseName)
