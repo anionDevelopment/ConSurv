@@ -16,10 +16,10 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 {
     public abstract class DatabaseTestsBase
     {
-        protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFrameworkImplementation();
+        protected abstract DatabaseTestFrameworkTemplate GetDatabaseTestFramework();
         protected DatabaseTestFrameworkTemplate GetDatabaseTestFramework(bool runMigrations)
         {
-            DatabaseTestFrameworkTemplate result = this.GetDatabaseTestFrameworkImplementation();
+            DatabaseTestFrameworkTemplate result = this.GetDatabaseTestFramework();
             this.PrepareDatabase(result, runMigrations);
             return result;
         }

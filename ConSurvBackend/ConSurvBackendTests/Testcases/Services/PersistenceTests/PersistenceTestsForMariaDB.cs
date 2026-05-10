@@ -1,16 +1,32 @@
-﻿using GRYLibrary.Core.APIServer.Utilities;
+﻿using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.APIServer.Utilities;
 using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenCvSharp.ML;
 
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
     [TestClass]
-    [Ignore("this file causes problems on some systems due test-case-runs which do not terminate.")]
     public class PersistenceTestsForMariaDB : PersistenceTestsBaseForDatabase
     {
+        private DatabaseTestFrameworkForMariaDB? _DatabaseFramework;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _DatabaseFramework = ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForMariaDB();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _DatabaseFramework?.Dispose();
+            _DatabaseFramework = null;
+        }
+
         protected override DatabaseTestFrameworkTemplate GetDatabaseTestFramework()
         {
-            return ConSurvBackend.Tests.TestUtilities.Utilities.GetDatabaseTestFrameworkForMariaDB();
+            return _DatabaseFramework!;
         }
 
         [TestMethod(nameof(PersistCameraTest))]
