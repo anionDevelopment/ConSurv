@@ -51,6 +51,12 @@
         /// <summary>Returns the SQL script that inserts a new camera record.</summary>
         string GetScriptCreateCamera();
 
+        /// <summary>Returns the SQL script that deletes a camera record by its id.</summary>
+        string GetScriptRemoveCamera();
+
+        /// <summary>Returns the SQL script that updates an existing camera record.</summary>
+        string GetScriptUpdateCamera();
+
         /// <summary>Returns the SQL script that resets (truncates or drops and recreates) the database schema.</summary>
         string GetScriptResetDatabase();
 
