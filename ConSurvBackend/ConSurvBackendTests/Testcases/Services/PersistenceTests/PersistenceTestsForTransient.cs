@@ -16,11 +16,39 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             return new PersistenceDisposable(result.Item1, result.Item2);
         }
 
-        [TestMethod(DisplayName = nameof(PersistCameraTest))]
+        [TestMethod(DisplayName =nameof(PersistenceTestsForTransient) + "." + nameof(CreateCameraTest))]
         [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
-        public override void PersistCameraTest()
+        public override void CreateCameraTest()
         {
-            this.PersistCamera();
+            this.CreateCamera();
+        }
+
+        [TestMethod(DisplayName = nameof(PersistenceTestsForTransient) + "." + nameof(RemoveCameraTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        public override void RemoveCameraTest()
+        {
+            this.RemoveCamera();
+        }
+
+        [TestMethod(DisplayName = nameof(PersistenceTestsForTransient) + "." + nameof(UpdateCameraTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        public override void UpdateCameraTest()
+        {
+            this.UpdateCamera();
+        }
+
+        [TestMethod(DisplayName = nameof(PersistenceTestsForTransient) + "." + nameof(GetAllCamerasTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        public override void GetAllCamerasTest()
+        {
+            this.GetAllCameras();
+        }
+
+        [TestMethod(DisplayName = nameof(PersistenceTestsForTransient) + "." + nameof(ResetTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        public override void ResetTest()
+        {
+            this.Reset();
         }
     }
 }

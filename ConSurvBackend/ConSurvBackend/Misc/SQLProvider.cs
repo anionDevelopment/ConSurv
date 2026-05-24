@@ -39,6 +39,16 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("CreateCamera");
         }
 
+        public string GetScriptRemoveCamera()
+        {
+            return this.LoadSQLScript("RemoveCamera");
+        }
+
+        public string GetScriptUpdateCamera()
+        {
+            return this.LoadSQLScript("UpdateCamera");
+        }
+
         public string GetScriptGetAccessToken()
         {
             return this.LoadSQLScript("GetAccessToken");

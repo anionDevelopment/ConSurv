@@ -118,13 +118,32 @@ namespace ConSurvBackend.Core.Services
         /// <inheritdoc />
         public void RemoveCamera(string cameraId)
         {
-            throw new NotImplementedException();
+            this.RunTransaction(nameof(RemoveCamera), true, (command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptRemoveCamera();
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", cameraId));
+                command.ExecuteNonQuery();
+            });
         }
 
         /// <inheritdoc />
         public void UpdateCamera(Camera camera)
         {
-            throw new NotImplementedException();
+            this.RunTransaction(nameof(UpdateCamera), true, (command) =>
+            {
+                command.CommandText = this._SQLProvider.GetScriptUpdateCamera();
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Id", camera.Id));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Name", camera.Name));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("StreamURL", camera.VideoInformation.StreamURL, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("SupportsPTZViaONVIF", camera.VideoInformation.SupportsPTZViaONVIF));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Certificate", camera.VideoInformation.Certificate, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("RecordMode", RecordMode.ToNumber(camera.RecordMode.GetType())));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Enabled", camera.Enabled));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFUrl", camera.VideoInformation.ONVIFUrl, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFUsername", camera.VideoInformation.ONVIFUsername, typeof(string)));
+                command.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("ONVIFPassword", camera.VideoInformation.ONVIFPassword, typeof(string)));
+                command.ExecuteNonQuery();
+            });
         }
 
         /// <inheritdoc />
@@ -591,8 +610,7 @@ namespace ConSurvBackend.Core.Services
             this.RunTransaction(nameof(Reset), false, (cmd) =>
             {
                 cmd.CommandText = this._SQLProvider.GetScriptResetDatabase();
-                using DbDataReader reader = cmd.ExecuteReader();
-                return reader.HasRows;
+                cmd.ExecuteNonQuery();
             });
         }
 

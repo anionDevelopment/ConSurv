@@ -154,7 +154,6 @@ namespace ConSurvBackend.Core
                         MaximalLengthOfResponseBodies = 500,
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
-                    initializationInformation.InitialApplicationConfiguration.ServerConfiguration.Domain = domain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePFXHex = GeneralConstants.DevelopmentCertificatePFXHex;
                     string initialCameraAddressesJoined = string.Join(", ", initializationInformation.CommandlineParameter.InitialCameraAddresses ?? new List<string>());
