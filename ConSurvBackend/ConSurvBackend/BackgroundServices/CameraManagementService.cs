@@ -91,13 +91,14 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 existingState = this._RuntimeData.GetCameraInternals(camera.Id);
                 CameraInternalsBase currentState = this.GetCurrentInternalState(camera);
+                this._Logger.Log($"Camera {camera.Id}: tracked-state={existingState?.GetType().Name ?? "none"}, detected-state={currentState.GetType().Name}.", Microsoft.Extensions.Logging.LogLevel.Trace);
                 try
                 {
                     currentState.Accept(new EnsureDesiredConditionIsApplied(existingState, this));
                 }
                 catch (Exception e)
                 {
-                    this._Logger.Log($"Error while managing camera {camera.Id}.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this._Logger.Log($"Error while managing camera {camera.Id}. Resetting it to {nameof(NotAvailable)} and reapplying the desired condition.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
                     NotAvailable newState = new NotAvailable(camera);
                     this._RuntimeData.SetCameraInternals(newState);
                     newState.Accept(new EnsureDesiredConditionIsApplied(currentState, this));
@@ -106,6 +107,17 @@ namespace ConSurvBackend.Core.BackgroundServices
 
             //TODO camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RTSPManager));
         }
+
+        private void LogDebug(string message)
+        {
+            this._Logger.Log(message, Microsoft.Extensions.Logging.LogLevel.Debug);
+        }
+
+        private void LogDebug(string message, Exception exception)
+        {
+            this._Logger.Log(message, exception, Microsoft.Extensions.Logging.LogLevel.Debug);
+        }
+
         private class EnsureDesiredConditionIsApplied : ICameraInternalsBaseVisitor
         {
             private readonly CameraInternalsBase _PreviousState;
@@ -124,6 +136,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 bool startProcesses = false;
                 if (this._PreviousState.Camera.VideoInformation.StreamURL != available.Camera.VideoInformation.StreamURL)
                 {
+                    this._CameraManagementService.LogDebug($"Stream-URL of camera {available.Camera.Id} changed. Restarting its media-processes.");
                     if (this._PreviousState is Available prevous)
                     {
                         this.StopProcesses(prevous);
@@ -132,6 +145,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 }
                 if (this._PreviousState is NotAvailable)
                 {
+                    this._CameraManagementService.LogDebug($"Camera {available.Camera.Id} transitioned from {nameof(NotAvailable)} to {nameof(Available)}. Starting its media-processes.");
                     startProcesses = true;
                 }
                 if (startProcesses)
@@ -149,12 +163,14 @@ namespace ConSurvBackend.Core.BackgroundServices
             {
                 if (this._PreviousState is Available previousAvailableState)
                 {
+                    this._CameraManagementService.LogDebug($"Camera {notAvailable.Camera.Id} is no longer available. Stopping its media-processes.");
                     this.StopProcesses(previousAvailableState);
                 }
             }
 
             private void StopProcesses(Available available)
             {
+                this._CameraManagementService.LogDebug($"Terminating media-processes of camera {available.Camera.Id}.");
                 try
                 {
                     if (available.MediaMTXProcess.IsRunning)
@@ -162,9 +178,9 @@ namespace ConSurvBackend.Core.BackgroundServices
                         available.MediaMTXProcess.Terminate();
                     }
                 }
-                catch
+                catch (Exception exception)
                 {
-                    //TODO log exception
+                    this._CameraManagementService.LogDebug($"Error while terminating the MediaMTX-process of camera {available.Camera.Id}.", exception);
                 }
 
                 try
@@ -175,9 +191,9 @@ namespace ConSurvBackend.Core.BackgroundServices
                     }
 
                 }
-                catch
+                catch (Exception exception)
                 {
-                    //TODO log exception
+                    this._CameraManagementService.LogDebug($"Error while terminating the FFMPEG-process of camera {available.Camera.Id}.", exception);
                 }
             }
         }
@@ -253,9 +269,14 @@ namespace ConSurvBackend.Core.BackgroundServices
                     ffmpegProcessResult = available.FFMPEGProcess;
                     mediaMTXProcessResult = available.MediaMTXProcess;
                     url = available.MediaMTXURL;
-                    if (IsRtspAvailable(url,out string? errorMessage))
+                    if (IsRtspAvailable(url, out string? errorMessage))
                     {
+                        this._Logger.Log($"Camera {camera.Id} is still available internally under \"{url}\". Reusing the existing media-processes.", Microsoft.Extensions.Logging.LogLevel.Trace);
                         return true;
+                    }
+                    else
+                    {
+                        this._Logger.Log($"Camera {camera.Id} was available internally but its stream is no longer reachable. Recreating the media-processes. Details: {errorMessage}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     }
                 }
             }
@@ -263,7 +284,8 @@ namespace ConSurvBackend.Core.BackgroundServices
             ExternalProgramExecutor mediaMTXProcess;
             try
             {
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL, out string? errorMessage), $"Camera {camera.Id} is not available: "+errorMessage);
+                this._Logger.Log($"(Re)starting media-processes for camera {camera.Id} (stream-URL: \"{Misc.Utilities.EscapeBasicAuthPasswords(camera.VideoInformation.StreamURL)}\").", Microsoft.Extensions.Logging.LogLevel.Debug);
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL, out string? errorMessage), $"Camera {camera.Id} is not available: " + errorMessage);
                 Thread.Sleep(TimeSpan.FromSeconds(2));//wait until the camera is available again after probing it
                 string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
@@ -275,6 +297,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                     mediaMTXExecutable = mediaMTXExecutable + ".exe";
                 }
                 ushort mediaMTXPort = this.GetNewFreePort();
+                this._Logger.Log($"Using port {mediaMTXPort} for the media-hub of camera {camera.Id}.", Microsoft.Extensions.Logging.LogLevel.Debug);
                 string configurationFileContent = @$"rtspAddress: ""0.0.0.0:{mediaMTXPort}""
 rtmp: no
 hls: no
@@ -289,7 +312,7 @@ paths:
                 string configFile = Path.Combine(mediaMTXFolder, configFileName);
                 GRYLibrary.Core.Misc.Utilities.EnsureFileExists(configFile);
                 File.WriteAllText(configFile, configurationFileContent);
-                this._Logger.Log($"Content of {configFile}:\n\"" + File.ReadAllText(configFile, new UTF8Encoding(false)) + "\"",Microsoft.Extensions.Logging.LogLevel.Trace);
+                this._Logger.Log($"Content of {configFile}:\n\"" + File.ReadAllText(configFile, new UTF8Encoding(false)) + "\"", Microsoft.Extensions.Logging.LogLevel.Trace);
                 //FIXME: mediamtx will not be exited after terminating consurvbackend, even if it should be (by espoc)
                 mediaMTXProcess = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, configFileName, mediaMTXFolder, null, $"Media-hub for {camera.Id}", $"MediaHubFor{camera.Id}", false);
                 url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
@@ -313,7 +336,7 @@ paths:
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess.IsRunning, () => $"Process \"{purpose}\" terminated unexpectedly with {ffmpegProcess.ExitCode}.");
 
                 //assert stream is available
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url,out string? message), () =>
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url, out string? message), () =>
                 {
                     string result = $"{message}\nMedia-Hub for {camera.Id} is not available.";
                     try
@@ -366,6 +389,7 @@ paths:
                 if (camera.RecordMode is RecordAlways)
                 {
                     //record
+                    this._Logger.Log($"Start recording {camera.Id}.");
                     string target_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Recordings");
                     GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(target_folder);
                     target_folder = target_folder.Replace("\\", "/");
@@ -436,6 +460,7 @@ paths:
             using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
             using FileStream stream = System.IO.File.OpenWrite(overlayFile);
             data.SaveTo(stream);
+            this._Logger.Log($"Created overlay-file for camera {camera.Id} ({width}x{height}, {polygons.Count} polygon(s)) at \"{overlayFile}\".", Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
         /// <summary>
@@ -446,13 +471,15 @@ paths:
         /// <returns>A port number that has not been handed out since the last wrap-around.</returns>
         private ushort GetNewFreePort()
         {
-            if (this._LastUsedPort == ushort.MaxValue)
+            lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
-                this._LastUsedPort = _LastUsedPortRangeBegin;
+                if (this._LastUsedPort == ushort.MaxValue)
+                {
+                    this._LastUsedPort = _LastUsedPortRangeBegin;
+                }
+                this._LastUsedPort = (ushort)(this._LastUsedPort + 1);
+                return this._LastUsedPort;
             }
-            this._LastUsedPort = (ushort)(this._LastUsedPort + 1);
-
-            return this._LastUsedPort;
         }
 
         /// <summary>
@@ -464,7 +491,7 @@ paths:
         /// <see langword="true"/> if <c>ffprobe</c> exits with code 0; <see langword="false"/> if the
         /// URL is unreachable or probing fails for any reason.
         /// </returns>
-        private static bool IsRtspAvailable(string rtspUrl,out string? message)
+        private static bool IsRtspAvailable(string rtspUrl, out string? message)
         {
             try
             {

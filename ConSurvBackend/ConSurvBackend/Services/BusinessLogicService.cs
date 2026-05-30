@@ -119,6 +119,7 @@ namespace ConSurvBackend.Core.Services
         private void RunONVIFCommandCore(string cameraId, ONVIFCommand onvifCommand)
         {
             Camera camera = this.GetCameraByIdCore(cameraId);
+            this._Log.Log($"Running ONVIF-command {onvifCommand.GetType().Name} on camera {cameraId}.", LogLevel.Debug);
             if (camera.VideoInformation.SupportsPTZViaONVIF)
             {
                 (bool, Exception?) result = onvifCommand.Accept(new RunONVIFCommandVisitor(camera));
@@ -280,6 +281,7 @@ namespace ConSurvBackend.Core.Services
             string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
             if (File.Exists(fullPath))
             {
+                this._Log.Log($"Removing recording \"{filename}\" of camera {cameraId}.", LogLevel.Debug);
                 File.Delete(fullPath);
             }
             else
