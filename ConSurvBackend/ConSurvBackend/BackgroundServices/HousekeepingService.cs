@@ -197,6 +197,10 @@ namespace ConSurvBackend.Core.BackgroundServices
                     {
                         GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(fileToDelete);
                     }
+                    if (filesToDelete.Count > 0)
+                    {
+                        this._Logger.Log($"Deleted {filesToDelete.Count} outdated screenshot(s) of camera {camera.Id}.", LogLevel.Debug);
+                    }
                 }
             }
         }
@@ -222,6 +226,10 @@ namespace ConSurvBackend.Core.BackgroundServices
                     foreach (string fileToDelete in filesToDelete)
                     {
                         GRYLibrary.Core.Misc.Utilities.EnsureFileDoesNotExist(fileToDelete);
+                    }
+                    if (filesToDelete.Count > 0)
+                    {
+                        this._Logger.Log($"Deleted {filesToDelete.Count} recording(s) of camera {camera.Id} that exceeded the retention-period.", LogLevel.Debug);
                     }
                 }
             }
