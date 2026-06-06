@@ -1,11 +1,9 @@
-version: "3.2"
-
 services:
   consurv_database:
     container_name: "consurv_database"
     image: ${image_mariadb}
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     environment:
       MARIADB_USER: user
       MARIADB_PASSWORD: pa55w0rd
@@ -25,8 +23,8 @@ services:
   consurv_database_administration:
     image: ${image_adminer}
     container_name: "consurv_database_administration"
-    ports:
-      - 8080:8080
+    expose:
+      - "8080"
     networks:
       - consurv_net
 

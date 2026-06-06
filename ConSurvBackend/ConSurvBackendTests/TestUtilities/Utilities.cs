@@ -36,9 +36,20 @@ namespace ConSurvBackend.Tests.TestUtilities
             return GUtilities.ResolveToFullPath(@$"{GeneralConstants.RepositoryFolder}\Other\Resources\LocalTestServices\MariaDBDatabase");
         }
 
+        /// <summary>
+        /// Returns the host under which the test-database-container is reachable.
+        /// Inside the build-container the test-process is attached to the docker-network of the test-services and reaches the container directly by its
+        /// container-name (no ports are published to the host). Locally the container's ports are published, so it is reached via "localhost".
+        /// </summary>
+        private static string GetTestDatabaseHost()
+        {
+            bool runningInBuildContainer = System.Environment.GetEnvironmentVariable("ISRUNNINGINBUILDCONTAINER") == "true";
+            return runningInBuildContainer ? "consurv_database" : "localhost";
+        }
+
         public static string GetTestMariaDBConnectionString()
         {
-            return @$"Host=localhost;Port=3306;User ID=user;Password=pa55w0rd;Database=ConSurvDatabase;";
+            return @$"Host={GetTestDatabaseHost()};Port=3306;User ID=user;Password=pa55w0rd;Database=ConSurvDatabase;";
         }
         public static string GetTestPostgreSQLDatabaseFolder()
         {
@@ -47,7 +58,7 @@ namespace ConSurvBackend.Tests.TestUtilities
 
         public static string GetTestPostgreSQLConnectionString()
         {
-            return @$"Host=localhost;Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;";
+            return @$"Host={GetTestDatabaseHost()};Port=5432;Username=user;Password=pa55w0rd;Database=ConSurvDatabase;IncludeErrorDetail=true;";
         }
 
         public static string GetTestDatabaseCreationScriptArtifactFolder(string databaseName)
