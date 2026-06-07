@@ -1,6 +1,9 @@
 name: buildpipeline
 on:
   push:
+    branches:
+      - main
+      - other/next-release
   workflow_dispatch:
 jobs:
   run-script:
