@@ -6,6 +6,7 @@ def on_building_finished():
     tf.verify_image_is_working_via_network(None,{
         "InitialDatabaseType":"Transient"
     },443,"/API/Other/Maintenance/AvailabilityCheck",True,"consurv_net")
+    tf._protected_sc.ensure_docker_network_is_not_available("consurv_net")
  
 if __name__ == "__main__":
     on_building_finished()
