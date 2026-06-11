@@ -1,56 +1,55 @@
 <?xml version='1.0' encoding='utf-8'?>
-<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="442px" preserveAspectRatio="none" style="width:854px;height:442px;background:#FFFFFF;" version="1.1" viewBox="0 0 854 442" width="854px" zoomAndPan="magnify">
-  <ns0:title>Runtime-view full test</ns0:title>
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="450px" preserveAspectRatio="none" style="width:862px;height:450px;background:#FFFFFF;" version="1.1" viewBox="0 0 862 450" width="862px" zoomAndPan="magnify">
   <ns0:defs />
   <ns0:g>
     <ns0:g class="title" data-source-line="1">
-      <ns0:text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="144.6826" x="347.748" y="24.5332">Runtime-view full test</ns0:text>
+      <ns0:text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="144.6826" x="355.248" y="24.5332">Runtime-view full test</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="user" data-source-line="3" data-uid="ent0002" id="entity_user">
+    <ns0:g class="entity" data-qualified-name="user" data-source-line="3" id="ent0001">
       <ns0:ellipse cx="403.7793" cy="52.6094" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:path d="M403.7793,60.6094 L403.7793,87.6094 M390.7793,68.6094 L416.7793,68.6094 M403.7793,87.6094 L390.7793,102.6094 M403.7793,87.6094 L416.7793,102.6094" fill="none" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="29.5586" x="389" y="118.6426">User</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="UserNote" data-source-line="5" data-uid="ent0003" id="entity_UserNote">
+    <ns0:g class="entity" data-qualified-name="UserNote" data-source-line="5" id="ent0002">
       <ns0:path d="M6,193.1094 L6,219.4609 A0,0 0 0 0 6,219.4609 L446.104,219.4609 A0,0 0 0 0 446.104,219.4609 L446.104,203.1094 L436.104,193.1094 L247.74,193.1094 L388.82,94.4294 L239.74,193.1094 L6,193.1094 A0,0 0 0 0 6,193.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:path d="M436.104,193.1094 L436.104,203.1094 L446.104,203.1094 L436.104,193.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="116.3271" x="12" y="211.6045">The user calls https:</ns0:text>
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" font-style="italic" lengthAdjust="spacing" textLength="169.8125" x="128.3271" y="211.6045">consurv.test.local:443 or http:</ns0:text>
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="132.9644" x="298.1396" y="211.6045">consurv.test.local:8080</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="ConSurv" data-source-line="9" data-uid="ent0005" id="entity_ConSurv">
+    <ns0:g class="entity" data-qualified-name="ConSurv" data-source-line="9" id="ent0004">
       <ns0:rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="201.1025" x="481.5" y="182.1094" />
       <ns0:rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="662.6025" y="187.1094" />
       <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="660.6025" y="189.1094" />
       <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="660.6025" y="193.1094" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="161.1025" x="496.5" y="216.6426">ConSurv (:443 and :8080)</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="ConSurvNote" data-source-line="11" data-uid="ent0006" id="entity_ConSurvNote">
+    <ns0:g class="entity" data-qualified-name="ConSurvNote" data-source-line="11" id="ent0005">
       <ns0:path d="M117,290.1094 L117,349.1641 A0,0 0 0 0 117,349.1641 L665.3506,349.1641 A0,0 0 0 0 665.3506,349.1641 L665.3506,300.1094 L655.3506,290.1094 L444.03,290.1094 L542.42,230.2094 L436.03,290.1094 L117,290.1094 A0,0 0 0 0 117,290.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:path d="M655.3506,290.1094 L655.3506,300.1094 L665.3506,300.1094 L655.3506,290.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="347.2104" x="123" y="308.6045">Started via "task BaseExampleStart" (or shorter: "task beu").</ns0:text>
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="527.3506" x="123" y="324.9561">The domain can be changed using the commandline-parameter "--InitialDomain &lt;domain&gt;".</ns0:text>
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="292.7031" x="123" y="341.3076">Backend and frontend are running in the container.</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="ConSurvDatabase" data-source-line="17" data-uid="ent0008" id="entity_ConSurvDatabase">
+    <ns0:g class="entity" data-qualified-name="ConSurvDatabase" data-source-line="17" id="ent0007">
       <ns0:rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.1787" x="700" y="295.6094" />
       <ns0:rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="828.1787" y="300.6094" />
       <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="826.1787" y="302.6094" />
       <ns0:rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="826.1787" y="306.6094" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.1787" x="715" y="330.1426">Database (:5432)</ns0:text>
     </ns0:g>
-    <ns0:g class="entity" data-entity="ConSurvDatabaseNote" data-source-line="19" data-uid="ent0009" id="entity_ConSurvDatabaseNote">
+    <ns0:g class="entity" data-qualified-name="ConSurvDatabaseNote" data-source-line="19" id="ent0008">
       <ns0:path d="M707,409.1094 L707,435.4609 A0,0 0 0 0 707,435.4609 L841.458,435.4609 A0,0 0 0 0 841.458,435.4609 L841.458,419.1094 L831.458,409.1094 L778,409.1094 L774,343.6694 L770,409.1094 L707,409.1094 A0,0 0 0 0 707,409.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:path d="M831.458,409.1094 L831.458,419.1094 L841.458,419.1094 L831.458,409.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;" />
       <ns0:text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="113.458" x="713" y="427.6045">Database-container</ns0:text>
     </ns0:g>
-    <ns0:g class="link" data-entity-1="user" data-entity-2="ConSurv" data-source-line="23" data-uid="lnk11" id="link_user_ConSurv">
-      <ns0:path d="M419.18,94.4294 C447.51,113.6894 504.118,152.1661 542.908,178.5361" fill="none" id="user-to-ConSurv" style="stroke:#181818;stroke-width:1;" />
-      <ns0:polygon fill="#181818" points="547.87,181.9094,542.6758,173.5415,543.735,179.0983,538.1782,180.1575,547.87,181.9094" style="stroke:#181818;stroke-width:1;" />
+    <ns0:g class="link" data-entity-1="ent0001" data-entity-2="ent0004" data-link-type="dependency" data-source-line="23" id="lnk10">
+      <ns0:path d="M419.18,94.4294 C447.51,113.6894 504.945,152.7283 543.735,179.0983" fill="none" id="user-to-ConSurv" style="stroke:#181818;stroke-width:1;" />
+      <ns0:polygon fill="#181818" points="547.87,181.9094,542.6758,173.5415,543.735,179.0983,538.1782,180.1575,547.87,181.9094" style="stroke:#181818;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:10;" />
     </ns0:g>
-    <ns0:g class="link" data-entity-1="ConSurv" data-entity-2="ConSurvDatabase" data-source-line="24" data-uid="lnk12" id="link_ConSurv_ConSurvDatabase">
-      <ns0:path d="M621.78,230.2094 C654.73,249.3494 696.1415,273.3961 729.0815,292.5261" fill="none" id="ConSurv-to-ConSurvDatabase" style="stroke:#181818;stroke-width:1;" />
-      <ns0:polygon fill="#181818" points="734.27,295.5394,728.4961,287.5605,729.9463,293.0283,724.4784,294.4785,734.27,295.5394" style="stroke:#181818;stroke-width:1;" />
+    <ns0:g class="link" data-entity-1="ent0004" data-entity-2="ent0007" data-link-type="dependency" data-source-line="24" id="lnk11">
+      <ns0:path d="M621.78,230.2094 C654.73,249.3494 697.0063,273.8983 729.9463,293.0283" fill="none" id="ConSurv-to-ConSurvDatabase" style="stroke:#181818;stroke-width:1;" />
+      <ns0:polygon fill="#181818" points="734.27,295.5394,728.4961,287.5605,729.9463,293.0283,724.4784,294.4785,734.27,295.5394" style="stroke:#181818;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:10;" />
     </ns0:g>
   </ns0:g>
 </ns0:svg>
