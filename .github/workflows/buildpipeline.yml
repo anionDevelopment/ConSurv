@@ -24,9 +24,9 @@ jobs:
       - name: Update scriptcollection (temporary)
         run: pip3 install scriptcollection --upgrade
       - name: Show scversion (temporary)
+        run: scshowversion
       - name: Install CycloneDX NPM (temporary)
         run: npm install --global @cyclonedx/cyclonedx-npm
-        run: scshowversion
       - name: Prepare build-pipeline
         run: scpreparebuildpipelineforgitlab
       - name: Build codeunits
