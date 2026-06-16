@@ -1,36 +1,9 @@
-# Betterleaks configuration
-
-# Keep all default rules; this config only adds allowlists.
-# (Without useDefault the default ruleset would be replaced and nothing would be scanned.)
 [extend]
 useDefault = true
-
-[[allowlists]]
-description = "Development-only certificate (false positive, intentionally checked in for local dev workflows, not used in production)."
-paths = [
-    '''Other/Resources/DevelopmentCertificate/''',
-]
-
-[[allowlists]]
-description = "Local development CA keys (false positives, not used in production)."
-paths = [
-    '''Other/Resources/CA/''',
-]
-
-[[allowlists]]
-description = "Local test service data (generated, not used in production)."
-paths = [
-    '''Other/Resources/LocalTestServices/''',
-]
-
-[[allowlists]]
-description = "Visual Studio local files (generated, git-ignored, not used in production)."
-paths = [
-    '''/\.vs/''',
-]
-
-[[allowlists]]
-description = "Angular build cache (generated, git-ignored, not used in production)."
-paths = [
-    '''/\.angular/''',
-]
+filter = '''
+!attributes["path"].contains("Other/Resources/LocalTestServices/")
+&& !attributes["path"].contains("Other/Resources/CA/")
+&& !attributes["path"].contains("Other/Resources/DevelopmentCertificate/")
+&& !attributes["path"].contains("/.vs/")
+&& !attributes["path"].contains("/.angular/")
+'''
