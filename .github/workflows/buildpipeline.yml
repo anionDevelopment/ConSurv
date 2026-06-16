@@ -29,6 +29,8 @@ jobs:
         run: scpreparebuildpipelineforgitlab
       - name: Build codeunits
         run: scbuildcodeunits -v 4 --assertnonewchanges
+      - name: Install CycloneDX NPM
+        run: npm install --global @cyclonedx/cyclonedx-npm
       - name: Upload artifacts
         if: success()
         uses: actions/upload-artifact@v4
