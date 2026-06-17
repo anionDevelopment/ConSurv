@@ -13,7 +13,7 @@ import { VideoInformationDTO } from './videoInformationDTO';
 
 
 /**
- * Data transfer object that exposes the full observable state of a camera to clients,  combining its identity, video source, recording configuration, and current record state.
+ * Data transfer object that exposes the full observable state of a camera to clients, combining its identity, video source, recording configuration, and current record state.
  */
 export interface CameraDTO { 
     cameraId?: string | null;

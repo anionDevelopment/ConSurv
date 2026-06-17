@@ -15,9 +15,11 @@ components:
       type: object
     CameraDTO:
       additionalProperties: false
-      description: "Data transfer object that exposes the full observable state of\
-        \ a camera to clients,\r\ncombining its identity, video source, recording\
-        \ configuration, and current record state."
+      description: 'Data transfer object that exposes the full observable state of
+        a camera to clients,
+
+        combining its identity, video source, recording configuration, and current
+        record state.'
       properties:
         cameraId:
           nullable: true
@@ -34,10 +36,12 @@ components:
       type: object
     ONVIFCommandDTO:
       additionalProperties: false
-      description: "Data transfer object used to deserialize an ONVIF PTZ command\
-        \ received from a client.\r\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType\
-        \ discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand\
-        \ subtype."
+      description: 'Data transfer object used to deserialize an ONVIF PTZ command
+        received from a client.
+
+        The ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator
+        selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand
+        subtype.'
       properties:
         commandType:
           nullable: true
@@ -48,9 +52,10 @@ components:
       type: object
     RecordModeDTO:
       additionalProperties: false
-      description: "Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode\
-        \ as its type name\r\nfor serialization and deserialization across the API\
-        \ boundary."
+      description: 'Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode
+        as its type name
+
+        for serialization and deserialization across the API boundary.'
       properties:
         recordMode:
           nullable: true
@@ -58,8 +63,10 @@ components:
       type: object
     RecordStateDTO:
       additionalProperties: false
-      description: "Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState\
-        \ of a camera\r\nas its type name for transport over the API."
+      description: 'Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState
+        of a camera
+
+        as its type name for transport over the API.'
       properties:
         recordState:
           nullable: true
@@ -83,8 +90,10 @@ components:
       type: object
     UserInformationDTO:
       additionalProperties: false
-      description: "Data transfer object that exposes basic identity and role information\
-        \ about\r\na logged-in user to the client."
+      description: 'Data transfer object that exposes basic identity and role information
+        about
+
+        a logged-in user to the client.'
       properties:
         id:
           nullable: true
@@ -99,8 +108,9 @@ components:
       type: object
     VideoInformationDTO:
       additionalProperties: false
-      description: "Data transfer object for the video-source configuration of a camera,\r\
-        \ncarrying only the fields that are safe to expose over the API."
+      description: 'Data transfer object for the video-source configuration of a camera,
+
+        carrying only the fields that are safe to expose over the API.'
       properties:
         onvifPassword:
           nullable: true
@@ -548,10 +558,15 @@ paths:
       responses:
         '200':
           description: OK
-      summary: "Serves an HLS stream segment or playlist file for the specified stream.\r\
-        \nValidates the filename format, resolves the file from the camera's fragment\
-        \ folder,\r\nand returns it with the appropriate MIME type (`application/vnd.apple.mpegurl`\
-        \ for\r\n`.m3u8` playlists, `video/MP2T` for `.ts` segments)."
+      summary: 'Serves an HLS stream segment or playlist file for the specified stream.
+
+        Validates the filename format, resolves the file from the camera''s fragment
+        folder,
+
+        and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl`
+        for
+
+        `.m3u8` playlists, `video/MP2T` for `.ts` segments).'
       tags:
       - Streaming
   /API/v3/UserController/CreateUser:
@@ -577,8 +592,10 @@ paths:
       responses:
         '200':
           description: OK
-      summary: "Creates a new user account with the given credentials and assigns\
-        \ the admin role to it.\r\nRequires the caller to hold the admin role."
+      summary: 'Creates a new user account with the given credentials and assigns
+        the admin role to it.
+
+        Requires the caller to hold the admin role.'
       tags:
       - User
   /API/v3/UserController/GetRoles:

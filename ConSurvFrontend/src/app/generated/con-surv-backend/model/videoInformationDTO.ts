@@ -10,7 +10,7 @@
 
 
 /**
- * Data transfer object for the video-source configuration of a camera,  carrying only the fields that are safe to expose over the API.
+ * Data transfer object for the video-source configuration of a camera, carrying only the fields that are safe to expose over the API.
  */
 export interface VideoInformationDTO { 
     streamURL?: string | null;

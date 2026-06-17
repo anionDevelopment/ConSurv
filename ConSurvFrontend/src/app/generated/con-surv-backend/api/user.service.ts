@@ -38,7 +38,7 @@ export class UserService extends BaseService {
     }
 
     /**
-     * Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+     * Creates a new user account with the given credentials and assigns the admin role to it. Requires the caller to hold the admin role.
      * @param xAccessToken Access Token
      * @param user The desired username, provided via request header.
      * @param password The plain-text password that will be hashed before storage, provided via request header.

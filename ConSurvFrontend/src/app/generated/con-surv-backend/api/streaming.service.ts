@@ -34,7 +34,7 @@ export class StreamingService extends BaseService {
     }
 
     /**
-     * Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera\&#39;s fragment folder,  and returns it with the appropriate MIME type (&#x60;application/vnd.apple.mpegurl&#x60; for  &#x60;.m3u8&#x60; playlists, &#x60;video/MP2T&#x60; for &#x60;.ts&#x60; segments).
+     * Serves an HLS stream segment or playlist file for the specified stream. Validates the filename format, resolves the file from the camera\&#39;s fragment folder, and returns it with the appropriate MIME type (&#x60;application/vnd.apple.mpegurl&#x60; for &#x60;.m3u8&#x60; playlists, &#x60;video/MP2T&#x60; for &#x60;.ts&#x60; segments).
      * @param streamId The identifier of the stream (typically a camera ID).
      * @param filename The HLS segment or playlist filename to serve (must match &#x60;^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$&#x60;).
      * @param xAccessToken Access Token
