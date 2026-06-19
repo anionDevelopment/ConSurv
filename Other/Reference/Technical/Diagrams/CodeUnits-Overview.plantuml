@@ -1,6 +1,6 @@
 @startuml CodeUnits-Overview
 skinparam defaultFontName "DejaVu Sans"
-title CodeUnits of Repository
+title CodeUnits of ConSurv
 
 [ConSurvBackend]
 note as ConSurvBackendNote
