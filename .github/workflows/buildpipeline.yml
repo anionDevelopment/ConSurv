@@ -21,6 +21,8 @@ jobs:
         run: pip3 install scriptcollection --upgrade
       - name: Show scversion (temporary)
         run: scshowversion
+      - name: Prepare build-pipeline
+        run: scpreparebuildpipelineforgitlab -v 4
       - name: Build codeunits
         run: scbuildcodeunits -v 4 --assertnonewchanges
       - name: Upload artifacts
