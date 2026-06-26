@@ -9,7 +9,7 @@ jobs:
   build-pipeline:
     runs-on: [self-hosted, scriptcollection]
     container:
-      image: aniondev/scbuilder:v1.2.1
+      image: aniondev/scbuilder:v1.2.2
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     steps:
@@ -17,19 +17,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Update scriptcollection (temporary)
-        run: pip3 install scriptcollection --upgrade
-      - name: Show scversion (temporary)
-        run: scshowversion
       - name: Prepare build-pipeline
-        run: scpreparebuildpipelineforgitlab -v 4
+        run: scpreparebuildpipelineforgithub -v 4
       - name: Build codeunits
         run: scbuildcodeunits -v 4 --assertnonewchanges
       - name: Upload artifacts
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: ConSurv-Artifacts
           path: |
             ConSurv/Other/Artifacts
             ConSurvApp/Other/Artifacts
