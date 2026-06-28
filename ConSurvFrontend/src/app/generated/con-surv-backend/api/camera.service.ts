@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -11,10 +11,10 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+         HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { CameraDTO } from '../model/cameraDTO';
@@ -41,10 +41,12 @@ export class CameraService extends BaseService {
 
     /**
      * Retrieves the full configuration details of a specific camera.
+     * @endpoint get /API/v3/CameraController/Camera/{cameraId}
      * @param cameraId The unique identifier of the camera to retrieve.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerCameraCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<CameraDTO>;
     public aPIV3CameraControllerCameraCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CameraDTO>>;
@@ -96,7 +98,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -104,9 +106,11 @@ export class CameraService extends BaseService {
 
     /**
      * Returns the list of all configured cameras visible to the current user.
+     * @endpoint get /API/v3/CameraController/Cameras
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerCamerasGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CameraDTO>>;
     public aPIV3CameraControllerCamerasGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CameraDTO>>>;
@@ -155,7 +159,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -163,9 +167,11 @@ export class CameraService extends BaseService {
 
     /**
      * Creates a new camera with default name and RTSP address and returns its generated identifier.
+     * @endpoint post /API/v3/CameraController/CreateCamera
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerCreateCameraPost(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
     public aPIV3CameraControllerCreateCameraPost(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
@@ -214,7 +220,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -222,11 +228,13 @@ export class CameraService extends BaseService {
 
     /**
      * Downloads the raw bytes of a specific recorded video file for a given camera.
+     * @endpoint get /API/v3/CameraController/DownloadVideo/{cameraId}/{filename}
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video to download.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -278,7 +286,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -286,10 +294,12 @@ export class CameraService extends BaseService {
 
     /**
      * Returns the latest preview image (as raw bytes) for the specified camera.
+     * @endpoint get /API/v3/CameraController/GetPreview/{cameraId}
      * @param cameraId The unique identifier of the camera whose preview should be retrieved.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
     public aPIV3CameraControllerGetPreviewCameraIdGet(cameraId: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
@@ -341,7 +351,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -349,11 +359,13 @@ export class CameraService extends BaseService {
 
     /**
      * Returns a preview thumbnail image for the specified recorded video file of a camera.
+     * @endpoint get /API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video for which the preview is requested.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -405,7 +417,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -413,9 +425,11 @@ export class CameraService extends BaseService {
 
     /**
      * Returns a dictionary mapping each camera identifier to the list of recorded video filenames available for that camera.
+     * @endpoint get /API/v3/CameraController/ListVideos
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerListVideosGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -461,7 +475,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -469,10 +483,12 @@ export class CameraService extends BaseService {
 
     /**
      * Permanently removes the specified camera and all associated data.
+     * @endpoint delete /API/v3/CameraController/RemoveCamera/{cameraId}
      * @param cameraId The unique identifier of the camera to remove.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerRemoveCameraCameraIdDelete(cameraId: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerRemoveCameraCameraIdDelete(cameraId: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -521,7 +537,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -529,11 +545,13 @@ export class CameraService extends BaseService {
 
     /**
      * Permanently deletes a specific recorded video file belonging to the given camera.
+     * @endpoint delete /API/v3/CameraController/RemoveVideo/{cameraId}/{filename}
      * @param cameraId The unique identifier of the camera that owns the video.
      * @param filename The filename of the recorded video to delete.
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(cameraId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -585,7 +603,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -593,11 +611,13 @@ export class CameraService extends BaseService {
 
     /**
      * Executes an ONVIF command on the specified camera (e.g., PTZ control, preset recall).
+     * @endpoint post /API/v3/CameraController/RunONVIFCommand/{cameraId}
      * @param cameraId The unique identifier of the target camera.
      * @param xAccessToken Access Token
      * @param oNVIFCommandDTO The ONVIF command to execute, including its type and parameters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerRunONVIFCommandCameraIdPost(cameraId: string, xAccessToken: string, oNVIFCommandDTO?: ONVIFCommandDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -658,7 +678,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -666,10 +686,12 @@ export class CameraService extends BaseService {
 
     /**
      * Updates the properties of an existing camera using the values provided in the request body.
+     * @endpoint put /API/v3/CameraController/UpdateCamera
      * @param xAccessToken Access Token
      * @param updateCameraDTO The DTO containing the updated camera properties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3CameraControllerUpdateCameraPut(xAccessToken: string, updateCameraDTO?: UpdateCameraDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3CameraControllerUpdateCameraPut(xAccessToken: string, updateCameraDTO?: UpdateCameraDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -727,7 +749,7 @@ export class CameraService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );

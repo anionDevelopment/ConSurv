@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -10,7 +10,7 @@
 
 
 /**
- * Data transfer object used to deserialize an ONVIF PTZ command received from a client.  The ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype.
+ * Data transfer object used to deserialize an ONVIF PTZ command received from a client. The ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype.
  */
 export interface ONVIFCommandDTO { 
     commandType?: string | null;

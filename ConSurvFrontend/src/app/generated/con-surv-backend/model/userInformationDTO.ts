@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -10,7 +10,7 @@
 
 
 /**
- * Data transfer object that exposes basic identity and role information about  a logged-in user to the client.
+ * Data transfer object that exposes basic identity and role information about a logged-in user to the client.
  */
 export interface UserInformationDTO { 
     id?: string | null;

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v3.0.27 API documentation",
+    "title": "ConSurvBackend v3.0.28 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,7 +12,7 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v3.0.27"
+    "version": "v3.0.28"
   },
   "paths": {
     "/API/v3/CameraController/GetPreview/{cameraId}": {
@@ -643,7 +643,7 @@
         "tags": [
           "Streaming"
         ],
-        "summary": "Serves an HLS stream segment or playlist file for the specified stream.\r\nValidates the filename format, resolves the file from the camera's fragment folder,\r\nand returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for\r\n`.m3u8` playlists, `video/MP2T` for `.ts` segments).",
+        "summary": "Serves an HLS stream segment or playlist file for the specified stream.\nValidates the filename format, resolves the file from the camera's fragment folder,\nand returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for\n`.m3u8` playlists, `video/MP2T` for `.ts` segments).",
         "parameters": [
           {
             "name": "streamId",
@@ -733,7 +733,7 @@
         "tags": [
           "User"
         ],
-        "summary": "Creates a new user account with the given credentials and assigns the admin role to it.\r\nRequires the caller to hold the admin role.",
+        "summary": "Creates a new user account with the given credentials and assigns the admin role to it.\nRequires the caller to hold the admin role.",
         "parameters": [
           {
             "name": "user",
@@ -966,7 +966,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object that exposes the full observable state of a camera to clients,\r\ncombining its identity, video source, recording configuration, and current record state."
+        "description": "Data transfer object that exposes the full observable state of a camera to clients,\ncombining its identity, video source, recording configuration, and current record state."
       },
       "ONVIFCommandDTO": {
         "type": "object",
@@ -981,7 +981,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object used to deserialize an ONVIF PTZ command received from a client.\r\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype."
+        "description": "Data transfer object used to deserialize an ONVIF PTZ command received from a client.\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype."
       },
       "RecordModeDTO": {
         "type": "object",
@@ -992,7 +992,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode as its type name\r\nfor serialization and deserialization across the API boundary."
+        "description": "Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode as its type name\nfor serialization and deserialization across the API boundary."
       },
       "RecordStateDTO": {
         "type": "object",
@@ -1003,7 +1003,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState of a camera\r\nas its type name for transport over the API."
+        "description": "Data transfer object that encodes the current ConSurvBackend.Core.Model.RecordStates.RecordState of a camera\nas its type name for transport over the API."
       },
       "UpdateCameraDTO": {
         "type": "object",
@@ -1045,7 +1045,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object that exposes basic identity and role information about\r\na logged-in user to the client."
+        "description": "Data transfer object that exposes basic identity and role information about\na logged-in user to the client."
       },
       "VideoInformationDTO": {
         "type": "object",
@@ -1071,7 +1071,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data transfer object for the video-source configuration of a camera,\r\ncarrying only the fields that are safe to expose over the API."
+        "description": "Data transfer object for the video-source configuration of a camera,\ncarrying only the fields that are safe to expose over the API."
       }
     }
   },

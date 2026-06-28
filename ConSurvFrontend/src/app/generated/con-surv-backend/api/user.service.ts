@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -11,10 +11,10 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+         HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { AccessToken } from '../model/accessToken';
@@ -38,12 +38,14 @@ export class UserService extends BaseService {
     }
 
     /**
-     * Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+     * Creates a new user account with the given credentials and assigns the admin role to it. Requires the caller to hold the admin role.
+     * @endpoint put /API/v3/UserController/CreateUser
      * @param xAccessToken Access Token
      * @param user The desired username, provided via request header.
      * @param password The plain-text password that will be hashed before storage, provided via request header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerCreateUserPut(xAccessToken: string, user?: string, password?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3UserControllerCreateUserPut(xAccessToken: string, user?: string, password?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -95,7 +97,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -103,9 +105,11 @@ export class UserService extends BaseService {
 
     /**
      * Returns the list of role names assigned to the currently authenticated user.
+     * @endpoint put /API/v3/UserController/GetRoles
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerGetRolesPut(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
     public aPIV3UserControllerGetRolesPut(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
@@ -154,7 +158,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -162,9 +166,11 @@ export class UserService extends BaseService {
 
     /**
      * Returns profile information (e.g., username, roles) for the currently authenticated user.
+     * @endpoint get /API/v3/UserController/GetUserInformation
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerGetUserInformationGet(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UserInformationDTO>;
     public aPIV3UserControllerGetUserInformationGet(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserInformationDTO>>;
@@ -213,7 +219,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -221,10 +227,12 @@ export class UserService extends BaseService {
 
     /**
      * Authenticates a user with the supplied credentials and returns a new access token on success.
+     * @endpoint put /API/v3/UserController/Login
      * @param xUser The username, provided via the &#x60;x-user&#x60; HTTP header.
      * @param xPassword The plain-text password, provided via the &#x60;x-password&#x60; HTTP header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerLoginPut(xUser?: string, xPassword?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<AccessToken>;
     public aPIV3UserControllerLoginPut(xUser?: string, xPassword?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccessToken>>;
@@ -273,7 +281,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -281,9 +289,11 @@ export class UserService extends BaseService {
 
     /**
      * Invalidates the access token of the currently authenticated user, effectively logging them out.
+     * @endpoint put /API/v3/UserController/Logout
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerLogoutPut(xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3UserControllerLogoutPut(xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -329,7 +339,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -337,9 +347,11 @@ export class UserService extends BaseService {
 
     /**
      * Checks whether the supplied access token is still valid (not expired and not revoked).
+     * @endpoint get /API/v3/UserController/TokenIsValid
      * @param accessToken The access token to validate, provided via request header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3UserControllerTokenIsValidGet(accessToken?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
     public aPIV3UserControllerTokenIsValidGet(accessToken?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
@@ -385,7 +397,7 @@ export class UserService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );

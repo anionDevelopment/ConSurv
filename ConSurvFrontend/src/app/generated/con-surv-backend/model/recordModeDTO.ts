@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -10,7 +10,7 @@
 
 
 /**
- * Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode as its type name  for serialization and deserialization across the API boundary.
+ * Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode as its type name for serialization and deserialization across the API boundary.
  */
 export interface RecordModeDTO { 
     recordMode?: string | null;

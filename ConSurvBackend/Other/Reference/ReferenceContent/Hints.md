@@ -34,3 +34,45 @@ Apart from the transient-mode the supported values for `DatabaseType` are:
 - `MariaDB`
 
 To reset all your local backend-configuration-values etc. to a plain state you can simply remove the entire `<repository-root>\ConSurvBackend\Other\Workspace`-folder.
+
+## Windows-specific hints
+
+### Database-port cannot be bound (e. g. "ports are not available ... bind: An attempt was made to access a socket in a way forbidden by its access permissions")
+
+When building or running the local test-services (e. g. via `scbuildcodeunits` or `task LocaltestserviceMariadbStart`) the start of the database-container can fail with an error like:
+
+```
+Error response from daemon: ports are not available: exposing port TCP 0.0.0.0:3306 -> 127.0.0.1:0: listen tcp 0.0.0.0:3306: bind: An attempt was made to access a socket in a way forbidden by its access permissions.
+```
+
+This usually does not mean the port is already in use by another program. On Windows, Hyper-V/WinNAT reserves dynamic port-ranges, and the required database-port (e. g. `3306` for MariaDB or `5432` for PostgreSQL) can fall into one of those reserved ranges, which prevents Docker from binding it.
+
+To check whether the port is inside a reserved range, run:
+
+```cmd
+netsh int ipv4 show excludedportrange protocol=tcp
+```
+
+If the port lies within one of the listed ranges, restart the WinNAT-service (in a command prompt as Administrator) to re-roll the reserved ranges:
+
+```cmd
+net stop winnat
+net start winnat
+```
+
+If stopping WinNAT fails because of dependent services, stop Docker first and start it again afterwards:
+
+```cmd
+net stop com.docker.service
+net stop winnat
+net start winnat
+net start com.docker.service
+```
+
+For a permanent fix you can reserve the port explicitly so the dynamic Hyper-V-ranges avoid it (replace `3306` with the affected port):
+
+```cmd
+net stop winnat
+netsh int ipv4 add excludedportrange protocol=tcp startport=3306 numberofports=1 store=persistent
+net start winnat
+```

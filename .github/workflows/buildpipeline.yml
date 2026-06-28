@@ -1,0 +1,38 @@
+name: buildpipeline
+on:
+  workflow_dispatch:
+    inputs:
+      TargetEnvironmentType:
+        description: "Target environment (Development, QualityCheck or Productive)"
+        required: false
+        default: QualityCheck
+        type: string
+jobs:
+  build-pipeline:
+    runs-on: [self-hosted, scriptcollection]
+    container:
+      image: aniondev/scbuilder:v1.2.2
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prepare build-pipeline
+        run: scpreparebuildpipelineforgithub -v 4
+      - name: Build codeunits
+        env:
+          TARGET_ENV: ${{ github.event.inputs.TargetEnvironmentType }}
+        run: scbuildcodeunits -v 4 --assertnonewchanges --targetenvironment $TARGET_ENV
+      - name: Upload artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ConSurv-Artifacts
+          path: |
+            ConSurv/Other/Artifacts
+            ConSurvApp/Other/Artifacts
+            ConSurvBackend/Other/Artifacts
+            ConSurvFrontend/Other/Artifacts
+          if-no-files-found: error

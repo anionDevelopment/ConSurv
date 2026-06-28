@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.27 API documentation
+ * ConSurvBackend v3.0.28 API documentation
  *
  * 
  *
@@ -11,10 +11,10 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+         HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 
 // @ts-ignore
@@ -34,12 +34,14 @@ export class StreamingService extends BaseService {
     }
 
     /**
-     * Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera\&#39;s fragment folder,  and returns it with the appropriate MIME type (&#x60;application/vnd.apple.mpegurl&#x60; for  &#x60;.m3u8&#x60; playlists, &#x60;video/MP2T&#x60; for &#x60;.ts&#x60; segments).
+     * Serves an HLS stream segment or playlist file for the specified stream. Validates the filename format, resolves the file from the camera\&#39;s fragment folder, and returns it with the appropriate MIME type (&#x60;application/vnd.apple.mpegurl&#x60; for &#x60;.m3u8&#x60; playlists, &#x60;video/MP2T&#x60; for &#x60;.ts&#x60; segments).
+     * @endpoint get /API/v3/StreamingController/Stream/{streamId}/{filename}
      * @param streamId The identifier of the stream (typically a camera ID).
      * @param filename The HLS segment or playlist filename to serve (must match &#x60;^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$&#x60;).
      * @param xAccessToken Access Token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public aPIV3StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
     public aPIV3StreamingControllerStreamStreamIdFilenameGet(streamId: string, filename: string, xAccessToken: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
@@ -91,7 +93,7 @@ export class StreamingService extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
