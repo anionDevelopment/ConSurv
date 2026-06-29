@@ -24,7 +24,7 @@ jobs:
       - name: Build codeunits
         env:
           TARGET_ENV: ${{ github.event.inputs.TargetEnvironmentType }}
-        run: scbuildcodeunits -v 4 --assertnonewchanges --targetenvironment $TARGET_ENV
+        run: pip3 install scriptcollection --upgrade && scbuildcodeunits -v 4 --assertnonewchanges --targetenvironment $TARGET_ENV
       - name: Upload artifacts
         if: success()
         uses: actions/upload-artifact@v4
