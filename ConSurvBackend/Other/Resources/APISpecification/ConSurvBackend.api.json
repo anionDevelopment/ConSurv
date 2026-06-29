@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v3.0.28 API documentation",
+    "title": "ConSurvBackend v3.0.29 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,7 +12,7 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v3.0.28"
+    "version": "v3.0.29"
   },
   "paths": {
     "/API/v3/CameraController/GetPreview/{cameraId}": {
