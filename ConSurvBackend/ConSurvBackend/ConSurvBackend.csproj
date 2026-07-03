@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/anionDev/ConSurv.git</RepositoryUrl>
     <RootNamespace>ConSurvBackend.Core</RootNamespace>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <Configurations>Development;QualityCheck;Productive</Configurations>
     <IsTestProject>false</IsTestProject>
     <LangVersion>11.0</LangVersion>
