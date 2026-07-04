@@ -6,21 +6,21 @@
 
 ## Features
 
-- [x] Video-Recording
-- [x] Live-Video-Viewing in the browser
-- [x] Video-blacken
+- ✅ Video-Recording
+- ✅ Live-Video-Viewing in the browser
+- ✅ Video-blacken
 
 ## Not implemented features
 
-- [ ] OpenID-Login
-- [ ] Usage of gpu if available
-- [ ] Record on motion-detection
-- [ ] Video-control using ONVIF-commands for cameras which supports ONVIF
-- [ ] Smartphone-app which has all features from the user-area
-- [ ] Being able to change group-memberships of users
-- [ ] Design (including logo/favicon/dark-mode)
-- [ ] Providing raw camera-streams via RTSP
-- [ ] Providing encrypted camera-streams via RTSPS
+- ❌ OpenID-Login
+- ❌ Usage of gpu if available
+- ❌ Record on motion-detection
+- ❌ Video-control using ONVIF-commands for cameras which supports ONVIF
+- ❌ Smartphone-app which has all features from the user-area
+- ❌ Being able to change group-memberships of users
+- ❌ Design (including logo/favicon/dark-mode)
+- ❌ Providing raw camera-streams via RTSP
+- ❌ Providing encrypted camera-streams via RTSPS
 
 ## Development
 
