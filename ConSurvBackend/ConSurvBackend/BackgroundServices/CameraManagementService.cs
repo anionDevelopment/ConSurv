@@ -35,8 +35,14 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly CommandlineParameter _CommandlineParameter;
         private readonly string _EntryAssemblyLocation;
-        private const ushort _LastUsedPortRangeBegin = 10_000;
-        private ushort _LastUsedPort = _LastUsedPortRangeBegin;
+        private const ushort _LastUsedPortRangeBegin = 20_000;
+        private const ushort _LastUsedPortRangeEnd = 30_000;
+        /// <summary>
+        /// The port handed out by the most recent successful call to <see cref="GetNewFreePort"/>, or
+        /// <see langword="null"/> if no port has been allocated yet. <see langword="null"/> makes the very
+        /// first allocated candidate <see cref="_LastUsedPortRangeBegin"/> instead of begin+1.
+        /// </summary>
+        private ushort? _LastUsedPort = null;
         /// <summary>
         /// Holds all currently relevant runtime information (processes, port, URL) per camera, keyed by
         /// camera-id. This is the single source of truth for which processes belong to a camera and is
@@ -96,6 +102,14 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         private void ManageCamera(Camera camera)
         {
+            // The lock is deliberately held for the entire reconciliation of a single camera - including
+            // the potentially long-running work in StartProcesses (Thread.Sleeps, spawning the
+            // MediaMTX/FFmpeg processes and probing the RTSP endpoint via ffprobe). This is intentional and
+            // acceptable: the camera-management runs on its own background-thread, cameras are reconciled
+            // one after another anyway, and keeping the whole start/stop/detect sequence under one lock
+            // guarantees that the tracked runtime-information can never be observed or mutated in a
+            // half-started/half-terminated state by a concurrent reader. The added latency for other
+            // holders of the lock is a conscious trade-off in favour of this consistency guarantee.
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
                 if (!this._RuntimeData.GetCameraInternals().ContainsKey(camera.Id))
@@ -195,7 +209,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                     }
                     else
                     {
-                        this._Logger.Log($"Camera {camera.Id} was available internally but is no longer fully operational (all-processes-running={allProcessesRunning}). Recreating its media-processes. Details: {errorMessage}", Microsoft.Extensions.Logging.LogLevel.Debug);
+                        this._Logger.Log($"Camera {camera.Id} was available internally but is no longer fully operational (all-processes-running={allProcessesRunning}). Reporting it as not-available; its media-processes will be recreated during reconciliation. Details: {errorMessage}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     }
                 }
                 return new NotAvailable(camera);
@@ -310,6 +324,9 @@ paths:
                 this._Logger.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
 
                 //take screenshots (means: previews)
+                // EnsureDirectoryExistsAndIfEmpty clears the folder on every (re)start. This is intentional
+                // and wanted: the screenshots are only live previews of the current stream, so no older
+                // screenshots (e.g. from a previous stream-URL or a stale session) should ever be shown.
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
                 GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(screenshots_folder);
                 string target_file = Path.Combine(screenshots_folder, "frame").Replace("\\", "/");
@@ -449,15 +466,20 @@ paths:
 
             using SKImage image = surface.Snapshot();
             using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
-            using FileStream stream = System.IO.File.OpenWrite(overlayFile);
+            // File.Create (FileMode.Create) truncates an already existing file to zero length first, so no
+            // trailing bytes of a previously larger overlay-PNG can remain and corrupt the new file.
+            using FileStream stream = System.IO.File.Create(overlayFile);
             data.SaveTo(stream);
             this._Logger.Log($"Created overlay-file for camera {camera.Id} ({width}x{height}, {polygons.Count} polygon(s)) at \"{overlayFile}\".", Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
         /// <summary>
-        /// Returns the next free port number from the sequentially allocated port range starting at
-        /// <see cref="_LastUsedPortRangeBegin"/>. Ports that are currently in use are skipped. Wraps
-        /// around to the range begin when <see cref="ushort.MaxValue"/> is reached.
+        /// Returns the next free port number from the sequentially allocated, inclusive port range
+        /// [<see cref="_LastUsedPortRangeBegin"/>, <see cref="_LastUsedPortRangeEnd"/>]. The very first
+        /// port ever handed out is <see cref="_LastUsedPortRangeBegin"/>; afterwards the range is walked
+        /// upwards and wraps back around to <see cref="_LastUsedPortRangeBegin"/> once
+        /// <see cref="_LastUsedPortRangeEnd"/> has been reached. Ports that are currently in use are
+        /// skipped.
         /// </summary>
         /// <returns>A port number that is currently free.</returns>
         /// <exception cref="InvalidOperationException">Thrown when no free port could be found.</exception>
@@ -465,20 +487,26 @@ paths:
         {
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
-                int amountOfPortsInRange = ushort.MaxValue - _LastUsedPortRangeBegin;
+                int amountOfPortsInRange = _LastUsedPortRangeEnd - _LastUsedPortRangeBegin + 1;
                 for (int attempt = 0; attempt < amountOfPortsInRange; attempt++)
                 {
-                    if (this._LastUsedPort >= ushort.MaxValue)
+                    // Advance to the next candidate. On the first call (no port allocated yet) and whenever
+                    // the end of the range was reached (or the value somehow left the range) we (re)start at
+                    // the begin; otherwise we step one port further.
+                    if (this._LastUsedPort is null || this._LastUsedPort.Value >= _LastUsedPortRangeEnd || this._LastUsedPort.Value < _LastUsedPortRangeBegin)
                     {
                         this._LastUsedPort = _LastUsedPortRangeBegin;
                     }
-                    this._LastUsedPort = (ushort)(this._LastUsedPort + 1);
-                    if (PortIsFree(this._LastUsedPort))
+                    else
                     {
-                        return this._LastUsedPort;
+                        this._LastUsedPort = (ushort)(this._LastUsedPort.Value + 1);
+                    }
+                    if (PortIsFree(this._LastUsedPort.Value))
+                    {
+                        return this._LastUsedPort.Value;
                     }
                 }
-                throw new InvalidOperationException($"No free port available in the range [{_LastUsedPortRangeBegin + 1}, {ushort.MaxValue}].");
+                throw new InvalidOperationException($"No free port available in the range [{_LastUsedPortRangeBegin}, {_LastUsedPortRangeEnd}].");
             }
         }
 
@@ -525,7 +553,6 @@ paths:
                     Program = "ffprobe",
                     Argument = $"-v error -i \"{rtspUrl}\"",
                     TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
-                    WaitingState = new RunSynchronously(),
                     Verbosity = Verbosity.Quiet,
                 });
                 e.Configuration.WaitingState = new RunSynchronously()
