@@ -10,7 +10,7 @@
 - ✅ Live-Video-Viewing in the browser
 - ✅ Video-blacken
 - ❌ [OpenID-Login](https://github.com/anionDevelopment/ConSurv/issues/5)
-- ❌ [Usage of GPU if available](https://github.com/anionDevelopment/ConSurv/issues/4)
+- ✅ Usage of GPU if available
 - ❌ [Record on motion-detection](https://github.com/anionDevelopment/ConSurv/issues/6)
 - ❌ [Video-control using ONVIF-commands for cameras which supports ONVIF](https://github.com/anionDevelopment/ConSurv/issues/7)
 - ❌ [Smartphone-app which has all features from the user-area](https://github.com/anionDevelopment/ConSurv/issues/8)
