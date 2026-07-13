@@ -6,21 +6,19 @@
 
 ## Features
 
-- Video-Recording
-- Live-Video-Viewing in the browser
-- Video-blacken
-
-## Not implemented features
-
-- OpenID-Login
-- Usage of gpu if available
-- Record on motion-detection
-- Video-control using ONVIF-commands for cameras which supports ONVIF
-- Smartphone-app which has all features from the user-area
-- Being able to change group-memberships of users
-- Design (including logo/favicon/dark-mode)
-- Providing raw camera-streams via RTSP
-- Providing encrypted camera-streams via RTSPS
+- ✅ Video-Recording
+- ✅ Live-Video-Viewing in the browser
+- ✅ Video-blacken
+- ❌ [OpenID-Login](https://github.com/anionDevelopment/ConSurv/issues/5)
+- ✅ Usage of GPU if available
+- ❌ [Record on motion-detection](https://github.com/anionDevelopment/ConSurv/issues/6)
+- ❌ [Video-control using ONVIF-commands for cameras which supports ONVIF](https://github.com/anionDevelopment/ConSurv/issues/7)
+- ❌ [Smartphone-app which has all features from the user-area](https://github.com/anionDevelopment/ConSurv/issues/8)
+- ❌ [Being able to change group-memberships of users](https://github.com/anionDevelopment/ConSurv/issues/9)
+- ❌ [Design (including logo/favicon/dark-mode)](https://github.com/anionDevelopment/ConSurv/issues/10)
+- ❌ [Processing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/11)
+- ❌ [Providing raw camera-streams via RTSP](https://github.com/anionDevelopment/ConSurv/issues/12)
+- ❌ [Providing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/13)
 
 ## Development
 
@@ -55,10 +53,10 @@ If you just want to run ConSurv locally:
 
 If you want to debug the frontend or backend instead:
 
-- Create the dockernetwork `consurv_net` (by running `docker network create consurv_net`).
+- Create the docker network `consurv_net` (by running `docker network create consurv_net`).
 - Start the backend in your IDE, see the [hints](./ConSurvBackend/Other/Reference/ReferenceContent/Hints.md) for developer.
 - Start the frontend in your IDE, see the [hints](./ConSurvFrontend/Other/Reference/ReferenceContent/Hints.md) for developer.
-- Run `task LocaltestserviceReverseProxyStart` (or shorter: `task lru`) to make the backend and frontend accessable on the same port.
+- Run `task LocaltestserviceReverseProxyStart` (or shorter: `task lru`) to make the backend and frontend accessible on the same port.
 
 Step 3:
 
@@ -96,7 +94,7 @@ This product follows the [GitFlowSimplified](https://projects.aniondev.de/Public
 
 ## Image-properties
 
-The image-artifacts of this product must fulfill the image-properties defined by [DefaultImageUsabilityRequirements](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/ImageProperties/DefaultImageUsabilityRequirements/DefaultImageUsabilityRequirements.md).
+The image-artifacts of this product must fulfil the image-properties defined by [DefaultImageUsabilityRequirements](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/ImageProperties/DefaultImageUsabilityRequirements/DefaultImageUsabilityRequirements.md).
 
 ## Versioning
 

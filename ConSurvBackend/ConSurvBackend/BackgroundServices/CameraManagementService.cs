@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.Internals;
@@ -17,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -32,8 +34,49 @@ namespace ConSurvBackend.Core.BackgroundServices
         private readonly IInitializationService<CommandlineParameter> _InitializationService;
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly CommandlineParameter _CommandlineParameter;
-        private const ushort _LastUsedPortRangeBegin = 10_000;
-        private ushort _LastUsedPort = _LastUsedPortRangeBegin;
+        private readonly string _EntryAssemblyLocation;
+        private const ushort _LastUsedPortRangeBegin = 20_000;
+        private const ushort _LastUsedPortRangeEnd = 30_000;
+        /// <summary>
+        /// The port handed out by the most recent successful call to <see cref="GetNewFreePort"/>, or
+        /// <see langword="null"/> if no port has been allocated yet. <see langword="null"/> makes the very
+        /// first allocated candidate <see cref="_LastUsedPortRangeBegin"/> instead of begin+1.
+        /// </summary>
+        private ushort? _LastUsedPort = null;
+        /// <summary>
+        /// Holds all currently relevant runtime information (processes, port, URL) per camera, keyed by
+        /// camera-id. This is the single source of truth for which processes belong to a camera and is
+        /// used both for diagnostics and to be able to terminate every process a camera owns.
+        /// </summary>
+        private readonly IDictionary<string/*camera-id*/, CameraRuntimeInformation> _CameraRuntimeInformation = new Dictionary<string, CameraRuntimeInformation>();
+        /// <summary>
+        /// Caches whether FFmpeg can use NVIDIA-GPU-acceleration (NVENC) on this machine. <see langword="null"/>
+        /// until it has been detected once (lazily, on the first camera-start) via
+        /// <see cref="GpuAccelerationIsAvailable"/>; afterwards the detected value is reused for the whole
+        /// process-lifetime so the (comparatively expensive) probe runs only a single time.
+        /// </summary>
+        private bool? _GpuAccelerationAvailable = null;
+        private readonly object _GpuDetectionLock = new();
+        /// <summary>
+        /// Ids of cameras whose stream-process failed to start with GPU-acceleration and which are therefore
+        /// permanently (for the rest of the process-lifetime) handled on the CPU. NVENC can be available in
+        /// general while still refusing an additional encoding-session, because consumer-GPUs limit the amount
+        /// of concurrent NVENC-sessions. Without this the affected camera would fail to start over and over
+        /// again in every reconciliation-iteration instead of falling back to the CPU-encoder.
+        /// </summary>
+        private readonly ISet<string/*camera-id*/> _CamerasWithDisabledGpuAcceleration = new HashSet<string>();
+        /// <summary>
+        /// Encoder-arguments used when the video is encoded by the GPU. <c>-rc vbr -cq 23 -b:v 0</c> selects a
+        /// quality-based rate-control comparable to the CRF-default of <c>libx264</c>; without it NVENC would
+        /// silently fall back to a low default-bitrate. <c>-no-scenecut</c> and <c>-forced-idr</c> are the
+        /// NVENC-equivalent of <c>-sc_threshold 0</c> and keep the GOP-length fixed, which the HLS-process
+        /// (which copies the video-stream without re-encoding it) relies on for constant segment-durations.
+        /// </summary>
+        private const string _GpuVideoEncoderArgument = "-c:v h264_nvenc -preset p1 -tune ull -rc vbr -cq 23 -b:v 0 -no-scenecut 1 -forced-idr 1 -g 50 -keyint_min 50";
+        /// <summary>
+        /// Encoder-arguments used when the video is encoded by the CPU.
+        /// </summary>
+        private const string _CpuVideoEncoderArgument = "-c:v libx264 -preset ultrafast -tune zerolatency -g 50 -keyint_min 50 -sc_threshold 0";
         /// <summary>
         /// Initializes a new instance of <see cref="CameraManagementService"/> with all required dependencies.
         /// </summary>
@@ -43,7 +86,6 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// <param name="processManager">Manager for spawning and tracking external processes.</param>
         /// <param name="runtimeData">Shared in-memory runtime state.</param>
         /// <param name="initializationService">Service that tracks the application initialization state.</param>
-        /// <param name="log">Logger used for camera-management-specific log entries.</param>
         /// <param name="constants">Application-wide constants including data-folder paths.</param>
         /// <param name="codeUnitSpecificConfiguration">Persisted configuration containing video settings.</param>
         public CameraManagementService(IBusinessLogicService businessLogicService, ICameraManagementServiceLog logger, CommandlineParameter commandlineParameter, IProcessManager processManager, IRuntimeData runtimeData, IInitializationService<CommandlineParameter> initializationService, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration) : base(constants.ExecutionMode, logger.Logger)
@@ -57,6 +99,12 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._RuntimeData = runtimeData;
             this._Constants = constants;
             this._CodeUnitSpecificConfiguration = codeUnitSpecificConfiguration;
+            Assembly? entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly is null || string.IsNullOrEmpty(entryAssembly.Location))
+            {
+                throw new InvalidOperationException("Could not determine the location of the entry-assembly. The camera-management-service cannot locate its bundled MediaMTX executable.");
+            }
+            this._EntryAssemblyLocation = entryAssembly.Location;
         }
 
         /// <inheritdoc />
@@ -82,26 +130,31 @@ namespace ConSurvBackend.Core.BackgroundServices
 
         private void ManageCamera(Camera camera)
         {
-            CameraInternalsBase? existingState;
+            // The lock is deliberately held for the entire reconciliation of a single camera - including
+            // the potentially long-running work in StartProcesses (Thread.Sleeps, spawning the
+            // MediaMTX/FFmpeg processes and probing the RTSP endpoint via ffprobe). This is intentional and
+            // acceptable: the camera-management runs on its own background-thread, cameras are reconciled
+            // one after another anyway, and keeping the whole start/stop/detect sequence under one lock
+            // guarantees that the tracked runtime-information can never be observed or mutated in a
+            // half-started/half-terminated state by a concurrent reader. The added latency for other
+            // holders of the lock is a conscious trade-off in favour of this consistency guarantee.
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
                 if (!this._RuntimeData.GetCameraInternals().ContainsKey(camera.Id))
                 {
                     this._RuntimeData.SetCameraInternals(new NotAvailable(camera));
                 }
-                existingState = this._RuntimeData.GetCameraInternals(camera.Id);
                 CameraInternalsBase currentState = this.GetCurrentInternalState(camera);
-                this._Logger.Log($"Camera {camera.Id}: tracked-state={existingState?.GetType().Name ?? "none"}, detected-state={currentState.GetType().Name}.", Microsoft.Extensions.Logging.LogLevel.Trace);
+                this._Logger.Log($"Camera {camera.Id}: detected-state={currentState.GetType().Name}.", Microsoft.Extensions.Logging.LogLevel.Trace);
                 try
                 {
-                    currentState.Accept(new EnsureDesiredConditionIsApplied(existingState, this));
+                    currentState.Accept(new EnsureDesiredConditionIsApplied(this));
                 }
                 catch (Exception e)
                 {
-                    this._Logger.Log($"Error while managing camera {camera.Id}. Resetting it to {nameof(NotAvailable)} and reapplying the desired condition.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
-                    NotAvailable newState = new NotAvailable(camera);
-                    this._RuntimeData.SetCameraInternals(newState);
-                    newState.Accept(new EnsureDesiredConditionIsApplied(currentState, this));
+                    this._Logger.Log($"Error while managing camera {camera.Id}. Terminating its media-processes and resetting it to {nameof(NotAvailable)}. It will be reapplied on the next iteration.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this.TerminateProcesses(camera.Id);
+                    this._RuntimeData.SetCameraInternals(new NotAvailable(camera));
                 }
             }
 
@@ -118,88 +171,51 @@ namespace ConSurvBackend.Core.BackgroundServices
             this._Logger.Log(message, exception, Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
+        /// <summary>
+        /// Reconciles the actual state of a camera (as detected by <see cref="GetCurrentInternalState"/>)
+        /// with the desired state (a camera should always be streaming). Starting and stopping of the
+        /// media-processes happens exclusively – and deliberately – here.
+        /// </summary>
         private class EnsureDesiredConditionIsApplied : ICameraInternalsBaseVisitor
         {
-            private readonly CameraInternalsBase _PreviousState;
             private readonly CameraManagementService _CameraManagementService;
 
-            public EnsureDesiredConditionIsApplied(CameraInternalsBase previousState, CameraManagementService cameraManagementService)
+            public EnsureDesiredConditionIsApplied(CameraManagementService cameraManagementService)
             {
-                this._PreviousState = previousState;
                 this._CameraManagementService = cameraManagementService;
             }
 
+            /// <summary>
+            /// The camera is currently streaming. Nothing to do unless its stream-URL changed in the
+            /// meantime, in which case the media-processes are restarted with the new configuration.
+            /// </summary>
             public void Handle(Available available)
             {
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(available.MediaMTXProcess.IsRunning, $"MediaMTX terminated unexoectedly for {available.Camera.Id}.");
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(available.FFMPEGProcess.IsRunning, $"FFMPEG terminated unexoectedly for {available.Camera.Id}.");
-                bool startProcesses = false;
-                if (this._PreviousState.Camera.VideoInformation.StreamURL != available.Camera.VideoInformation.StreamURL)
+                CameraRuntimeInformation? info = this._CameraManagementService.GetRuntimeInformation(available.Camera.Id);
+                if (info is not null && info.Camera.VideoInformation.StreamURL != available.Camera.VideoInformation.StreamURL)
                 {
                     this._CameraManagementService.LogDebug($"Stream-URL of camera {available.Camera.Id} changed. Restarting its media-processes.");
-                    if (this._PreviousState is Available prevous)
-                    {
-                        this.StopProcesses(prevous);
-                    }
-                    startProcesses = true;
-                }
-                if (this._PreviousState is NotAvailable)
-                {
-                    this._CameraManagementService.LogDebug($"Camera {available.Camera.Id} transitioned from {nameof(NotAvailable)} to {nameof(Available)}. Starting its media-processes.");
-                    startProcesses = true;
-                }
-                if (startProcesses)
-                {
-                    this.StartProcesses(available);
+                    this._CameraManagementService.TerminateProcesses(available.Camera.Id);
+                    this._CameraManagementService.StartProcesses(available.Camera);
                 }
             }
 
-            private void StartProcesses(Available available)
-            {
-                //  throw new NotImplementedException();
-            }
-
+            /// <summary>
+            /// The camera should be streaming but currently is not available. Any leftover processes are
+            /// terminated first, then the media-processes are (re)started.
+            /// </summary>
             public void Handle(NotAvailable notAvailable)
             {
-                if (this._PreviousState is Available previousAvailableState)
-                {
-                    this._CameraManagementService.LogDebug($"Camera {notAvailable.Camera.Id} is no longer available. Stopping its media-processes.");
-                    this.StopProcesses(previousAvailableState);
-                }
-            }
-
-            private void StopProcesses(Available available)
-            {
-                this._CameraManagementService.LogDebug($"Terminating media-processes of camera {available.Camera.Id}.");
-                try
-                {
-                    if (available.MediaMTXProcess.IsRunning)
-                    {
-                        available.MediaMTXProcess.Terminate();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    this._CameraManagementService.LogDebug($"Error while terminating the MediaMTX-process of camera {available.Camera.Id}.", exception);
-                }
-
-                try
-                {
-                    if (available.FFMPEGProcess.IsRunning)
-                    {
-                        available.FFMPEGProcess.Terminate();
-                    }
-
-                }
-                catch (Exception exception)
-                {
-                    this._CameraManagementService.LogDebug($"Error while terminating the FFMPEG-process of camera {available.Camera.Id}.", exception);
-                }
+                this._CameraManagementService.LogDebug($"Camera {notAvailable.Camera.Id} is not available. (Re)starting its media-processes.");
+                this._CameraManagementService.TerminateProcesses(notAvailable.Camera.Id);
+                this._CameraManagementService.StartProcesses(notAvailable.Camera);
             }
         }
+
         /// <summary>
-        /// Determines the current internal availability state of a camera by checking whether its
-        /// associated media processes (MediaMTX and FFMPEG) are running and the RTSP stream is reachable.
+        /// Determines the current internal availability state of a camera by checking whether all of its
+        /// associated processes are running and the internal RTSP stream is reachable. This method is a
+        /// pure query and does not start, stop or otherwise mutate any process.
         /// </summary>
         /// <param name="camera">The camera whose internal state is evaluated.</param>
         /// <returns>
@@ -208,86 +224,56 @@ namespace ConSurvBackend.Core.BackgroundServices
         /// </returns>
         private CameraInternalsBase GetCurrentInternalState(Camera camera)
         {
-            if (this.TryGetMediaMTXProcess(camera, out ExternalProgramExecutor? ffmpegProcess, out ExternalProgramExecutor? mediaMTXProcess, out string? url))
-            {
-                return new Available(camera, ffmpegProcess!, mediaMTXProcess!, url!);
-            }
-            else
-            {
-                return new NotAvailable(camera);
-            }
-        }
-        private static ExternalProgramExecutor mediamtx;
-        private static ExternalProgramExecutor streamtomediamtx;
-        private static ExternalProgramExecutor takescreenshots;
-        private static ExternalProgramExecutor m3u8;
-        private static ExternalProgramExecutor record;
-        /// <summary>
-        /// Tries to obtain (or create) the MediaMTX and FFMPEG processes that expose the camera's
-        /// RTSP stream internally.  When no running processes exist yet the method starts MediaMTX,
-        /// pipes the camera stream into it via FFMPEG, spawns a screenshot-capture process, an HLS
-        /// segmenter process, and – if the camera is configured for continuous recording – a recording
-        /// process.
-        /// </summary>
-        /// <param name="camera">The camera for which the media processes are required.</param>
-        /// <param name="ffmpegProcessResult">
-        /// When the method returns <see langword="true"/>, contains the running FFMPEG process;
-        /// otherwise <see langword="null"/>.
-        /// </param>
-        /// <param name="mediaMTXProcessResult">
-        /// When the method returns <see langword="true"/>, contains the running MediaMTX process;
-        /// otherwise <see langword="null"/>.
-        /// </param>
-        /// <param name="url">
-        /// When the method returns <see langword="true"/>, contains the internal RTSP URL under which
-        /// the camera stream is available via MediaMTX; otherwise <see langword="null"/>.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if all required processes are running and the internal RTSP stream is
-        /// reachable; <see langword="false"/> if any step failed.
-        /// </returns>
-        private bool TryGetMediaMTXProcess(Camera camera, out ExternalProgramExecutor? ffmpegProcessResult, out ExternalProgramExecutor? mediaMTXProcessResult, out string? url)
-        {
-            bool isAlreadyAvailable;
-            CameraInternalsBase? cameraInternals;
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
-                isAlreadyAvailable = this._RuntimeData.GetCameraInternals().ContainsKey(camera.Id);
-                if (isAlreadyAvailable)
+                if (this._CameraRuntimeInformation.TryGetValue(camera.Id, out CameraRuntimeInformation? info))
                 {
-                    cameraInternals = this._RuntimeData.GetCameraInternals(camera.Id);
-                }
-                else
-                {
-                    cameraInternals = null;
-                }
-            }
-            if (isAlreadyAvailable)
-            {
-                if (cameraInternals is Available available)
-                {
-                    ffmpegProcessResult = available.FFMPEGProcess;
-                    mediaMTXProcessResult = available.MediaMTXProcess;
-                    url = available.MediaMTXURL;
-                    if (IsRtspAvailable(url, out string? errorMessage))
+                    bool allProcessesRunning = info.GetAllProcesses().All(process => process.IsRunning);
+                    string? errorMessage = allProcessesRunning ? null : "not all processes are running";
+                    if (allProcessesRunning && IsRtspAvailable(info.MediaMTXURL, out errorMessage))
                     {
-                        this._Logger.Log($"Camera {camera.Id} is still available internally under \"{url}\". Reusing the existing media-processes.", Microsoft.Extensions.Logging.LogLevel.Trace);
-                        return true;
+                        this._Logger.Log($"Camera {camera.Id} is available internally under \"{info.MediaMTXURL}\".", Microsoft.Extensions.Logging.LogLevel.Trace);
+                        return new Available(camera, info.StreamToMediaMTXProcess, info.MediaMTXProcess, info.MediaMTXURL);
                     }
                     else
                     {
-                        this._Logger.Log($"Camera {camera.Id} was available internally but its stream is no longer reachable. Recreating the media-processes. Details: {errorMessage}", Microsoft.Extensions.Logging.LogLevel.Debug);
+                        this._Logger.Log($"Camera {camera.Id} was available internally but is no longer fully operational (all-processes-running={allProcessesRunning}). Reporting it as not-available; its media-processes will be recreated during reconciliation. Details: {errorMessage}", Microsoft.Extensions.Logging.LogLevel.Debug);
                     }
                 }
+                return new NotAvailable(camera);
             }
-            ExternalProgramExecutor ffmpegProcess;
-            ExternalProgramExecutor mediaMTXProcess;
+        }
+
+        /// <summary>
+        /// Returns the tracked runtime information of the given camera, or <c>null</c> if the camera has
+        /// no running processes.
+        /// </summary>
+        private CameraRuntimeInformation? GetRuntimeInformation(string cameraId)
+        {
+            lock (RuntimeData.CameraInternalsRuntimeDataLock)
+            {
+                return this._CameraRuntimeInformation.TryGetValue(cameraId, out CameraRuntimeInformation? info) ? info : null;
+            }
+        }
+
+        /// <summary>
+        /// Starts MediaMTX, pipes the camera stream into it via FFmpeg, and spawns the screenshot, HLS
+        /// and – if the camera is configured for continuous recording – recording processes. On success
+        /// the resulting processes are tracked in <see cref="_CameraRuntimeInformation"/> and the camera
+        /// is marked as <see cref="Available"/>. If any step fails, every already-started process is
+        /// terminated again and the camera is left in the <see cref="NotAvailable"/> state so that the
+        /// next iteration retries cleanly.
+        /// </summary>
+        /// <param name="camera">The camera for which the media-processes are started.</param>
+        private void StartProcesses(Camera camera)
+        {
+            List<ExternalProgramExecutor> startedProcesses = new List<ExternalProgramExecutor>();
             try
             {
-                this._Logger.Log($"(Re)starting media-processes for camera {camera.Id} (stream-URL: \"{Misc.Utilities.EscapeBasicAuthPasswords(camera.VideoInformation.StreamURL)}\").", Microsoft.Extensions.Logging.LogLevel.Debug);
+                this._Logger.Log($"Starting media-processes for camera {camera.Id} (stream-URL: \"{Misc.Utilities.EscapeBasicAuthPasswords(camera.VideoInformation.StreamURL)}\").", Microsoft.Extensions.Logging.LogLevel.Debug);
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(camera.VideoInformation.StreamURL, out string? errorMessage), $"Camera {camera.Id} is not available: " + errorMessage);
-                Thread.Sleep(TimeSpan.FromSeconds(2));//wait until the camera is available again after probing it
-                string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                Thread.Sleep(TimeSpan.FromSeconds(1));//wait until the camera is available again after probing it
+                string location = Path.GetDirectoryName(this._EntryAssemblyLocation)!;
 
                 //mediamtx
                 string mediaMTXFolder = Path.Combine(location, "MediaMTX");
@@ -314,11 +300,12 @@ paths:
                 File.WriteAllText(configFile, configurationFileContent);
                 this._Logger.Log($"Content of {configFile}:\n\"" + File.ReadAllText(configFile, new UTF8Encoding(false)) + "\"", Microsoft.Extensions.Logging.LogLevel.Trace);
                 //FIXME: mediamtx will not be exited after terminating consurvbackend, even if it should be (by espoc)
-                mediaMTXProcess = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, configFileName, mediaMTXFolder, null, $"Media-hub for {camera.Id}", $"MediaHubFor{camera.Id}", false);
-                url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
-                Thread.Sleep(TimeSpan.FromSeconds(2));
+                ExternalProgramExecutor mediaMTXProcess = this._ProcessManager.GetBackgroundProcess(mediaMTXExecutable, configFileName, mediaMTXFolder, null, $"Media-hub for {camera.Id}", $"MediaHubFor{camera.Id}", false);
+                startedProcesses.Add(mediaMTXProcess);
+                string url = $"rtsp://127.0.0.1:{mediaMTXPort}/camera_{camera.Id}";
+                Thread.Sleep(TimeSpan.FromSeconds(1));
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(mediaMTXProcess.IsRunning, () => $"Process terminated unexpectedly with {mediaMTXProcess.ExitCode}.");
-                Thread.Sleep(TimeSpan.FromSeconds(3));
+                Thread.Sleep(TimeSpan.FromSeconds(1));
 
                 //stream to media hub
                 string overlay_folder = $"{this._Constants.GetDataFolder()}/CameraData/{camera.Id}/Overlays";
@@ -326,14 +313,9 @@ paths:
                 string overlay_file = $"{overlay_folder}\\overlay.png";
                 overlay_file = overlay_file.Replace("\\", "/");
                 this.CreateOverlayFile(camera, overlay_file);
-                string path = $"Stream_{camera.Id}";
-                string ffmpegArgument = "-fflags +genpts -rtsp_transport tcp -use_wallclock_as_timestamps 1  -i " + camera.VideoInformation.StreamURL + " -loop 1 -i " + overlay_file;
-                ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='" + camera.Name + " (" + camera.Id + ") %{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider camera-timezone in timestamp
-                ffmpegArgument = ffmpegArgument + " -c:v libx264 -c:a aac -preset ultrafast -tune zerolatency -g 50 -keyint_min 50 -sc_threshold 0 -avoid_negative_ts make_zero -vsync vfr -fflags nobuffer -metadata title=\"Camera-" + camera.Id + "\" -f rtsp " + url;//ffmpeg takes the stream and redirects it to mediamtx
-                string purpose = $"StreamToMediaHubFrom-{camera.Id}";
-                ffmpegProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Send stream of camera {camera.Id} to media-hub", purpose, false);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess.IsRunning, () => $"Process \"{purpose}\" terminated unexpectedly with {ffmpegProcess.ExitCode}.");
+                bool useGpuAcceleration = this.GpuAccelerationIsAvailable() && !this._CamerasWithDisabledGpuAcceleration.Contains(camera.Id);
+                ExternalProgramExecutor streamToMediaMTXProcess = this.StartStreamToMediaHubProcess(camera, overlay_file, url, startedProcesses, ref useGpuAcceleration);
+                string inputHardwareAccelerationArgument = GetInputHardwareAccelerationArgument(useGpuAcceleration);
 
                 //assert stream is available
                 GRYLibrary.Core.Misc.Utilities.AssertCondition(IsRtspAvailable(url, out string? message), () =>
@@ -362,18 +344,24 @@ paths:
                     }
                     return result;
                 });
-                ffmpegProcessResult = ffmpegProcess;
-                mediaMTXProcessResult = mediaMTXProcess;
-                this._RuntimeData.SetCameraInternals(new Available(camera, ffmpegProcessResult, mediaMTXProcessResult, url));
                 this._Logger.Log($"Provided Camera {camera.Id} internally under \"{url}\".");
 
                 //take screenshots (means: previews)
+                // EnsureDirectoryExistsAndIfEmpty clears the folder on every (re)start. This is intentional
+                // and wanted: the screenshots are only live previews of the current stream, so no older
+                // screenshots (e.g. from a previous stream-URL or a stale session) should ever be shown.
                 string screenshots_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Screenshots");
                 GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExistsAndIfEmpty(screenshots_folder);
                 string target_file = Path.Combine(screenshots_folder, "frame").Replace("\\", "/");
-                string ffmpegArgument2 = $"-rtsp_transport tcp -i {url} -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 10 -vf fps=1/2 -qscale:v 2 -strftime 1 {target_file}_%Y-%m-%dT%H-%M-%S.jpg";
-                ExternalProgramExecutor ffmpegProcess2 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument2, null, null, $"Take screenshots of {camera.Id}", $"TakeScreenshotsOf-{camera.Id}", false);
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess2.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess2.ExitCode}.");
+                // The screenshots are plain JPGs (encoded on the CPU), but the decoding of the incoming
+                // stream can still be offloaded to the GPU when one is available. The -reconnect*-options are
+                // deliberately absent: they only exist for the HTTP-protocol and never had any effect on this
+                // RTSP-input. A dying screenshot-process is detected by GetCurrentInternalState and restarted
+                // by the reconciliation instead.
+                string ffmpegArgument2 = $"{inputHardwareAccelerationArgument}-rtsp_transport tcp -i \"{url}\" -vf fps=1/2 -qscale:v 2 -strftime 1 \"{target_file}_%Y-%m-%dT%H-%M-%S.jpg\"";
+                ExternalProgramExecutor screenshotProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument2, null, null, $"Take screenshots of {camera.Id}", $"TakeScreenshotsOf-{camera.Id}", false);
+                startedProcesses.Add(screenshotProcess);
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(screenshotProcess.IsRunning, () => $"Process terminated unexpectedly with {screenshotProcess.ExitCode}.");
 
                 //prepare m3u8 stream
                 string fradments_folder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Fragments");
@@ -381,11 +369,12 @@ paths:
                 fradments_folder = fradments_folder.Replace("\\", "/");
                 uint timeOfFragmentInSeconds = 2;
                 uint amountOfFragments = 1;
-                string ffmpegArgument3 = $"-rtsp_transport tcp -i {url} -c:v copy -c:a aac -f hls -hls_time {timeOfFragmentInSeconds} -hls_list_size {amountOfFragments} -hls_flags delete_segments -hls_segment_filename {fradments_folder}/segment_%01d.ts {fradments_folder}/stream.m3u8";
-                ExternalProgramExecutor ffmpegProcess3 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument3, null, null, $"Provide m3u8-stream {camera.Id}", $"ProvideM3U8Stream-{camera.Id}", false);
-                GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess3.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess3.ExitCode}.");
-                m3u8 = ffmpegProcess3;
+                string ffmpegArgument3 = $"-rtsp_transport tcp -i \"{url}\" -c:v copy -c:a aac -f hls -hls_time {timeOfFragmentInSeconds} -hls_list_size {amountOfFragments} -hls_flags delete_segments -hls_segment_filename \"{fradments_folder}/segment_%01d.ts\" \"{fradments_folder}/stream.m3u8\"";
+                ExternalProgramExecutor m3u8Process = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument3, null, null, $"Provide m3u8-stream {camera.Id}", $"ProvideM3U8Stream-{camera.Id}", false);
+                startedProcesses.Add(m3u8Process);
+                GRYLibrary.Core.Misc.Utilities.AssertCondition(m3u8Process.IsRunning, () => $"Process terminated unexpectedly with {m3u8Process.ExitCode}.");
 
+                ExternalProgramExecutor? recordProcess = null;
                 if (camera.RecordMode is RecordAlways)
                 {
                     //record
@@ -394,29 +383,141 @@ paths:
                     GRYLibrary.Core.Misc.Utilities.EnsureDirectoryExists(target_folder);
                     target_folder = target_folder.Replace("\\", "/");
                     uint videoLengthInSeconds = (uint)Math.Round(this._CodeUnitSpecificConfiguration.ApplicationSpecificConfiguration.VideoLength.TotalSeconds);
-                    string ffmpegArgument4 = $"-rtsp_transport tcp -i {url} -c copy -f segment -strftime 1 -segment_time {videoLengthInSeconds} -reset_timestamps 1 {target_folder}/Camera_{camera.Id}_%Y-%m-%d-%H-%M-%S.mp4";
-                    ExternalProgramExecutor ffmpegProcess4 = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument4, null, null, $"Record camera-stream {camera.Id}", $"RecordCameraStream-{camera.Id}", false);
-                    GRYLibrary.Core.Misc.Utilities.AssertCondition(ffmpegProcess4.IsRunning, () => $"Process terminated unexpectedly with {ffmpegProcess4.ExitCode}.");
-                    record = ffmpegProcess4;
+                    string ffmpegArgument4 = $"-rtsp_transport tcp -i \"{url}\" -c copy -f segment -strftime 1 -segment_time {videoLengthInSeconds} -reset_timestamps 1 \"{target_folder}/Camera_{camera.Id}_%Y-%m-%d-%H-%M-%S.mp4\"";
+                    recordProcess = this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument4, null, null, $"Record camera-stream {camera.Id}", $"RecordCameraStream-{camera.Id}", false);
+                    startedProcesses.Add(recordProcess);
+                    GRYLibrary.Core.Misc.Utilities.AssertCondition(recordProcess.IsRunning, () => $"Process terminated unexpectedly with {recordProcess.ExitCode}.");
                 }
 
-                takescreenshots = ffmpegProcess2;
-                mediamtx = mediaMTXProcess;
-                streamtomediamtx = ffmpegProcess;
+                CameraRuntimeInformation runtimeInformation = new CameraRuntimeInformation(camera, mediaMTXPort, url, mediaMTXProcess, streamToMediaMTXProcess, screenshotProcess, m3u8Process, recordProcess);
+                lock (RuntimeData.CameraInternalsRuntimeDataLock)
+                {
+                    this._CameraRuntimeInformation[camera.Id] = runtimeInformation;
+                }
+                this._RuntimeData.SetCameraInternals(new Available(camera, streamToMediaMTXProcess, mediaMTXProcess, url));
 
                 Thread.Sleep(TimeSpan.FromSeconds(1));
-
-                return true;
-
             }
             catch (Exception e)
             {
-                this._Logger.Log($"Could not start media-processes for {camera.Id}", e);
-                ffmpegProcessResult = null;
-                mediaMTXProcessResult = null;
-                url = null;
+                this._Logger.Log($"Could not start media-processes for {camera.Id}. Terminating the {startedProcesses.Count} already-started process(es) again.", e, Microsoft.Extensions.Logging.LogLevel.Debug);
+                this.TerminateProcesses(startedProcesses);
+                lock (RuntimeData.CameraInternalsRuntimeDataLock)
+                {
+                    this._CameraRuntimeInformation.Remove(camera.Id);
+                }
                 this._RuntimeData.SetCameraInternals(new NotAvailable(camera));
-                return false;
+            }
+        }
+
+        /// <summary>
+        /// Starts the FFmpeg-process which takes the camera-stream, burns the overlay and the timestamp into
+        /// it and republishes it to the local media-hub. When <paramref name="useGpuAcceleration"/> is
+        /// requested but the process does not survive its start-up, the attempt is repeated on the CPU and
+        /// <paramref name="useGpuAcceleration"/> is set to <see langword="false"/> so that the caller
+        /// configures the remaining processes of this camera accordingly.
+        /// </summary>
+        /// <param name="camera">The camera whose stream is republished.</param>
+        /// <param name="overlayFile">Absolute path of the overlay-PNG to composite onto the video.</param>
+        /// <param name="url">The media-hub-URL the stream is published to.</param>
+        /// <param name="startedProcesses">Collects the started processes so that the caller can terminate them on failure.</param>
+        /// <param name="useGpuAcceleration">On input whether GPU-acceleration should be attempted; on output whether it is actually in use.</param>
+        /// <returns>The running stream-process.</returns>
+        private ExternalProgramExecutor StartStreamToMediaHubProcess(Camera camera, string overlayFile, string url, List<ExternalProgramExecutor> startedProcesses, ref bool useGpuAcceleration)
+        {
+            string purpose = $"StreamToMediaHubFrom-{camera.Id}";
+            ExternalProgramExecutor process = this.StartStreamToMediaHubProcessAttempt(camera, overlayFile, url, purpose, useGpuAcceleration);
+            startedProcesses.Add(process);
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            if (useGpuAcceleration && !process.IsRunning)
+            {
+                // NVENC was detected as generally usable, yet this particular encoding-session could not be
+                // created - the most likely reason is the limit of concurrent NVENC-sessions of consumer-GPUs.
+                // Falling back to the CPU for this camera is the only way to get it streaming at all.
+                this._Logger.Log($"The GPU-accelerated stream-process of camera {camera.Id} terminated unexpectedly with {process.ExitCode}. Falling back to CPU-encoding for this camera.", Microsoft.Extensions.Logging.LogLevel.Warning);
+                this.TerminateProcesses(new ExternalProgramExecutor[] { process });
+                startedProcesses.Remove(process);
+                this._CamerasWithDisabledGpuAcceleration.Add(camera.Id);
+                useGpuAcceleration = false;
+                process = this.StartStreamToMediaHubProcessAttempt(camera, overlayFile, url, purpose, false);
+                startedProcesses.Add(process);
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+            }
+            ExternalProgramExecutor result = process;
+            GRYLibrary.Core.Misc.Utilities.AssertCondition(result.IsRunning, () => $"Process \"{purpose}\" terminated unexpectedly with {result.ExitCode}.");
+            return result;
+        }
+
+        /// <summary>
+        /// Performs a single start-attempt of the stream-process, either on the GPU or on the CPU.
+        /// </summary>
+        private ExternalProgramExecutor StartStreamToMediaHubProcessAttempt(Camera camera, string overlayFile, string url, string purpose, bool useGpuAcceleration)
+        {
+            // When a usable GPU is present the video-decoding is offloaded to it (-hwaccel cuda) and the
+            // encoding is done by the GPU's NVENC-encoder (h264_nvenc) instead of the CPU-encoder (libx264).
+            // The overlay-/drawtext-filters keep running on the CPU (the decoded frames are transferred back
+            // to system-memory automatically). If no GPU is available everything runs on the CPU.
+            string videoEncoderArgument = useGpuAcceleration ? _GpuVideoEncoderArgument : _CpuVideoEncoderArgument;
+            string ffmpegArgument = GetInputHardwareAccelerationArgument(useGpuAcceleration) + "-fflags +genpts -rtsp_transport tcp -use_wallclock_as_timestamps 1  -i \"" + camera.VideoInformation.StreamURL + "\" -loop 1 -i \"" + overlayFile + "\"";
+            ffmpegArgument = ffmpegArgument + " -filter_complex \"[0:v][1:v]overlay=0:0:format=auto,drawtext=fontsize=60:fontcolor=white:text='" + camera.Name + " (" + camera.Id + ") %{localtime\\:%Y-%m-%d %H\\\\\\:%M\\\\\\:%S}':box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w):y=(h-text_h)\"";//TODO consider camera-timezone in timestamp
+            ffmpegArgument = ffmpegArgument + " " + videoEncoderArgument + " -c:a aac -avoid_negative_ts make_zero -vsync vfr -fflags nobuffer -metadata title=\"Camera-" + camera.Id + "\" -f rtsp \"" + url + "\"";//ffmpeg takes the stream and redirects it to mediamtx
+            return this._ProcessManager.GetBackgroundProcess("ffmpeg", ffmpegArgument, null, null, $"Send stream of camera {camera.Id} to media-hub", purpose, false);
+        }
+
+        /// <summary>
+        /// Returns the FFmpeg input-option which offloads the decoding of the next input to the GPU, or an
+        /// empty string when the decoding should happen on the CPU. Note that this must be placed in front of
+        /// the <c>-i</c> it belongs to. If the GPU cannot decode the codec of the input, FFmpeg falls back to
+        /// software-decoding on its own.
+        /// </summary>
+        private static string GetInputHardwareAccelerationArgument(bool useGpuAcceleration)
+        {
+            return useGpuAcceleration ? "-hwaccel cuda " : string.Empty;
+        }
+
+        /// <summary>
+        /// Terminates every process belonging to the given camera and removes its tracked runtime
+        /// information. Does nothing if the camera has no tracked processes.
+        /// </summary>
+        /// <param name="cameraId">The id of the camera whose processes are terminated.</param>
+        private void TerminateProcesses(string cameraId)
+        {
+            CameraRuntimeInformation? info;
+            lock (RuntimeData.CameraInternalsRuntimeDataLock)
+            {
+                this._CameraRuntimeInformation.TryGetValue(cameraId, out info);
+            }
+            if (info is not null)
+            {
+                this.LogDebug($"Terminating media-processes of camera {cameraId}.");
+                this.TerminateProcesses(info.GetAllProcesses());
+                lock (RuntimeData.CameraInternalsRuntimeDataLock)
+                {
+                    this._CameraRuntimeInformation.Remove(cameraId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Terminates the given set of processes, ignoring (but logging) errors for each individual
+        /// process so that a failure to terminate one process does not prevent terminating the others.
+        /// </summary>
+        /// <param name="processes">The processes to terminate.</param>
+        private void TerminateProcesses(IEnumerable<ExternalProgramExecutor> processes)
+        {
+            foreach (ExternalProgramExecutor process in processes)
+            {
+                try
+                {
+                    if (process.IsRunning)
+                    {
+                        process.Terminate();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    this.LogDebug($"Error while terminating a media-process.", exception);
+                }
             }
         }
 
@@ -458,27 +559,72 @@ paths:
 
             using SKImage image = surface.Snapshot();
             using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
-            using FileStream stream = System.IO.File.OpenWrite(overlayFile);
+            // File.Create (FileMode.Create) truncates an already existing file to zero length first, so no
+            // trailing bytes of a previously larger overlay-PNG can remain and corrupt the new file.
+            using FileStream stream = System.IO.File.Create(overlayFile);
             data.SaveTo(stream);
             this._Logger.Log($"Created overlay-file for camera {camera.Id} ({width}x{height}, {polygons.Count} polygon(s)) at \"{overlayFile}\".", Microsoft.Extensions.Logging.LogLevel.Debug);
         }
 
         /// <summary>
-        /// Returns the next port number in the sequentially allocated port range starting at
-        /// <see cref="_LastUsedPortRangeBegin"/>. Wraps around to the range begin when
-        /// <see cref="ushort.MaxValue"/> is reached.
+        /// Returns the next free port number from the sequentially allocated, inclusive port range
+        /// [<see cref="_LastUsedPortRangeBegin"/>, <see cref="_LastUsedPortRangeEnd"/>]. The very first
+        /// port ever handed out is <see cref="_LastUsedPortRangeBegin"/>; afterwards the range is walked
+        /// upwards and wraps back around to <see cref="_LastUsedPortRangeBegin"/> once
+        /// <see cref="_LastUsedPortRangeEnd"/> has been reached. Ports that are currently in use are
+        /// skipped.
         /// </summary>
-        /// <returns>A port number that has not been handed out since the last wrap-around.</returns>
+        /// <returns>A port number that is currently free.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when no free port could be found.</exception>
         private ushort GetNewFreePort()
         {
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
-                if (this._LastUsedPort == ushort.MaxValue)
+                int amountOfPortsInRange = _LastUsedPortRangeEnd - _LastUsedPortRangeBegin + 1;
+                for (int attempt = 0; attempt < amountOfPortsInRange; attempt++)
                 {
-                    this._LastUsedPort = _LastUsedPortRangeBegin;
+                    // Advance to the next candidate. On the first call (no port allocated yet) and whenever
+                    // the end of the range was reached (or the value somehow left the range) we (re)start at
+                    // the begin; otherwise we step one port further.
+                    if (this._LastUsedPort is null || this._LastUsedPort.Value >= _LastUsedPortRangeEnd || this._LastUsedPort.Value < _LastUsedPortRangeBegin)
+                    {
+                        this._LastUsedPort = _LastUsedPortRangeBegin;
+                    }
+                    else
+                    {
+                        this._LastUsedPort = (ushort)(this._LastUsedPort.Value + 1);
+                    }
+                    if (PortIsFree(this._LastUsedPort.Value))
+                    {
+                        return this._LastUsedPort.Value;
+                    }
                 }
-                this._LastUsedPort = (ushort)(this._LastUsedPort + 1);
-                return this._LastUsedPort;
+                throw new InvalidOperationException($"No free port available in the range [{_LastUsedPortRangeBegin}, {_LastUsedPortRangeEnd}].");
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the given TCP port is currently free on the local machine by attempting to
+        /// bind a listener to it on all interfaces.
+        /// </summary>
+        /// <param name="port">The TCP port to check.</param>
+        /// <returns><see langword="true"/> if the port can currently be bound; otherwise <see langword="false"/>.</returns>
+        public static bool PortIsFree(ushort port)
+        {
+            TcpListener? listener = null;
+            try
+            {
+                listener = new TcpListener(IPAddress.Any, port);
+                listener.Start();
+                return true;
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
+            finally
+            {
+                listener?.Stop();
             }
         }
 
@@ -500,7 +646,6 @@ paths:
                     Program = "ffprobe",
                     Argument = $"-v error -i \"{rtspUrl}\"",
                     TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
-                    WaitingState = new RunSynchronously(),
                     Verbosity = Verbosity.Quiet,
                 });
                 e.Configuration.WaitingState = new RunSynchronously()
@@ -525,12 +670,87 @@ paths:
                 return false;
             }
         }
+        /// <summary>
+        /// Determines - once per process-lifetime, then cached - whether FFmpeg can use NVIDIA-GPU-
+        /// acceleration (NVENC) on this machine. The result is used to decide whether the FFmpeg-processes
+        /// are configured to run on the GPU or on the CPU. Only NVIDIA-GPUs are supported for now.
+        /// </summary>
+        /// <returns><see langword="true"/> if GPU-acceleration is available; otherwise <see langword="false"/>.</returns>
+        private bool GpuAccelerationIsAvailable()
+        {
+            lock (this._GpuDetectionLock)
+            {
+                if (this._GpuAccelerationAvailable is null)
+                {
+                    this._GpuAccelerationAvailable = DetectNvencAvailability();
+                    if (this._GpuAccelerationAvailable.Value)
+                    {
+                        this._Logger.Log("Detected a usable NVIDIA-GPU. FFmpeg-processes will use NVENC-based hardware-acceleration.", Microsoft.Extensions.Logging.LogLevel.Information);
+                    }
+                    else
+                    {
+                        this._Logger.Log("No usable GPU-acceleration was detected. FFmpeg-processes will run on the CPU.", Microsoft.Extensions.Logging.LogLevel.Information);
+                    }
+                }
+                return this._GpuAccelerationAvailable.Value;
+            }
+        }
+
+        /// <summary>
+        /// Probes whether the NVIDIA-NVENC-encoder is actually usable by letting FFmpeg encode a few tiny
+        /// frames with exactly the same encoder-arguments the camera-processes use. This is the only reliable
+        /// check because the encoder can be compiled into FFmpeg while still failing at runtime when no
+        /// NVIDIA-GPU or driver is present, and because some of the used options (e.g. the <c>p1</c>-preset)
+        /// only exist in newer FFmpeg-versions and would otherwise let the camera-process die instead.
+        /// </summary>
+        /// <returns><see langword="true"/> if the test-encode succeeds; otherwise <see langword="false"/>.</returns>
+        private static bool DetectNvencAvailability()
+        {
+            try
+            {
+                ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
+                {
+                    Program = "ffmpeg",
+                    Argument = $"-hide_banner -loglevel error -f lavfi -i color=black:s=256x256:d=0.1 {_GpuVideoEncoderArgument} -f null -",
+                    TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(20).TotalMilliseconds,
+                    Verbosity = Verbosity.Quiet,
+                });
+                e.Configuration.WaitingState = new RunSynchronously()
+                {
+                    ThrowErrorIfExitCodeIsNotZero = false,
+                };
+                e.Run();
+                return e.ExitCode == 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Terminates the media-processes of every managed camera and clears the tracked runtime
+        /// information. Used on shutdown so that no MediaMTX/FFmpeg processes are left behind.
+        /// </summary>
+        private void TerminateAllProcesses()
+        {
+            ICollection<string> cameraIds;
+            lock (RuntimeData.CameraInternalsRuntimeDataLock)
+            {
+                cameraIds = this._CameraRuntimeInformation.Keys.ToList();
+            }
+            foreach (string cameraId in cameraIds)
+            {
+                this.TerminateProcesses(cameraId);
+            }
+        }
+
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                //add dispose logic here if required
+                this.TerminateAllProcesses();
             }
             base.Dispose(disposing);
         }

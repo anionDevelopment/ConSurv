@@ -50,6 +50,34 @@ namespace ConSurvBackend.Core.Services
             this._Constants = constants;
         }
 
+        /// <summary>
+        /// Characters that must not occur in a camera-name because they would break the FFmpeg command
+        /// lines (shell/filter meta-characters) the camera-management-service builds from the name.
+        /// </summary>
+        private static readonly char[] _ForbiddenCameraNameCharacters = new char[] { '\'', '"', '|', '&', '*', '/', '\\' };
+
+        /// <summary>
+        /// Ensures the given camera-name does not contain any whitespace or meta-character that would
+        /// break the FFmpeg command lines built from it. Throws a <see cref="BadRequestException"/>
+        /// otherwise.
+        /// </summary>
+        /// <param name="name">The camera-name to validate.</param>
+        /// <exception cref="BadRequestException">Thrown when the name is null or contains a forbidden character.</exception>
+        private static void EnsureCameraNameIsValid(string name)
+        {
+            if (name is null)
+            {
+                throw new BadRequestException("The camera-name must not be null.");
+            }
+            foreach (char character in name)
+            {
+                if (char.IsWhiteSpace(character) || _ForbiddenCameraNameCharacters.Contains(character))
+                {
+                    throw new BadRequestException($"The camera-name \"{name}\" contains the forbidden character '{character}'. A camera-name must not contain whitespace or any of the following characters: single-quote, double-quote, pipe, ampersand, asterisk, slash, backslash.");
+                }
+            }
+        }
+
         private static void Semaphore(SemaphoreSlim semaphore, Action action)
         {
             semaphore.Wait();
@@ -68,6 +96,7 @@ namespace ConSurvBackend.Core.Services
         public string CreateCamera(string name, string streamURL) => Semaphore(_Semaphore, () => this.CreateCameraCore(name, streamURL));
         private string CreateCameraCore(string name, string streamURL)
         {
+            EnsureCameraNameIsValid(name);
             Camera camera = new Camera(this.GetId(streamURL), name);
             camera.VideoInformation.StreamURL = streamURL;
             this.GetAllCamerasCore()[camera.Id] = camera;
@@ -150,6 +179,7 @@ namespace ConSurvBackend.Core.Services
         private void UpdateCameraCore(Camera camera)
         {
             //TODO check permission
+            EnsureCameraNameIsValid(camera.Name);
             this._Persistence.UpdateCamera(camera);
             camera.RecordMode.Accept(new ChangeRecordingModeVisitor(camera, this._RuntimeData));
             this._AuditLog.Logger.Log($"Updated camera {camera.Id}.", LogLevel.Information);//TODO add information about why and by whom this was done

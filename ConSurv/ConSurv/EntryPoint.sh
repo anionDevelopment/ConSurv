@@ -2,7 +2,7 @@
 
 export IsRunningInContainer=true
 
-argument="Run --RealRun"
+argument="Run --RealRun true"
 
 if [[ -n "$InitialAdminPassword" ]]; then
     argument+=" --InitialAdminPassword $InitialAdminPassword"
