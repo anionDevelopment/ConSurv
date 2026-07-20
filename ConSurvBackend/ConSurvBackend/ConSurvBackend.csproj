@@ -9,7 +9,7 @@
     <IsPackable>false</IsPackable>
     <PreserveCompilationContext>false</PreserveCompilationContext>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <Copyright>Copyright © 2025 Marius Göcke</Copyright>
+    <Copyright>Copyright © 2026 Marius Göcke</Copyright>
     <Description>ConSurvBackend is the backend for ConSurv.</Description>
     <PackageProjectUrl>https://github.com/anionDevelopment/ConSurv</PackageProjectUrl>
     <RepositoryUrl>https://github.com/anionDevelopment/ConSurv.git</RepositoryUrl>
