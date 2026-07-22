@@ -2,6 +2,8 @@ ARG image_debian
 FROM ${image_debian}
 ARG CodeUnitVersion
 ARG DotNetRuntime
+# DEBIAN_FRONTEND as ARG (not ENV) so it only affects the build and does not leak into the running container.
+ARG DEBIAN_FRONTEND=noninteractive
 LABEL version=${CodeUnitVersion}
 ENV ISRUNNINGINCONTAINER="true"
 #TODO make it possible to have an own apt-server for apt-packages to get rid of rate limits
