@@ -11,8 +11,8 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Copyright>Copyright © 2026 Marius Göcke</Copyright>
     <Description>ConSurvBackendTests is the test-project for ConSurvBackend.</Description>
-    <PackageProjectUrl>https://github.com/anionDev/CommonProjectStructureExamples</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/anionDev/CommonProjectStructureExamples.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/anionDevelopment/ConSurv</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/anionDevelopment/ConSurv.git</RepositoryUrl>
     <RootNamespace>ConSurvBackend.Tests</RootNamespace>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <Nullable>enable</Nullable>
