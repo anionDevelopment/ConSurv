@@ -30,11 +30,11 @@ namespace ConSurvBackend.Core.Controller
         /// and returns it with the appropriate MIME type (<c>application/vnd.apple.mpegurl</c> for
         /// <c>.m3u8</c> playlists, <c>video/MP2T</c> for <c>.ts</c> segments).
         /// </summary>
-        /// <param name="streamId">The identifier of the stream (typically a camera ID).</param>
+        /// <param name="streamId">The identifier of the stream (typically a camera ID; must match <c>^[0-9A-Za-z_-]+$</c>).</param>
         /// <param name="filename">The HLS segment or playlist filename to serve (must match <c>^[0-9A-Za-z_]+\.[0-9A-Za-z]+$</c>).</param>
         /// <returns>
         /// 200 OK with the file bytes and the correct content type;
-        /// 400 Bad Request if the filename is invalid;
+        /// 400 Bad Request if the stream-id or the filename is invalid;
         /// 404 Not Found if the file does not exist.
         /// </returns>
         [HttpGet()]
@@ -44,6 +44,12 @@ namespace ConSurvBackend.Core.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Stream([FromRoute] string streamId, [FromRoute] string filename)
         {
+            // Both parts are used to build a path inside the data-folder, so both of them must be
+            // validated. Otherwise path-separators or ".." could be used to leave the data-folder.
+            if (!Regex.IsMatch(streamId, @"^[0-9A-Za-z_-]+$"))
+            {
+                return this.BadRequest($"Stream-id \"{streamId}\" is an invalid stream-id.");
+            }
             if (!Regex.IsMatch(filename, @"^[0-9A-Za-z_]+\.[0-9A-Za-z]+$"))
             {
                 return this.BadRequest($"Filename \"{filename}\" is an invalid stream-file.");

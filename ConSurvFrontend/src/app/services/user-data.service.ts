@@ -17,6 +17,7 @@ export class UserDataService {
   }
 
   unloadUserData() {
+    this.loaded = false;//otherwise the user-data of the next login would never be loaded
     this.storageService.setUserName(null);
     this.storageService.setUserId(null);
     this.storageService.setAccessToken(null);

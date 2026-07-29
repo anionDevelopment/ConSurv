@@ -116,6 +116,7 @@ namespace ConSurvBackend.Core.BackgroundServices
                 {
                     ICollection<Camera> cameras = this._CameraService.GetAllCameras().Values;
                     this._Logger.Log("Cameras to manage: {" + string.Join(", ", cameras) + "}", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this.TerminateProcessesOfNoLongerExistingCameras(cameras.Select(camera => camera.Id).ToHashSet());
                     foreach (Model.Base.Camera camera in cameras)
                     {
                         this._Logger.Log($"ManageCamera_{camera.Id}", Microsoft.Extensions.Logging.LogLevel.Debug, false, true, true, true, true, () => this.ManageCamera(camera));
@@ -126,6 +127,30 @@ namespace ConSurvBackend.Core.BackgroundServices
                     this._Logger.Log($"Wait until initialization is finished...", Microsoft.Extensions.Logging.LogLevel.Debug);
                 }
             });
+        }
+
+        /// <summary>
+        /// Terminates the media-processes of every camera which is tracked as running but which does not
+        /// exist anymore. Without this the MediaMTX- and FFmpeg-processes of a removed camera would keep
+        /// running (and keep recording) until the application is restarted, because the reconciliation
+        /// itself only iterates over the currently existing cameras.
+        /// </summary>
+        /// <param name="existingCameraIds">The ids of all currently existing cameras.</param>
+        private void TerminateProcessesOfNoLongerExistingCameras(ISet<string> existingCameraIds)
+        {
+            ICollection<string> trackedCameraIds;
+            lock (RuntimeData.CameraInternalsRuntimeDataLock)
+            {
+                trackedCameraIds = this._CameraRuntimeInformation.Keys.ToList();
+            }
+            foreach (string trackedCameraId in trackedCameraIds)
+            {
+                if (!existingCameraIds.Contains(trackedCameraId))
+                {
+                    this._Logger.Log($"Camera {trackedCameraId} does not exist anymore. Terminating its media-processes.", Microsoft.Extensions.Logging.LogLevel.Debug);
+                    this.TerminateProcesses(trackedCameraId);
+                }
+            }
         }
 
         private void ManageCamera(Camera camera)

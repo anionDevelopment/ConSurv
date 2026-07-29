@@ -84,7 +84,7 @@ namespace ConSurvBackend.Core.Controller
         {
             User typedUser = GRYLibrary.Core.APIServer.CommonDBTypes.User.CreateNewUser(user, this._AuthenticationService.Hash(password), this._TimeService);
             this._AuthenticationService.AddUser(typedUser);
-            this._AuthenticationService.EnsureUserHasRole(typedUser.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.UsernameAdmin).Id);
+            this._AuthenticationService.EnsureUserHasRole(typedUser.Id, this._AuthenticationService.GetRoleByName(CodeUnitSpecificConstants.RolenameAdmins).Id);
             return this.Ok();
         }
 

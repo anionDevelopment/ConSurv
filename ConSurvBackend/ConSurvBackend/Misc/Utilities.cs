@@ -166,7 +166,6 @@ namespace ConSurvBackend.Core.Misc
             string result = Regex.Replace(rtspLink, pattern, m =>
             {
                 string scheme = m.Groups["scheme"].Value;
-                string user = m.Groups["user"].Value;
                 return $"{scheme}://";
             });
 
@@ -198,7 +197,7 @@ namespace ConSurvBackend.Core.Misc
         /// <param name="img1Bytes">Raw bytes of the first image (must be decodable by OpenCV).</param>
         /// <param name="img2Bytes">Raw bytes of the second image (must be decodable by OpenCV).</param>
         /// <returns>
-        /// A value in the range [0, 100] where 100 means the images are identical and 0 means they
+        /// A value in the range [0, 1] where 1 means the images are identical and 0 means they
         /// are completely different.
         /// </returns>
         public static double CalculateImageSimilarity(byte[] img1Bytes, byte[] img2Bytes)
@@ -216,7 +215,9 @@ namespace ConSurvBackend.Core.Misc
 
             double distance = Cv2.Norm(hash1, hash2, NormTypes.Hamming);
 
-            double similarity = (1.0 - distance / 64.0) * 100.0;
+            // The hamming-distance of the 64-bit-PHash is normalized to [0, 1] because every consumer of
+            // this function (and the configured motion-detection-threshold) expects a value in this range.
+            double similarity = 1.0 - distance / 64.0;
 
             return similarity;
         }
