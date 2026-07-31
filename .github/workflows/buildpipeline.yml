@@ -6,11 +6,14 @@ on:
         description: "Target environment-type for the build (e.g. QualityCheck, Productive)."
         required: false
         default: QualityCheck
+env:
+  IS_RUNNING_IN_SERVER_PIPELINE: "true"
+  IS_RUNNING_IN_GITHUB_PIPELINE: "true"
 jobs:
   build-pipeline:
     runs-on: [self-hosted, scriptcollection]
     container:
-      image: aniondev/scbuilder:v1.2.5
+      image: aniondev/scbuilder:v1.2.7
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     steps:

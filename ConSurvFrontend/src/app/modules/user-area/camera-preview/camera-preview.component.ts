@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CameraService } from '../../../generated/con-surv-backend';
 import { StorageService } from '../../../services/storage.service';
-import { interval, startWith, switchMap } from 'rxjs';
+import { interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-camera-preview',
@@ -9,11 +9,12 @@ import { interval, startWith, switchMap } from 'rxjs';
   templateUrl: './camera-preview.component.html',
   styleUrl: './camera-preview.component.scss'
 })
-export class CameraPreviewComponent implements OnInit {
+export class CameraPreviewComponent implements OnInit, OnDestroy {
 
   @Input()
   cameraId: string | null = null;
   image: string = "";
+  private destroy$ = new Subject<void>();
   constructor(private cameraService: CameraService, private storageService: StorageService) {
   }
 
@@ -22,10 +23,18 @@ export class CameraPreviewComponent implements OnInit {
       interval(5000).pipe(
         startWith(0),
         switchMap(() => this.cameraService.aPIV3CameraControllerGetPreviewCameraIdGet(this.cameraId!, this.storageService.getAccessToken())
-        )).subscribe((result) => {
-          this.image = 'data:image/png;base64,' + result;
-        });
+        ),
+        takeUntil(this.destroy$),
+      ).subscribe((result) => {
+        this.image = 'data:image/png;base64,' + result;
+      });
     }
+  }
+
+  ngOnDestroy(): void {
+    //without this the interval would keep requesting previews for a camera which is not displayed anymore
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   popupVisible = false;

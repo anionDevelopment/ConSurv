@@ -24,9 +24,11 @@ export class CamerasListComponent implements OnInit {
   ngOnInit(): void {
     this.userDataService.userIsModerator().subscribe((isModerator) => {
       this.userIdModerator = isModerator;
-      const newColumnsList = [...this.displayedColumns];
-      newColumnsList.push("options");
-      this.displayedColumns = newColumnsList;
+      if (isModerator) {//the options-column contains the edit- and the remove-button and is therefore only relevant for moderators
+        const newColumnsList = [...this.displayedColumns];
+        newColumnsList.push("options");
+        this.displayedColumns = newColumnsList;
+      }
     });
     this.cameraService.aPIV3CameraControllerCamerasGet(this.storageService.getAccessToken()).subscribe(((cameras: CameraDTO[]) => {
       cameras.forEach(camera => {

@@ -97,9 +97,8 @@ namespace ConSurvBackend.Core.Services
         private string CreateCameraCore(string name, string streamURL)
         {
             EnsureCameraNameIsValid(name);
-            Camera camera = new Camera(this.GetId(streamURL), name);
+            Camera camera = new Camera(this.GetUnusedId(streamURL), name);
             camera.VideoInformation.StreamURL = streamURL;
-            this.GetAllCamerasCore()[camera.Id] = camera;
             this._Persistence.CreateCamera(camera);
             this._AuditLog.Logger.Log($"Created camera {camera.Id}.", LogLevel.Information);
             return camera.Id;
@@ -113,6 +112,33 @@ namespace ConSurvBackend.Core.Services
         private string GetId(string rtspLink)
         {
             return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
+        }
+
+        /// <summary>
+        /// Returns an id which is derived from the given stream-URL and which is not used by an already
+        /// existing camera yet. Since the id is derived from the stream-URL alone, two cameras which are
+        /// created with the same stream-URL (which is always the case for cameras created with the default
+        /// stream-URL and adjusted afterwards) would otherwise get the same id and the second camera would
+        /// replace the first one.
+        /// </summary>
+        /// <param name="rtspLink">The stream URL to derive the id from.</param>
+        /// <returns>A 6-character hex string which is not used as a camera-id yet.</returns>
+        /// <exception cref="InternalAlgorithmException">Thrown when no unused id could be found.</exception>
+        private string GetUnusedId(string rtspLink)
+        {
+            IDictionary<string, Camera> existingCameras = this.GetAllCamerasCore();
+            string result = this.GetId(rtspLink);
+            uint discriminator = 0;
+            while (existingCameras.ContainsKey(result))
+            {
+                discriminator = discriminator + 1;
+                if (discriminator == uint.MaxValue)
+                {
+                    throw new InternalAlgorithmException($"Could not calculate an unused camera-id for the given stream-URL.");
+                }
+                result = this.GetId($"{rtspLink}#{discriminator}");
+            }
+            return result;
         }
 
         /// <inheritdoc />
@@ -204,13 +230,15 @@ namespace ConSurvBackend.Core.Services
         public double GetRateOfAvailableCameras() => Semaphore(_Semaphore, this.GetRateOfAvailableCamerasCore);
         private double GetRateOfAvailableCamerasCore()
         {
-            if (this.GetAllCamerasCore().Count == 0)
+            IDictionary<string, Camera> cameras = this.GetAllCamerasCore();
+            if (cameras.Count == 0)
             {
                 return 0;
             }
             else
             {
-                return this.GetAllCamerasCore().Where(kvp => this.IsAvailableCore(kvp.Value).Item1).Count() / this.GetAllCamerasCore().Count;
+                int amountOfAvailableCameras = cameras.Where(kvp => this.IsAvailableCore(kvp.Value).Item1).Count();
+                return (double)amountOfAvailableCameras / cameras.Count;
             }
         }
 
@@ -290,25 +318,54 @@ namespace ConSurvBackend.Core.Services
         private IDictionary<string, IList<string>> GetVideosCore()
         {
             Dictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
-            foreach (string folder in Directory.GetDirectories(Path.Combine(this._Constants.GetDataFolder(), "CameraData")))
+            string cameraDataFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData");
+            if (!Directory.Exists(cameraDataFolder))
+            {
+                return result;
+            }
+            foreach (string folder in Directory.GetDirectories(cameraDataFolder))
             {
                 string cameraId = new DirectoryInfo(folder).Name;
                 List<string> list = new List<string>();
-                string recordingsFolder = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings");
-                foreach (string file in Directory.GetFiles(recordingsFolder))
+                // The recordings-folder only exists for cameras which are (or were) recording, so its
+                // absence is a regular state and must not let the entire listing fail.
+                string recordingsFolder = Path.Combine(folder, "Recordings");
+                if (Directory.Exists(recordingsFolder))
                 {
-                    list.Add(file);
+                    foreach (string file in Directory.GetFiles(recordingsFolder))
+                    {
+                        list.Add(Path.GetFileName(file));
+                    }
                 }
                 result.Add(cameraId, list);
             }
             return result;
         }
 
+        /// <summary>
+        /// Returns the absolute path of a recording of a camera. The camera-id is resolved against the
+        /// existing cameras and the file-name must be a plain file-name, so that neither of both can be
+        /// used to leave the recordings-folder of the camera.
+        /// </summary>
+        /// <param name="cameraId">The id of the camera the recording belongs to.</param>
+        /// <param name="filename">The plain file-name of the recording.</param>
+        /// <returns>The absolute path of the recording.</returns>
+        /// <exception cref="BadRequestException">Thrown when the file-name is not a plain file-name.</exception>
+        private string GetRecordingFile(string cameraId, string filename)
+        {
+            Camera camera = this.GetCameraByIdCore(cameraId);
+            if (string.IsNullOrWhiteSpace(filename) || filename.Contains('/') || filename.Contains('\\') || filename != Path.GetFileName(filename) || filename == "." || filename == "..")
+            {
+                throw new BadRequestException($"\"{filename}\" is not a valid name of a recording.");
+            }
+            return Path.Combine(this._Constants.GetDataFolder(), "CameraData", camera.Id, "Recordings", filename);
+        }
+
         /// <inheritdoc />
         public void RemoveVideo(string cameraId, string filename) => Semaphore(_Semaphore, () => this.RemoveVideoCore(cameraId, filename));
         private void RemoveVideoCore(string cameraId, string filename)
         {
-            string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
+            string fullPath = this.GetRecordingFile(cameraId, filename);
             if (File.Exists(fullPath))
             {
                 this._Log.Log($"Removing recording \"{filename}\" of camera {cameraId}.", LogLevel.Debug);
@@ -331,7 +388,7 @@ namespace ConSurvBackend.Core.Services
         public byte[] GetVideo(string cameraId, string filename) => Semaphore(_Semaphore, () => this.GetVideoCore(cameraId, filename));
         private byte[] GetVideoCore(string cameraId, string filename)
         {
-            string fullPath = Path.Combine(this._Constants.GetDataFolder(), "CameraData", cameraId, "Recordings", filename);
+            string fullPath = this.GetRecordingFile(cameraId, filename);
             if (File.Exists(fullPath))
             {
                 return File.ReadAllBytes(fullPath);

@@ -56,7 +56,9 @@ namespace ConSurvBackend.Core.Controller
         [Route(nameof(CreateCamera))]
         public IActionResult CreateCamera()
         {
-            return this.Ok(this._CameraService.CreateCamera("New camera", "rtsp://mycamera.example.com/stream"));
+            // The name must not contain whitespace because it is used in the FFmpeg-command-lines of the
+            // camera-management-service (see the validation in the business-logic-service).
+            return this.Ok(this._CameraService.CreateCamera("NewCamera", "rtsp://mycamera.example.com/stream"));
         }
 
         /// <summary>

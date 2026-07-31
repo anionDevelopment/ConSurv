@@ -1,31 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cps:codeunit
-    xmlns:cps="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/tree/main/Conventions/RepositoryStructure/CommonProjectStructure"
-    codeunitspecificationversion="2.9.4"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/raw/v2.9.4/Conventions/RepositoryStructure/CommonProjectStructure/codeunit.xsd" enabled="true">
-    <cps:name>ConSurvFrontend</cps:name>
-    <cps:version>3.0.33</cps:version>
-    <cps:codeunitownername>Marius Göcke</cps:codeunitownername>
-    <cps:codeunitowneremailaddress>marius.goecke@gmail.com</cps:codeunitowneremailaddress>
-    <cps:properties codeunithastestablesourcecode="true" codeunithasupdatabledependencies="true"
-        throwexceptionifcodeunitfilecannotbevalidated="false"
-        developmentstate="Maintenance-updates only"
-        description="ConSurvBackend is the frontend for ConSurv.">
-        <cps:testsettings minimalcodecoverageinpercent="1" />
-        <cps:pipelinedemands>
-        </cps:pipelinedemands>
-        <cps:updatesettings>
-            <cps:ignoreddependencies>
-            </cps:ignoreddependencies>
-        </cps:updatesettings>
-    </cps:properties>
-    <cps:dependentcodeunits>
-        <cps:dependentcodeunit>ConSurvBackend</cps:dependentcodeunit>
-    </cps:dependentcodeunits>
-    <cps:developerteam>
-        <cps:developer>
-            <cps:developername>Marius Göcke</cps:developername>
-            <cps:developeremailaddress>marius.goecke@gmail.com</cps:developeremailaddress>
-        </cps:developer>
-    </cps:developerteam>
-</cps:codeunit>
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:codeunit xmlns:ns0="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/tree/main/Conventions/RepositoryStructure/CommonProjectStructure" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" codeunitspecificationversion="2.9.4" xsi:schemaLocation="https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/raw/v2.9.4/Conventions/RepositoryStructure/CommonProjectStructure/codeunit.xsd" enabled="true">
+  <ns0:name>ConSurvFrontend</ns0:name>
+  <ns0:version>3.0.34</ns0:version>
+  <ns0:codeunitownername>Marius Göcke</ns0:codeunitownername>
+  <ns0:codeunitowneremailaddress>marius.goecke@gmail.com</ns0:codeunitowneremailaddress>
+  <ns0:properties codeunithastestablesourcecode="true" codeunithasupdatabledependencies="true" throwexceptionifcodeunitfilecannotbevalidated="false" developmentstate="Maintenance-updates only" description="ConSurvBackend is the frontend for ConSurv.">
+    <ns0:testsettings minimalcodecoverageinpercent="1" />
+    <ns0:pipelinedemands />
+    <ns0:updatesettings>
+      <ns0:ignoreddependencies />
+    </ns0:updatesettings>
+  </ns0:properties>
+  <ns0:dependentcodeunits>
+    <ns0:dependentcodeunit>ConSurvBackend</ns0:dependentcodeunit>
+  </ns0:dependentcodeunits>
+  <ns0:developerteam>
+    <ns0:developer>
+      <ns0:developername>Marius Göcke</ns0:developername>
+      <ns0:developeremailaddress>marius.goecke@gmail.com</ns0:developeremailaddress>
+    </ns0:developer>
+  </ns0:developerteam>
+</ns0:codeunit>

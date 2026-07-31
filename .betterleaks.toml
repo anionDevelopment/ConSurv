@@ -30,3 +30,19 @@ description = "Angular build cache (generated, git-ignored, not used in producti
 paths = [
     '''/\.angular/''',
 ]
+
+# The entries below are matched against the findings of the OCI-image-scan. That scan reports the path a file has INSIDE the
+# image, which differs from its repository-path because the containerfile copies the files to other locations. The entries
+# above therefore do not apply to it and the same known false positives have to get allowlisted a second time by their in-image-path.
+
+[[allowlists]]
+description = "Development-only certificate inside the built OCI-image. This is the same file as the one allowlisted above via 'Other/Resources/DevelopmentCertificate/'; the containerfile copies it to '/Workspace/Other/Certificates/' where nginx uses it as default-certificate, so the image-scan reports it under that path. It is a self-signed certificate for the local test-domain 'consurv.test.local' issued by a local development-CA and is expected to get replaced for a real deployment."
+paths = [
+    '''Workspace/Other/Certificates/ConSurvDevelopmentCertificate\.''',
+]
+
+[[allowlists]]
+description = "Compiler-generated XML-documentation of the backend inside the built OCI-image. The reported url is the example 'rtsp://user:pass@host/path' of a documentation-comment which describes how the user-info-segment gets removed from a camera-url; it is not a real credential. Scoped to this single finding-type so that for example a private key in the same file would still get reported."
+paths = [
+    '''Workspace/Application/Backend/ConSurvBackend\.xml" in image-layer: contains credentials in the url''',
+]
