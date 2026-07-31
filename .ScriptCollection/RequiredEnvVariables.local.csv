@@ -1,6 +1,0 @@
-EnvVariableName;Kind;Value
-ACCESS_TOKEN_PROJECTSANIONDEVDE;file;~/.pp/Full-projects.aniondev.de.txt
-Dependency_CSharp_CCOTLibrary_Name;literal;CCOTLibrary
-Dependency_CSharp_CCOTLibrary_URL;literal;https://projects.aniondev.de/api/v4/projects/148/packages/nuget/index.json
-Dependency_CSharp_CCOTLibrary_Username;literal;anion
-Dependency_CSharp_CCOTLibrary_Passwort;file;~/.pp/Full-projects.aniondev.de.txt
