@@ -15,7 +15,13 @@ export class Settings {
         return environment.production;
     }
     public static getAppName(): string {
-        return packageInfo.name;
+        /*
+         * The name of the product and not the name of the npm-package: the package-name has to be lowercase
+         * and without spaces (npm requires that), so using it here displayed "con-surv-frontend" as the title
+         * of every page and in the footer. The version below is taken from the package, because that value is
+         * the version of the product.
+         */
+        return "ConSurv";
     }
     public static getAppVersion(): string {
         return packageInfo.version;
