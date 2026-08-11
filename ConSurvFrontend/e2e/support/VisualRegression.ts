@@ -11,14 +11,18 @@ const selectorsOfVolatileElements: string[] = ['app-footer'];
  * Opens the given route and compares the resulting screenshot with the baseline-screenshot
  * which belongs to the current browser and operating-system.
  * The comparison-tolerance is defined centrally in playwright.config.ts.
+ *
+ * Elements which are volatile on one page only (and not on every page) can be masked additionally
+ * by passing their selectors as last argument.
  */
-export async function expectPageToLookLikeBaseline(page: Page, route: string, baselineName: string): Promise<void> {
+export async function expectPageToLookLikeBaseline(page: Page, route: string, baselineName: string, selectorsOfAdditionalVolatileElements: string[] = []): Promise<void> {
     await openPageInReproducibleState(page, route);
+    const selectorsToMask: string[] = [...selectorsOfVolatileElements, ...selectorsOfAdditionalVolatileElements];
     await expect(page).toHaveScreenshot(`${baselineName}.png`, {
         fullPage: true,
         caret: 'hide',
         animations: 'disabled',
-        mask: selectorsOfVolatileElements.map((selector) => page.locator(selector))
+        mask: selectorsToMask.map((selector) => page.locator(selector))
     });
 }
 
