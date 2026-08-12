@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,13 +11,12 @@ import { AdminAreaModule } from './modules/admin-area/admin-area.module';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterOutlet,
     HomePageModule,
     UserAreaModule,
-    AdminAreaModule,
-  ],
+    AdminAreaModule
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

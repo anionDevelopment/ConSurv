@@ -44,8 +44,10 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <br>
-    <button mat-button *ngIf="userIdModerator" (click)="addCamera()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </app-user-area-container>
-</app-frame-work>
+      @if (userIdModerator) {
+        <button mat-button (click)="addCamera()">
+          <mat-icon>add</mat-icon>
+        </button>
+      }
+    </app-user-area-container>
+  </app-frame-work>
