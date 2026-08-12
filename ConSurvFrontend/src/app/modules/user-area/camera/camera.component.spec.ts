@@ -4,12 +4,13 @@ import { UserDataService } from '../../../services/user-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CameraService, StreamingService, UserService } from '../../../generated/con-surv-backend';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-user-area-container',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<ng-content></ng-content>'
 })
 class MockUserAreaContainerComponent { }

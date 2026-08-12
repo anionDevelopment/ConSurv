@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UserDataService } from '../../../services/user-data.service';
 import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { CameraDTO, CameraService, RecordModeDTO } from '../../../generated/con-
   selector: 'app-cameras-list',
   standalone: false,
   templateUrl: './cameras-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './cameras-list.component.scss'
 })
 export class CamerasListComponent implements OnInit {

@@ -10,7 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
 import { UserAreaContainerComponent } from '../user-area-container/user-area-container.component';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 @Component({
   selector: 'app-user-area-container',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<ng-content></ng-content>'
 })
 class MockUserAreaContainerComponent { }

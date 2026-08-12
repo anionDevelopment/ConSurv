@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RecordModeDTO } from '../../../generated/con-surv-backend';
 import { Observable, of } from 'rxjs';
 
@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
   selector: 'app-record-mode-indicator',
   standalone: false,
   templateUrl: './record-mode-indicator.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './record-mode-indicator.component.scss'
 })
 export class RecordModeIndicatorComponent {

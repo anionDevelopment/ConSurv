@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LoginFormComponent } from "../login-form/login-form.component";
 import { Settings } from '../../../static/Settings';
 import { UserDataService } from '../../../services/user-data.service';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-home-page',
   standalone: false,
   templateUrl: './home-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home-page.component.scss'
 })
 export class HomePageComponent {
