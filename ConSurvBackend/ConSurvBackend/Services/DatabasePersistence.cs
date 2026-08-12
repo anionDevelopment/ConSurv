@@ -331,6 +331,40 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <inheritdoc />
+        /// <inheritdoc />
+        public string? GetUserSetting(string userId, string key)
+        {
+            return this.RunTransaction(nameof(GetUserSetting), true, (cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptGetUserSetting();
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", userId));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Key", key));
+                using DbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    return reader.GetString(0);
+                }
+                else
+                {
+                    return null;
+                }
+            })[0];
+        }
+
+        /// <inheritdoc />
+        public void SetUserSetting(string userId, string key, string value)
+        {
+            this.RunTransaction(nameof(SetUserSetting), true, (cmd) =>
+            {
+                cmd.CommandText = this._SQLProvider.GetScriptSetUserSetting();
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("UserId", userId));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Key", key));
+                cmd.Parameters.Add(this._Database.GetGenericDatabaseInteractor().GetParameter("Value", value));
+                cmd.ExecuteNonQuery();
+            });
+        }
+
         public User GetUserById(string userId)
         {
             User result = this.RunTransaction(nameof(GetUserById), true, (cmd) =>

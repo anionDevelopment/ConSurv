@@ -21,7 +21,8 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             Mock<IPersistence> persistence = new Mock<IPersistence>();
             Mock<IAuthenticationService> authServiceMock = new Mock<IAuthenticationService>(MockBehavior.Strict);
             Mock<ITimeService> timeServiceMock = new Mock<ITimeService>(MockBehavior.Strict);
-            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object);
+            Mock<IBusinessLogicService> businessLogicServiceMock = new Mock<IBusinessLogicService>();
+            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object, businessLogicServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.Login(null, "somepassword");
@@ -41,7 +42,8 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             Mock<IPersistence> persistence = new Mock<IPersistence>();
             Mock<IAuthenticationService> authServiceMock = new Mock<IAuthenticationService>(MockBehavior.Strict);
             Mock<ITimeService> timeServiceMock = new Mock<ITimeService>(MockBehavior.Strict);
-            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object);
+            Mock<IBusinessLogicService> businessLogicServiceMock = new Mock<IBusinessLogicService>();
+            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object, businessLogicServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.Login("someuser", null);
@@ -63,7 +65,8 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             Mock<ITimeService> timeServiceMock = new Mock<ITimeService>(MockBehavior.Strict);
             string accessToken = "valid-token-123";
             authServiceMock.Setup(mock => mock.AccessTokenIsValid(accessToken)).Returns(true);
-            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object);
+            Mock<IBusinessLogicService> businessLogicServiceMock = new Mock<IBusinessLogicService>();
+            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object, businessLogicServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.TokenIsValid(accessToken);
@@ -87,7 +90,8 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             Mock<ITimeService> timeServiceMock = new Mock<ITimeService>(MockBehavior.Strict);
             string accessToken = "expired-or-unknown-token";
             authServiceMock.Setup(mock => mock.AccessTokenIsValid(accessToken)).Returns(false);
-            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object);
+            Mock<IBusinessLogicService> businessLogicServiceMock = new Mock<IBusinessLogicService>();
+            UserController controller = new UserController(ServerLog.GetTransientLog(), persistence.Object, authServiceMock.Object, timeServiceMock.Object, businessLogicServiceMock.Object);
 
             // act
             IActionResult actualResult = controller.TokenIsValid(accessToken);

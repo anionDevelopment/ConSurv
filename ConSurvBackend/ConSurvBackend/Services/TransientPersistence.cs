@@ -11,6 +11,7 @@ namespace ConSurvBackend.Core.Services
     public sealed class TransientPersistence : IPersistence
     {
         private readonly IDictionary<string, Camera> _Cameras = new Dictionary<string, Camera>();
+        private readonly IDictionary<(string/*userid*/, string/*key*/), string/*value*/> _UserSettings = new Dictionary<(string, string), string>();
         private readonly IAuthenticationServicePersistence<User> _TransientAuthenticationServicePersistence;
 
         public TransientPersistence(IAuthenticationServicePersistence<User> transientAuthenticationServicePersistence)
@@ -28,6 +29,19 @@ namespace ConSurvBackend.Core.Services
         public void Reset()
         {
             this._Cameras.Clear();
+            this._UserSettings.Clear();
+        }
+
+        /// <inheritdoc />
+        public string? GetUserSetting(string userId, string key)
+        {
+            return this._UserSettings.TryGetValue((userId, key), out string? value) ? value : null;
+        }
+
+        /// <inheritdoc />
+        public void SetUserSetting(string userId, string key, string value)
+        {
+            this._UserSettings[(userId, key)] = value;
         }
 
         public void CreateCamera(Camera camera)

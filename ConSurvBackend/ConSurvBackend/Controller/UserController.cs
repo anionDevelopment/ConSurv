@@ -26,12 +26,42 @@ namespace ConSurvBackend.Core.Controller
         private readonly IPersistence _Persistence;
         private readonly IAuthenticationService _AuthenticationService;
         private readonly ITimeService _TimeService;
-        public UserController(IServerLog logger, IPersistence persistence, IAuthenticationService authenticationService, ITimeService timeService)
+        private readonly IBusinessLogicService _BusinessLogicService;
+        public UserController(IServerLog logger, IPersistence persistence, IAuthenticationService authenticationService, ITimeService timeService, IBusinessLogicService businessLogicService)
         {
             this._Logger = logger.Logger;
             this._Persistence = persistence;
             this._AuthenticationService = authenticationService;
             this._TimeService = timeService;
+            this._BusinessLogicService = businessLogicService;
+        }
+
+        /// <summary>
+        /// Returns the color-scheme which the currently authenticated user chose.
+        /// </summary>
+        /// <returns>200 OK with a <see cref="StringValueDTO"/> containing "system", "light" or "dark". A user who did not choose a color-scheme yet gets "system", which follows the setting of the operating-system of that user.</returns>
+        [Authenticate]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringValueDTO))]
+        [Route(nameof(GetTheme))]
+        public IActionResult GetTheme()
+        {
+            return this.Ok(new StringValueDTO() { Value = this._BusinessLogicService.GetThemeOfUser(this.GetUser().Id) });
+        }
+
+        /// <summary>
+        /// Sets the color-scheme of the currently authenticated user, so that the choice is available again on another device and after a new login.
+        /// </summary>
+        /// <param name="theme">The color-scheme to store: "system", "light" or "dark".</param>
+        /// <returns>200 OK if the color-scheme was stored.</returns>
+        [Authenticate]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route(nameof(SetTheme))]
+        public IActionResult SetTheme([FromBody] StringValueDTO theme)
+        {
+            this._BusinessLogicService.SetThemeOfUser(this.GetUser().Id, theme.Value);
+            return this.Ok();
         }
 
         /// <summary>

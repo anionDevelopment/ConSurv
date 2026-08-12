@@ -99,6 +99,16 @@ namespace ConSurvBackend.Core.Miscellaneous
             return this.LoadSQLScript("GetUserByName");
         }
 
+        public string GetScriptGetUserSetting()
+        {
+            return this.LoadSQLScript("GetUserSetting");
+        }
+
+        public string GetScriptSetUserSetting()
+        {
+            return this.LoadSQLScript("SetUserSetting");
+        }
+
         public string GetScriptInsertRole()
         {
             return this.LoadSQLScript("InsertRole");

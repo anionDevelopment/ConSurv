@@ -44,7 +44,7 @@ namespace ConSurvBackend.Core
 {
     internal class Program
     {
-        internal bool ListenOnEveryIP { get; set; } = false;
+        internal bool ListenOnEveryIP { get; set; } = true;
         internal bool RunAsync { get; set; } = false;
         internal bool IsRunning { get; set; } = false;
         internal IBusinessLogicService? _BusinessLogicService;
@@ -85,6 +85,7 @@ namespace ConSurvBackend.Core
                     runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
+                    initializationInformation.ApplicationConstants.ListenOnEveryIP = this.ListenOnEveryIP;
                     initializationInformation.ApplicationConstants.AuthenticationMiddleware = typeof(AuthSMiddleware);
                     initializationInformation.ApplicationConstants.AuthorizationMiddleware = typeof(AutSRMiddleware);
                     initializationInformation.ApplicationConstants.ExceptionManagerMiddleware = typeof(DefaultExceptionHandlerMiddleware);

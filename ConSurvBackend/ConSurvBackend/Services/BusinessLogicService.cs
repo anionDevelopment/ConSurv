@@ -37,6 +37,29 @@ namespace ConSurvBackend.Core.Services
         private readonly IRuntimeData _RuntimeData;
         private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
 
+        /// <inheritdoc />
+        public string GetThemeOfUser(string userId)
+        {
+            // A value which is not stored (or which is not valid anymore because the set of the accepted values
+            // changed) is treated as the default, so that the user-interface never has to deal with an unknown value.
+            string? value = this._Persistence.GetUserSetting(userId, Constants.CodeUnitSpecificConstants.UserSettingKeyTheme);
+            if (value == null || !Constants.CodeUnitSpecificConstants.Themes.Contains(value))
+            {
+                return Constants.CodeUnitSpecificConstants.ThemeSystem;
+            }
+            return value;
+        }
+
+        /// <inheritdoc />
+        public void SetThemeOfUser(string userId, string theme)
+        {
+            if (!Constants.CodeUnitSpecificConstants.Themes.Contains(theme))
+            {
+                throw new BadRequestException($"'{theme}' is not a valid color-scheme. Valid are: {string.Join(", ", Constants.CodeUnitSpecificConstants.Themes)}.");
+            }
+            this._Persistence.SetUserSetting(userId, Constants.CodeUnitSpecificConstants.UserSettingKeyTheme, theme);
+        }
+
         public BusinessLogicService(IPersistence persistence, IServerLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants)
         {
             this._Persistence = persistence;

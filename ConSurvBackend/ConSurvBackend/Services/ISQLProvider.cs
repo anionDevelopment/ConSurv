@@ -21,6 +21,12 @@
         /// <summary>Returns the SQL script that retrieves a user by their id.</summary>
         string GetScriptGetUserById();
 
+        /// <summary>Returns the SQL script that retrieves the value of a setting of a single user.</summary>
+        string GetScriptGetUserSetting();
+
+        /// <summary>Returns the SQL script that inserts or updates the value of a setting of a single user.</summary>
+        string GetScriptSetUserSetting();
+
         /// <summary>Returns the SQL script that retrieves a role by its name.</summary>
         string GetScriptGetRoleByName();
 

@@ -11,6 +11,16 @@ namespace ConSurvBackend.Core.Services
 {
     public interface IBusinessLogicService
     {
+        /// <summary>Returns the color-scheme the given user chose.</summary>
+        /// <param name="userId">The id of the user.</param>
+        /// <returns>"system", "light" or "dark". A user who did not choose a color-scheme yet gets "system", which follows the setting of the operating-system of that user.</returns>
+        public string GetThemeOfUser(string userId);
+
+        /// <summary>Sets the color-scheme of the given user.</summary>
+        /// <param name="userId">The id of the user.</param>
+        /// <param name="theme">"system", "light" or "dark".</param>
+        public void SetThemeOfUser(string userId, string theme);
+
         /// <summary>
         /// Creates a new camera with the given name and stream URL.
         /// </summary>
