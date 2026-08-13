@@ -80,6 +80,31 @@ examples which were found this way and fixed: a line-break inside a flex-contain
 different height, so a menu was 20 pixels higher in firefox) and an inline-element which contains a
 block-element (which made an element 28 pixels higher in webkit).
 
+### Visual-regression-tests of the recordings
+
+Besides the pages of the frontend there is a second kind of visual-regression-test: it checks the video which
+the backend records (`ConSurvBackendTests/Testcases/BackgroundServices/RecordedStreamVisualRegressionTests.cs`).
+
+Two test-streams are recorded at the same time. A test-stream shows its own name and a number which is counted
+up once per second, so a picture of a recording says which stream it came from and how much time passed inside
+it. That is what makes a swapped camera, a frozen picture or a wrong playback-speed visible; a testcase which
+only checks that a file was written sees none of it.
+
+- **The stream is produced by `start_rtsp_test_stream` of ScriptCollection** and published to a mediamtx which
+  the testcase starts itself (`RTSPTestServer`). It is deliberately not the mediamtx which the application
+  starts per camera: that one is fed by the application, so publishing to it would replace the part which is
+  supposed to be tested.
+- **The font is the one of this repository** (`Other/Resources/Fonts/Noto`) and not one of the operating-system,
+  so the picture is the same on every machine and the baseline-pictures stay comparable.
+- **The testcase does not expect one certain number.** The number belongs to the timeline of the stream, the
+  checked moments belong to the timeline of the recording, and the application only starts recording after it
+  could probe the camera — so how far the stream is advanced when the recording begins is not predictable. What
+  is asserted is that the picture is one of the baseline-pictures of its stream and that the number one second
+  later is the successor of it.
+- **Generate the baseline-pictures**: run `UpdateRecordedStreamBaselines.py` in `ConSurvBackend/Other/QualityCheck`
+  (or `task ursb`). It takes the pictures from a video which the same generator produces, not from a recording,
+  which is what keeps them reproducible.
+
 ## Things which are easy to get wrong
 
 - The fonts are delivered with the application (`@fontsource`-packages, see `angular.json`) and are not loaded

@@ -162,6 +162,19 @@
           "t"
         ],
         "allowcustomarguments": true
+      },
+      {
+        "label": "Update: Recorded-stream-baselines",
+        "command": "python UpdateRecordedStreamBaselines.py",
+        "args": [],
+        "type": "shell",
+        "options": {
+          "cwd": "${workspaceFolder}/ConSurvBackend/Other/QualityCheck"
+        },
+        "aliases": [
+          "ursb"
+        ],
+        "allowcustomarguments": true
       }
     ]
   },
