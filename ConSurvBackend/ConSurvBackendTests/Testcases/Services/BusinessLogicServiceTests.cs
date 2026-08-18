@@ -5,6 +5,7 @@ using ConSurvBackend.Core.Constants;
 using System.Collections.Generic;
 using System;
 using GRYLibrary.Core.Misc;
+using GRYLibrary.Core.Exceptions;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
@@ -82,6 +83,28 @@ namespace ConSurvBackend.Tests.Testcases.Services
             Assert.IsTrue(persistence.UserWithIdExists(userId));
             Assert.IsTrue(businessLogicService.UserWithNameExists(user));
             // TODO add more assertions
+        }
+
+        /// <remarks>
+        /// A duplicate name must be refused by the business-logic, not only by the unique-constraint of the
+        /// database: the constraint does not exist in the transient persistence and its violation would surface
+        /// as an internal error instead of a usable one.
+        /// </remarks>
+        [TestMethod(nameof(RegisterWithAlreadyTakenUsernameIsRejectedTest))]
+        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        public void RegisterWithAlreadyTakenUsernameIsRejectedTest()
+        {
+            // arrange
+            this.InitializeServices(true, out IBusinessLogicService businessLogicService, out IInitializationService<CommandlineParameter> initializationService, out IPersistence persistence);
+            initializationService.Initialize(new CommandlineParameter());
+            string user = "someuser";
+            string userId = businessLogicService.Register(user, "somepassword");
+
+            // act & assert
+            Assert.ThrowsExactly<BadRequestException>(() => businessLogicService.Register(user, "anotherpassword"));
+
+            // assert: the existing account is untouched and no second one was created
+            Assert.IsTrue(persistence.UserWithIdExists(userId));
         }
 
         //TODO write testcases for the things which are not allowed to verify the user is really not able to do certain things

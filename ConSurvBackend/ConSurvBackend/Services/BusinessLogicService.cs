@@ -269,6 +269,16 @@ namespace ConSurvBackend.Core.Services
         public string Register(string username, string password) => Semaphore(_Semaphore, () => this.RegisterCore(username, password));
         private string RegisterCore(string username, string password)
         {
+            // Reject a name which is already taken. The database enforces this as well (the unique-constraint on
+            // Users.Name), but only the check here can answer with a usable error instead of letting a
+            // constraint-violation surface as an internal error. It also covers the transient persistence, which
+            // has no constraint at all.
+            // Attention: the Core-variant has to be used here, because this method already runs inside the
+            // semaphore and a SemaphoreSlim is not re-entrant - calling the public method would deadlock.
+            if (this.UserWithNameExistsCore(username))
+            {
+                throw new BadRequestException($"The username '{username}' is already taken.");
+            }
             User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
             this._AuthenticationService.AddUserTyped(newUser);
             this._AuditLog.Logger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);
