@@ -10,7 +10,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
     public class RecordModeDTOTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_NoRecording_ReturnsNoRecordingInstance()
         {
             // arrange
@@ -24,7 +24,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_RecordAlways_ReturnsRecordAlwaysInstance()
         {
             // arrange
@@ -38,7 +38,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_RecordOnMovements_ReturnsRecordOnMovementsInstance()
         {
             // arrange
@@ -52,7 +52,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_UnknownMode_ThrowsNotSupportedException()
         {
             // arrange
@@ -74,7 +74,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_RoundTrip_NoRecording_PreservesType()
         {
             // arrange
@@ -89,7 +89,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_RoundTrip_RecordAlways_PreservesType()
         {
             // arrange
@@ -104,7 +104,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToRecordMode_RoundTrip_RecordOnMovements_PreservesType()
         {
             // arrange

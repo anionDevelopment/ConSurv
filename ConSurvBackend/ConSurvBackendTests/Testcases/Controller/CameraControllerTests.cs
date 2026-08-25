@@ -17,7 +17,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     public class CameraControllerTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestCreateCamera()
         {
             // arrange
@@ -40,7 +40,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestRemoveCamera()
         {
             // arrange
@@ -62,7 +62,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestUpdateCamera()
         {
             // arrange
@@ -95,7 +95,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestGetCameraById()
         {
             // arrange
@@ -122,7 +122,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestGetAllCameras()
         {
             // arrange
@@ -153,7 +153,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestListVideos()
         {
             // arrange
@@ -180,7 +180,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestRemoveVideo()
         {
             // arrange

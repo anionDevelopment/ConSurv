@@ -31,35 +31,35 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
         }
 
         [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(CreateCameraTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public override void CreateCameraTest()
         {
             this.CreateCamera();
         }
 
         [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(RemoveCameraTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public override void RemoveCameraTest()
         {
             this.RemoveCamera();
         }
 
         [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(UpdateCameraTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public override void UpdateCameraTest()
         {
             this.UpdateCamera();
         }
 
         [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(GetAllCamerasTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public override void GetAllCamerasTest()
         {
             this.GetAllCameras();
         }
 
         [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(ResetTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public override void ResetTest()
         {
             this.Reset();

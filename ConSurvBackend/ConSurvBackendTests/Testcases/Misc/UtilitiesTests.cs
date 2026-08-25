@@ -1,4 +1,5 @@
-﻿using ConSurvBackend.Core.Misc;
+﻿using GRYLibrary.Core.Misc;
+using ConSurvBackend.Core.Misc;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -10,6 +11,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
     public class UtilitiesTests
     {
         [TestMethod]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void GetVideoTargetFileTests()
         {
             // arrange
@@ -31,6 +33,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
         }
 
         [TestMethod]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void GetVideoTargetFileTests_LocalTime()
         {
             // arrange
@@ -52,6 +55,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
         }
 
         [TestMethod]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void EscapeBasicAuthPasswords()
         {
             // arrange

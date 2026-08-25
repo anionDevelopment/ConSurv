@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export IsRunningInContainer=true
+export ISRUNNINGINCONTAINER=true
 
 argument="Run --RealRun true"
 

@@ -9,7 +9,7 @@ def build():
             Platform.Linux_ARM64,
     ]
     tf:TFCPS_CodeUnitSpecific_DotNet_Functions=TFCPS_CodeUnitSpecific_DotNet_CLI.parse(__file__)
-    tf.build([GeneralUtilities.platform_to_dotnet_runtime_identifier(p)  for p in platforms], True)
+    tf.build(True)
     codeunit_folder: str = tf.get_codeunit_folder()
     for target_platform in platforms:
         mediamtx_src_folder: str = os.path.join(codeunit_folder, "Other", "Resources", f"MediaMTX_{GeneralUtilities.platform_to_dash_str(target_platform)}", "MediaMTX")

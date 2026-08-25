@@ -14,7 +14,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     public class UserControllerTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Login_NullUser_ReturnsBadRequest()
         {
             // arrange
@@ -35,7 +35,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Login_NullPassword_ReturnsBadRequest()
         {
             // arrange
@@ -56,7 +56,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TokenIsValid_ValidToken_ReturnsOkWithTrue()
         {
             // arrange
@@ -81,7 +81,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TokenIsValid_InvalidToken_ReturnsOkWithFalse()
         {
             // arrange

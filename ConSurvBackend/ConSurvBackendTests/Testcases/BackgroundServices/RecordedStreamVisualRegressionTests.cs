@@ -43,7 +43,7 @@ namespace ConSurvBackend.Tests.Testcases.BackgroundServices
         private static readonly TimeSpan _TimeoutForTheRecordingToAppear = TimeSpan.FromMinutes(2);
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void TheRecordedVideoOfEveryStreamLooksLikeItsBaselinePictures()
         {
             // arrange

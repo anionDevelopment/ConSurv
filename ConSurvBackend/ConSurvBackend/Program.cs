@@ -76,7 +76,7 @@ namespace ConSurvBackend.Core
             this.IsRunning = true;
             int result = Tools.RunAPIServer<CommandlineParameter, CodeUnitSpecificConstants, CodeUnitSpecificConfiguration>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitDescription, Version3.Parse(GeneralConstants.CodeUnitVersion), Misc.Utilities.GetEnvironmentTargetType(), GUtilities.GetExecutionMode(commandlineArguments), commandlineArguments, null, (apiServerConfiguration) =>
             {
-                apiServerConfiguration.SetInitialzationInformationAction = (initializationInformation) =>
+                apiServerConfiguration.SetInitializationInformationAction = (initializationInformation) =>
                 {
                     if (initializationInformation.CommandlineParameter.EnforceVerbose)
                     {

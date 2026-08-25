@@ -1,4 +1,4 @@
-using ConSurvBackend.Core.Configuration;
+﻿using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Threading;
 
 namespace ConSurvBackend.Core.Services
@@ -80,9 +81,9 @@ namespace ConSurvBackend.Core.Services
         private static readonly char[] _ForbiddenCameraNameCharacters = new char[] { '\'', '"', '|', '&', '*', '/', '\\' };
 
         /// <summary>
-        /// Ensures the given camera-name does not contain any whitespace or meta-character that would
-        /// break the FFmpeg command lines built from it. Throws a <see cref="BadRequestException"/>
-        /// otherwise.
+        /// Ensures the given camera-name does not contain any character which would either break the FFmpeg
+        /// command-lines built from it or which is not visible in the user-interface. Throws a
+        /// <see cref="BadRequestException"/> otherwise.
         /// </summary>
         /// <param name="name">The camera-name to validate.</param>
         /// <exception cref="BadRequestException">Thrown when the name is null or contains a forbidden character.</exception>
@@ -94,11 +95,34 @@ namespace ConSurvBackend.Core.Services
             }
             foreach (char character in name)
             {
-                if (char.IsWhiteSpace(character) || _ForbiddenCameraNameCharacters.Contains(character))
+                if (CharacterIsForbiddenInACameraName(character))
                 {
-                    throw new BadRequestException($"The camera-name \"{name}\" contains the forbidden character '{character}'. A camera-name must not contain whitespace or any of the following characters: single-quote, double-quote, pipe, ampersand, asterisk, slash, backslash.");
+                    throw new BadRequestException($"The camera-name \"{name}\" contains the character U+{(int)character:X4}, which is not allowed. A camera-name must not contain whitespace, control-characters (which includes carriage-return and line-feed), invisible characters or any of the following characters: single-quote, double-quote, pipe, ampersand, asterisk, slash, backslash.");
                 }
             }
+        }
+
+        /// <summary>Indicates whether the given character must not be part of a camera-name.</summary>
+        /// <remarks>
+        /// Two different reasons are combined here. Quote-, pipe-, ampersand-, asterisk- and slash-characters break the
+        /// FFmpeg command-lines which are built from the name. Whitespace, control-characters (which includes
+        /// carriage-return and line-feed) and format-characters like the zero-width space are refused because they are
+        /// not visible: two cameras whose names differ only in such a character would be indistinguishable in the
+        /// user-interface, and a carriage-return or line-feed additionally allows to forge additional lines in every
+        /// log-entry and command-line which contains the name.
+        /// </remarks>
+        private static bool CharacterIsForbiddenInACameraName(char character)
+        {
+            if (char.IsWhiteSpace(character) || char.IsControl(character))
+            {
+                return true;
+            }
+            UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory(character);
+            if (category == UnicodeCategory.Format || category == UnicodeCategory.Surrogate || category == UnicodeCategory.PrivateUse)
+            {
+                return true;
+            }
+            return _ForbiddenCameraNameCharacters.Contains(character);
         }
 
         private static void Semaphore(SemaphoreSlim semaphore, Action action)

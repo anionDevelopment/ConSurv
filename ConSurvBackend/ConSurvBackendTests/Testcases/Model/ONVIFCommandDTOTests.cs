@@ -12,7 +12,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
     public class ONVIFCommandDTOTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Up_ReturnsMoveWithMoveUpDirection()
         {
             // arrange
@@ -28,7 +28,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Down_ReturnsMoveWithMoveDownDirection()
         {
             // arrange
@@ -44,7 +44,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Left_ReturnsMoveWithMoveLeftDirection()
         {
             // arrange
@@ -60,7 +60,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Right_ReturnsMoveWithMoveRightDirection()
         {
             // arrange
@@ -76,7 +76,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_In_ReturnsZoomWithZoomInDirection()
         {
             // arrange
@@ -92,7 +92,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_Out_ReturnsZoomWithZoomOutDirection()
         {
             // arrange
@@ -108,7 +108,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_UnknownCommandType_ThrowsNotSupportedException()
         {
             // arrange
@@ -130,7 +130,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_UnknownDirection_ThrowsNotSupportedException()
         {
             // arrange
@@ -152,7 +152,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_UnknownDirection_ThrowsNotSupportedException()
         {
             // arrange

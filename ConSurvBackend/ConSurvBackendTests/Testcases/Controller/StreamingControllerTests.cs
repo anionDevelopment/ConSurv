@@ -15,7 +15,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     public class StreamingControllerTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithPathTraversal_ReturnsBadRequest()
         {
             // arrange
@@ -32,7 +32,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithSpaces_ReturnsBadRequest()
         {
             // arrange
@@ -49,7 +49,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithSpecialChars_ReturnsBadRequest()
         {
             // arrange
@@ -66,7 +66,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_ValidFilenamePattern_FileNotFound_ReturnsNotFound()
         {
             // arrange
@@ -85,7 +85,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_ValidTsFilenamePattern_FileNotFound_ReturnsNotFound()
         {
             // arrange

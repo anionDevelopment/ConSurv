@@ -10,7 +10,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
     public class VideoInformationTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_MapsAllPublicFields()
         {
             // arrange
@@ -36,7 +36,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_DoesNotExposesCertificate()
         {
             // arrange
@@ -56,7 +56,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_WithNullOptionalFields_PreservesNulls()
         {
             // arrange
@@ -79,7 +79,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void VideoInformationDTO_ToVideoInformation_MapsAllFields()
         {
             // arrange
@@ -104,7 +104,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void VideoInformationDTO_ToVideoInformation_WithNullOptionalFields_PreservesNulls()
         {
             // arrange
@@ -127,7 +127,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void UpdateCameraDTO_ToCamera_MapsAllFields()
         {
             // arrange
