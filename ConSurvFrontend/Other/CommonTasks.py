@@ -7,6 +7,7 @@ def common_tasks():
     tf.do_common_tasks(tf.get_version_of_project())#codeunit-version should alsways be the same as project-version
     codeunit_folder = tf.get_codeunit_folder()
     tf.tfcps_Tools_General.generate_api_client_from_dependent_codeunit(codeunit_folder,"ConSurvBackend","src/app/generated/con-surv-backend", "typescript-angular",tf.use_cache(),["apis","models","supportingFiles"])
+    tf.organize_translations(["ar","cs","da","de","de-CH","de-AT","el","en-GB","es","fa","fi","fr","he","hi","id","it","ja","ko","ms","nl","ms-SG","nb","pl","pt","ru","sv","th","ur","vi","zh"])
 
 if __name__ == "__main__":
     common_tasks()
