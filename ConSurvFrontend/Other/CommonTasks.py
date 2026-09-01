@@ -8,7 +8,14 @@ def common_tasks():
     codeunit_folder = tf.get_codeunit_folder()
     tf.tfcps_Tools_General.generate_api_client_from_dependent_codeunit(codeunit_folder,"ConSurvBackend","src/app/generated/con-surv-backend", "typescript-angular",tf.use_cache(),["apis","models","supportingFiles"])
     tf.organize_translations([
+        "af",  # Afrikaans
         "ar",  # Arabic
+        "ar-DZ",  # Arabic (Algeria)
+        "ar-EG",  # Arabic (Egypt)
+        "ar-LY",  # Arabic (Libya)
+        "ar-MA",  # Arabic (Morocco)
+        "ar-SD",  # Arabic (Sudan)
+        "ar-TN",  # Arabic (Tunisia)
         "bn",  # Bengali
         "cs",  # Czech
         "da",  # Danish
@@ -18,27 +25,43 @@ def common_tasks():
         "el",  # Greek
         "en-GB",  # English (United Kingdom)
         "es",  # Spanish
+        "es-BR",  # Spanish (Brazil)
+        "es-MX",  # Spanish (Mexico)
+        "et",  # Estonian
         "fa",  # Persian
         "fi",  # Finnish
         "fr",  # French
         "he",  # Hebrew
         "hi",  # Hindi
+        "hr",  # Croatian
         "hu",  # Hungarian
         "id",  # Indonesian
+        "ir",  # Irish
+        "is",  # Icelandic
         "it",  # Italian
         "ja",  # Japanese
+        "ka",  # Georgian
+        "kk",  # Kazakh
+        "km",  # Khmer
+        "ky",  # Kyrgyz
         "ko",  # Korean
+        "lo",  # Lao
+        "lv",  # Latvian
+        "lt",  # Lithuanian
         "ms",  # Malay
         "ms-ID",  # Malay (Indonesia)
         "ms-SG",  # Malay (Singapore)
         "nb",  # Norwegian Bokmål
         "nl",  # Dutch
+        "ph",  # Filipino
         "pl",  # Polish
         "pt",  # Portuguese
+        "pt-BR",  # Portuguese (Brazil)
         "ro",  # Romanian
         "ru",  # Russian
         "sv",  # Swedish
         "th",  # Thai
+        "tk",  # Turkmen
         "tr",  # Turkish
         "uk",  # Ukrainian
         "ur",  # Urdu
