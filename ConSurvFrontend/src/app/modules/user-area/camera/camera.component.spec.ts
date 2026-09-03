@@ -70,6 +70,7 @@ describe('CameraComponent', () => {
           provide: StorageService,
           useValue: {
             getAccessToken: () => "at1",
+            hasAccessToken: () => false,
           }
         },
       ],

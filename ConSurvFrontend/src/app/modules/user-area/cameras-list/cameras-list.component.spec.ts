@@ -80,6 +80,7 @@ describe('CamerasListComponent', () => {
           provide: StorageService,
           useValue: {
             getAccessToken: () => "someAccessToken",
+            hasAccessToken: () => false,
           },
         },
         {
