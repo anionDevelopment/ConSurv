@@ -1,3 +1,4 @@
+import { NgxCultureSelectorComponent } from '@aniondev/ngx-culture-selector';
 import { NgxDarkmodeToggleButtonComponent } from '@aniondev/ngx-darkmode-toggle-button';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -43,6 +44,7 @@ import { CameraPreviewComponent } from './camera-preview/camera-preview.componen
   imports: [
     CommonModule,
     NgxDarkmodeToggleButtonComponent,
+    NgxCultureSelectorComponent,
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
