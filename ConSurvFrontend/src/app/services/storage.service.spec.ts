@@ -42,11 +42,11 @@ describe('StorageService', () => {
 
     it('should report hasAccessToken=true when set', () => {
       sessionStorage.setItem(StorageService.keyAccessToken, 'token-abc');
-      expect(service.hasAccessToken()).toBeTrue();
+      expect(service.hasAccessToken()).toBe(true);
     });
 
     it('should report hasAccessToken=false when not set', () => {
-      expect(service.hasAccessToken()).toBeFalse();
+      expect(service.hasAccessToken()).toBe(false);
     });
 
     it('should remove the access token via removeAccessToken', () => {
@@ -131,7 +131,7 @@ describe('StorageService', () => {
 
     it('should return true when the stored value is "true"', () => {
       sessionStorage.setItem(StorageService.keyUserIsAdmin, 'true');
-      expect(service.getUserIsAdmin()).toBeTrue();
+      expect(service.getUserIsAdmin()).toBe(true);
     });
 
     it('should throw when getting an unset admin flag', () => {
@@ -158,7 +158,7 @@ describe('StorageService', () => {
 
     it('should return true when the stored value is "true"', () => {
       sessionStorage.setItem(StorageService.keyUserIsModerator, 'true');
-      expect(service.getUserIsModerator()).toBeTrue();
+      expect(service.getUserIsModerator()).toBe(true);
     });
 
     it('should throw when getting an unset moderator flag', () => {
