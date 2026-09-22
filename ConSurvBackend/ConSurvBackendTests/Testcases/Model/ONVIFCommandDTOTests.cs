@@ -2,7 +2,6 @@ using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

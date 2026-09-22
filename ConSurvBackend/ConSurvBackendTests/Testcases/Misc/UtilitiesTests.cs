@@ -1,6 +1,4 @@
-﻿using GRYLibrary.Core.Misc;
-using ConSurvBackend.Core.Misc;
-using GRYLibrary.Core.APIServer.Services.Interfaces;
+﻿using GRYLibrary.Core.APIServer.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -63,7 +61,7 @@ namespace ConSurvBackend.Tests.Testcases.Misc
             string expectedOutput = "test1: rtsp://example.com/stream1 ; test2: rtsps://example.com/stream2";
 
             // act
-            string actualOutput =Utilities.EscapeBasicAuthPasswords(input);
+            string actualOutput =Core.Misc.Utilities.EscapeBasicAuthPasswords(input);
 
             // assert
             Assert.AreEqual(expectedOutput, actualOutput);

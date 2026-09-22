@@ -1,6 +1,5 @@
 ﻿using ConSurvBackend.Tests.TestUtilities;
 using GRYLibrary.Core.APIServer.Utilities;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests

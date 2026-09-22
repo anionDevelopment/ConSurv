@@ -1,7 +1,6 @@
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordModes;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ConSurvBackend.Tests.Testcases.Model

@@ -47,8 +47,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                         SetupMocks = this._IntegrationTestConfiguration.SetupMocks
                     };
 
-                    string[] args = new string[] {
-                    };//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
+                    string[] args = Array.Empty<string>();//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
                     int exitCode = this._Program.MainImplementation(args);
                     Thread.Sleep(TimeSpan.FromSeconds(5));
                     GRYLibrary.Core.Misc.Utilities.AssertCondition(exitCode == 0, () =>
