@@ -82,7 +82,9 @@ namespace ConSurvBackend.Core
                     {
                         this._Log.Configuration.AddLogLevel(LogLevel.Debug);
                     }
-                    runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram;
+                    // The execution-mode of a test-run does not tell whether the background-services are wanted, so a caller which needs
+                    // them (for example a testcase which checks what the application records) asks for them with its own commandline-option.
+                    runningUsually = initializationInformation.ApplicationConstants.ExecutionMode is RunProgram || initializationInformation.CommandlineParameter.RunBackgroundProcesses;
                     string domain = string.IsNullOrWhiteSpace(initializationInformation.CommandlineParameter.InitialDomain) ? Tools.GetDefaultDomainValue(GeneralConstants.CodeUnitName) : initializationInformation.CommandlineParameter.InitialDomain;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.SetDomainAndPublichUrlToDefault(domain);
                     initializationInformation.ApplicationConstants.ListenOnEveryIP = this.ListenOnEveryIP;
@@ -241,7 +243,6 @@ namespace ConSurvBackend.Core
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<ITransientAuthenticationServicePersistence<User>, TransientAuthenticationServicePersistence<User>>();
                         functionalInformation.WebApplicationBuilder.Services.AddSingleton<IAuthenticationServicePersistence<User>>(sp => sp.GetRequiredService<ITransientAuthenticationServicePersistence<User>>());
                     }
-                    bool useMockService = runningUsually;
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IHousekeepingService, HousekeepingService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<ICameraManagementService, CameraManagementService>();
                     functionalInformation.WebApplicationBuilder.Services.AddSingleton<IRuntimeData, RuntimeData>();
@@ -289,14 +290,16 @@ namespace ConSurvBackend.Core
                     try
                     {
                         this._Constants = apiServerConfiguration;
+                        // Whether the run of the web-application blocks the caller is independent of whether the application
+                        // runs with its background-services: a caller which starts the server in-process has to get the control
+                        // back in every execution-mode, otherwise it stays in the run of the web-application until the shutdown.
+                        functionalInformationForWebApplication.RunAsync = this.RunAsync;
                         if (runningUsually)
                         {
                             this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IServerLog>()).Logger;
                             this._HostApplicationLifetime = functionalInformationForWebApplication.WebApplication.Services.GetService<IHostApplicationLifetime>();
                             this._BusinessLogicService = functionalInformationForWebApplication.WebApplication.Services.GetService<IBusinessLogicService>();
                             this._InitializationService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IInitializationService<CommandlineParameter>>());
-                            functionalInformationForWebApplication.RunAsync = this.RunAsync;
-
                             IHousekeepingService housekeepingService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IHousekeepingService>());
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());

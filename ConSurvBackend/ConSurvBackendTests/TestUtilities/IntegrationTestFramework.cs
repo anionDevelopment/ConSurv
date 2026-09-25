@@ -23,6 +23,10 @@ namespace ConSurvBackend.Tests.TestUtilities
         private readonly IntegrationTestConfiguration _IntegrationTestConfiguration;
         internal IBusinessLogicService? _BusinessLogicService;
         internal IGRYLog? _Log;
+        /// <summary>The program which hosts the server. It only exists after the server was started.</summary>
+        private Program RunningProgram => GRYLibrary.Core.Misc.Utilities.AssertNotNull(this._Program, nameof(this._Program));
+        /// <summary>The business-logic-service of the running server. It only exists after the server was started.</summary>
+        private IBusinessLogicService RunningBusinessLogicService => GRYLibrary.Core.Misc.Utilities.AssertNotNull(this._BusinessLogicService, nameof(this._BusinessLogicService));
         public IntegrationTestFramework(bool startServer) : this(new IntegrationTestConfiguration(), startServer)
         {
         }
@@ -47,7 +51,10 @@ namespace ConSurvBackend.Tests.TestUtilities
                         SetupMocks = this._IntegrationTestConfiguration.SetupMocks
                     };
 
-                    string[] args = Array.Empty<string>();//TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
+                    //TODO add option to pass more configuration-values for the test-run like port etc. so that this can not go wrong due to a different configuration from a previous (manual) run.
+                    string[] args = this._IntegrationTestConfiguration.RunBackgroundProcesses
+                        ? new string[] { $"--{nameof(ConSurvBackend.Core.Configuration.CommandlineParameter.RunBackgroundProcesses)}", "true" }
+                        : Array.Empty<string>();
                     int exitCode = this._Program.MainImplementation(args);
                     Thread.Sleep(TimeSpan.FromSeconds(5));
                     GRYLibrary.Core.Misc.Utilities.AssertCondition(exitCode == 0, () =>
@@ -70,7 +77,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                     });
 
                 }
-                catch (Exception ex)
+                catch
                 {
                     throw;
                 }
@@ -107,8 +114,8 @@ namespace ConSurvBackend.Tests.TestUtilities
                 }
             }
             this.Started = true;
-            this._BusinessLogicService = this._Program._BusinessLogicService;
-            this._Log = this._Program._Log;
+            this._BusinessLogicService = this.RunningProgram._BusinessLogicService;
+            this._Log = this.RunningProgram._Log;
         }
 
         private bool IsReady(out Exception? exception)
@@ -120,7 +127,7 @@ namespace ConSurvBackend.Tests.TestUtilities
                 HttpResponseMessage response = client.GetAsync(url).WaitAndGetResult();
                 Assert.IsTrue(response.IsSuccessStatusCode);
                 string content = response.Content.ReadAsStringAsync().WaitAndGetResult();
-                dynamic obj = JsonConvert.DeserializeObject(content);
+                dynamic obj = GRYLibrary.Core.Misc.Utilities.AssertNotNull(JsonConvert.DeserializeObject(content), "deserialized content of the health-check-response");
                 int status = (int)obj["status"];
                 exception = null;
                 return status == 2;//2 means healthy.
@@ -137,7 +144,7 @@ namespace ConSurvBackend.Tests.TestUtilities
             HttpClient result = new HttpClient();
             if (user != null)
             {
-                result.DefaultRequestHeaders.Add("X-Accesstoken", this._BusinessLogicService.Login(user.Name, this._UserPasswords[user]).Value);
+                result.DefaultRequestHeaders.Add("X-Accesstoken", this.RunningBusinessLogicService.Login(user.Name, this._UserPasswords[user]).Value);
             }
             return result;
         }
@@ -145,8 +152,8 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
             string username = Guid.NewGuid().ToString();
             string password = Guid.NewGuid().ToString();
-            string userId = this._BusinessLogicService.Register(username, password);
-            User user = this._BusinessLogicService.GetUser(userId);
+            string userId = this.RunningBusinessLogicService.Register(username, password);
+            User user = this.RunningBusinessLogicService.GetUser(userId);
             this._UserPasswords[user] = password;
             return user;
         }
@@ -163,7 +170,7 @@ namespace ConSurvBackend.Tests.TestUtilities
         {
             if (this.Started)
             {
-                this._Program.Stop();
+                this.RunningProgram.Stop();
                 this.Started = false;
             }
         }

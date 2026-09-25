@@ -28,20 +28,20 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
             return _DatabaseFramework!;
         }
 
-        [TestMethod(nameof(Migration000001Test))]
+        [TestMethod(DisplayName = nameof(Migration000001Test))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void Migration000001Test()
         {
             this.Migration000001();
         }
 
-        [TestMethod(nameof(AllMigrationsAreWorkingTest))]
+        [TestMethod(DisplayName = nameof(AllMigrationsAreWorkingTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void AllMigrationsAreWorkingTest()
         {
             this.AllMigrationsAreWorking();
         }
-        [TestMethod(nameof(LoadCameraTest))]
+        [TestMethod(DisplayName = nameof(LoadCameraTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void LoadCameraTest()
         {

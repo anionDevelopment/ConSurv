@@ -21,7 +21,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveUp));
         }
@@ -37,7 +37,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveDown));
         }
@@ -53,7 +53,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveLeft));
         }
@@ -69,7 +69,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveRight));
         }
@@ -85,7 +85,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Zoom zoom = result as Zoom;
+            Zoom? zoom = result as Zoom;
             Assert.IsNotNull(zoom);
             Assert.IsInstanceOfType(zoom.ZoomDirection, typeof(ZoomIn));
         }
@@ -101,7 +101,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Zoom zoom = result as Zoom;
+            Zoom? zoom = result as Zoom;
             Assert.IsNotNull(zoom);
             Assert.IsInstanceOfType(zoom.ZoomDirection, typeof(ZoomOut));
         }

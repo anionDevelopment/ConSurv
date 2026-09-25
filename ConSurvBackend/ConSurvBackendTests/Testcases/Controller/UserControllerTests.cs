@@ -27,7 +27,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Login(null, "somepassword");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             authServiceMock.VerifyNoOtherCalls();
             timeServiceMock.VerifyNoOtherCalls();
@@ -48,7 +48,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Login("someuser", null);
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             authServiceMock.VerifyNoOtherCalls();
             timeServiceMock.VerifyNoOtherCalls();
@@ -71,7 +71,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.TokenIsValid(accessToken);
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(true, okObjectResult.Value);
             authServiceMock.Verify(mock => mock.AccessTokenIsValid(accessToken), Times.Once);
@@ -96,7 +96,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.TokenIsValid(accessToken);
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(false, okObjectResult.Value);
             authServiceMock.Verify(mock => mock.AccessTokenIsValid(accessToken), Times.Once);

@@ -49,7 +49,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
         }
 
-        [TestMethod(nameof(DatabaseInitializationTest))]
+        [TestMethod(DisplayName = nameof(DatabaseInitializationTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void DatabaseInitializationTest()
         {
@@ -65,7 +65,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             // TODO add more assertions
         }
 
-        [TestMethod(nameof(RegisterTest))]
+        [TestMethod(DisplayName = nameof(RegisterTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void RegisterTest()
         {
@@ -90,7 +90,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
         /// database: the constraint does not exist in the transient persistence and its violation would surface
         /// as an internal error instead of a usable one.
         /// </remarks>
-        [TestMethod(nameof(RegisterWithAlreadyTakenUsernameIsRejectedTest))]
+        [TestMethod(DisplayName = nameof(RegisterWithAlreadyTakenUsernameIsRejectedTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void RegisterWithAlreadyTakenUsernameIsRejectedTest()
         {
@@ -111,7 +111,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
         /// The set of accepted color-schemes is a closed one. A value which is not part of it must be refused here,
         /// because the user-interface has no way to deal with an unknown value afterwards.
         /// </remarks>
-        [TestMethod(nameof(SetThemeOfUserRejectsAnUnknownColorSchemeTest))]
+        [TestMethod(DisplayName = nameof(SetThemeOfUserRejectsAnUnknownColorSchemeTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void SetThemeOfUserRejectsAnUnknownColorSchemeTest()
         {
@@ -127,7 +127,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
             Assert.AreEqual(CodeUnitSpecificConstants.ThemeSystem, businessLogicService.GetThemeOfUser(userId));
         }
 
-        [TestMethod(nameof(SetThemeOfUserStoresEveryAcceptedColorSchemeTest))]
+        [TestMethod(DisplayName = nameof(SetThemeOfUserStoresEveryAcceptedColorSchemeTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void SetThemeOfUserStoresEveryAcceptedColorSchemeTest()
         {
@@ -148,7 +148,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
         /// A user who never chose a color-scheme must get the default instead of null, so that every caller can rely
         /// on getting a value which is part of the accepted set.
         /// </remarks>
-        [TestMethod(nameof(GetThemeOfUserReturnsTheDefaultWhenNothingWasChosenTest))]
+        [TestMethod(DisplayName = nameof(GetThemeOfUserReturnsTheDefaultWhenNothingWasChosenTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void GetThemeOfUserReturnsTheDefaultWhenNothingWasChosenTest()
         {
@@ -169,7 +169,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
         /// user-interface. A name which contains whitespace, a control-character (which includes carriage-return and
         /// line-feed), an invisible character or one of the shell-relevant characters has to be refused therefore.
         /// </remarks>
-        [TestMethod(nameof(CreateCameraRejectsANameWhichWouldBreakTheCommandLineTest))]
+        [TestMethod(DisplayName = nameof(CreateCameraRejectsANameWhichWouldBreakTheCommandLineTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void CreateCameraRejectsANameWhichWouldBreakTheCommandLineTest()
         {
@@ -191,7 +191,7 @@ namespace ConSurvBackend.Tests.Testcases.Services
         /// is always the case for cameras created with the default-URL and adjusted afterwards - must therefore still
         /// get different ids, because the second one would otherwise replace the first one.
         /// </remarks>
-        [TestMethod(nameof(TwoCamerasWithTheSameStreamUrlGetDifferentIdsTest))]
+        [TestMethod(DisplayName = nameof(TwoCamerasWithTheSameStreamUrlGetDifferentIdsTest))]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void TwoCamerasWithTheSameStreamUrlGetDifferentIdsTest()
         {

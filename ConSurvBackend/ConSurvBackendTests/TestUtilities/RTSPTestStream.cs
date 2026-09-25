@@ -67,8 +67,12 @@ namespace ConSurvBackend.Tests.TestUtilities
             try
             {
                 Process process = Process.GetProcessById(this._ProcessId);
+                // Waiting for the exit is not possible here: the ffmpeg is not a child-process of the test-process
+                // (ScriptCollection starts it and the python-process which started it ends immediately), so on linux it
+                // stays as a zombie until the process with the id 1 reaps it, which the build-script does not do.
+                // Process.WaitForExit then does not return anymore, not even after the timeout which is passed to it.
+                // Killing the process ends the stream, which is what has to happen here.
                 process.Kill(true);
-                process.WaitForExit(TimeSpan.FromSeconds(30));
             }
             catch (ArgumentException)
             {

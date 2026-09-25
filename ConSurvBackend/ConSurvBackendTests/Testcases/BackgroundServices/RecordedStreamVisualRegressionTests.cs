@@ -48,7 +48,8 @@ namespace ConSurvBackend.Tests.Testcases.BackgroundServices
             using RTSPTestServer server = new RTSPTestServer(_NameOfTheFirstStream, _NameOfTheSecondStream);
             using RTSPTestStream firstStream = new RTSPTestStream(server, _NameOfTheFirstStream);
             using RTSPTestStream secondStream = new RTSPTestStream(server, _NameOfTheSecondStream);
-            using IntegrationTestFramework framework = new IntegrationTestFramework(true);
+            // The application only records when its background-services run, so this testcase asks for them explicitly.
+            using IntegrationTestFramework framework = new IntegrationTestFramework(new IntegrationTestConfiguration() { RunBackgroundProcesses = true }, true);
             IBusinessLogicService businessLogicService = GUtilities.AssertNotNull(framework._BusinessLogicService, nameof(framework._BusinessLogicService));
 
             // act

@@ -24,7 +24,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "../../etc/passwd");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }
@@ -41,7 +41,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "invalid file.m3u8");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }
@@ -58,7 +58,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "file;rm-rf.m3u8");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }

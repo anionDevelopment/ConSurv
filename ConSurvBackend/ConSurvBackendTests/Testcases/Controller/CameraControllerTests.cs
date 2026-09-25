@@ -31,9 +31,9 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.CreateCamera();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            Assert.AreEqual(cameraId, (string)okObjectResult.Value);
+            Assert.AreEqual(cameraId, (string?)okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.CreateCamera("NewCamera", "rtsp://mycamera.example.com/stream"));
             cameraServiceMock.VerifyNoOtherCalls();
         }
@@ -54,7 +54,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.RemoveCamera(cameraId);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.RemoveCamera(cameraId), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();
@@ -87,7 +87,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.UpdateCamera(updateCameraDTO);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.UpdateCamera(It.Is<Camera>(c => c.Id == cameraId)), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();
@@ -112,7 +112,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Camera(cameraId);
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(cameraDTO, okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.GetCameraById(cameraId), Times.Once);
@@ -140,9 +140,9 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Cameras();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            List<CameraDTO> resultList = okObjectResult.Value as List<CameraDTO>;
+            List<CameraDTO>? resultList = okObjectResult.Value as List<CameraDTO>;
             Assert.IsNotNull(resultList);
             Assert.AreEqual(1, resultList.Count);
             Assert.AreEqual(cameraDTO, resultList[0]);
@@ -171,7 +171,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.ListVideos();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(videos, okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.GetVideos(), Times.Once);
@@ -195,7 +195,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.RemoveVideo(cameraId, filename);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.RemoveVideo(cameraId, filename), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();
