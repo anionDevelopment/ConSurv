@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Services;
+using ConSurvBackend.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;

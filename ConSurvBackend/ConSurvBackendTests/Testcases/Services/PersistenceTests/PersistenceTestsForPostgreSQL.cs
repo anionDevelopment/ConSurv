@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Tests.TestUtilities;
+using ConSurvBackend.Tests.TestUtilities;
 using GRYLibrary.Core.APIServer.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Services;

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
+using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
 using System;

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Miscellaneous;
+using ConSurvBackend.Core.Miscellaneous;
 
 namespace ConSurvBackend.Core.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands
+namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands
 {
     public abstract class ONVIFCommand
     {

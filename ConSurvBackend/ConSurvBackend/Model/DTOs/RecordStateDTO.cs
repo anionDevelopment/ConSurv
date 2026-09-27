@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.DTOs
+namespace ConSurvBackend.Core.Model.DTOs
 {
     /// <summary>
     /// Data transfer object that encodes the current <see cref="RecordStates.RecordState"/> of a camera

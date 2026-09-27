@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
+using ConSurvBackend.Core.Model.DTOs;
 
 namespace ConSurvBackend.Core.Model.Base
 {

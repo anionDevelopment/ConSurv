@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
@@ -152,13 +152,14 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <summary>
-        /// Computes a short deterministic id from an RTSP link by hashing the URL (after escaping embedded credentials) and taking the first 6 hex characters.
+        /// Computes a short deterministic id from an RTSP link by hashing the URL (after escaping embedded credentials and removing the port) and taking the first 6 hex characters.
         /// </summary>
         /// <param name="rtspLink">The stream URL to derive the id from.</param>
         /// <returns>A 6-character hex string used as the camera id.</returns>
         private string GetId(string rtspLink)
         {
-            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
+            string linkWhichIdentifiesTheCamera = Misc.Utilities.RemovePortFromLink(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink));
+            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(linkWhichIdentifiesTheCamera)))[..6];
         }
 
         /// <summary>

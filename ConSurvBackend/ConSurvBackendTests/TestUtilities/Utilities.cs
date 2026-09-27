@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Services;
+using ConSurvBackend.Core.Services;
 using ConSurvBackend.Tests.TestUtilities.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Database;

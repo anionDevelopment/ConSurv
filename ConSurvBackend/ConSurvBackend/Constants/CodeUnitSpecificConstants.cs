@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Constants
+namespace ConSurvBackend.Core.Constants
 {
     public class CodeUnitSpecificConstants
     {

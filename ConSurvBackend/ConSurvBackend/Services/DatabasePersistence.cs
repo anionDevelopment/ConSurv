@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.RecordModes;
 using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
 using GRYLibrary.Core.APIServer.CommonDBTypes;

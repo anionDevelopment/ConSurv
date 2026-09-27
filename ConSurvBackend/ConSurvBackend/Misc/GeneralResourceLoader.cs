@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Misc
+namespace ConSurvBackend.Core.Misc
 {
     /// <summary>
     /// Application-specific resource loader that resolves embedded resources from the

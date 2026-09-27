@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
 using GRYLibrary.Core.APIServer.Settings.Configuration;

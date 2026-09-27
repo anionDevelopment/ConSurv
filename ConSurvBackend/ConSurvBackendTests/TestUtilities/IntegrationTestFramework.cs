@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core;
+using ConSurvBackend.Core;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Settings.Configuration;
@@ -156,6 +156,15 @@ namespace ConSurvBackend.Tests.TestUtilities
             User user = this.RunningBusinessLogicService.GetUser(userId);
             this._UserPasswords[user] = password;
             return user;
+        }
+        /// <summary>
+        /// Returns the folder into which the started application writes its data. Which folder that is depends on the
+        /// execution-mode (a test-run works in a fresh temporary folder), so a caller has to ask the application for it
+        /// instead of building the path itself.
+        /// </summary>
+        public string GetDataFolder()
+        {
+            return GRYLibrary.Core.Misc.Utilities.AssertNotNull(this.RunningProgram._ApplicationConstants, nameof(Program._ApplicationConstants)).GetDataFolder();
         }
         public string GetServerURL()
         {

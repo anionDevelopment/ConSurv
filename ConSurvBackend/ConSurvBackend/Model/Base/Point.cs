@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.Base
+namespace ConSurvBackend.Core.Model.Base
 {
     /// <summary>
     /// Represents an immutable 2-D pixel coordinate within a video frame.

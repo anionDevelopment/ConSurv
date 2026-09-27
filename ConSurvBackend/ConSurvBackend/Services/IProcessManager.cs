@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.ExecutePrograms;
 using System;
 using System.Collections.Generic;

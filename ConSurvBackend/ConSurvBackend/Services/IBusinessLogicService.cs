@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordStates;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;

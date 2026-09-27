@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
+using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.ExecutePrograms;
 
 namespace ConSurvBackend.Core.Model.Base

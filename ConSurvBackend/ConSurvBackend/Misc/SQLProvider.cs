@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Services;
+using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.Misc;
 
 namespace ConSurvBackend.Core.Miscellaneous

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Model.DTOs;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
@@ -170,6 +170,20 @@ namespace ConSurvBackend.Core.Misc
             });
 
             return result;
+        }
+        /// <summary>
+        /// Returns the given stream-link without its port.
+        /// </summary>
+        /// <remarks>
+        /// The id of a camera is derived from its stream-link, and the port of that link is not a property of the
+        /// camera: the same camera behind a different port-mapping is still the same camera, and a testcase which
+        /// starts its own rtsp-server gets a different free port in every run, which would give the camera a
+        /// different id in every run. The port is matched directly instead of parsing the link as an uri, so a link
+        /// which is not a well-formed uri is returned unchanged instead of making this fail.
+        /// </remarks>
+        public static string RemovePortFromLink(string rtspLink)
+        {
+            return Regex.Replace(rtspLink, @"^(?<linkWithoutPort>[a-z]+:\/\/[^\/\s:]+):\d+", "${linkWithoutPort}");
         }
         /// <summary>
         /// Determines whether two images are perceptually different by comparing their similarity

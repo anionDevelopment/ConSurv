@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.DTOs
+namespace ConSurvBackend.Core.Model.DTOs
 {
     /// <summary>
     /// Read-only data transfer object that exposes runtime information about a managed

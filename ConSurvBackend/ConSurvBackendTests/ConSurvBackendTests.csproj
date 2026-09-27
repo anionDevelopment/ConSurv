@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64</RuntimeIdentifiers>
@@ -93,5 +93,10 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="[3.119.3-preview.1.1]" />
     <PackageReference Include="System.Reactive" Version="[6.1.0]" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[10.0.10]" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Other\Resources\MediaMTX_Windows-x64\MediaMTX\**" Condition="$([MSBuild]::IsOSPlatform('Windows'))" Link="MediaMTX\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Other\Resources\MediaMTX_Linux-x64\MediaMTX\**" Condition="$([MSBuild]::IsOSPlatform('Linux'))" Link="MediaMTX\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Other\Resources\Fonts\**" Link="Fonts\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

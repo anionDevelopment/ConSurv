@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.DTOs
+namespace ConSurvBackend.Core.Model.DTOs
 {
     /// <summary>
     /// Data transfer object that exposes the full observable state of a camera to clients,

@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Services
+namespace ConSurvBackend.Core.Services
 {
     /// <summary>
     /// Provides database-engine-specific SQL scripts used by the persistence layer.

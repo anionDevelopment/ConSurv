@@ -19,6 +19,20 @@ namespace ConSurvBackend.Tests.TestUtilities
         /// <summary>The font which is used for the picture. It is the font of this repository and not one of the operating-system, so the picture is the same on every machine and the baseline-pictures stay comparable.</summary>
         private static readonly string _FontFile = Path.Combine(Constants.GeneralConstants.RepositoryFolder, "Other", "Resources", "Fonts", "Noto", "NotoSans_Condensed-Regular.ttf");
 
+        /// <summary>The color of the background. It has to be the one which UpdateRecordedStreamBaselines.py uses, because a picture of a recording is compared with a picture which that script generated.</summary>
+        private const string _BackgroundColor = "dodgerblue";
+
+        /// <summary>
+        /// The size of the picture. It has to be the one which UpdateRecordedStreamBaselines.py uses.
+        /// </summary>
+        /// <remarks>
+        /// It is deliberately wider than the default of the generator: the application draws the name and the id of
+        /// the camera and the current time into the stream, and that text is 1417 pixels wide (measured), so most of
+        /// it would be cut off at the left in a picture which has the default-width of 640 pixels.
+        /// </remarks>
+        private const int _PictureWidth = 1920;
+        private const int _PictureHeight = 1080;
+
         private readonly int _ProcessId;
 
         /// <summary>The name which is shown in the picture and which is the path of the stream on the server.</summary>
@@ -43,7 +57,7 @@ namespace ConSurvBackend.Tests.TestUtilities
             }
             string pythonStatement =
                 "from ScriptCollection.ScriptCollectionCore import ScriptCollectionCore;" +
-                $"print(ScriptCollectionCore().start_rtsp_test_stream(r'{address}', r'{name}', font_file=r'{_FontFile}'))";
+                $"print(ScriptCollectionCore().start_rtsp_test_stream(r'{address}', r'{name}', width={_PictureWidth}, height={_PictureHeight}, font_file=r'{_FontFile}', background_color='{_BackgroundColor}'))";
             using ExternalProgramExecutor executor = new ExternalProgramExecutor("python", $"-c \"{pythonStatement}\"");
             executor.Run();
             if (executor.ExitCode != 0)

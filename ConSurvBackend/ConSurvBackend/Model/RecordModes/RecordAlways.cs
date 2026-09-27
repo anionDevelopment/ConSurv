@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.RecordModes
+namespace ConSurvBackend.Core.Model.RecordModes
 {
     /// <summary>
     /// A <see cref="RecordMode"/> that instructs the camera to record continuously,

@@ -4,6 +4,7 @@ using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Misc;
 using ConSurvBackend.Core.Misc.Logger;
 using ConSurvBackend.Core.Services;
+using GRYLibrary.Core.APIServer.BaseServices;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.CommonRoutes;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;
@@ -49,6 +50,18 @@ namespace ConSurvBackend.Core
         internal bool IsRunning { get; set; } = false;
         internal IBusinessLogicService? _BusinessLogicService;
         internal IInitializationService<CommandlineParameter>? _InitializationService;
+        /// <summary>The constants of the running application. They contain the folders in which the application works. Those depend on the execution-mode, so a caller must not construct them itself. They only exist after the web-application was configured.</summary>
+        internal IApplicationConstants<CodeUnitSpecificConstants>? _ApplicationConstants;
+        /// <summary>
+        /// The background-services of the running application, or an empty list as long as none were started.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Stop"/> needs them: the shutdown of the web-application stops them itself, but a caller which
+        /// started the application asynchronously does not wait for that shutdown, so its process would end while the
+        /// services still run. Everything those services started - the media-processes of every camera above all -
+        /// would then outlive the application.
+        /// </remarks>
+        private readonly IList<IIteratingBackgroundService> _BackgroundServices = new List<IIteratingBackgroundService>();
         internal IGRYLog _Log;
 
         internal IHostApplicationLifetime? _HostApplicationLifetime;
@@ -294,6 +307,9 @@ namespace ConSurvBackend.Core
                         // runs with its background-services: a caller which starts the server in-process has to get the control
                         // back in every execution-mode, otherwise it stays in the run of the web-application until the shutdown.
                         functionalInformationForWebApplication.RunAsync = this.RunAsync;
+                        // In which folders the application works does not depend on its background-services, so the
+                        // constants are provided in every execution-mode.
+                        this._ApplicationConstants = functionalInformationForWebApplication.InitializationInformation.ApplicationConstants;
                         if (runningUsually)
                         {
                             this._Log = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IServerLog>()).Logger;
@@ -304,6 +320,18 @@ namespace ConSurvBackend.Core
                             IMetricsService metricsService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMetricsService>());
                             IMotionDetectionService motionDetectionService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<IMotionDetectionService>());
                             ICameraManagementService cameraManagementService = GUtilities.GetValue(functionalInformationForWebApplication.WebApplication.Services.GetService<ICameraManagementService>());
+                            // Every service decides a second time whether it runs, by looking at the execution-mode. A
+                            // caller which asked for the background-services without asking for a real run has to be told
+                            // to them as well, otherwise they are started here and refuse to run.
+                            bool backgroundProcessesWereAskedFor = functionalInformationForWebApplication.InitializationInformation.CommandlineParameter.RunBackgroundProcesses;
+                            housekeepingService.RunAlsoWhenTheExecutionModeIsNotRunProgram = backgroundProcessesWereAskedFor;
+                            metricsService.RunAlsoWhenTheExecutionModeIsNotRunProgram = backgroundProcessesWereAskedFor;
+                            motionDetectionService.RunAlsoWhenTheExecutionModeIsNotRunProgram = backgroundProcessesWereAskedFor;
+                            cameraManagementService.RunAlsoWhenTheExecutionModeIsNotRunProgram = backgroundProcessesWereAskedFor;
+                            this._BackgroundServices.Add(housekeepingService);
+                            this._BackgroundServices.Add(metricsService);
+                            this._BackgroundServices.Add(motionDetectionService);
+                            this._BackgroundServices.Add(cameraManagementService);
                             functionalInformationForWebApplication.PreRun = () =>
                             {
                                 //initialize
@@ -337,12 +365,21 @@ namespace ConSurvBackend.Core
         /// <summary>
         /// Requests a graceful shutdown of the running API server and blocks until it has fully stopped.
         /// </summary>
+        /// <remarks>
+        /// The background-services are stopped here and not only by the shutdown of the web-application, because a
+        /// caller which started the application asynchronously gets the control back long before that shutdown
+        /// happens. Stopping a service which was stopped already does nothing, so the two ways do not collide.
+        /// </remarks>
         internal void Stop()
         {
             GUtilities.AssertNotNull(this._Constants, nameof(this._Constants)).CancellationTokenSource.Cancel();
             while (this.IsRunning)
             {
                 System.Threading.Thread.Sleep(System.TimeSpan.FromMilliseconds(100));
+            }
+            foreach (IIteratingBackgroundService backgroundService in this._BackgroundServices)
+            {
+                backgroundService.Stop().Wait();
             }
         }
     }

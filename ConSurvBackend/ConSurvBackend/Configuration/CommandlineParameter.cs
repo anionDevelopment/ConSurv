@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using GRYLibrary.Core.APIServer.Verbs;
 using System.Collections.Generic;
 
