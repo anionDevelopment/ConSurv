@@ -81,6 +81,12 @@ describe('CameraComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    //this destroys the component and therefore disposes the video.js-player created in ngOnInit; without this
+    //the player keeps its timers and listeners alive, which makes the vitest-worker crash while it is torn down
+    fixture.destroy();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

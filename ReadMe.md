@@ -1,4 +1,4 @@
-﻿# ConSurv
+# ConSurv
 
 ## Purpose
 

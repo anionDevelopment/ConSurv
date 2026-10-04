@@ -168,6 +168,10 @@ namespace ConSurvBackend.Core
                         },
                         MaximalLengthofRequestBodies = 500,
                         MaximalLengthOfResponseBodies = 500,
+                        RoutesWhereResponseBodyIsNotLogged = new HashSet<string>()
+                        {
+                            @"^/API/v\d+/UserController/Login$",
+                        },
                     };
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.HostAPISpecificationForInNonDevelopmentEnvironment = true;
                     initializationInformation.InitialApplicationConfiguration.ServerConfiguration.DevelopmentCertificatePasswordHex = GeneralConstants.DevelopmentCertificatePasswordHex;
