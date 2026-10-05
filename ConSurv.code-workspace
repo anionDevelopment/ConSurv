@@ -193,6 +193,7 @@
   "settings": {
     "terminal.integrated.cwd": "${workspaceFolder}",
     "window.title": "${dirty} ${rootName}",
+    "dotnet.defaultSolution": "ConSurvBackend/ConSurvBackend.sln",
     "files.exclude": {
       ".coverage": true,
       "TestResults": true,

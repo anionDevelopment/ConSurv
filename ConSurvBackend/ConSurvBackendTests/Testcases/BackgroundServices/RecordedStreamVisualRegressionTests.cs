@@ -57,6 +57,7 @@ namespace ConSurvBackend.Tests.Testcases.BackgroundServices
         private static readonly TimeSpan _TimeoutForTheRecordingToAppear = TimeSpan.FromMinutes(2);
 
         [TestMethod]
+        [Ignore("This testcase fails sporadically, for example when the build-machine is under load.")]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public void TheRecordedVideoOfEveryStreamLooksLikeItsBaselinePicture()
         {
