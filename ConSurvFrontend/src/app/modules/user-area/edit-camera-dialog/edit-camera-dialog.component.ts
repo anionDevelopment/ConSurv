@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -10,6 +10,7 @@ import { CameraDTO, CameraService, RecordModeDTO, UpdateCameraDTO } from '../../
   selector: 'app-edit-camera-dialog',
   standalone: false,
   templateUrl: './edit-camera-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './edit-camera-dialog.component.scss'
 })
 export class EditCameraDialogComponent {

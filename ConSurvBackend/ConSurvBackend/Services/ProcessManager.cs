@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.APIServer.ConcreteEnvironments;

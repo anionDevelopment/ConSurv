@@ -2,7 +2,6 @@ using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections;
 using ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.ZoomDirections;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -12,7 +11,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
     public class ONVIFCommandDTOTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Up_ReturnsMoveWithMoveUpDirection()
         {
             // arrange
@@ -22,13 +21,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveUp));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Down_ReturnsMoveWithMoveDownDirection()
         {
             // arrange
@@ -38,13 +37,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveDown));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Left_ReturnsMoveWithMoveLeftDirection()
         {
             // arrange
@@ -54,13 +53,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveLeft));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_Right_ReturnsMoveWithMoveRightDirection()
         {
             // arrange
@@ -70,13 +69,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Move move = result as Move;
+            Move? move = result as Move;
             Assert.IsNotNull(move);
             Assert.IsInstanceOfType(move.MoveDirection, typeof(MoveRight));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_In_ReturnsZoomWithZoomInDirection()
         {
             // arrange
@@ -86,13 +85,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Zoom zoom = result as Zoom;
+            Zoom? zoom = result as Zoom;
             Assert.IsNotNull(zoom);
             Assert.IsInstanceOfType(zoom.ZoomDirection, typeof(ZoomIn));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_Out_ReturnsZoomWithZoomOutDirection()
         {
             // arrange
@@ -102,13 +101,13 @@ namespace ConSurvBackend.Tests.Testcases.Model
             ONVIFCommand result = dto.ToONVIFCommand();
 
             // assert
-            Zoom zoom = result as Zoom;
+            Zoom? zoom = result as Zoom;
             Assert.IsNotNull(zoom);
             Assert.IsInstanceOfType(zoom.ZoomDirection, typeof(ZoomOut));
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_UnknownCommandType_ThrowsNotSupportedException()
         {
             // arrange
@@ -130,7 +129,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Move_UnknownDirection_ThrowsNotSupportedException()
         {
             // arrange
@@ -152,7 +151,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToONVIFCommand_Zoom_UnknownDirection_ThrowsNotSupportedException()
         {
             // arrange

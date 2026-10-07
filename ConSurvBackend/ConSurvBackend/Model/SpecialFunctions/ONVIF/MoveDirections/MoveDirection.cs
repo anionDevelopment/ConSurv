@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections
+namespace ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.MoveDirections
 {
     public abstract class MoveDirection
     {

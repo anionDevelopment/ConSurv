@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CameraDTO, CameraService, StreamingService } from '../../../generated/con-surv-backend';
 import { distinctUntilChanged, filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
@@ -11,6 +11,7 @@ import Player from 'video.js/dist/types/player';
   selector: 'app-camera',
   standalone: false,
   templateUrl: './camera.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './camera.component.scss'
 })
 export class CameraComponent implements OnInit, OnDestroy {

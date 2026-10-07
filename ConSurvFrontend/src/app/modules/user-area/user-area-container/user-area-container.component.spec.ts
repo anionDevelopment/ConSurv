@@ -5,12 +5,13 @@ import { UserDataService } from '../../../services/user-data.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { UserIconComponent } from '../user-icon/user-icon.component';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-user-icon',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<span>app-user-icon-container-mock</span>'
 })
 class MockUserIconComponent { }

@@ -1,11 +1,11 @@
-﻿using ConSurvBackend.Core.Model.Base;
+using ConSurvBackend.Core.Model.Base;
 
 namespace ConSurvBackend.Core.Model.Internals
 {
     /// <summary>
     /// Abstract base that tracks the runtime availability state of a camera's backing processes.
-    /// Concrete subclasses use the Visitor pattern to let callers branch on <see cref="Available"/>
-    /// vs. <see cref="NotAvailable"/> without casting.
+    /// Concrete subclasses use the Visitor pattern to let callers branch on <see cref="Available"/>,
+    /// <see cref="Starting"/> and <see cref="NotAvailable"/> without casting.
     /// </summary>
     public abstract class CameraInternalsBase
     {
@@ -41,6 +41,7 @@ namespace ConSurvBackend.Core.Model.Internals
     public interface ICameraInternalsBaseVisitor
     {
         void Handle(Available available);
+        void Handle(Starting starting);
         void Handle(NotAvailable notAvailable);
     }
 
@@ -51,6 +52,7 @@ namespace ConSurvBackend.Core.Model.Internals
     public interface ICameraInternalsBaseVisitor<T>
     {
         T Handle(Available available);
+        T Handle(Starting starting);
         T Handle(NotAvailable notAvailable);
     }
 }

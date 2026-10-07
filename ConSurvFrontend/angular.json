@@ -22,6 +22,7 @@
           "de": "Other/Resources/Translations/messages.de.xlf",
           "de-CH": "Other/Resources/Translations/messages.de-CH.xlf",
           "de-AT": "Other/Resources/Translations/messages.de-AT.xlf",
+          "el": "Other/Resources/Translations/messages.el.xlf",
           "en-GB": "Other/Resources/Translations/messages.en-GB.xlf",
           "es": "Other/Resources/Translations/messages.es.xlf",
           "fa": "Other/Resources/Translations/messages.fa.xlf",
@@ -44,12 +45,49 @@
           "th": "Other/Resources/Translations/messages.th.xlf",
           "ur": "Other/Resources/Translations/messages.ur.xlf",
           "vi": "Other/Resources/Translations/messages.vi.xlf",
-          "zh": "Other/Resources/Translations/messages.zh.xlf"
+          "zh": "Other/Resources/Translations/messages.zh.xlf",
+          "af": "Other/Resources/Translations/messages.af.xlf",
+          "ar-DZ": "Other/Resources/Translations/messages.ar-DZ.xlf",
+          "ar-EG": "Other/Resources/Translations/messages.ar-EG.xlf",
+          "ar-LY": "Other/Resources/Translations/messages.ar-LY.xlf",
+          "ar-MA": "Other/Resources/Translations/messages.ar-MA.xlf",
+          "ar-SD": "Other/Resources/Translations/messages.ar-SD.xlf",
+          "ar-TN": "Other/Resources/Translations/messages.ar-TN.xlf",
+          "bn": "Other/Resources/Translations/messages.bn.xlf",
+          "es-AR": "Other/Resources/Translations/messages.es-AR.xlf",
+          "es-CL": "Other/Resources/Translations/messages.es-CL.xlf",
+          "es-CO": "Other/Resources/Translations/messages.es-CO.xlf",
+          "es-CR": "Other/Resources/Translations/messages.es-CR.xlf",
+          "es-DO": "Other/Resources/Translations/messages.es-DO.xlf",
+          "es-EC": "Other/Resources/Translations/messages.es-EC.xlf",
+          "es-MX": "Other/Resources/Translations/messages.es-MX.xlf",
+          "es-VE": "Other/Resources/Translations/messages.es-VE.xlf",
+          "et": "Other/Resources/Translations/messages.et.xlf",
+          "ga": "Other/Resources/Translations/messages.ga.xlf",
+          "hr": "Other/Resources/Translations/messages.hr.xlf",
+          "hu": "Other/Resources/Translations/messages.hu.xlf",
+          "is": "Other/Resources/Translations/messages.is.xlf",
+          "ka": "Other/Resources/Translations/messages.ka.xlf",
+          "kk": "Other/Resources/Translations/messages.kk.xlf",
+          "km": "Other/Resources/Translations/messages.km.xlf",
+          "ky": "Other/Resources/Translations/messages.ky.xlf",
+          "lo": "Other/Resources/Translations/messages.lo.xlf",
+          "lv": "Other/Resources/Translations/messages.lv.xlf",
+          "lt": "Other/Resources/Translations/messages.lt.xlf",
+          "mn": "Other/Resources/Translations/messages.mn.xlf",
+          "my": "Other/Resources/Translations/messages.my.xlf",
+          "ph": "Other/Resources/Translations/messages.ph.xlf",
+          "pt-BR": "Other/Resources/Translations/messages.pt-BR.xlf",
+          "ro": "Other/Resources/Translations/messages.ro.xlf",
+          "tk": "Other/Resources/Translations/messages.tk.xlf",
+          "tl": "Other/Resources/Translations/messages.tl.xlf",
+          "tr": "Other/Resources/Translations/messages.tr.xlf",
+          "uk": "Other/Resources/Translations/messages.uk.xlf"
         }
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": "Other/Artifacts/BuildResult_WebApplication",
             "index": "src/index.html",
@@ -68,6 +106,10 @@
             ],
             "styles": [
               "node_modules/video.js/dist/video-js.css",
+              "node_modules/@fontsource/roboto/300.css",
+              "node_modules/@fontsource/roboto/400.css",
+              "node_modules/@fontsource/roboto/500.css",
+              "node_modules/@fontsource/material-icons/index.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -118,6 +160,9 @@
                   "with": "src/environments/environment.Development.ts"
                 }
               ]
+            },
+            "Test": {
+              "aot": false
             }
           },
           "defaultConfiguration": "QualityCheck"
@@ -147,33 +192,29 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "configurations": {
-            "Productive": {},
-            "QualityCheck": {},
-            "Development": {}
+            "Productive": {
+              "buildTarget": "ConSurvFrontend:build:Productive,Test"
+            },
+            "QualityCheck": {
+              "buildTarget": "ConSurvFrontend:build:QualityCheck,Test"
+            },
+            "Development": {
+              "buildTarget": "ConSurvFrontend:build:Development,Test"
+            }
           },
           "options": {
-            "codeCoverage": true,
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing",
-              "@angular/localize/init"
-            ],
+            "runner": "vitest",
+            "runnerConfig": "vitest-base.config.ts",
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "karmaConfig": "karma.conf.js"
-          }
+            "coverage": true,
+            "coverageReporters": [
+              "cobertura",
+              "text-summary"
+            ]
+          },
+          "defaultConfiguration": "QualityCheck"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
@@ -197,5 +238,31 @@
       "@angular-eslint/schematics"
     ],
     "analytics": false
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

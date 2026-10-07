@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Services
+namespace ConSurvBackend.Core.Services
 {
     public interface IExampleDataCreator
     {

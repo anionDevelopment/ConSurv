@@ -1,8 +1,6 @@
 using ConSurvBackend.Core.Controller;
 using GRYLibrary.Core.APIServer.Services.Logger;
 using GRYLibrary.Core.APIServer.Settings;
-using GRYLibrary.Core.APIServer.Settings.Configuration;
-using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -15,7 +13,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     public class StreamingControllerTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithPathTraversal_ReturnsBadRequest()
         {
             // arrange
@@ -26,13 +24,13 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "../../etc/passwd");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithSpaces_ReturnsBadRequest()
         {
             // arrange
@@ -43,13 +41,13 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "invalid file.m3u8");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_FilenameWithSpecialChars_ReturnsBadRequest()
         {
             // arrange
@@ -60,13 +58,13 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Stream("cam1", "file;rm-rf.m3u8");
 
             // assert
-            BadRequestObjectResult badRequestResult = actualResult as BadRequestObjectResult;
+            BadRequestObjectResult? badRequestResult = actualResult as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             applicationConstantsMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_ValidFilenamePattern_FileNotFound_ReturnsNotFound()
         {
             // arrange
@@ -85,7 +83,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Stream_ValidTsFilenamePattern_FileNotFound_ReturnsNotFound()
         {
             // arrange

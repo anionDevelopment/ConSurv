@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
 using GRYLibrary.Core.APIServer.CommonDBTypes;
 using GRYLibrary.Core.APIServer.Services.Init;

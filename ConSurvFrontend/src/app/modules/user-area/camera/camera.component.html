@@ -4,7 +4,8 @@
     <div class="videocontainer">
       <video id="videoPlayer" class="video-js vjs-default-skin vjs-16-9" autoplay></video>
     </div>
-    <div class="ptz-controls" *ngIf="camera?.videoInformationDTO?.supportsPTZViaONVIF">
+    @if (camera?.videoInformationDTO?.supportsPTZViaONVIF) {
+    <div class="ptz-controls">
       <div class="ptz-pad">
         <button mat-icon-button class="ptz-up" (click)="sendONVIFCommand('Move', 'MoveUp')">
           <mat-icon>arrow_upward</mat-icon>
@@ -28,5 +29,6 @@
         </button>
       </div>
     </div>
+    }
   </app-user-area-container>
 </app-frame-work>

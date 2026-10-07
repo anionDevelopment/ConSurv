@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" data-diagram-type="CLASS" style="width:1728px;height:513px;background:#FFFFFF;" width="1728px" height="513px" viewBox="0 0 1728 513" zoomAndPan="magnify" preserveAspectRatio="none" contentStyleType="text/css">
+  <defs />
+  <g font-family="sans-serif" lengthAdjust="spacing">
+    <g class="title" data-source-line="1">
+      <text x="667.901" y="22.995" fill="#000" font-size="14" textLength="385.834" font-weight="700" font-family="DejaVu Sans">ConSurvBackend - Database structure (MariaDB)</text>
+    </g>
+    <g class="entity" data-qualified-name="AccessToken" id="ent0001" data-source-line="5">
+      <rect x="7" y="101.327" width="291.631" height="91.188" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="107.374" y="119.322" fill="#000" font-size="14" textLength="90.884" font-family="DejaVu Sans">AccessToken</text>
+      <line x1="8" y1="127.624" x2="297.631" y2="127.624" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="18" cy="141.272" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="27" y="144.619" fill="#000" font-size="14" textLength="145.879" font-family="DejaVu Sans">Value : varchar «PK»</text>
+      <line x1="8" y1="151.921" x2="297.631" y2="151.921" style="stroke:#181818;stroke-width:1;" />
+      <text x="13" y="168.916" fill="#000" font-size="14" textLength="279.631" font-family="DejaVu Sans">ExpiredMoment : datetime «NOT NULL»</text>
+      <text x="13" y="185.213" fill="#000" font-size="14" textLength="204.463" font-family="DejaVu Sans">UserId : varchar «NOT NULL»</text>
+    </g>
+    <g class="entity" data-qualified-name="Cameras" id="ent0002" data-source-line="12">
+      <rect x="1146.16" y="44.297" width="317.32" height="205.266" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="1273.703" y="62.292" fill="#000" font-size="14" textLength="62.234" font-family="DejaVu Sans">Cameras</text>
+      <line x1="1147.16" y1="70.594" x2="1462.48" y2="70.594" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="1157.16" cy="84.242" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="1166.16" y="87.589" fill="#000" font-size="14" textLength="119.362" font-family="DejaVu Sans">Id : varchar «PK»</text>
+      <line x1="1147.16" y1="94.891" x2="1462.48" y2="94.891" style="stroke:#181818;stroke-width:1;" />
+      <text x="1152.16" y="111.886" fill="#000" font-size="14" textLength="139.863" font-family="DejaVu Sans">Certificate : varchar</text>
+      <text x="1152.16" y="128.183" fill="#000" font-size="14" textLength="207.375" font-family="DejaVu Sans">Enabled : tinyint «NOT NULL»</text>
+      <text x="1152.16" y="144.479" fill="#000" font-size="14" textLength="200.84" font-family="DejaVu Sans">Name : varchar «NOT NULL»</text>
+      <text x="1152.16" y="160.776" fill="#000" font-size="14" textLength="176.661" font-family="DejaVu Sans">ONVIFPassword : varchar</text>
+      <text x="1152.16" y="177.073" fill="#000" font-size="14" textLength="130.286" font-family="DejaVu Sans">ONVIFUrl : varchar</text>
+      <text x="1152.16" y="193.37" fill="#000" font-size="14" textLength="182.007" font-family="DejaVu Sans">ONVIFUsername : varchar</text>
+      <text x="1152.16" y="209.667" fill="#000" font-size="14" textLength="238.191" font-family="DejaVu Sans">RecordMode : tinyint «NOT NULL»</text>
+      <text x="1152.16" y="225.964" fill="#000" font-size="14" textLength="238.273" font-family="DejaVu Sans">StreamURL : varchar «NOT NULL»</text>
+      <text x="1152.16" y="242.261" fill="#000" font-size="14" textLength="305.32" font-family="DejaVu Sans">SupportsPTZViaONVIF : tinyint «NOT NULL»</text>
+    </g>
+    <g class="entity" data-qualified-name="RefreshToken" id="ent0003" data-source-line="26">
+      <rect x="334" y="101.327" width="291.631" height="91.188" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="431.557" y="119.322" fill="#000" font-size="14" textLength="96.517" font-family="DejaVu Sans">RefreshToken</text>
+      <line x1="335" y1="127.624" x2="624.631" y2="127.624" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="345" cy="141.272" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="354" y="144.619" fill="#000" font-size="14" textLength="145.879" font-family="DejaVu Sans">Value : varchar «PK»</text>
+      <line x1="335" y1="151.921" x2="624.631" y2="151.921" style="stroke:#181818;stroke-width:1;" />
+      <text x="340" y="168.916" fill="#000" font-size="14" textLength="279.631" font-family="DejaVu Sans">ExpiredMoment : datetime «NOT NULL»</text>
+      <text x="340" y="185.213" fill="#000" font-size="14" textLength="204.463" font-family="DejaVu Sans">UserId : varchar «NOT NULL»</text>
+    </g>
+    <g class="entity" data-qualified-name="Role_InheritedRoles" id="ent0004" data-source-line="33">
+      <rect x="872.17" y="109.477" width="239.281" height="74.891" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="922.306" y="127.472" fill="#000" font-size="14" textLength="139.009" font-family="DejaVu Sans">Role_InheritedRoles</text>
+      <line x1="873.17" y1="135.774" x2="1110.451" y2="135.774" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="883.17" cy="149.422" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="892.17" y="152.769" fill="#000" font-size="14" textLength="213.281" font-family="DejaVu Sans">InheritedRoleId : varchar «PK»</text>
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="883.17" cy="165.719" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="892.17" y="169.066" fill="#000" font-size="14" textLength="150.158" font-family="DejaVu Sans">RoleId : varchar «PK»</text>
+      <line x1="873.17" y1="176.368" x2="1110.451" y2="176.368" style="stroke:#181818;stroke-width:0.5;" />
+    </g>
+    <g class="entity" data-qualified-name="Roles" id="ent0005" data-source-line="38">
+      <rect x="885.4" y="366.597" width="212.84" height="74.891" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="972.775" y="384.592" fill="#000" font-size="14" textLength="38.09" font-family="DejaVu Sans">Roles</text>
+      <line x1="886.4" y1="392.894" x2="1097.24" y2="392.894" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="896.4" cy="406.542" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="905.4" y="409.889" fill="#000" font-size="14" textLength="119.362" font-family="DejaVu Sans">Id : varchar «PK»</text>
+      <line x1="886.4" y1="417.191" x2="1097.24" y2="417.191" style="stroke:#181818;stroke-width:1;" />
+      <text x="891.4" y="434.186" fill="#000" font-size="14" textLength="200.84" font-family="DejaVu Sans">Name : varchar «NOT NULL»</text>
+    </g>
+    <g class="entity" data-qualified-name="UserSettings" id="ent0006" data-source-line="44">
+      <rect x="1498" y="101.327" width="215.636" height="91.188" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="1561.152" y="119.322" fill="#000" font-size="14" textLength="89.332" font-family="DejaVu Sans">UserSettings</text>
+      <line x1="1499" y1="127.624" x2="1712.636" y2="127.624" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="1509" cy="141.272" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="1518" y="144.619" fill="#000" font-size="14" textLength="132.426" font-family="DejaVu Sans">Key : varchar «PK»</text>
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="1509" cy="157.569" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="1518" y="160.916" fill="#000" font-size="14" textLength="151.272" font-family="DejaVu Sans">UserId : varchar «PK»</text>
+      <line x1="1499" y1="168.218" x2="1712.636" y2="168.218" style="stroke:#181818;stroke-width:1;" />
+      <text x="1504" y="185.213" fill="#000" font-size="14" textLength="203.636" font-family="DejaVu Sans">Value : longtext «NOT NULL»</text>
+    </g>
+    <g class="entity" data-qualified-name="User_Roles" id="ent0007" data-source-line="51">
+      <rect x="660.18" y="109.477" width="177.272" height="74.891" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="710.316" y="127.472" fill="#000" font-size="14" textLength="77" font-family="DejaVu Sans">User_Roles</text>
+      <line x1="661.18" y1="135.774" x2="836.452" y2="135.774" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="671.18" cy="149.422" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="680.18" y="152.769" fill="#000" font-size="14" textLength="150.158" font-family="DejaVu Sans">RoleId : varchar «PK»</text>
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="671.18" cy="165.719" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="680.18" y="169.066" fill="#000" font-size="14" textLength="151.272" font-family="DejaVu Sans">UserId : varchar «PK»</text>
+      <line x1="661.18" y1="176.368" x2="836.452" y2="176.368" style="stroke:#181818;stroke-width:0.5;" />
+    </g>
+    <g class="entity" data-qualified-name="Users" id="ent0008" data-source-line="56">
+      <rect x="318.06" y="309.557" width="323.521" height="188.969" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;" rx="2.5" ry="2.5" />
+      <text x="460.218" y="327.552" fill="#000" font-size="14" textLength="39.204" font-family="DejaVu Sans">Users</text>
+      <line x1="319.06" y1="335.854" x2="640.581" y2="335.854" style="stroke:#181818;stroke-width:0.5;" />
+      <g data-visibility-modifier="IE_MANDATORY">
+        <ellipse cx="329.06" cy="349.502" rx="3" ry="3" fill="#000" style="stroke:#000;stroke-width:1;" />
+      </g>
+      <text x="338.06" y="352.849" fill="#000" font-size="14" textLength="119.362" font-family="DejaVu Sans">Id : varchar «PK»</text>
+      <line x1="319.06" y1="360.151" x2="640.581" y2="360.151" style="stroke:#181818;stroke-width:1;" />
+      <text x="324.06" y="377.146" fill="#000" font-size="14" textLength="160.733" font-family="DejaVu Sans">EMailAddress : varchar</text>
+      <text x="324.06" y="393.443" fill="#000" font-size="14" textLength="200.84" font-family="DejaVu Sans">Name : varchar «NOT NULL»</text>
+      <text x="324.06" y="409.739" fill="#000" font-size="14" textLength="168.684" font-family="DejaVu Sans">PasswordHash : varchar</text>
+      <text x="324.06" y="426.036" fill="#000" font-size="14" textLength="311.521" font-family="DejaVu Sans">RegistrationMoment : datetime «NOT NULL»</text>
+      <text x="324.06" y="442.333" fill="#000" font-size="14" textLength="161.479" font-family="DejaVu Sans">TOTPActivated : tinyint</text>
+      <text x="324.06" y="458.63" fill="#000" font-size="14" textLength="174.843" font-family="DejaVu Sans">TOTPSecretKey : varchar</text>
+      <text x="324.06" y="474.927" fill="#000" font-size="14" textLength="260.641" font-family="DejaVu Sans">UserIsActivated : tinyint «NOT NULL»</text>
+      <text x="324.06" y="491.224" fill="#000" font-size="14" textLength="243.804" font-family="DejaVu Sans">UserIsLocked : tinyint «NOT NULL»</text>
+    </g>
+    <g class="link" data-entity-1="ent0001" data-entity-2="ent0008" id="lnk9" data-source-line="69" data-link-type="crowfoot">
+      <path d="M316.96,146.527 C333.2,146.527 326.03,146.527 326.03,146.527 C326.03,146.527 326.03,227.827 326.03,301.247" style="stroke:#181818;stroke-width:1;" fill="none" id="AccessToken-Users" codeLine="69" />
+      <line x1="306.96" y1="146.527" x2="298.96" y2="152.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="306.96" y1="146.527" x2="298.96" y2="140.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="306.96" y1="146.527" x2="298.96" y2="146.527" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="312.96" cy="146.527" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="330.03" y1="305.247" x2="322.03" y2="305.247" style="stroke:#181818;stroke-width:1;" />
+      <line x1="330.03" y1="302.247" x2="322.03" y2="302.247" style="stroke:#181818;stroke-width:1;" />
+      <line x1="326.03" y1="301.247" x2="326.03" y2="309.247" style="stroke:#181818;stroke-width:1;" />
+      <text x="284.03" y="210.424" fill="#000" font-size="13" textLength="41.717" font-family="DejaVu Sans">UserId</text>
+    </g>
+    <g class="link" data-entity-1="ent0003" data-entity-2="ent0008" id="lnk10" data-source-line="70" data-link-type="crowfoot">
+      <path d="M479.82,210.897 C479.82,243.177 479.82,261.507 479.82,301.217" style="stroke:#181818;stroke-width:1;" fill="none" id="RefreshToken-Users" codeLine="70" />
+      <line x1="479.82" y1="200.897" x2="473.82" y2="192.897" style="stroke:#181818;stroke-width:1;" />
+      <line x1="479.82" y1="200.897" x2="485.82" y2="192.897" style="stroke:#181818;stroke-width:1;" />
+      <line x1="479.82" y1="200.897" x2="479.82" y2="192.897" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="479.82" cy="206.897" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="483.82" y1="305.217" x2="475.82" y2="305.217" style="stroke:#181818;stroke-width:1;" />
+      <line x1="483.82" y1="302.217" x2="475.82" y2="302.217" style="stroke:#181818;stroke-width:1;" />
+      <line x1="479.82" y1="301.217" x2="479.82" y2="309.217" style="stroke:#181818;stroke-width:1;" />
+      <text x="437.82" y="247.124" fill="#000" font-size="13" textLength="41.717" font-family="DejaVu Sans">UserId</text>
+    </g>
+    <g class="link" data-entity-1="ent0004" data-entity-2="ent0005" id="lnk11" data-source-line="71" data-link-type="crowfoot">
+      <path d="M956.34,202.867 C956.34,251.617 956.34,309.747 956.34,358.367" style="stroke:#181818;stroke-width:1;" fill="none" id="Role_InheritedRoles-Roles" codeLine="71" />
+      <line x1="956.34" y1="192.867" x2="950.34" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <line x1="956.34" y1="192.867" x2="962.34" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <line x1="956.34" y1="192.867" x2="956.34" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="956.34" cy="198.867" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="960.34" y1="362.367" x2="952.34" y2="362.367" style="stroke:#181818;stroke-width:1;" />
+      <line x1="960.34" y1="359.367" x2="952.34" y2="359.367" style="stroke:#181818;stroke-width:1;" />
+      <line x1="956.34" y1="358.367" x2="956.34" y2="366.367" style="stroke:#181818;stroke-width:1;" />
+      <text x="856.34" y="271.684" fill="#000" font-size="13" textLength="99.296" font-family="DejaVu Sans">InheritedRoleId</text>
+    </g>
+    <g class="link" data-entity-1="ent0004" data-entity-2="ent0005" id="lnk12" data-source-line="72" data-link-type="crowfoot">
+      <path d="M1027.29,202.867 C1027.29,251.617 1027.29,309.747 1027.29,358.367" style="stroke:#181818;stroke-width:1;" fill="none" id="Role_InheritedRoles-Roles-1" codeLine="72" />
+      <line x1="1027.29" y1="192.867" x2="1021.29" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <line x1="1027.29" y1="192.867" x2="1033.29" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <line x1="1027.29" y1="192.867" x2="1027.29" y2="184.867" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="1027.29" cy="198.867" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="1031.29" y1="362.367" x2="1023.29" y2="362.367" style="stroke:#181818;stroke-width:1;" />
+      <line x1="1031.29" y1="359.367" x2="1023.29" y2="359.367" style="stroke:#181818;stroke-width:1;" />
+      <line x1="1027.29" y1="358.367" x2="1027.29" y2="366.367" style="stroke:#181818;stroke-width:1;" />
+      <text x="986.29" y="271.684" fill="#000" font-size="13" textLength="40.682" font-family="DejaVu Sans">RoleId</text>
+    </g>
+    <g class="link" data-entity-1="ent0007" data-entity-2="ent0005" id="lnk13" data-source-line="73" data-link-type="crowfoot">
+      <path d="M748.82,202.657 C748.82,274.207 748.82,404.527 748.82,404.527 C748.82,404.527 811.94,404.527 877.23,404.527" style="stroke:#181818;stroke-width:1;" fill="none" id="User_Roles-Roles" codeLine="73" />
+      <line x1="748.82" y1="192.657" x2="742.82" y2="184.657" style="stroke:#181818;stroke-width:1;" />
+      <line x1="748.82" y1="192.657" x2="754.82" y2="184.657" style="stroke:#181818;stroke-width:1;" />
+      <line x1="748.82" y1="192.657" x2="748.82" y2="184.657" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="748.82" cy="198.657" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="881.23" y1="400.527" x2="881.23" y2="408.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="878.23" y1="400.527" x2="878.23" y2="408.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="877.23" y1="404.527" x2="885.23" y2="404.527" style="stroke:#181818;stroke-width:1;" />
+      <text x="707.82" y="358.864" fill="#000" font-size="13" textLength="40.682" font-family="DejaVu Sans">RoleId</text>
+    </g>
+    <g class="link" data-entity-1="ent0007" data-entity-2="ent0008" id="lnk14" data-source-line="74" data-link-type="crowfoot">
+      <path d="M641.75,146.527 C626.57,146.527 633.6,146.527 633.6,146.527 C633.6,146.527 633.6,227.827 633.6,301.247" style="stroke:#181818;stroke-width:1;" fill="none" id="User_Roles-Users" codeLine="74" />
+      <line x1="651.75" y1="146.527" x2="659.75" y2="140.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="651.75" y1="146.527" x2="659.75" y2="152.527" style="stroke:#181818;stroke-width:1;" />
+      <line x1="651.75" y1="146.527" x2="659.75" y2="146.527" style="stroke:#181818;stroke-width:1;" />
+      <ellipse cx="645.75" cy="146.527" rx="4" ry="4" fill="none" style="stroke:#181818;stroke-width:1;" />
+      <line x1="637.6" y1="305.247" x2="629.6" y2="305.247" style="stroke:#181818;stroke-width:1;" />
+      <line x1="637.6" y1="302.247" x2="629.6" y2="302.247" style="stroke:#181818;stroke-width:1;" />
+      <line x1="633.6" y1="301.247" x2="633.6" y2="309.247" style="stroke:#181818;stroke-width:1;" />
+      <text x="591.6" y="210.884" fill="#000" font-size="13" textLength="41.717" font-family="DejaVu Sans">UserId</text>
+    </g>
+  </g>
+</svg>

@@ -6,7 +6,7 @@ def common_tasks():
     tf.tfcps_Tools_General.copy_product_resource_to_codeunit_resource_folder(tf.get_codeunit_folder(), "Fonts")
     tf.tfcps_Tools_General.get_resource_from_global_resource(tf.get_codeunit_folder(), "DevelopmentCertificate")
     tf.do_common_tasks(tf.get_version_of_project(),CertificateGeneratorInformationGenerate())#codeunit-version should alsways be the same as project-version
-    tf.tfcps_Tools_General.ensure_mediamtx_is_available(tf.get_codeunit_folder(),tf.use_cache())
+    tf.tfcps_Tools_General.ensure_mediamtx_is_available(tf.get_codeunit_folder(),not tf.use_cache())
     tf.tfcps_Tools_General.t4_transform(tf.get_codeunit_folder(),True,tf.use_cache())
 
 if __name__ == "__main__":

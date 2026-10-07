@@ -1,6 +1,5 @@
 using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordModes;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
     public class RecordModeTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToNumber_NoRecording_Returns0()
         {
             // arrange & act
@@ -22,7 +21,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToNumber_RecordAlways_Returns1()
         {
             // arrange & act
@@ -33,7 +32,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToNumber_RecordOnMovements_Returns2()
         {
             // arrange & act
@@ -44,7 +43,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToNumber_UnknownType_ThrowsKeyNotFoundException()
         {
             // arrange
@@ -65,7 +64,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumber_0_ReturnsNoRecordingType()
         {
             // arrange & act
@@ -76,7 +75,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumber_1_ReturnsRecordAlwaysType()
         {
             // arrange & act
@@ -87,7 +86,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumber_2_ReturnsRecordOnMovementsType()
         {
             // arrange & act
@@ -98,7 +97,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumberToInstance_0_ReturnsNoRecordingInstance()
         {
             // arrange & act
@@ -109,7 +108,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumberToInstance_1_ReturnsRecordAlwaysInstance()
         {
             // arrange & act
@@ -120,7 +119,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void FromNumberToInstance_2_ReturnsRecordOnMovementsInstance()
         {
             // arrange & act
@@ -131,7 +130,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Equals_SameType_ReturnsTrue()
         {
             // arrange
@@ -143,7 +142,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Equals_DifferentType_ReturnsFalse()
         {
             // arrange
@@ -155,7 +154,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void Equals_Null_ReturnsFalse()
         {
             // arrange
@@ -166,7 +165,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_NoRecording_ReturnsCorrectDTOTypeName()
         {
             // arrange
@@ -180,7 +179,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_RecordAlways_ReturnsCorrectDTOTypeName()
         {
             // arrange
@@ -194,7 +193,7 @@ namespace ConSurvBackend.Tests.Testcases.Model
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void ToDTO_RecordOnMovements_ReturnsCorrectDTOTypeName()
         {
             // arrange

@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.RecordModes;
+using ConSurvBackend.Core.Model.RecordModes;
 using System;
 
 namespace ConSurvBackend.Core.Model.Base

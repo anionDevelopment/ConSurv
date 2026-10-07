@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Threading;
 
 namespace ConSurvBackend.Core.Services
@@ -36,6 +37,29 @@ namespace ConSurvBackend.Core.Services
         private readonly IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> _CodeUnitSpecificConfiguration;
         private readonly IRuntimeData _RuntimeData;
         private readonly IApplicationConstants<Constants.CodeUnitSpecificConstants> _Constants;
+
+        /// <inheritdoc />
+        public string GetThemeOfUser(string userId)
+        {
+            // A value which is not stored (or which is not valid anymore because the set of the accepted values
+            // changed) is treated as the default, so that the user-interface never has to deal with an unknown value.
+            string? value = this._Persistence.GetUserSetting(userId, Constants.CodeUnitSpecificConstants.UserSettingKeyTheme);
+            if (value == null || !Constants.CodeUnitSpecificConstants.Themes.Contains(value))
+            {
+                return Constants.CodeUnitSpecificConstants.ThemeSystem;
+            }
+            return value;
+        }
+
+        /// <inheritdoc />
+        public void SetThemeOfUser(string userId, string theme)
+        {
+            if (!Constants.CodeUnitSpecificConstants.Themes.Contains(theme))
+            {
+                throw new BadRequestException($"'{theme}' is not a valid color-scheme. Valid are: {string.Join(", ", Constants.CodeUnitSpecificConstants.Themes)}.");
+            }
+            this._Persistence.SetUserSetting(userId, Constants.CodeUnitSpecificConstants.UserSettingKeyTheme, theme);
+        }
 
         public BusinessLogicService(IPersistence persistence, IServerLog log, ITimeService timeService, IAuthenticationService<User> authenticationService, IRandomnessProvider randomnessProvider, IAuditLog auditLog, IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> codeUnitSpecificConfiguration, IRuntimeData runtimeData, IApplicationConstants<Constants.CodeUnitSpecificConstants> constants)
         {
@@ -57,9 +81,9 @@ namespace ConSurvBackend.Core.Services
         private static readonly char[] _ForbiddenCameraNameCharacters = new char[] { '\'', '"', '|', '&', '*', '/', '\\' };
 
         /// <summary>
-        /// Ensures the given camera-name does not contain any whitespace or meta-character that would
-        /// break the FFmpeg command lines built from it. Throws a <see cref="BadRequestException"/>
-        /// otherwise.
+        /// Ensures the given camera-name does not contain any character which would either break the FFmpeg
+        /// command-lines built from it or which is not visible in the user-interface. Throws a
+        /// <see cref="BadRequestException"/> otherwise.
         /// </summary>
         /// <param name="name">The camera-name to validate.</param>
         /// <exception cref="BadRequestException">Thrown when the name is null or contains a forbidden character.</exception>
@@ -71,11 +95,34 @@ namespace ConSurvBackend.Core.Services
             }
             foreach (char character in name)
             {
-                if (char.IsWhiteSpace(character) || _ForbiddenCameraNameCharacters.Contains(character))
+                if (CharacterIsForbiddenInACameraName(character))
                 {
-                    throw new BadRequestException($"The camera-name \"{name}\" contains the forbidden character '{character}'. A camera-name must not contain whitespace or any of the following characters: single-quote, double-quote, pipe, ampersand, asterisk, slash, backslash.");
+                    throw new BadRequestException($"The camera-name \"{name}\" contains the character U+{(int)character:X4}, which is not allowed. A camera-name must not contain whitespace, control-characters (which includes carriage-return and line-feed), invisible characters or any of the following characters: single-quote, double-quote, pipe, ampersand, asterisk, slash, backslash.");
                 }
             }
+        }
+
+        /// <summary>Indicates whether the given character must not be part of a camera-name.</summary>
+        /// <remarks>
+        /// Two different reasons are combined here. Quote-, pipe-, ampersand-, asterisk- and slash-characters break the
+        /// FFmpeg command-lines which are built from the name. Whitespace, control-characters (which includes
+        /// carriage-return and line-feed) and format-characters like the zero-width space are refused because they are
+        /// not visible: two cameras whose names differ only in such a character would be indistinguishable in the
+        /// user-interface, and a carriage-return or line-feed additionally allows to forge additional lines in every
+        /// log-entry and command-line which contains the name.
+        /// </remarks>
+        private static bool CharacterIsForbiddenInACameraName(char character)
+        {
+            if (char.IsWhiteSpace(character) || char.IsControl(character))
+            {
+                return true;
+            }
+            UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory(character);
+            if (category == UnicodeCategory.Format || category == UnicodeCategory.Surrogate || category == UnicodeCategory.PrivateUse)
+            {
+                return true;
+            }
+            return _ForbiddenCameraNameCharacters.Contains(character);
         }
 
         private static void Semaphore(SemaphoreSlim semaphore, Action action)
@@ -105,13 +152,14 @@ namespace ConSurvBackend.Core.Services
         }
 
         /// <summary>
-        /// Computes a short deterministic id from an RTSP link by hashing the URL (after escaping embedded credentials) and taking the first 6 hex characters.
+        /// Computes a short deterministic id from an RTSP link by hashing the URL (after escaping embedded credentials and removing the port) and taking the first 6 hex characters.
         /// </summary>
         /// <param name="rtspLink">The stream URL to derive the id from.</param>
         /// <returns>A 6-character hex string used as the camera id.</returns>
         private string GetId(string rtspLink)
         {
-            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink))))[..6];
+            string linkWhichIdentifiesTheCamera = Misc.Utilities.RemovePortFromLink(Misc.Utilities.EscapeBasicAuthPasswords(rtspLink));
+            return GRYLibrary.Core.Misc.Utilities.ByteArrayToHexString(new SHA256().Hash(GRYLibrary.Core.Misc.Utilities.StringToByteArray(linkWhichIdentifiesTheCamera)))[..6];
         }
 
         /// <summary>
@@ -246,6 +294,16 @@ namespace ConSurvBackend.Core.Services
         public string Register(string username, string password) => Semaphore(_Semaphore, () => this.RegisterCore(username, password));
         private string RegisterCore(string username, string password)
         {
+            // Reject a name which is already taken. The database enforces this as well (the unique-constraint on
+            // Users.Name), but only the check here can answer with a usable error instead of letting a
+            // constraint-violation surface as an internal error. It also covers the transient persistence, which
+            // has no constraint at all.
+            // Attention: the Core-variant has to be used here, because this method already runs inside the
+            // semaphore and a SemaphoreSlim is not re-entrant - calling the public method would deadlock.
+            if (this.UserWithNameExistsCore(username))
+            {
+                throw new BadRequestException($"The username '{username}' is already taken.");
+            }
             User newUser = User.CreateNewUser(username, this._AuthenticationService.Hash(password), this._TimeService);
             this._AuthenticationService.AddUserTyped(newUser);
             this._AuditLog.Logger.Log($"User \"{newUser.Name}\" (Id: {newUser.Id}) registered.", LogLevel.Information);

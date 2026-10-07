@@ -111,3 +111,23 @@ tasks:
     aliases:
       - translate
       - t
+
+  UpdateRecordedStreamBaselines:
+    desc: "Update: Recorded-stream-baselines"
+    silent: true
+    dir: "./ConSurvBackend/Other/QualityCheck"
+    cmds:
+      - "python UpdateRecordedStreamBaselines.py {{.CLI_ARGS}}"
+    aliases:
+      - updaterecordedstreambaselines
+      - ursb
+
+  UpdateVisualRegressionBaselines:
+    desc: "Update: Visual-regression-baselines"
+    silent: true
+    dir: "./ConSurvFrontend/Other/QualityCheck"
+    cmds:
+      - "python UpdateVisualRegressionBaselines.py {{.CLI_ARGS}}"
+    aliases:
+      - updatevisualregressionbaselines
+      - uvrb

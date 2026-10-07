@@ -4,12 +4,13 @@ import { UserDataService } from '../../../services/user-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CameraService, StreamingService, UserService } from '../../../generated/con-surv-backend';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-user-area-container',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<ng-content></ng-content>'
 })
 class MockUserAreaContainerComponent { }
@@ -69,6 +70,7 @@ describe('CameraComponent', () => {
           provide: StorageService,
           useValue: {
             getAccessToken: () => "at1",
+            hasAccessToken: () => false,
           }
         },
       ],
@@ -77,6 +79,12 @@ describe('CameraComponent', () => {
     fixture = TestBed.createComponent(CameraComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    //this destroys the component and therefore disposes the video.js-player created in ngOnInit; without this
+    //the player keeps its timers and listeners alive, which makes the vitest-worker crash while it is torn down
+    fixture.destroy();
   });
 
   it('should create', () => {

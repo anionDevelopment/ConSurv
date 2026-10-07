@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model.DTOs;
+using ConSurvBackend.Core.Model.DTOs;
 using System;
 using System.Collections.Generic;
 

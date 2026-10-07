@@ -20,6 +20,7 @@ model/models.ts
 model/oNVIFCommandDTO.ts
 model/recordModeDTO.ts
 model/recordStateDTO.ts
+model/stringValueDTO.ts
 model/updateCameraDTO.ts
 model/userInformationDTO.ts
 model/videoInformationDTO.ts

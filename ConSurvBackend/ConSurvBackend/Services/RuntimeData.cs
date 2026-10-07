@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Model;
+using ConSurvBackend.Core.Model;
 using ConSurvBackend.Core.Model.Internals;
 using GRYLibrary.Core.APIServer.Services.Interfaces;
 using GRYLibrary.Core.APIServer.Services.Res;

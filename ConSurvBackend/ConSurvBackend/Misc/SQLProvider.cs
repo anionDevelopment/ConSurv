@@ -1,4 +1,4 @@
-﻿using ConSurvBackend.Core.Services;
+using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.Misc;
 
 namespace ConSurvBackend.Core.Miscellaneous
@@ -97,6 +97,16 @@ namespace ConSurvBackend.Core.Miscellaneous
         public string GetScriptGetUserByName()
         {
             return this.LoadSQLScript("GetUserByName");
+        }
+
+        public string GetScriptGetUserSetting()
+        {
+            return this.LoadSQLScript("GetUserSetting");
+        }
+
+        public string GetScriptSetUserSetting()
+        {
+            return this.LoadSQLScript("SetUserSetting");
         }
 
         public string GetScriptInsertRole()

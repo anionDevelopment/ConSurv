@@ -4,7 +4,6 @@ using ConSurvBackend.Core.Model.DTOs;
 using ConSurvBackend.Core.Model.RecordModes;
 using ConSurvBackend.Core.Services;
 using GRYLibrary.Core.APIServer.Services.Logger;
-using GRYLibrary.Core.Misc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -17,7 +16,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
     public class CameraControllerTests
     {
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestCreateCamera()
         {
             // arrange
@@ -32,15 +31,15 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.CreateCamera();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            Assert.AreEqual(cameraId, (string)okObjectResult.Value);
+            Assert.AreEqual(cameraId, (string?)okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.CreateCamera("NewCamera", "rtsp://mycamera.example.com/stream"));
             cameraServiceMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestRemoveCamera()
         {
             // arrange
@@ -55,14 +54,14 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.RemoveCamera(cameraId);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.RemoveCamera(cameraId), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestUpdateCamera()
         {
             // arrange
@@ -88,14 +87,14 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.UpdateCamera(updateCameraDTO);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.UpdateCamera(It.Is<Camera>(c => c.Id == cameraId)), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestGetCameraById()
         {
             // arrange
@@ -113,7 +112,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Camera(cameraId);
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(cameraDTO, okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.GetCameraById(cameraId), Times.Once);
@@ -122,7 +121,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestGetAllCameras()
         {
             // arrange
@@ -141,9 +140,9 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.Cameras();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            List<CameraDTO> resultList = okObjectResult.Value as List<CameraDTO>;
+            List<CameraDTO>? resultList = okObjectResult.Value as List<CameraDTO>;
             Assert.IsNotNull(resultList);
             Assert.AreEqual(1, resultList.Count);
             Assert.AreEqual(cameraDTO, resultList[0]);
@@ -153,7 +152,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestListVideos()
         {
             // arrange
@@ -172,7 +171,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.ListVideos();
 
             // assert
-            OkObjectResult okObjectResult = actualResult as OkObjectResult;
+            OkObjectResult? okObjectResult = actualResult as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             Assert.AreEqual(videos, okObjectResult.Value);
             cameraServiceMock.Verify(mock => mock.GetVideos(), Times.Once);
@@ -180,7 +179,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
         }
 
         [TestMethod]
-        [TestProperty(nameof(TestKind), nameof(TestKind.UnitTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestRemoveVideo()
         {
             // arrange
@@ -196,7 +195,7 @@ namespace ConSurvBackend.Tests.Testcases.Controller
             IActionResult actualResult = controller.RemoveVideo(cameraId, filename);
 
             // assert
-            OkResult okResult = actualResult as OkResult;
+            OkResult? okResult = actualResult as OkResult;
             Assert.IsNotNull(okResult);
             cameraServiceMock.Verify(mock => mock.RemoveVideo(cameraId, filename), Times.Once);
             cameraServiceMock.VerifyNoOtherCalls();

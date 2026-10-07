@@ -138,6 +138,19 @@
         "allowcustomarguments": true
       },
       {
+        "label": "Update: Visual-regression-baselines",
+        "command": "python UpdateVisualRegressionBaselines.py",
+        "args": [],
+        "type": "shell",
+        "options": {
+          "cwd": "${workspaceFolder}/ConSurvFrontend/Other/QualityCheck"
+        },
+        "aliases": [
+          "uvrb"
+        ],
+        "allowcustomarguments": true
+      },
+      {
         "label": "Translate",
         "command": "python Translate.py",
         "args": [],
@@ -147,6 +160,19 @@
         },
         "aliases": [
           "t"
+        ],
+        "allowcustomarguments": true
+      },
+      {
+        "label": "Update: Recorded-stream-baselines",
+        "command": "python UpdateRecordedStreamBaselines.py",
+        "args": [],
+        "type": "shell",
+        "options": {
+          "cwd": "${workspaceFolder}/ConSurvBackend/Other/QualityCheck"
+        },
+        "aliases": [
+          "ursb"
         ],
         "allowcustomarguments": true
       }
@@ -167,6 +193,7 @@
   "settings": {
     "terminal.integrated.cwd": "${workspaceFolder}",
     "window.title": "${dirty} ${rootName}",
+    "dotnet.defaultSolution": "ConSurvBackend/ConSurvBackend.sln",
     "files.exclude": {
       ".coverage": true,
       "TestResults": true,

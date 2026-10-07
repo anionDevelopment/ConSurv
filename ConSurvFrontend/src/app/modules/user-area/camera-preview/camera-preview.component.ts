@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CameraService } from '../../../generated/con-surv-backend';
 import { StorageService } from '../../../services/storage.service';
 import { interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
@@ -7,6 +7,7 @@ import { interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
   selector: 'app-camera-preview',
   standalone: false,
   templateUrl: './camera-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './camera-preview.component.scss'
 })
 export class CameraPreviewComponent implements OnInit, OnDestroy {

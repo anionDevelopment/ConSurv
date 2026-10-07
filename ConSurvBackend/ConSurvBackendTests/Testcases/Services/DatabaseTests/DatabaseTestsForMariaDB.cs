@@ -1,6 +1,5 @@
-﻿using ConSurvBackend.Tests.TestUtilities;
+using ConSurvBackend.Tests.TestUtilities;
 using GRYLibrary.Core.APIServer.Utilities;
-using GRYLibrary.Core.Misc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
@@ -30,21 +29,21 @@ namespace ConSurvBackend.Tests.Testcases.Services.DatabaseTests
 
 
         [TestMethod(DisplayName = nameof(Migration000001Test))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void Migration000001Test()
         {
             this.Migration000001();
         }
 
         [TestMethod(DisplayName = nameof(AllMigrationsAreWorkingTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void AllMigrationsAreWorkingTest()
         {
             this.AllMigrationsAreWorking();
         }
 
         [TestMethod(DisplayName = nameof(LoadCameraTest))]
-        [TestProperty(nameof(TestKind), nameof(TestKind.IntegrationTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
         public override void LoadCameraTest()
         {
             this.LoadCamera();

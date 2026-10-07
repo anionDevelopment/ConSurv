@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../../services/storage.service';
 import { of } from 'rxjs';
 import { UserIconComponent } from '../user-icon/user-icon.component';
+import { NgxDarkmodeToggleButtonComponent } from '@aniondev/ngx-darkmode-toggle-button';
+import { NgxCultureSelectorComponent } from '@aniondev/ngx-culture-selector';
 
 describe('UserSettingsComponent', () => {
   let component: UserSettingsComponent;
@@ -34,6 +36,8 @@ describe('UserSettingsComponent', () => {
         MatSidenavModule,
         MatButtonModule,
         MatTabsModule,
+        NgxDarkmodeToggleButtonComponent,
+        NgxCultureSelectorComponent,
       ],
       declarations: [
         UserIconComponent,
@@ -45,6 +49,7 @@ describe('UserSettingsComponent', () => {
           provide: StorageService,
           useValue: {
             getAccessToken: () => "at1",
+            hasAccessToken: () => false,
           }
         },
         {

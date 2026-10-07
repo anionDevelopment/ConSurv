@@ -1,4 +1,4 @@
-﻿# ConSurv
+# ConSurv
 
 ## Purpose
 
@@ -12,7 +12,7 @@
 - ❌ [OpenID-Login](https://github.com/anionDevelopment/ConSurv/issues/5)
 - ✅ Usage of GPU if available
 - ❌ [Record on motion-detection](https://github.com/anionDevelopment/ConSurv/issues/6)
-- ❌ [Video-control using ONVIF-commands for cameras which supports ONVIF](https://github.com/anionDevelopment/ConSurv/issues/7)
+- ✅ Video-control using ONVIF-commands for cameras which supports ONVIF
 - ❌ [Smartphone-app which has all features from the user-area](https://github.com/anionDevelopment/ConSurv/issues/8)
 - ❌ [Being able to change group-memberships of users](https://github.com/anionDevelopment/ConSurv/issues/9)
 - ❌ [Design (including logo/favicon/dark-mode)](https://github.com/anionDevelopment/ConSurv/issues/10)
@@ -69,6 +69,661 @@ You can now also use the REST-API directly. The graphical API-documentation shou
 ## Reference
 
 The OpenDMS-reference can be found [here](./Other/Resources/Reference/Reference.md).
+
+## OWASP-Top-10
+
+### Scope of this analysis
+
+This section documents the result of a security-analysis of this repository against the
+[OWASP Top 10:2025](https://owasp.org/Top10/2025/), which is the current official version of that list.
+The analysis was performed on 2026-10-02 against the branch `other/maintenance` (commit `09b95ef`,
+product-version 3.0.36). It covers the code-units `ConSurvBackend`, `ConSurvFrontend` and `ConSurv`
+(the container-image and the example-deployments) as well as the build-pipeline.
+
+The findings are the state at that moment and are not a release-statement: a finding which is listed as
+`open` below is not fixed yet. Every finding states its confidence, so a reader can tell a fact from an
+assumption:
+
+- `confirmed`: the evidence is in this repository and was read.
+- `needs-validation`: the evidence in this repository shows the weakness, but whether it is exploitable
+  depends on behavior of a dependency (`GRYLibrary`) which was not read.
+- `assumption`: derived from the design, not from a single place in the code.
+
+### Attack-surface
+
+| Component | Exposure |
+|---|---|
+| nginx on port 443 (frontend and reverse-proxy for `/API/`) | internet-exposed |
+| `UserController` (login, logout, token-validation, user-creation) | internet-exposed |
+| `CameraController` (cameras, recordings, ONVIF-commands) | internet-exposed |
+| `StreamingController` (HLS-playlists and -segments) | internet-exposed |
+| `InsightsController` (list of the managed processes) | internet-exposed |
+| Maintenance-routes `Metrics` and `HealthCheck`, API-specification | internet-exposed, unauthenticated |
+| nginx on port 8080 (same application, without TLS) | internal-only |
+| Backend-webserver on port 80, bound to every address | internal-only |
+| mediamtx-instance and ffmpeg-processes per camera | local-only |
+| Database (PostgreSQL or MariaDB), database-administration (adminer) | internal-only, published in the example-deployment |
+| Build-pipeline (self-hosted runner with access to the docker-socket) | continuous-integration entry-point |
+
+Untrusted input crosses a trust-boundary at these places: the request-headers (`x-user`, `x-password`,
+`accessToken`), the route-parameters (`streamId`, `filename`, `cameraId`), the request-bodies
+(`UpdateCameraDTO` with `StreamURL` and `ONVIFUrl`, `ONVIFCommandDTO`, `StringValueDTO`) and the
+camera-stream itself, which is decoded by ffmpeg, OpenCV, ImageSharp and SkiaSharp.
+
+The assets to protect are: the credentials of the cameras (the basic-auth-credentials embedded in a
+`StreamURL` as well as `ONVIFUsername` and `ONVIFPassword`), the password-hashes and the access-tokens of
+the users, the recordings and previews (which show persons), the database-connection-string, the initial
+admin-password and the private key of the TLS-certificate.
+
+### Findings
+
+#### A01 Broken Access Control
+
+##### CSV-01: The credentials of every camera are returned to every authenticated user
+
+- Component: `ConSurvBackend`, `Model/Base/VideoInformation.ToDTO`, `Controller/CameraController.Cameras`
+- Attack-surface: internet-exposed
+- Criticality: critical, confidence: confirmed, status: open
+- Evidence: `VideoInformation.ToDTO` puts `ONVIFPassword` and the unmodified `StreamURL` into the
+  `VideoInformationDTO`, and `CameraController.Cameras` only demands the role `Users`. The backend itself
+  contains `Misc.Utilities.EscapeBasicAuthPasswords`, which exists because a `StreamURL` commonly carries
+  basic-auth-credentials, but the mapping does not use it. The doc-comment of the DTO states that it carries
+  "only the fields that are safe to expose over the API", which does not hold.
+- Impact: every user of the lowest role can read the credentials of all cameras and can use them to access
+  the cameras directly, bypassing the application entirely.
+- Recommendation: remove `ONVIFPassword` from the DTO and return the `StreamURL` through
+  `EscapeBasicAuthPasswords`. Replace the testcase `ToDTO_MapsAllPublicFields` by one which asserts that the
+  password is not part of the DTO.
+
+##### CSV-02: There is no authorization per camera
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService`, `Controller/CameraController`,
+  `Controller/StreamingController`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the authorization is role-based only. `GetAllCamerasCore`, `GetCameraByIdCore`, `UpdateCameraCore`
+  and `RemoveCameraCore` each contain the comment `//TODO check permission`, and `UserController` contains the
+  comment that functions for granting a right on certain cameras only are still missing.
+- Impact: every user of the role `Users` can watch the live-stream of every camera and list all recordings;
+  every user of the role `CameraManagers` can reconfigure and delete every camera and every recording. A
+  deployment cannot restrict a user to the cameras that user is supposed to see.
+- Recommendation: introduce an assignment between a user and a camera and check it in the
+  business-logic-service (not in the controller), so that every path which resolves a camera passes the same
+  check.
+
+##### CSV-03: A preview is served for a camera-id which does not exist
+
+- Component: `ConSurvBackend`, `Controller/CameraController.GetPreview`, `Services/RuntimeData`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: `GetPreview` passes the route-parameter directly to `RuntimeData.GetLatestPreview`, which calls
+  `EnsurePreviewQueueIsAvailable` and therefore answers for any value instead of refusing an unknown camera.
+- Impact: the endpoint does not distinguish an existing from a non-existing camera, and it allocates state for
+  a value the caller invented (see also CSV-21).
+- Recommendation: resolve the camera-id against the existing cameras first and answer with 404 otherwise.
+
+##### CSV-04: The token-validation is reachable without authentication
+
+- Component: `ConSurvBackend`, `Controller/UserController.TokenIsValid`
+- Attack-surface: internet-exposed
+- Criticality: low, confidence: confirmed, status: open
+- Evidence: `TokenIsValid` is the only route of the controller besides `Login` without the attribute
+  `[Authenticate]`.
+- Impact: the endpoint is an oracle which tells an unauthenticated caller whether a given token is valid, which
+  makes a stolen or guessed token testable without any other request.
+- Recommendation: remove the endpoint and let the client derive the validity from the answer of the regular
+  requests, or demand authentication for it.
+
+#### A02 Security Misconfiguration
+
+##### CSV-05: The delivered image serves TLS with the development-certificate
+
+- Component: `ConSurv`, `ConSurv/Dockerfile`, `ConSurv/nginx.conf`, `ConSurv/nginx-api-only.conf`
+- Attack-surface: internet-exposed
+- Criticality: critical, confidence: confirmed, status: open
+- Evidence: the containerfile copies `ConSurvDevelopmentCertificate.crt` and
+  `ConSurvDevelopmentCertificate.key` into the image, and both nginx-configurations reference exactly that path
+  in `ssl_certificate` and `ssl_certificate_key`. There is no environment-variable, no configuration-file-entry
+  and no volume in the example-deployment which would supply a different certificate;
+  `.ScriptCollection/SecretScanConfiguration.toml` states that the certificate "is expected to get replaced for
+  a real deployment", but the mechanism to replace it does not exist. The certificate-files themselves are
+  generated by the build and are not committed.
+- Impact: every deployment which uses the published image serves TLS with a private key that everybody who can
+  pull that image possesses. The connection can be decrypted and modified, which includes the login-credentials
+  and the video-streams.
+- Recommendation: make the certificate-path configurable, document the volume which supplies it, and refuse to
+  start when a productive run would fall back to the development-certificate.
+
+##### CSV-06: The image serves the whole application unencrypted on port 8080
+
+- Component: `ConSurv`, `ConSurv/nginx.conf`, `ConSurv/nginx-api-only.conf`
+- Attack-surface: internal-only
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: besides the server-block for port 443 both configurations contain a server-block `listen 8080;`
+  which includes the same location-settings, so it serves the same application without TLS.
+- Impact: in a deployment which publishes that port, or for anything else on the same container-network,
+  credentials and tokens are readable on the wire.
+- Recommendation: remove the plain-text-listener, or restrict it to a health- and metrics-path.
+
+##### CSV-07: The response-headers for content-security and transport-security are missing
+
+- Component: `ConSurv`, `ConSurv/nginx.conf`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the http-block sets `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection` and
+  `Referrer-Policy`, but neither `Content-Security-Policy` nor `Strict-Transport-Security`.
+- Impact: there is no second line of defense against an injected script (which matters because the access-token
+  is reachable for scripts, see CSV-27), and a browser can be downgraded to a plain-text-connection.
+- Recommendation: add a `Content-Security-Policy` which matches the application (the frontend needs no external
+  origin, because the fonts are delivered with it) and add `Strict-Transport-Security`.
+
+##### CSV-08: The documented example-deployment contains a fixed database-password and publishes the database and its administration-interface
+
+- Component: `ConSurv`, `Other/Reference/ReferenceContent/Examples/MinimalDockerComposeFile/docker-compose.yml`
+- Attack-surface: internet-exposed when used as it is
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the compose-file sets `POSTGRES_PASSWORD: pa55w0rd`, publishes the database-port 5432 on the host
+  and starts a database-administration-interface (adminer) on port 8080. This file is the deployment which
+  `ReadMe.md` points the reader to.
+- Impact: whoever follows the example exposes the database and a database-administration-interface with
+  credentials which are public, which gives direct access to the password-hashes and the camera-credentials.
+- Recommendation: take the password from an environment-file without a default, remove the published
+  database-port and move the administration-interface into a separate example which is marked as
+  development-only.
+
+##### CSV-09: Everything in the container runs as root
+
+- Component: `ConSurv`, `ConSurv/Dockerfile`
+- Attack-surface: internet-exposed (as the consequence of another weakness)
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the containerfile contains no `USER`-instruction, so the entry-point, the backend, nginx, the
+  ffmpeg-processes and the mediamtx-instances all run as root.
+- Impact: any code-execution in one of those processes starts with the highest privileges in the container,
+  which removes the step an attacker would otherwise have to take.
+- Recommendation: create an unprivileged user in the image, let the entry-point run as that user and drop the
+  capabilities which are not needed.
+
+##### CSV-10: The API-specification is hosted unauthenticated outside of development
+
+- Component: `ConSurvBackend`, `Program.cs`
+- Attack-surface: internet-exposed
+- Criticality: low, confidence: confirmed, status: open
+- Evidence: `HostAPISpecificationForInNonDevelopmentEnvironment` is set to `true` and the route of the
+  specification is part of `RoutesWhereUnauthenticatedAccessIsAllowed`.
+- Impact: the complete list of the endpoints, including the ones which are not used by the frontend, is readable
+  for everybody. That is not a weakness by itself, but it removes the effort of finding them.
+- Recommendation: decide this per environment and demand authentication for the specification in a productive
+  run.
+
+#### A03 Software Supply Chain Failures
+
+##### CSV-11: The build-pipeline installs an unpinned dependency and has access to the docker-socket
+
+- Component: repository, `.github/workflows/buildpipeline.yml`
+- Attack-surface: continuous-integration entry-point
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the step "Update scriptcollection" runs `pip3 install scriptcollection --upgrade`, so the version
+  which is installed is whatever is current at that moment. The same job mounts `/var/run/docker.sock` into the
+  build-container. This contradicts the convention of this project to always pin a version explicitly.
+- Impact: a compromised or simply unexpected version of that package executes code in the pipeline, and through
+  the docker-socket that code controls the docker-daemon of the build-host. The build-artifacts of this product
+  are produced by that pipeline.
+- Recommendation: pin the version of `scriptcollection` (and update it deliberately), and give the job access to
+  the docker-socket only in the step which really needs it.
+
+##### CSV-12: The pipeline references an action and an image by a movable tag
+
+- Component: repository, `.github/workflows/buildpipeline.yml`
+- Attack-surface: continuous-integration entry-point
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the checkout-step uses `actions/checkout@v4`, which is a tag and not a commit-digest, and the
+  build-container is referenced as `aniondev/scbuilder:v1.2.13`, which is a tag and not an image-digest.
+- Impact: the content behind both references can change without any change in this repository, so a build is not
+  reproducible and a replaced tag runs other code than the one which was reviewed.
+- Recommendation: reference the action by its commit-digest and the image by its image-digest.
+
+##### CSV-13: A pre-release-dependency is part of the productive build
+
+- Component: `ConSurvBackend`, `ConSurvBackend.csproj`
+- Attack-surface: internet-exposed (as part of the application)
+- Criticality: low, confidence: confirmed, status: open
+- Evidence: `SkiaSharp` and `SkiaSharp.NativeAssets.Linux` are pinned to `3.119.3-preview.1.1`.
+- Impact: a pre-release gets no separate security-maintenance, and a fix is published for the release-line only.
+- Recommendation: move to the current release of that package, or document why the pre-release is required.
+
+Not a finding: all other dependencies of the backend and of the frontend are pinned to an exact version, both
+code-units have a lock-file (`packages.lock.json` and `package-lock.json`), and the build produces a
+bill-of-materials.
+
+#### A04 Cryptographic Failures
+
+##### CSV-14: The randomness-provider of the application is a deterministic generator with a fixed seed
+
+- Component: `ConSurvBackend`, `Program.cs`
+- Attack-surface: internet-exposed (depending on the consumer)
+- Criticality: high, confidence: needs-validation, status: needs-validation
+- Evidence: the application registers `IRandomnessProvider` as `new RandomnessProvider(new Random(42))`, in
+  every environment including `Productive`. `System.Random` is not a cryptographically secure generator, and a
+  fixed seed makes its sequence identical in every run. Which values are derived from this provider is decided
+  inside `GRYLibrary`, which is not part of this repository and was not read for this analysis.
+- Impact: if access-tokens, salts or identifiers are derived from this provider, they are predictable, which
+  allows taking over a session without any credential. If it is only used for non-security-purposes, the finding
+  is a latent one: the next use of it inherits the weakness.
+- Recommendation: register a provider which is based on a cryptographically secure generator, and keep the
+  seeded one for testcases only.
+
+##### CSV-15: The credentials of a camera are stored in clear text
+
+- Component: `ConSurvBackend`, `Resources/Database/*/Statements/CreateCamera.sql`, `Model/Base/VideoInformation`
+- Attack-surface: internal-only
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the column `ONVIFPassword` holds the password as it was given, and the `StreamURL` is stored
+  unmodified including the credentials it may contain. There is no encryption and no separate secret-store.
+- Impact: read-access to the database (see CSV-08) yields the credentials of all cameras directly.
+- Recommendation: store those values encrypted with a key which is not in the database, and decrypt them only in
+  the moment they are handed to the camera.
+
+##### CSV-16: Secrets are passed as command-line-arguments
+
+- Component: `ConSurv`, `ConSurv/EntryPoint.sh`
+- Attack-surface: local-only
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the entry-point appends `--InitialAdminPassword`, `--InitialDatabaseConnectionString` and the other
+  values to one argument-string and passes it to the backend. A command-line is readable through
+  `/proc/<pid>/cmdline`. The variables are additionally expanded unquoted, so a value which contains whitespace
+  is split into several arguments.
+- Impact: the admin-password and the database-connection-string are readable for every process in the container
+  and tend to appear in process-listings and crash-reports. A password which contains a space does not arrive as
+  it was configured.
+- Recommendation: let the backend read those values from the environment (or from a file) instead of from the
+  command-line, and quote the expansions.
+
+##### CSV-17: The backend speaks plain text and listens on every address
+
+- Component: `ConSurvBackend`, `Program.cs`
+- Attack-surface: internal-only
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: `ServerConfiguration.Protocol` is set to `new HTTP()` while `ListenOnEveryIP` is `true`, so the
+  backend is reachable unencrypted on every address of the container, not only through the reverse-proxy on the
+  loopback-interface.
+- Impact: on a shared container-network the login (which carries the password in the header `x-password`) and
+  every token can be read without touching the reverse-proxy.
+- Recommendation: bind the backend to the loopback-interface, since the reverse-proxy in the same container is
+  the only intended client.
+
+#### A05 Injection
+
+##### CSV-18: The stream-URL of a camera is not validated and is interpolated into the ffmpeg-command-lines
+
+- Component: `ConSurvBackend`, `BackgroundServices/CameraManagementService`, `Services/BusinessLogicService`,
+  `Controller/CameraController.UpdateCamera`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: `UpdateCamera` takes the `StreamURL` from the request-body and stores it without any validation.
+  `CameraManagementService` interpolates that value into five argument-strings of ffmpeg and of ffprobe, inside
+  double-quotes. The camera-name is validated for exactly this reason (`EnsureCameraNameIsValid` rejects, among
+  others, the quote-characters, and the doc-comment says it does so because the name "would break the FFmpeg
+  command lines"), while the URL which ends up in the same argument-string is not validated at all.
+- Impact: a user of the role `CameraManagers` can terminate the quoted value and append arbitrary options to the
+  ffmpeg-invocation, which allows writing files at a chosen path and reading local files through the
+  file-handling protocols of ffmpeg. Even without a quote-character the value chooses the protocol ffmpeg uses.
+- Recommendation: validate the value as an absolute URI with a scheme from an allow-list (`rtsp`, later `rtsps`)
+  and reject the characters which the camera-name already rejects. Independently of that, pass the arguments as
+  a list instead of building one argument-string.
+
+##### CSV-19: The ONVIF-address of a camera is not validated
+
+- Component: `ConSurvBackend`, `Misc/RunONVIFCommandVisitor`, `Controller/CameraController.RunONVIFCommand`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: `GetOnvifCamera` builds the ONVIF-account from `VideoInformation.ONVIFUrl`, which comes from the
+  request-body of `UpdateCamera` unvalidated. The exception of a failed attempt is rethrown by
+  `RunONVIFCommandCore`.
+- Impact: the backend connects to a host which the caller chooses, from inside the network of the deployment, and
+  the result of the attempt is observable. That makes services reachable which are not exposed, and it sends the
+  stored ONVIF-credentials to a host the attacker controls.
+- Recommendation: validate the address against an allow-list of the networks in which cameras are expected, and
+  answer with one generic error instead of the exception of the attempt.
+
+Not a finding, checked explicitly: all database-access uses parameters (the substitution of the placeholder
+`__generated__` in `AddDirectlyInheritedRoles.sql` composes parameter-names only, no values); the frontend
+contains no use of `innerHTML`, of `bypassSecurityTrust*` or of `eval`, so the escaping of Angular is in effect
+everywhere; path-traversal is prevented in `StreamingController.Stream` and in
+`BusinessLogicService.GetRecordingFile` and is covered by testcases.
+
+#### A06 Insecure Design
+
+##### CSV-20: Creating a user always grants the admin-role
+
+- Component: `ConSurvBackend`, `Controller/UserController.CreateUser`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: `CreateUser` calls `EnsureUserHasRole` with the role `Adminstrators` unconditionally, and there is
+  no parameter for the role.
+- Impact: the three roles exist, but through the API no user below an administrator can be created, so a
+  deployment which wants a viewer-only account cannot create one. Every account created this way can create
+  further administrators.
+- Recommendation: take the role as a parameter, validate it against the known roles, and grant the lowest role by
+  default.
+
+##### CSV-21: The preview-store grows without a bound, keyed by a value the caller chooses
+
+- Component: `ConSurvBackend`, `Services/RuntimeData`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: `EnsurePreviewQueueIsAvailable` adds an entry to the dictionary `_Previews` for every camera-id it is
+  asked for, and the dictionary has no upper bound. The queue per entry is bounded to ten previews, the number of
+  entries is not.
+- Impact: an authenticated user of the lowest role exhausts the memory of the backend by requesting previews for
+  invented camera-ids.
+- Recommendation: create an entry only for a camera which exists (see CSV-03).
+
+##### CSV-22: Recordings and stream-segments are read into memory completely
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService.GetVideoCore`,
+  `Controller/StreamingController.Stream`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: both paths use `File.ReadAllBytes` and hand the resulting array to the response. A recording covers
+  ten minutes in a productive run, and nginx accepts a body of up to 800 megabytes.
+- Impact: a few parallel requests allocate as many times the file-size, which makes the memory-consumption of the
+  backend depend on the number of callers.
+- Recommendation: stream the file instead of reading it (which also enables range-requests, which a video-player
+  uses anyway).
+
+##### CSV-23: The camera-stream is untrusted input but is decoded without isolation
+
+- Component: `ConSurvBackend`, `BackgroundServices/CameraManagementService`,
+  `BackgroundServices/MotionDetectionService`, `Misc/Utilities`
+- Attack-surface: internal-only
+- Criticality: medium, confidence: assumption, status: open
+- Evidence: the content which a camera delivers is processed by ffmpeg, and the resulting pictures are decoded by
+  OpenCV (`Cv2.ImDecode`, `PHash`), by ImageSharp (`Image.Load`) and by SkiaSharp. All of that runs in the
+  process of the backend respectively as a child-process with the same privileges (see CSV-09), and the design
+  treats the camera as trusted.
+- Impact: a camera which is taken over, or one which is simply placed into the network, attacks those decoders
+  with crafted media-data. A weakness in one of them is reachable from the camera-network.
+- Recommendation: treat the camera as untrusted: run the decoding with reduced privileges, limit what the
+  decoding may consume, and keep those dependencies updated deliberately.
+
+#### A07 Authentication Failures
+
+##### CSV-24: The delivered image creates accounts with fixed credentials
+
+- Component: `ConSurvBackend`, `Services/ExampleDataCreator`, `Services/InitializationService`,
+  `ConSurv/EntryPoint.sh`
+- Attack-surface: internet-exposed
+- Criticality: critical, confidence: confirmed, status: open
+- Evidence: `ExampleDataCreator.AddExampleData` registers the users `moderator` with the password `moderator`,
+  `user01` with `user01` and `user02` with `user02`, and grants the role `CameraManagers` to the first one.
+  `InitializationService.Initialize` calls it inside `if (commandlineParameter.RealRun)`, which is a condition on
+  the kind of the run and not on the environment, and `EntryPoint.sh` always passes `--RealRun true`.
+- Impact: every deployment started from the image contains an account with publicly known credentials which may
+  manage cameras, which means watching every stream and reconfiguring every camera (and through CSV-18 more than
+  that).
+- Recommendation: bind the example-data to the environment `Development` instead of to `RealRun`, and never
+  create it in a productive run.
+
+##### CSV-25: The initial admin-password defaults to a known value
+
+- Component: `ConSurvBackend`, `Services/InitializationService`
+- Attack-surface: internet-exposed
+- Criticality: critical, confidence: confirmed, status: open
+- Evidence: when `InitialAdminPassword` is not given, the password of the user `admin` is set to the value of
+  `CodeUnitSpecificConstants.UsernameAdmin`, which is `admin`. The comment next to it states that it should be
+  changed as soon as possible, but nothing enforces that.
+- Impact: a deployment which does not set the variable has an administrator with the credentials `admin`/`admin`,
+  and nothing reports or prevents that this stays so.
+- Recommendation: refuse to initialize when no initial password was given, and require the change of that
+  password at the first login.
+
+##### CSV-26: There is no protection against guessing credentials
+
+- Component: `ConSurvBackend`, `Controller/UserController.Login`, `ConSurv/nginx.conf`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: neither the backend nor the reverse-proxy limits the rate of the requests: the repository contains no
+  rate-limit, no lockout and no throttling. The field `UserIsLocked` exists and is read in
+  `PersistentAuthenticationService`, but no code sets it.
+- Impact: credentials can be guessed at the speed of the network, which is what makes CSV-24 and CSV-25
+  exploitable in the first place.
+- Recommendation: limit the login-rate per address and per account, lock an account after repeated failures
+  (the field for it exists) and report the event (see CSV-32).
+
+##### CSV-27: The access-token is stored where every script can read it
+
+- Component: `ConSurvFrontend`, `src/app/services/storage.service.ts`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: `StorageService` keeps the access-token (and the role-flags) in `sessionStorage`, which is reachable
+  for any script running on the page. There is no `Content-Security-Policy` as a second line of defense
+  (CSV-07).
+- Impact: a single injected script takes the session over. The role-flags in the same place are a
+  display-decision only, because the backend checks the roles itself, so they are not a weakness by themselves.
+- Recommendation: keep the token in a cookie which is marked `HttpOnly`, `Secure` and `SameSite`, and add a
+  content-security-policy.
+
+##### CSV-28: Multi-factor-authentication is prepared but not usable
+
+- Component: `ConSurvBackend`, `Resources/Database/*/Statements/AddUser.sql`
+- Attack-surface: internet-exposed
+- Criticality: low, confidence: confirmed, status: open
+- Evidence: the user-table carries the columns `TOTPActivated` and `TOTPSecretKey`, but no endpoint and no
+  frontend-page uses them.
+- Impact: a second factor cannot be switched on, so a leaked password is sufficient for an account, which for a
+  camera-system means access to the recordings.
+- Recommendation: implement the second factor for the roles which can manage cameras, or remove the columns until
+  it is implemented, so the schema does not promise a property which does not exist.
+
+#### A08 Software or Data Integrity Failures
+
+##### CSV-29: The assemblies are only delay-signed and the image is not signed
+
+- Component: `ConSurvBackend`, `ConSurvBackend.csproj`, `ConSurv`
+- Attack-surface: continuous-integration entry-point
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the project sets `SignAssembly` to `true` together with `DelaySign` to `true` and references
+  `ConSurvPublicKey.snk`, which holds the public key only. A delay-signed assembly carries the space for a
+  signature but not a valid one. For the container-image the repository contains no signature and no attestation
+  of the build.
+- Impact: neither the assemblies nor the image can be verified by a consumer, so a replaced artifact is not
+  detectable. Together with CSV-11 the path to replace one exists.
+- Recommendation: either sign the artifacts in the pipeline with a key which is not in the repository and publish
+  a signature, or remove the strong-name-configuration so it does not suggest a guarantee it does not give.
+
+##### CSV-30: Recordings have no integrity-protection and their deletion is not audited
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService.RemoveVideoCore`,
+  `BackgroundServices/HousekeepingService`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: a recording is a file in the data-folder without a checksum, a signature or a write-protection.
+  `RemoveVideoCore` writes one line through `_Log` at the level `Debug`, while the creation, the update and the
+  removal of a camera are written to `_AuditLog`.
+- Impact: the recordings are the product of this system, and it cannot be shown afterwards that one was not
+  modified, nor who removed one. A user of the role `CameraManagers` removes the record of an event without
+  leaving a trace which is meant to be kept.
+- Recommendation: write a checksum per recording when it is closed, protect the recordings against modification,
+  and log every removal into the audit-log with the acting user.
+
+#### A09 Security Logging and Alerting Failures
+
+##### CSV-31: An access-token is written into the log in clear text
+
+- Component: `ConSurvBackend`, `Controller/UserController.TokenIsValid`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the endpoint logs `$"Checked if access token {accessToken} is valid. Result: {result}"`.
+- Impact: every token which is checked is in the log-file, so read-access to the logs (which are mounted as a
+  volume in the example-deployment) yields usable sessions. A log is commonly kept longer and copied more freely
+  than a credential-store.
+- Recommendation: do not log the token; log at most a hash-prefix of it, or remove the endpoint (CSV-04).
+
+##### CSV-32: Logins are not audited and a failed login is not reported
+
+- Component: `ConSurvBackend`, `Controller/UserController.Login`, `Services/BusinessLogicService.LoginCore`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: neither a successful nor a failed login writes to the audit-log. The `catch`-block of `Login` writes
+  the exception with `Console.Error.WriteLine`, which bypasses the configured logging completely, and answers
+  with 500. There is no alerting-mechanism anywhere in the repository.
+- Impact: an attempt to guess credentials (which nothing slows down, see CSV-26) leaves no evaluable trace, and a
+  successful misuse of an account cannot be reconstructed afterwards.
+- Recommendation: write every login-attempt with its result, its account and its source-address into the
+  audit-log, replace the `Console.Error`-output by the logger, and report a threshold of failed attempts.
+
+##### CSV-33: Audit-entries do not name who caused the change
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: the audit-entries for updating a camera and for granting or removing a role state the affected object
+  only. Three places carry the comment `//TODO add information about why and by whom this was done`.
+- Impact: the audit-log shows that something changed but not by whom, which is the part that makes it an
+  audit-log.
+- Recommendation: pass the acting user into the business-logic-service and record it in every audit-entry.
+
+#### A10 Mishandling of Exceptional Conditions
+
+##### CSV-34: The state of a camera is never determined, and the catch-block hides that
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService.GetCurrentRecordingInformationCore`
+- Attack-surface: internet-exposed
+- Criticality: high, confidence: confirmed, status: open
+- Evidence: the method is `try { return new Idle(); } catch { return new Unavailable(); }` with the comment
+  `//TODO`. The `try`-block cannot fail, so the result is always `Idle`. `IsAvailableCore` derives the
+  availability from exactly this value and therefore always reports the camera as available, and
+  `GetRateOfAvailableCameras`, which feeds the metric `ConSurvBackend_Business_AvailableCamerasRate`, always
+  reports the full rate.
+- Impact: a camera which is broken, unplugged or blinded is reported as available by the user-interface, by the
+  metrics and by the health-check. For a surveillance-system that is the failure which must not stay unnoticed,
+  and the construction of the method makes it look like it were handled.
+- Recommendation: determine the state from the actual runtime-data of the camera, remove the `catch`-block which
+  cannot be reached, and let the metric reflect the real state.
+
+##### CSV-35: Two documented endpoints always fail, one of them after reading the whole file
+
+- Component: `ConSurvBackend`, `Controller/CameraController.DownloadVideo`,
+  `Controller/CameraController.GetPreviewOfVideo`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: confirmed, status: open
+- Evidence: both methods compute their content and then execute `throw new System.NotImplementedException();`,
+  while their documentation and their `ProducesResponseType` announce 200. `DownloadVideo` reads the complete
+  recording into memory before it throws. The route-template of `GetPreviewOfVideo` is additionally missing the
+  separator between the route-name and the first parameter.
+- Impact: a client which follows the API-specification receives 500 for a function the specification offers, and
+  every such call allocates the size of a recording.
+- Recommendation: let the endpoints answer with 501 until they are implemented (and do not read the file before),
+  or remove them from the specification.
+
+##### CSV-36: Framework-exceptions reach the error-handling from the controller-paths
+
+- Component: `ConSurvBackend`, `Services/BusinessLogicService`, `Misc/RunONVIFCommandVisitor`, `Program.cs`
+- Attack-surface: internet-exposed
+- Criticality: medium, confidence: needs-validation, status: needs-validation
+- Evidence: `GetCameraByIdCore` throws `KeyNotFoundException` for an unknown camera, `RunONVIFCommandCore`
+  rethrows the exception of the attempt with `throw result.Item2!`, and the recording-paths throw
+  `BadRequestException`. Only the last kind is an exception which describes an answer. How the response looks is
+  decided by the exception-middleware of `GRYLibrary`, which is left at its defaults
+  (`new ExceptionManagerConfiguration()`) and was not read for this analysis.
+- Impact: an unknown camera-id is answered as an internal error instead of as 404, and the detail of a failed
+  ONVIF-attempt may reach the caller, which is what makes CSV-19 observable.
+- Recommendation: map the expected cases to their answer in the controller or in the business-logic-service, and
+  configure the middleware explicitly so that no internal detail is returned in a productive run.
+
+##### CSV-37: The login catches every exception and answers with one internal error
+
+- Component: `ConSurvBackend`, `Controller/UserController.Login`
+- Attack-surface: internet-exposed
+- Criticality: low, confidence: confirmed, status: open
+- Evidence: the whole body is wrapped in `catch (Exception e)`, which writes to the error-stream and returns 500.
+- Impact: a failure of the database, a configuration-error and a rejected credential are indistinguishable from
+  the outside and, more importantly, from the side of the operator, because the cause does not reach the log
+  (CSV-32).
+- Recommendation: catch only what is expected, let the rest be handled by the exception-middleware, and log
+  through the logger.
+
+### Missing security-tests
+
+The repository covers two of the checked mechanisms with testcases: path-traversal in `StreamingController`
+(`Stream_FilenameWithPathTraversal_ReturnsBadRequest` and the two neighboring cases) and the validation of a
+camera-name against the command-line (`CreateCameraRejectsANameWhichWouldBreakTheCommandLineTest`).
+
+Missing for the paths which carry the risk:
+
+- No testcase asserts that a user of the role `Users` is refused at an endpoint which demands
+  `CameraManagers`, so a lost `[Authorize]`-attribute would not be noticed.
+- No testcase covers the validation of a `StreamURL`, because there is none (CSV-18).
+- The testcase `ToDTO_MapsAllPublicFields` asserts that `ONVIFPassword` is part of the DTO and therefore keeps
+  CSV-01 in place. `ToDTO_DoesNotExposesCertificate` shows that the intention to exclude a sensitive field
+  exists.
+- No testcase covers the behavior at a login with wrong credentials beyond the two cases of a missing header.
+
+### Remediation-plan
+
+The order follows exploitability and impact, not the order of the categories.
+
+1. CSV-24 and CSV-25: remove the fixed accounts from a productive run and refuse to initialize without an
+   initial admin-password.
+2. CSV-01: remove the camera-credentials from the data which the API returns.
+3. CSV-05: make the TLS-certificate configurable and keep the development-certificate out of the productive
+   image.
+4. CSV-18 and CSV-19: validate the `StreamURL` and the `ONVIFUrl`, and pass arguments as a list.
+5. CSV-14: register a cryptographically secure randomness-provider.
+6. CSV-26, CSV-31 and CSV-32: limit the login-rate, remove the token from the log, audit the logins.
+7. CSV-02 and CSV-20: introduce the authorization per camera and decouple the creation of a user from the
+   admin-role.
+8. CSV-34: determine the state of a camera for real.
+9. CSV-08, CSV-11 and CSV-29: harden the example-deployment and the pipeline.
+10. The remaining findings: CSV-03, CSV-04, CSV-06, CSV-07, CSV-09, CSV-10, CSV-12, CSV-13, CSV-15, CSV-16,
+    CSV-17, CSV-21, CSV-22, CSV-23, CSV-27, CSV-28, CSV-30, CSV-33, CSV-35, CSV-36, CSV-37.
+
+### Summary of all findings
+
+| Id | OWASP-category | Component | Criticality | Confidence | Status |
+|---|---|---|---|---|---|
+| CSV-01 | A01 Broken Access Control | `ConSurvBackend` (`VideoInformation.ToDTO`, `CameraController`) | critical | confirmed | open |
+| CSV-02 | A01 Broken Access Control | `ConSurvBackend` (`BusinessLogicService`, controllers) | high | confirmed | open |
+| CSV-03 | A01 Broken Access Control | `ConSurvBackend` (`CameraController.GetPreview`) | medium | confirmed | open |
+| CSV-04 | A01 Broken Access Control | `ConSurvBackend` (`UserController.TokenIsValid`) | low | confirmed | open |
+| CSV-05 | A02 Security Misconfiguration | `ConSurv` (`Dockerfile`, nginx-configurations) | critical | confirmed | open |
+| CSV-06 | A02 Security Misconfiguration | `ConSurv` (nginx-configurations) | medium | confirmed | open |
+| CSV-07 | A02 Security Misconfiguration | `ConSurv` (`nginx.conf`) | medium | confirmed | open |
+| CSV-08 | A02 Security Misconfiguration | `ConSurv` (example-deployment) | high | confirmed | open |
+| CSV-09 | A02 Security Misconfiguration | `ConSurv` (`Dockerfile`) | medium | confirmed | open |
+| CSV-10 | A02 Security Misconfiguration | `ConSurvBackend` (`Program.cs`) | low | confirmed | open |
+| CSV-11 | A03 Software Supply Chain Failures | repository (build-pipeline) | high | confirmed | open |
+| CSV-12 | A03 Software Supply Chain Failures | repository (build-pipeline) | medium | confirmed | open |
+| CSV-13 | A03 Software Supply Chain Failures | `ConSurvBackend` (`ConSurvBackend.csproj`) | low | confirmed | open |
+| CSV-14 | A04 Cryptographic Failures | `ConSurvBackend` (`Program.cs`) | high | needs-validation | needs-validation |
+| CSV-15 | A04 Cryptographic Failures | `ConSurvBackend` (database-statements, `VideoInformation`) | high | confirmed | open |
+| CSV-16 | A04 Cryptographic Failures | `ConSurv` (`EntryPoint.sh`) | medium | confirmed | open |
+| CSV-17 | A04 Cryptographic Failures | `ConSurvBackend` (`Program.cs`) | medium | confirmed | open |
+| CSV-18 | A05 Injection | `ConSurvBackend` (`CameraManagementService`, `BusinessLogicService`) | high | confirmed | open |
+| CSV-19 | A05 Injection | `ConSurvBackend` (`RunONVIFCommandVisitor`) | medium | confirmed | open |
+| CSV-20 | A06 Insecure Design | `ConSurvBackend` (`UserController.CreateUser`) | high | confirmed | open |
+| CSV-21 | A06 Insecure Design | `ConSurvBackend` (`RuntimeData`) | medium | confirmed | open |
+| CSV-22 | A06 Insecure Design | `ConSurvBackend` (`BusinessLogicService`, `StreamingController`) | medium | confirmed | open |
+| CSV-23 | A06 Insecure Design | `ConSurvBackend` (media-decoding) | medium | assumption | open |
+| CSV-24 | A07 Authentication Failures | `ConSurvBackend` (`ExampleDataCreator`), `ConSurv` (`EntryPoint.sh`) | critical | confirmed | open |
+| CSV-25 | A07 Authentication Failures | `ConSurvBackend` (`InitializationService`) | critical | confirmed | open |
+| CSV-26 | A07 Authentication Failures | `ConSurvBackend` (`UserController.Login`), `ConSurv` (`nginx.conf`) | high | confirmed | open |
+| CSV-27 | A07 Authentication Failures | `ConSurvFrontend` (`storage.service.ts`) | medium | confirmed | open |
+| CSV-28 | A07 Authentication Failures | `ConSurvBackend` (database-statements) | low | confirmed | open |
+| CSV-29 | A08 Software or Data Integrity Failures | `ConSurvBackend` (`ConSurvBackend.csproj`), `ConSurv` | medium | confirmed | open |
+| CSV-30 | A08 Software or Data Integrity Failures | `ConSurvBackend` (`BusinessLogicService`, `HousekeepingService`) | medium | confirmed | open |
+| CSV-31 | A09 Security Logging and Alerting Failures | `ConSurvBackend` (`UserController.TokenIsValid`) | high | confirmed | open |
+| CSV-32 | A09 Security Logging and Alerting Failures | `ConSurvBackend` (`UserController.Login`) | high | confirmed | open |
+| CSV-33 | A09 Security Logging and Alerting Failures | `ConSurvBackend` (`BusinessLogicService`) | medium | confirmed | open |
+| CSV-34 | A10 Mishandling of Exceptional Conditions | `ConSurvBackend` (`BusinessLogicService`) | high | confirmed | open |
+| CSV-35 | A10 Mishandling of Exceptional Conditions | `ConSurvBackend` (`CameraController`) | medium | confirmed | open |
+| CSV-36 | A10 Mishandling of Exceptional Conditions | `ConSurvBackend` (`BusinessLogicService`, `Program.cs`) | medium | needs-validation | needs-validation |
+| CSV-37 | A10 Mishandling of Exceptional Conditions | `ConSurvBackend` (`UserController.Login`) | low | confirmed | open |
+
+No category of the OWASP Top 10:2025 is without a finding. The following concrete weaknesses were checked and
+are not present: injection into the database (every statement is parameterized), cross-site-scripting in the
+frontend (no unescaped sink exists) and path-traversal in the two paths which build a file-path from a
+request-parameter (both validate and are covered by testcases).
 
 ## Build
 

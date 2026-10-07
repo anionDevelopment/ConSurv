@@ -1,4 +1,4 @@
-﻿namespace ConSurvBackend.Core.Model.RecordStates
+namespace ConSurvBackend.Core.Model.RecordStates
 {
     /// <summary>
     /// Represents the state in which the camera stream is active but no footage is currently being recorded.

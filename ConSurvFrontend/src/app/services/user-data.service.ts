@@ -1,3 +1,4 @@
+import { ThemeService } from './theme.service';
 import { Injectable } from '@angular/core';
 import { UserInformationDTO, UserService } from '../generated/con-surv-backend';
 import { StorageService } from './storage.service';
@@ -9,7 +10,7 @@ import { Observable, first, map, mergeMap, of, switchMap, tap } from 'rxjs';
 export class UserDataService {
   private loaded: boolean = false;
 
-  constructor(private userService: UserService, private storageService: StorageService) {
+  constructor(private userService: UserService, private storageService: StorageService, private themeService: ThemeService) {
   }
 
   loadUserData(): Observable<void> {
@@ -23,6 +24,7 @@ export class UserDataService {
     this.storageService.setAccessToken(null);
     this.storageService.setUserIsAdmin(false);
     this.storageService.setUserIsModerator(false);
+    this.themeService.unloadModeOfUser();
   }
 
   getUserId(): Observable<string> {

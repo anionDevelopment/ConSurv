@@ -1,5 +1,6 @@
 using ConSurvBackend.Core.Model.Base;
 using GRYLibrary.Core.ExecutePrograms;
+using System;
 using System.Collections.Generic;
 
 namespace ConSurvBackend.Core.Model.Internals
@@ -30,41 +31,79 @@ namespace ConSurvBackend.Core.Model.Internals
         /// <summary>The FFmpeg process that pushes the camera stream into the media-hub.</summary>
         public ExternalProgramExecutor StreamToMediaMTXProcess { get; }
 
-        /// <summary>The FFmpeg process that captures preview screenshots from the media-hub.</summary>
-        public ExternalProgramExecutor ScreenshotProcess { get; }
+        /// <summary>
+        /// The moment at which the media-hub and the process which feeds it were started.
+        /// </summary>
+        /// <remarks>
+        /// It tells how long the camera is starting already, which is what distinguishes a camera that only needs a
+        /// moment more from one that never becomes available.
+        /// </remarks>
+        public DateTime MomentOfTheStart { get; }
 
-        /// <summary>The FFmpeg process that produces the HLS (m3u8) stream from the media-hub.</summary>
-        public ExternalProgramExecutor M3U8Process { get; }
+        /// <summary>The FFmpeg process that captures preview screenshots from the media-hub, or <c>null</c> while the camera is still starting.</summary>
+        public ExternalProgramExecutor? ScreenshotProcess { get; private set; }
 
-        /// <summary>The FFmpeg recording process, or <c>null</c> if the camera is not recording continuously.</summary>
-        public ExternalProgramExecutor? RecordProcess { get; }
+        /// <summary>The FFmpeg process that produces the HLS (m3u8) stream from the media-hub, or <c>null</c> while the camera is still starting.</summary>
+        public ExternalProgramExecutor? M3U8Process { get; private set; }
+
+        /// <summary>The FFmpeg recording process, or <c>null</c> if the camera is not recording continuously or is still starting.</summary>
+        public ExternalProgramExecutor? RecordProcess { get; private set; }
 
         /// <summary>
-        /// Initializes a new <see cref="CameraRuntimeInformation"/>.
+        /// Whether the processes which read from the media-hub were started already.
         /// </summary>
-        public CameraRuntimeInformation(Camera camera, ushort port, string mediaMTXURL, ExternalProgramExecutor mediaMTXProcess, ExternalProgramExecutor streamToMediaMTXProcess, ExternalProgramExecutor screenshotProcess, ExternalProgramExecutor m3u8Process, ExternalProgramExecutor? recordProcess)
+        /// <remarks>
+        /// They can only be started once the media-hub really provides the stream, because an FFmpeg which reads
+        /// from a path without a publisher terminates immediately.
+        /// </remarks>
+        public bool ProcessesWhichReadFromTheMediaHubWereStarted => this.ScreenshotProcess is not null;
+
+        /// <summary>
+        /// Initializes a new <see cref="CameraRuntimeInformation"/> with the processes which exist as soon as the
+        /// camera is started. The processes which read from the media-hub are added later by
+        /// <see cref="SetProcessesWhichReadFromTheMediaHub"/>.
+        /// </summary>
+        public CameraRuntimeInformation(Camera camera, ushort port, string mediaMTXURL, ExternalProgramExecutor mediaMTXProcess, ExternalProgramExecutor streamToMediaMTXProcess, DateTime momentOfTheStart)
         {
             this.Camera = camera;
             this.Port = port;
             this.MediaMTXURL = mediaMTXURL;
             this.MediaMTXProcess = mediaMTXProcess;
             this.StreamToMediaMTXProcess = streamToMediaMTXProcess;
+            this.MomentOfTheStart = momentOfTheStart;
+        }
+
+        /// <summary>
+        /// Remembers the processes which read from the media-hub, after they were started.
+        /// </summary>
+        /// <param name="screenshotProcess">The process which captures the preview-screenshots.</param>
+        /// <param name="m3u8Process">The process which produces the HLS-stream.</param>
+        /// <param name="recordProcess">The recording process, or <c>null</c> if the camera does not record continuously.</param>
+        public void SetProcessesWhichReadFromTheMediaHub(ExternalProgramExecutor screenshotProcess, ExternalProgramExecutor m3u8Process, ExternalProgramExecutor? recordProcess)
+        {
             this.ScreenshotProcess = screenshotProcess;
             this.M3U8Process = m3u8Process;
             this.RecordProcess = recordProcess;
         }
 
         /// <summary>
-        /// Enumerates every process that was started for the camera (excluding optional processes that
-        /// were never started, such as the recording process for a non-recording camera).
+        /// Enumerates every process that was started for the camera (excluding processes which were not started,
+        /// such as the recording process for a non-recording camera or the processes which read from the media-hub
+        /// while the camera is still starting).
         /// </summary>
         /// <returns>All started processes belonging to the camera.</returns>
         public IEnumerable<ExternalProgramExecutor> GetAllProcesses()
         {
             yield return this.MediaMTXProcess;
             yield return this.StreamToMediaMTXProcess;
-            yield return this.ScreenshotProcess;
-            yield return this.M3U8Process;
+            if (this.ScreenshotProcess is not null)
+            {
+                yield return this.ScreenshotProcess;
+            }
+            if (this.M3U8Process is not null)
+            {
+                yield return this.M3U8Process;
+            }
             if (this.RecordProcess is not null)
             {
                 yield return this.RecordProcess;
