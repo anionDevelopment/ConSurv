@@ -3,9 +3,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64</RuntimeIdentifiers>
     <Authors>Marius Göcke</Authors>
-    <Version>3.0.36</Version>
-    <AssemblyVersion>3.0.36</AssemblyVersion>
-    <FileVersion>3.0.36</FileVersion>
+    <Version>3.0.37</Version>
+    <AssemblyVersion>3.0.37</AssemblyVersion>
+    <FileVersion>3.0.37</FileVersion>
     <SelfContained>false</SelfContained>
     <IsPackable>false</IsPackable>
     <PreserveCompilationContext>false</PreserveCompilationContext>
@@ -67,7 +67,7 @@
     <PackageReference Include="FFmpeg.AutoGen" Version="[8.0.0.1]" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="[8.16.0]" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="[8.16.0]" />
-    <PackageReference Include="GRYLibrary" Version="[2.1.4]" />
+    <PackageReference Include="GRYLibrary" Version="[2.1.6]" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="[2.3.9]" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="[18.0.1]" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.10]" />
