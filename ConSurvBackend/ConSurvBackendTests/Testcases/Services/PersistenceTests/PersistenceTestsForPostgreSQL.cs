@@ -63,5 +63,12 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             this.Reset();
         }
 
+        [TestMethod(DisplayName = nameof(PersistenceTestsForPostgreSQL) + "." + nameof(UserCanNotDoAdministratorOnlyActionTest))]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.IntegrationTest))]
+        public override void UserCanNotDoAdministratorOnlyActionTest()
+        {
+            this.UserCanNotDoAdministratorOnlyAction();
+        }
+
     }
 }
