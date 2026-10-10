@@ -28,8 +28,8 @@ See the codeunit-specific information:
 
 - [ConSurvBackend](./ConSurvBackend/ReadMe.md)
 - [ConSurvFrontend](./ConSurvFrontend/ReadMe.md)
-- [ConSurvClient](./ConSurvClient/ReadMe.md)
-- [ConSurv](./ConSurvx/ReadMe.md)
+- [ConSurvApp](./ConSurvApp/ReadMe.md)
+- [ConSurv](./ConSurv/ReadMe.md)
 
 ### Run locally
 
@@ -68,7 +68,7 @@ You can now also use the REST-API directly. The graphical API-documentation shou
 
 ## Reference
 
-The OpenDMS-reference can be found [here](./Other/Resources/Reference/Reference.md).
+The ConSurv-reference can be found [here](./Other/Reference/Reference.md).
 
 ## OWASP-Top-10
 
