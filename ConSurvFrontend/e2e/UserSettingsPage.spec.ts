@@ -11,11 +11,11 @@ test.describe('User-settings-page', () => {
      */
     test('looks like the baseline-screenshot in the light color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'light');
-        await expectPageToLookLikeBaseline(page, '/user/settings', 'user-settings-page-light');
+        await expectPageToLookLikeBaseline(page, '/user/settings', 'light_user-settings-page');
     });
 
     test('looks like the baseline-screenshot in the dark color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'dark');
-        await expectPageToLookLikeBaseline(page, '/user/settings', 'user-settings-page-dark');
+        await expectPageToLookLikeBaseline(page, '/user/settings', 'dark_user-settings-page');
     });
 });
