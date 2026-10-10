@@ -18,6 +18,7 @@ model/accessToken.ts
 model/cameraDTO.ts
 model/models.ts
 model/oNVIFCommandDTO.ts
+model/problemDetails.ts
 model/recordModeDTO.ts
 model/recordStateDTO.ts
 model/stringValueDTO.ts

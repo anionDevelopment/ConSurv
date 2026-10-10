@@ -1,6 +1,7 @@
 export * from './accessToken';
 export * from './cameraDTO';
 export * from './oNVIFCommandDTO';
+export * from './problemDetails';
 export * from './recordModeDTO';
 export * from './recordStateDTO';
 export * from './stringValueDTO';

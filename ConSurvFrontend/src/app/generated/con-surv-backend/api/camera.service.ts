@@ -21,6 +21,8 @@ import { CameraDTO } from '../model/cameraDTO';
 // @ts-ignore
 import { ONVIFCommandDTO } from '../model/oNVIFCommandDTO';
 // @ts-ignore
+import { ProblemDetails } from '../model/problemDetails';
+// @ts-ignore
 import { UpdateCameraDTO } from '../model/updateCameraDTO';
 
 // @ts-ignore
