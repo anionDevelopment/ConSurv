@@ -21,7 +21,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   options: any = {}
   information: string = "";
-  constructor(private activatedRoute: ActivatedRoute, private cameraService: CameraService, private storgeService: StorageService, private streamingService: StreamingService, private configurationService: ConfigurationService) {
+  constructor(private activatedRoute: ActivatedRoute, private cameraService: CameraService, private storageService: StorageService, private streamingService: StreamingService, private configurationService: ConfigurationService) {
   }
 
   ngOnDestroy(): void {
@@ -31,7 +31,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const accessToken: string = this.storgeService.getAccessToken();
+    const accessToken: string = this.storageService.getAccessToken();
     (videojs as any).Vhs.xhr.beforeRequest = function (options: any) {
       options.headers = options.headers || {};
       options.headers['X-AccessToken'] = accessToken;
@@ -40,7 +40,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.pipe(
       switchMap(params => {
         if (params["cameraId"]) {
-          return this.cameraService.aPIV3CameraControllerCameraCameraIdGet(params["cameraId"], this.storgeService.getAccessToken());
+          return this.cameraService.aPIV3CameraControllerCameraCameraIdGet(params["cameraId"], this.storageService.getAccessToken());
         } else {
           return of(null);
         }
@@ -75,7 +75,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     if (!this.camera?.cameraId) { return; }
     this.cameraService.aPIV3CameraControllerRunONVIFCommandCameraIdPost(
       this.camera.cameraId,
-      this.storgeService.getAccessToken(),
+      this.storageService.getAccessToken(),
       { commandType, direction }
     ).pipe(takeUntil(this.destroy$)).subscribe();
   }

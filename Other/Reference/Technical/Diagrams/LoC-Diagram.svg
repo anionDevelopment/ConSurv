@@ -1,237 +1,255 @@
 <?xml version='1.0' encoding='utf-8'?>
-<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" version="1.1" class="marks" width="920" height="586" viewBox="0 0 920 586">
-  <ns0:rect width="920" height="586" fill="white" />
-  <ns0:g fill="none" stroke-miterlimit="4" transform="translate(111,10)">
-    <ns0:g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container">
-      <ns0:g transform="translate(0,0)">
-        <ns0:path class="background" aria-hidden="true" d="M0.5,0.5h800v400h-800Z" stroke="#ddd" />
-        <ns0:g>
-          <ns0:g class="mark-group role-axis" aria-hidden="true">
-            <ns0:g transform="translate(0.5,400.5)">
-              <ns0:path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
-              <ns0:g>
-                <ns0:g class="mark-rule role-axis-grid" pointer-events="none">
-                  <ns0:line transform="translate(36,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(148,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(249,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(361,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(469,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(581,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(690,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
-                </ns0:g>
-              </ns0:g>
-              <ns0:path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
-            </ns0:g>
-          </ns0:g>
-          <ns0:g class="mark-group role-axis" aria-hidden="true">
-            <ns0:g transform="translate(0.5,0.5)">
-              <ns0:path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
-              <ns0:g>
-                <ns0:g class="mark-rule role-axis-grid" pointer-events="none">
-                  <ns0:line transform="translate(0,400)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,350)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,300)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,250)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,200)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,150)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,100)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,50)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,0)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
-                </ns0:g>
-              </ns0:g>
-              <ns0:path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
-            </ns0:g>
-          </ns0:g>
-          <ns0:g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis titled 'Date' for a utc scale with values from 2025-12-22 02:31:40 (UTC) to 2026-07-31 12:41:47 (UTC)">
-            <ns0:g transform="translate(0.5,400.5)">
-              <ns0:path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
-              <ns0:g>
-                <ns0:g class="mark-rule role-axis-tick" pointer-events="none">
-                  <ns0:line transform="translate(36,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(148,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(249,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(361,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(469,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(581,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(690,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
-                </ns0:g>
-                <ns0:g class="mark-text role-axis-label" pointer-events="none">
-                  <ns0:text text-anchor="end" transform="translate(35.7492943262213,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-01-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(147.7517623614899,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-02-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(248.91528187721642,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-03-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(360.917749912485,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-04-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(469.30723510790625,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-05-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(581.3097031431748,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-06-01 00:00:00 (UTC)</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(689.6991883385961,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-07-01 00:00:00 (UTC)</ns0:text>
-                </ns0:g>
-                <ns0:g class="mark-rule role-axis-domain" pointer-events="none">
-                  <ns0:line transform="translate(0,0)" x2="800" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                </ns0:g>
-                <ns0:g class="mark-text role-axis-title" pointer-events="none">
-                  <ns0:text text-anchor="middle" transform="translate(400,168.49242404917504)" font-family="sans-serif" font-size="11px" font-weight="bold" fill="#000" opacity="1">Date</ns0:text>
-                </ns0:g>
-              </ns0:g>
-              <ns0:path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
-            </ns0:g>
-          </ns0:g>
-          <ns0:g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis titled 'Lines of Code' for a linear scale with values from 0 to 40,000">
-            <ns0:g transform="translate(0.5,0.5)">
-              <ns0:path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
-              <ns0:g>
-                <ns0:g class="mark-rule role-axis-tick" pointer-events="none">
-                  <ns0:line transform="translate(0,400)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,350)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,300)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,250)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,200)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,150)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,100)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,50)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                  <ns0:line transform="translate(0,0)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
-                </ns0:g>
-                <ns0:g class="mark-text role-axis-label" pointer-events="none">
-                  <ns0:text text-anchor="end" transform="translate(-7,403)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">0</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,353)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">5,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,303)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">10,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,253)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">15,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,203)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">20,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,153)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">25,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,103)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">30,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,53)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">35,000</ns0:text>
-                  <ns0:text text-anchor="end" transform="translate(-7,3)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">40,000</ns0:text>
-                </ns0:g>
-                <ns0:g class="mark-rule role-axis-domain" pointer-events="none">
-                  <ns0:line transform="translate(0,400)" x2="0" y2="-400" stroke="#888" stroke-width="1" opacity="1" />
-                </ns0:g>
-                <ns0:g class="mark-text role-axis-title" pointer-events="none">
-                  <ns0:text text-anchor="middle" transform="translate(-59,200) rotate(-90) translate(0,-2)" font-family="sans-serif" font-size="11px" font-weight="bold" fill="#000" opacity="1">Lines of Code</ns0:text>
-                </ns0:g>
-              </ns0:g>
-              <ns0:path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
-            </ns0:g>
-          </ns0:g>
-          <ns0:g class="mark-line role-mark layer_0_marks" role="graphics-object" aria-roledescription="line mark container">
-            <ns0:path aria-label="Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2" role="graphics-symbol" aria-roledescription="line mark" d="M0,51.37L5.778,51.29L17.759,51.13L39.427,50.94L50.158,50.84L67.973,50.84L70.889,50.84L78.264,50.84L79.282,50.58L125.77,50.55L176.453,50.46L186.959,50.64L285.034,46.5L298.913,46.5L309.998,46.33L335.773,46.28L339.264,46.27L349.126,46.9L349.974,46.47L367.688,46.75L369.37,46.75L386.268,46.77L389.552,46.77L410.668,46.77L417.726,46.77L436.512,34.55L465.436,33.43L482.527,31.59L490.667,29.51L497.763,20.35L554.156,16.87L575.332,16.52L683.675,13.45L684.268,13.45L734.425,10.38L764.6,10.47L788.556,10.43L800,9.49" stroke="#4c78a8" stroke-width="2" />
-          </ns0:g>
-          <ns0:g class="mark-symbol role-mark layer_1_marks" role="graphics-object" aria-roledescription="symbol mark container">
-            <ns0:path aria-label="Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2" role="graphics-symbol" aria-roledescription="point" transform="translate(0,51.370000000000005)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2025-12-23 16:54:32 (UTC); Lines of Code: 34871; Version: v2.0.3" role="graphics-symbol" aria-roledescription="point" transform="translate(5.77792899244666,51.29000000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2025-12-23 16:54:32 (UTC); Lines of Code: 34871; Version: v2.0.3</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2025-12-27 00:29:35 (UTC); Lines of Code: 34887; Version: v2.0.4" role="graphics-symbol" aria-roledescription="point" transform="translate(17.758605179539163,51.12999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2025-12-27 00:29:35 (UTC); Lines of Code: 34887; Version: v2.0.4</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-02 00:25:48 (UTC); Lines of Code: 34906; Version: v2.0.5" role="graphics-symbol" aria-roledescription="point" transform="translate(39.427009775282606,50.93999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-02 00:25:48 (UTC); Lines of Code: 34906; Version: v2.0.5</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-04 23:42:36 (UTC); Lines of Code: 34916; Version: v2.0.6" role="graphics-symbol" aria-roledescription="point" transform="translate(50.1575688096293,50.839999999999996)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-04 23:42:36 (UTC); Lines of Code: 34916; Version: v2.0.6</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-09 22:03:19 (UTC); Lines of Code: 34916; Version: v3.0.0" role="graphics-symbol" aria-roledescription="point" transform="translate(67.9733795507994,50.839999999999996)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-09 22:03:19 (UTC); Lines of Code: 34916; Version: v3.0.0</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-10 17:25:23 (UTC); Lines of Code: 34916; Version: v3.0.1" role="graphics-symbol" aria-roledescription="point" transform="translate(70.8890232490114,50.839999999999996)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-10 17:25:23 (UTC); Lines of Code: 34916; Version: v3.0.1</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-12 18:24:51 (UTC); Lines of Code: 34916; Version: v3.0.2" role="graphics-symbol" aria-roledescription="point" transform="translate(78.26419173857393,50.839999999999996)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-12 18:24:51 (UTC); Lines of Code: 34916; Version: v3.0.2</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-13 01:10:25 (UTC); Lines of Code: 34942; Version: v3.0.3" role="graphics-symbol" aria-roledescription="point" transform="translate(79.28176493793558,50.579999999999984)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-13 01:10:25 (UTC); Lines of Code: 34942; Version: v3.0.3</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-01-25 21:59:01 (UTC); Lines of Code: 34945; Version: v3.0.4" role="graphics-symbol" aria-roledescription="point" transform="translate(125.77031622015507,50.550000000000004)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-01-25 21:59:01 (UTC); Lines of Code: 34945; Version: v3.0.4</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-02-08 22:39:18 (UTC); Lines of Code: 34954; Version: v3.0.5" role="graphics-symbol" aria-roledescription="point" transform="translate(176.4531475002858,50.459999999999994)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-02-08 22:39:18 (UTC); Lines of Code: 34954; Version: v3.0.5</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-02-11 20:26:28 (UTC); Lines of Code: 34936; Version: v3.0.6" role="graphics-symbol" aria-roledescription="point" transform="translate(186.9588150796244,50.640000000000015)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-02-11 20:26:28 (UTC); Lines of Code: 34936; Version: v3.0.6</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-10 23:55:24 (UTC); Lines of Code: 35350; Version: v3.0.7" role="graphics-symbol" aria-roledescription="point" transform="translate(285.0335688027295,46.499999999999986)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-10 23:55:24 (UTC); Lines of Code: 35350; Version: v3.0.7</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-14 20:07:17 (UTC); Lines of Code: 35350; Version: v3.0.8" role="graphics-symbol" aria-roledescription="point" transform="translate(298.9131518272927,46.499999999999986)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-14 20:07:17 (UTC); Lines of Code: 35350; Version: v3.0.8</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-17 21:45:12 (UTC); Lines of Code: 35367; Version: v3.0.9" role="graphics-symbol" aria-roledescription="point" transform="translate(309.99777481655826,46.329999999999984)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-17 21:45:12 (UTC); Lines of Code: 35367; Version: v3.0.9</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-25 00:58:12 (UTC); Lines of Code: 35372; Version: v3.0.10" role="graphics-symbol" aria-roledescription="point" transform="translate(335.7728947566639,46.28000000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-25 00:58:12 (UTC); Lines of Code: 35372; Version: v3.0.10</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-26 00:09:44 (UTC); Lines of Code: 35373; Version: v3.0.11" role="graphics-symbol" aria-roledescription="point" transform="translate(339.26427396111455,46.26999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-26 00:09:44 (UTC); Lines of Code: 35373; Version: v3.0.11</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-28 17:40:07 (UTC); Lines of Code: 35310; Version: v3.0.13" role="graphics-symbol" aria-roledescription="point" transform="translate(349.12566808427806,46.899999999999984)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-28 17:40:07 (UTC); Lines of Code: 35310; Version: v3.0.13</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-03-28 23:18:10 (UTC); Lines of Code: 35353; Version: v3.0.14" role="graphics-symbol" aria-roledescription="point" transform="translate(349.97384089609085,46.47000000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-03-28 23:18:10 (UTC); Lines of Code: 35353; Version: v3.0.14</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-02 20:58:19 (UTC); Lines of Code: 35325; Version: v3.0.15" role="graphics-symbol" aria-roledescription="point" transform="translate(367.6878692271661,46.74999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-02 20:58:19 (UTC); Lines of Code: 35325; Version: v3.0.15</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-03 08:08:38 (UTC); Lines of Code: 35325; Version: v3.0.16" role="graphics-symbol" aria-roledescription="point" transform="translate(369.3697043757289,46.74999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-03 08:08:38 (UTC); Lines of Code: 35325; Version: v3.0.16</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-08 00:23:33 (UTC); Lines of Code: 35323; Version: v3.0.17" role="graphics-symbol" aria-roledescription="point" transform="translate(386.2677171149433,46.76999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-08 00:23:33 (UTC); Lines of Code: 35323; Version: v3.0.17</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-08 22:12:41 (UTC); Lines of Code: 35323; Version: v3.0.18" role="graphics-symbol" aria-roledescription="point" transform="translate(389.55235341244713,46.76999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-08 22:12:41 (UTC); Lines of Code: 35323; Version: v3.0.18</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-14 18:28:27 (UTC); Lines of Code: 35323; Version: v3.0.19" role="graphics-symbol" aria-roledescription="point" transform="translate(410.667645461632,46.76999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-14 18:28:27 (UTC); Lines of Code: 35323; Version: v3.0.19</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-16 17:21:39 (UTC); Lines of Code: 35323; Version: v3.0.20" role="graphics-symbol" aria-roledescription="point" transform="translate(417.7260088818116,46.76999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-16 17:21:39 (UTC); Lines of Code: 35323; Version: v3.0.20</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-21 22:09:03 (UTC); Lines of Code: 36545; Version: v3.0.21" role="graphics-symbol" aria-roledescription="point" transform="translate(436.5120142395013,34.54999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-21 22:09:03 (UTC); Lines of Code: 36545; Version: v3.0.21</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-04-29 22:16:58 (UTC); Lines of Code: 36657; Version: v3.0.22" role="graphics-symbol" aria-roledescription="point" transform="translate(465.4357400005133,33.42999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-04-29 22:16:58 (UTC); Lines of Code: 36657; Version: v3.0.22</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-05-04 15:48:43 (UTC); Lines of Code: 36841; Version: v3.0.23" role="graphics-symbol" aria-roledescription="point" transform="translate(482.52652879171495,31.590000000000007)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-05-04 15:48:43 (UTC); Lines of Code: 36841; Version: v3.0.23</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-05-06 21:53:11 (UTC); Lines of Code: 37049; Version: v3.0.24" role="graphics-symbol" aria-roledescription="point" transform="translate(490.66694711888397,29.510000000000012)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-05-06 21:53:11 (UTC); Lines of Code: 37049; Version: v3.0.24</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-05-08 21:01:29 (UTC); Lines of Code: 37965; Version: v3.0.25" role="graphics-symbol" aria-roledescription="point" transform="translate(497.7631966785648,20.35)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-05-08 21:01:29 (UTC); Lines of Code: 37965; Version: v3.0.25</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-05-24 11:37:34 (UTC); Lines of Code: 38313; Version: v3.0.26" role="graphics-symbol" aria-roledescription="point" transform="translate(554.1560462551711,16.869999999999983)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-05-24 11:37:34 (UTC); Lines of Code: 38313; Version: v3.0.26</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-05-30 08:17:24 (UTC); Lines of Code: 38348; Version: v3.0.27" role="graphics-symbol" aria-roledescription="point" transform="translate(575.331721952744,16.520000000000003)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-05-30 08:17:24 (UTC); Lines of Code: 38348; Version: v3.0.27</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-06-29 07:59:03 (UTC); Lines of Code: 38655; Version: v3.0.29" role="graphics-symbol" aria-roledescription="point" transform="translate(683.6751667071159,13.450000000000006)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-06-29 07:59:03 (UTC); Lines of Code: 38655; Version: v3.0.29</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-06-29 11:55:15 (UTC); Lines of Code: 38655; Version: v3.0.30" role="graphics-symbol" aria-roledescription="point" transform="translate(684.2677962534852,13.450000000000006)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-06-29 11:55:15 (UTC); Lines of Code: 38655; Version: v3.0.30</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-07-13 09:06:11 (UTC); Lines of Code: 38962; Version: v3.0.31" role="graphics-symbol" aria-roledescription="point" transform="translate(734.4253650631146,10.380000000000011)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-07-13 09:06:11 (UTC); Lines of Code: 38962; Version: v3.0.31</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-07-21 17:32:40 (UTC); Lines of Code: 38953; Version: v3.0.32" role="graphics-symbol" aria-roledescription="point" transform="translate(764.6000024985616,10.46999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-07-21 17:32:40 (UTC); Lines of Code: 38953; Version: v3.0.32</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-07-28 08:40:35 (UTC); Lines of Code: 38957; Version: v3.0.33" role="graphics-symbol" aria-roledescription="point" transform="translate(788.5558768547835,10.429999999999984)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-07-28 08:40:35 (UTC); Lines of Code: 38957; Version: v3.0.33</ns0:title>
-            </ns0:path>
-            <ns0:path aria-label="Date: 2026-07-31 12:41:47 (UTC); Lines of Code: 39051; Version: v3.0.34" role="graphics-symbol" aria-roledescription="point" transform="translate(800,9.489999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
-              <ns0:title>Date: 2026-07-31 12:41:47 (UTC); Lines of Code: 39051; Version: v3.0.34</ns0:title>
-            </ns0:path>
-          </ns0:g>
-        </ns0:g>
-        <ns0:path class="foreground" aria-hidden="true" d="" display="none" />
-      </ns0:g>
-    </ns0:g>
-  </ns0:g>
-</ns0:svg>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="marks" width="929" height="586" viewBox="0 0 929 586">
+  <rect width="929" height="586" fill="white" />
+  <g fill="none" stroke-miterlimit="4" transform="translate(120,10)">
+    <g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container">
+      <g transform="translate(0,0)">
+        <path class="background" aria-hidden="true" d="M0.5,0.5h800v400h-800Z" stroke="#ddd" />
+        <g>
+          <g class="mark-group role-axis" aria-hidden="true">
+            <g transform="translate(0.5,400.5)">
+              <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
+              <g>
+                <g class="mark-rule role-axis-grid" pointer-events="none">
+                  <line transform="translate(27,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(112,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(188,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(273,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(355,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(439,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(521,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(606,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(691,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(773,-400)" x2="0" y2="400" stroke="#ddd" stroke-width="1" opacity="1" />
+                </g>
+              </g>
+              <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
+            </g>
+          </g>
+          <g class="mark-group role-axis" aria-hidden="true">
+            <g transform="translate(0.5,0.5)">
+              <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
+              <g>
+                <g class="mark-rule role-axis-grid" pointer-events="none">
+                  <line transform="translate(0,400)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,360)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,320)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,280)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,240)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,200)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,160)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,120)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,80)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,40)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,0)" x2="800" y2="0" stroke="#ddd" stroke-width="1" opacity="1" />
+                </g>
+              </g>
+              <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
+            </g>
+          </g>
+          <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis titled 'Date' for a utc scale with values from 2025-12-22 02:31:40 (UTC) to 2026-10-11 01:26:43 (UTC)">
+            <g transform="translate(0.5,400.5)">
+              <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
+              <g>
+                <g class="mark-rule role-axis-tick" pointer-events="none">
+                  <line transform="translate(27,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(112,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(188,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(273,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(355,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(439,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(521,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(606,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(691,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(773,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1" />
+                </g>
+                <g class="mark-text role-axis-label" pointer-events="none">
+                  <text text-anchor="end" transform="translate(27.02033949022696,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-01-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(111.67500938217208,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-02-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(188.13729186521925,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-03-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(272.79196175716436,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-04-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(354.71583584614353,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-05-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(439.37050573808864,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-06-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(521.2943798270678,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-07-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(605.9490497190128,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-08-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(690.603719610958,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">2026-09-01 00:00:00 (UTC)</text>
+                  <text text-anchor="end" transform="translate(772.5275936999371,7) rotate(315) translate(0,8)" font-family="sans-serif" font-size="10px" fill="#000" opacity="0">2026-10-01 00:00:00 (UTC)</text>
+                </g>
+                <g class="mark-rule role-axis-domain" pointer-events="none">
+                  <line transform="translate(0,0)" x2="800" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                </g>
+                <g class="mark-text role-axis-title" pointer-events="none">
+                  <text text-anchor="middle" transform="translate(400,168.49242404917504)" font-family="sans-serif" font-size="11px" font-weight="bold" fill="#000" opacity="1">Date</text>
+                </g>
+              </g>
+              <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
+            </g>
+          </g>
+          <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis titled 'Lines of Code' for a linear scale with values from 0 to 50,000">
+            <g transform="translate(0.5,0.5)">
+              <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none" />
+              <g>
+                <g class="mark-rule role-axis-tick" pointer-events="none">
+                  <line transform="translate(0,400)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,360)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,320)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,280)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,240)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,200)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,160)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,120)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,80)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,40)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                  <line transform="translate(0,0)" x2="-5" y2="0" stroke="#888" stroke-width="1" opacity="1" />
+                </g>
+                <g class="mark-text role-axis-label" pointer-events="none">
+                  <text text-anchor="end" transform="translate(-7,403)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">0</text>
+                  <text text-anchor="end" transform="translate(-7,363)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">5,000</text>
+                  <text text-anchor="end" transform="translate(-7,323)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">10,000</text>
+                  <text text-anchor="end" transform="translate(-7,283)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">15,000</text>
+                  <text text-anchor="end" transform="translate(-7,243)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">20,000</text>
+                  <text text-anchor="end" transform="translate(-7,203)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">25,000</text>
+                  <text text-anchor="end" transform="translate(-7,163)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">30,000</text>
+                  <text text-anchor="end" transform="translate(-7,123.00000000000001)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">35,000</text>
+                  <text text-anchor="end" transform="translate(-7,82.99999999999999)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">40,000</text>
+                  <text text-anchor="end" transform="translate(-7,42.99999999999999)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">45,000</text>
+                  <text text-anchor="end" transform="translate(-7,3)" font-family="sans-serif" font-size="10px" fill="#000" opacity="1">50,000</text>
+                </g>
+                <g class="mark-rule role-axis-domain" pointer-events="none">
+                  <line transform="translate(0,400)" x2="0" y2="-400" stroke="#888" stroke-width="1" opacity="1" />
+                </g>
+                <g class="mark-text role-axis-title" pointer-events="none">
+                  <text text-anchor="middle" transform="translate(-59,200) rotate(-90) translate(0,-2)" font-family="sans-serif" font-size="11px" font-weight="bold" fill="#000" opacity="1">Lines of Code</text>
+                </g>
+              </g>
+              <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none" />
+            </g>
+          </g>
+          <g class="mark-line role-mark layer_0_marks" role="graphics-object" aria-roledescription="line mark container">
+            <path aria-label="Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2" role="graphics-symbol" aria-roledescription="line mark" d="M0,121.096L4.367,121.032L13.422,120.904L29.8,120.752L37.911,120.672L51.376,120.672L53.58,120.672L59.154,120.672L59.923,120.464L95.061,120.44L133.368,120.368L141.309,120.512L215.437,117.2L225.927,117.2L234.305,117.064L253.787,117.024L256.426,117.016L263.879,117.52L264.52,117.176L277.909,117.4L279.18,117.4L291.952,117.416L294.435,117.416L310.394,117.416L315.729,117.416L329.928,107.64L351.79,106.744L364.707,105.272L370.86,103.608L376.224,96.28L418.847,93.496L434.852,93.216L516.741,90.76L517.189,90.76L555.1,88.304L577.907,88.376L596.013,88.344L604.663,87.592L800,36.488" stroke="#4c78a8" stroke-width="2" />
+          </g>
+          <g class="mark-symbol role-mark layer_1_marks" role="graphics-object" aria-roledescription="symbol mark container">
+            <path aria-label="Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2" role="graphics-symbol" aria-roledescription="point" transform="translate(0,121.096)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2025-12-22 02:31:40 (UTC); Lines of Code: 34863; Version: v2.0.2</title>
+            </path>
+            <path aria-label="Date: 2025-12-23 16:54:32 (UTC); Lines of Code: 34871; Version: v2.0.3" role="graphics-symbol" aria-roledescription="point" transform="translate(4.367124047308034,121.03199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2025-12-23 16:54:32 (UTC); Lines of Code: 34871; Version: v2.0.3</title>
+            </path>
+            <path aria-label="Date: 2025-12-27 00:29:35 (UTC); Lines of Code: 34887; Version: v2.0.4" role="graphics-symbol" aria-roledescription="point" transform="translate(13.42246189380294,120.904)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2025-12-27 00:29:35 (UTC); Lines of Code: 34887; Version: v2.0.4</title>
+            </path>
+            <path aria-label="Date: 2026-01-02 00:25:48 (UTC); Lines of Code: 34906; Version: v2.0.5" role="graphics-symbol" aria-roledescription="point" transform="translate(29.8000620513294,120.75200000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-02 00:25:48 (UTC); Lines of Code: 34906; Version: v2.0.5</title>
+            </path>
+            <path aria-label="Date: 2026-01-04 23:42:36 (UTC); Lines of Code: 34916; Version: v2.0.6" role="graphics-symbol" aria-roledescription="point" transform="translate(37.910525586138334,120.67199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-04 23:42:36 (UTC); Lines of Code: 34916; Version: v2.0.6</title>
+            </path>
+            <path aria-label="Date: 2026-01-09 22:03:19 (UTC); Lines of Code: 34916; Version: v3.0.0" role="graphics-symbol" aria-roledescription="point" transform="translate(51.3762250801549,120.67199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-09 22:03:19 (UTC); Lines of Code: 34916; Version: v3.0.0</title>
+            </path>
+            <path aria-label="Date: 2026-01-10 17:25:23 (UTC); Lines of Code: 34916; Version: v3.0.1" role="graphics-symbol" aria-roledescription="point" transform="translate(53.57995200800212,120.67199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-10 17:25:23 (UTC); Lines of Code: 34916; Version: v3.0.1</title>
+            </path>
+            <path aria-label="Date: 2026-01-12 18:24:51 (UTC); Lines of Code: 34916; Version: v3.0.2" role="graphics-symbol" aria-roledescription="point" transform="translate(59.15431536653802,120.67199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-12 18:24:51 (UTC); Lines of Code: 34916; Version: v3.0.2</title>
+            </path>
+            <path aria-label="Date: 2026-01-13 01:10:25 (UTC); Lines of Code: 34942; Version: v3.0.3" role="graphics-symbol" aria-roledescription="point" transform="translate(59.923426304840966,120.464)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-13 01:10:25 (UTC); Lines of Code: 34942; Version: v3.0.3</title>
+            </path>
+            <path aria-label="Date: 2026-01-25 21:59:01 (UTC); Lines of Code: 34945; Version: v3.0.4" role="graphics-symbol" aria-roledescription="point" transform="translate(95.06080346792103,120.44000000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-01-25 21:59:01 (UTC); Lines of Code: 34945; Version: v3.0.4</title>
+            </path>
+            <path aria-label="Date: 2026-02-08 22:39:18 (UTC); Lines of Code: 34954; Version: v3.0.5" role="graphics-symbol" aria-roledescription="point" transform="translate(133.36833745777528,120.36799999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-02-08 22:39:18 (UTC); Lines of Code: 34954; Version: v3.0.5</title>
+            </path>
+            <path aria-label="Date: 2026-02-11 20:26:28 (UTC); Lines of Code: 34936; Version: v3.0.6" role="graphics-symbol" aria-roledescription="point" transform="translate(141.30882159642275,120.512)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-02-11 20:26:28 (UTC); Lines of Code: 34936; Version: v3.0.6</title>
+            </path>
+            <path aria-label="Date: 2026-03-10 23:55:24 (UTC); Lines of Code: 35350; Version: v3.0.7" role="graphics-symbol" aria-roledescription="point" transform="translate(215.4365265193973,117.20000000000002)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-10 23:55:24 (UTC); Lines of Code: 35350; Version: v3.0.7</title>
+            </path>
+            <path aria-label="Date: 2026-03-14 20:07:17 (UTC); Lines of Code: 35350; Version: v3.0.8" role="graphics-symbol" aria-roledescription="point" transform="translate(225.92711248409455,117.20000000000002)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-14 20:07:17 (UTC); Lines of Code: 35350; Version: v3.0.8</title>
+            </path>
+            <path aria-label="Date: 2026-03-17 21:45:12 (UTC); Lines of Code: 35367; Version: v3.0.9" role="graphics-symbol" aria-roledescription="point" transform="translate(234.3051876863076,117.06400000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-17 21:45:12 (UTC); Lines of Code: 35367; Version: v3.0.9</title>
+            </path>
+            <path aria-label="Date: 2026-03-25 00:58:12 (UTC); Lines of Code: 35372; Version: v3.0.10" role="graphics-symbol" aria-roledescription="point" transform="translate(253.78676080010578,117.02400000000002)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-25 00:58:12 (UTC); Lines of Code: 35372; Version: v3.0.10</title>
+            </path>
+            <path aria-label="Date: 2026-03-26 00:09:44 (UTC); Lines of Code: 35373; Version: v3.0.11" role="graphics-symbol" aria-roledescription="point" transform="translate(256.4256450961849,117.016)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-26 00:09:44 (UTC); Lines of Code: 35373; Version: v3.0.11</title>
+            </path>
+            <path aria-label="Date: 2026-03-28 17:40:07 (UTC); Lines of Code: 35310; Version: v3.0.13" role="graphics-symbol" aria-roledescription="point" transform="translate(263.8791689230697,117.51999999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-28 17:40:07 (UTC); Lines of Code: 35310; Version: v3.0.13</title>
+            </path>
+            <path aria-label="Date: 2026-03-28 23:18:10 (UTC); Lines of Code: 35353; Version: v3.0.14" role="graphics-symbol" aria-roledescription="point" transform="translate(264.52024220167567,117.17599999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-03-28 23:18:10 (UTC); Lines of Code: 35353; Version: v3.0.14</title>
+            </path>
+            <path aria-label="Date: 2026-04-02 20:58:19 (UTC); Lines of Code: 35325; Version: v3.0.15" role="graphics-symbol" aria-roledescription="point" transform="translate(277.9090116380022,117.39999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-02 20:58:19 (UTC); Lines of Code: 35325; Version: v3.0.15</title>
+            </path>
+            <path aria-label="Date: 2026-04-03 08:08:38 (UTC); Lines of Code: 35325; Version: v3.0.16" role="graphics-symbol" aria-roledescription="point" transform="translate(279.1801907629963,117.39999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-03 08:08:38 (UTC); Lines of Code: 35325; Version: v3.0.16</title>
+            </path>
+            <path aria-label="Date: 2026-04-08 00:23:33 (UTC); Lines of Code: 35323; Version: v3.0.17" role="graphics-symbol" aria-roledescription="point" transform="translate(291.95219226762055,117.41600000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-08 00:23:33 (UTC); Lines of Code: 35323; Version: v3.0.17</title>
+            </path>
+            <path aria-label="Date: 2026-04-08 22:12:41 (UTC); Lines of Code: 35323; Version: v3.0.18" role="graphics-symbol" aria-roledescription="point" transform="translate(294.4348143594188,117.41600000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-08 22:12:41 (UTC); Lines of Code: 35323; Version: v3.0.18</title>
+            </path>
+            <path aria-label="Date: 2026-04-14 18:28:27 (UTC); Lines of Code: 35323; Version: v3.0.19" role="graphics-symbol" aria-roledescription="point" transform="translate(310.39435622891483,117.41600000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-14 18:28:27 (UTC); Lines of Code: 35323; Version: v3.0.19</title>
+            </path>
+            <path aria-label="Date: 2026-04-16 17:21:39 (UTC); Lines of Code: 35323; Version: v3.0.20" role="graphics-symbol" aria-roledescription="point" transform="translate(315.7292692517647,117.41600000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-16 17:21:39 (UTC); Lines of Code: 35323; Version: v3.0.20</title>
+            </path>
+            <path aria-label="Date: 2026-04-21 22:09:03 (UTC); Lines of Code: 36545; Version: v3.0.21" role="graphics-symbol" aria-roledescription="point" transform="translate(329.92826959560324,107.64)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-21 22:09:03 (UTC); Lines of Code: 36545; Version: v3.0.21</title>
+            </path>
+            <path aria-label="Date: 2026-04-29 22:16:58 (UTC); Lines of Code: 36657; Version: v3.0.22" role="graphics-symbol" aria-roledescription="point" transform="translate(351.7896490749607,106.744)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-04-29 22:16:58 (UTC); Lines of Code: 36657; Version: v3.0.22</title>
+            </path>
+            <path aria-label="Date: 2026-05-04 15:48:43 (UTC); Lines of Code: 36841; Version: v3.0.23" role="graphics-symbol" aria-roledescription="point" transform="translate(364.7073562352756,105.27199999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-05-04 15:48:43 (UTC); Lines of Code: 36841; Version: v3.0.23</title>
+            </path>
+            <path aria-label="Date: 2026-05-06 21:53:11 (UTC); Lines of Code: 37049; Version: v3.0.24" role="graphics-symbol" aria-roledescription="point" transform="translate(370.8601173159675,103.608)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-05-06 21:53:11 (UTC); Lines of Code: 37049; Version: v3.0.24</title>
+            </path>
+            <path aria-label="Date: 2026-05-08 21:01:29 (UTC); Lines of Code: 37965; Version: v3.0.25" role="graphics-symbol" aria-roledescription="point" transform="translate(376.2236657670291,96.28000000000002)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-05-08 21:01:29 (UTC); Lines of Code: 37965; Version: v3.0.25</title>
+            </path>
+            <path aria-label="Date: 2026-05-24 11:37:34 (UTC); Lines of Code: 38313; Version: v3.0.26" role="graphics-symbol" aria-roledescription="point" transform="translate(418.8469949571541,93.49599999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-05-24 11:37:34 (UTC); Lines of Code: 38313; Version: v3.0.26</title>
+            </path>
+            <path aria-label="Date: 2026-05-30 08:17:24 (UTC); Lines of Code: 38348; Version: v3.0.27" role="graphics-symbol" aria-roledescription="point" transform="translate(434.85217651576454,93.21600000000001)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-05-30 08:17:24 (UTC); Lines of Code: 38348; Version: v3.0.27</title>
+            </path>
+            <path aria-label="Date: 2026-06-29 07:59:03 (UTC); Lines of Code: 38655; Version: v3.0.29" role="graphics-symbol" aria-roledescription="point" transform="translate(516.7412519221156,90.75999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-06-29 07:59:03 (UTC); Lines of Code: 38655; Version: v3.0.29</title>
+            </path>
+            <path aria-label="Date: 2026-06-29 11:55:15 (UTC); Lines of Code: 38655; Version: v3.0.30" role="graphics-symbol" aria-roledescription="point" transform="translate(517.189178289241,90.75999999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-06-29 11:55:15 (UTC); Lines of Code: 38655; Version: v3.0.30</title>
+            </path>
+            <path aria-label="Date: 2026-07-13 09:06:11 (UTC); Lines of Code: 38962; Version: v3.0.31" role="graphics-symbol" aria-roledescription="point" transform="translate(555.0997038753793,88.30399999999999)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-07-13 09:06:11 (UTC); Lines of Code: 38962; Version: v3.0.31</title>
+            </path>
+            <path aria-label="Date: 2026-07-21 17:32:40 (UTC); Lines of Code: 38953; Version: v3.0.32" role="graphics-symbol" aria-roledescription="point" transform="translate(577.906558188648,88.376)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-07-21 17:32:40 (UTC); Lines of Code: 38953; Version: v3.0.32</title>
+            </path>
+            <path aria-label="Date: 2026-07-28 08:40:35 (UTC); Lines of Code: 38957; Version: v3.0.33" role="graphics-symbol" aria-roledescription="point" transform="translate(596.0130934389273,88.34399999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-07-28 08:40:35 (UTC); Lines of Code: 38957; Version: v3.0.33</title>
+            </path>
+            <path aria-label="Date: 2026-07-31 12:41:47 (UTC); Lines of Code: 39051; Version: v3.0.34" role="graphics-symbol" aria-roledescription="point" transform="translate(604.662889144822,87.59199999999998)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-07-31 12:41:47 (UTC); Lines of Code: 39051; Version: v3.0.34</title>
+            </path>
+            <path aria-label="Date: 2026-10-11 01:26:43 (UTC); Lines of Code: 45439; Version: v3.0.37" role="graphics-symbol" aria-roledescription="point" transform="translate(800,36.487999999999985)" d="M2.739,0A2.739,2.739,0,1,1,-2.739,0A2.739,2.739,0,1,1,2.739,0" fill="#4c78a8" stroke-width="2" opacity="1">
+              <title>Date: 2026-10-11 01:26:43 (UTC); Lines of Code: 45439; Version: v3.0.37</title>
+            </path>
+          </g>
+        </g>
+        <path class="foreground" aria-hidden="true" d="" display="none" />
+      </g>
+    </g>
+  </g>
+</svg>

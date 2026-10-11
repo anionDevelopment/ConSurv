@@ -1,5 +1,5 @@
 /**
- * ConSurvBackend v3.0.36 API documentation
+ * ConSurvBackend v3.0.37 API documentation
  *
  * 
  *
@@ -20,6 +20,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { CameraDTO } from '../model/cameraDTO';
 // @ts-ignore
 import { ONVIFCommandDTO } from '../model/oNVIFCommandDTO';
+// @ts-ignore
+import { ProblemDetails } from '../model/problemDetails';
 // @ts-ignore
 import { UpdateCameraDTO } from '../model/updateCameraDTO';
 

@@ -50,6 +50,26 @@ components:
           nullable: true
           type: string
       type: object
+    ProblemDetails:
+      additionalProperties: {}
+      properties:
+        detail:
+          nullable: true
+          type: string
+        instance:
+          nullable: true
+          type: string
+        status:
+          format: int32
+          nullable: true
+          type: integer
+        title:
+          nullable: true
+          type: string
+        type:
+          nullable: true
+          type: string
+      type: object
     RecordModeDTO:
       additionalProperties: false
       description: 'Data transfer object that encodes a ConSurvBackend.Core.Model.RecordModes.RecordMode
@@ -146,8 +166,8 @@ info:
     name: License
     url: https://consurvbackend.test.local:443/API/Other/Resources/Information/License
   termsOfService: https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService
-  title: ConSurvBackend v3.0.36 API documentation
-  version: v3.0.36
+  title: ConSurvBackend v3.0.37 API documentation
+  version: v3.0.37
 openapi: 3.0.4
 paths:
   /API/Other/Maintenance/AvailabilityCheck:
@@ -360,6 +380,18 @@ paths:
                 format: byte
                 type: string
           description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+          description: Not Found
       summary: Returns the latest preview image (as raw bytes) for the specified camera.
       tags:
       - Camera

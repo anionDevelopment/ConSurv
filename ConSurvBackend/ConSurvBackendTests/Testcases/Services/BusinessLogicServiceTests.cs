@@ -1,4 +1,5 @@
 using ConSurvBackend.Core.Services;
+using ConSurvBackend.Tests.TestUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConSurvBackend.Core.Configuration;
 using ConSurvBackend.Core.Constants;
@@ -26,27 +27,10 @@ namespace ConSurvBackend.Tests.Testcases.Services
         private void InitializeServices(bool registrationIsEnabled, out IBusinessLogicService businessLogicService, out IInitializationService<CommandlineParameter> initializationService, out IPersistence persistence)
         {
             ITimeService timeService = new TimeService();
-            IPersistedAPIServerConfiguration<CodeUnitSpecificConfiguration> persistedAPIServerConfiguration = new PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>
-            {
-                ApplicationSpecificConfiguration = new CodeUnitSpecificConfiguration
-                {
-                    RegistrationIsEnabled = registrationIsEnabled
-                }
-            };
-            ApplicationConstants<CodeUnitSpecificConstants> constants = new ApplicationConstants<CodeUnitSpecificConstants>(GeneralConstants.CodeUnitName, GeneralConstants.CodeUnitVersion, Version3.Parse(GeneralConstants.CodeUnitVersion), TestRun.Instance, ConSurvBackend.Core.Misc.Utilities.GetEnvironmentTargetType(), new CodeUnitSpecificConstants());
-            constants.BaseFolder = APIServer<CodeUnitSpecificConstants, PersistedAPIServerConfiguration<CodeUnitSpecificConfiguration>, CommandlineParameter>.GetDefaultBaseFolder(constants, true);
-            IServerLog logger = new ServerLog(new GRYLogConfiguration(true), constants.GetLogFolder());
-            IAuditLog auditLog = new AuditLog(new GRYLogConfiguration(true), constants.GetLogFolder());
             (TransientPersistence, ISet<IDisposable>) databasePersistence = ConSurvBackend.Tests.TestUtilities.Utilities.GetTransientPersistence();
             persistence = databasePersistence.Item1;
             persistence.Reset();
-            IAuthenticationService<User> authenticationService = new PersistentAuthenticationService(timeService, persistence, logger);
-            IGeneralResourceLoader generalResourceLoader = new ConSurvBackend.Core.Services.GeneralResourceLoader();
-            IRandomnessProvider randomnessProvider = new RandomnessProvider(new System.Random());
-            IRuntimeData runtimeData = new RuntimeData(generalResourceLoader, timeService);
-            businessLogicService = new BusinessLogicService(persistence, logger, timeService, authenticationService, randomnessProvider, auditLog, persistedAPIServerConfiguration, runtimeData, constants);
-            IExampleDataCreator exampleDataCreator = new ExampleDataCreator(persistence, authenticationService, timeService, logger, constants, businessLogicService, persistedAPIServerConfiguration);
-            initializationService = new InitializationService(authenticationService, logger, businessLogicService, constants, exampleDataCreator, persistence);
+            ServicesForTests.CreateServices(persistence, timeService, registrationIsEnabled, out businessLogicService, out initializationService, out IAuthenticationService<User> _);
         }
 
         [TestMethod(DisplayName = nameof(DatabaseInitializationTest))]

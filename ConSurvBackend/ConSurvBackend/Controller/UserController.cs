@@ -152,7 +152,8 @@ namespace ConSurvBackend.Core.Controller
         public IActionResult TokenIsValid([FromHeader] string accessToken)
         {
             bool result = this._AuthenticationService.AccessTokenIsValid(accessToken);
-            this._Logger.Log($"Checked if access token {accessToken} is valid. Result: {result}");
+            // The access-token must not be written to the log, because read-access to the log would otherwise yield usable sessions.
+            this._Logger.Log($"Checked if an access-token is valid. Result: {result}");
             return this.Ok(result);
         }
 

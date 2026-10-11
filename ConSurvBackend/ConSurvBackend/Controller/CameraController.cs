@@ -39,9 +39,16 @@ namespace ConSurvBackend.Core.Controller
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(byte[]))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route($"{nameof(GetPreview)}/{{{nameof(cameraId)}}}")]
         public IActionResult GetPreview([FromRoute] string cameraId)
         {
+            // A preview must only be served for a camera which actually exists; otherwise a caller cannot tell an
+            // existing from a non-existing camera, and runtime-state would be allocated for an invented id (see finding CSV-03).
+            if (!this._CameraService.GetAllCameras().ContainsKey(cameraId))
+            {
+                return this.NotFound();
+            }
             return this.Ok(this._RuntimeData.GetLatestPreview(cameraId).Data);
         }
 

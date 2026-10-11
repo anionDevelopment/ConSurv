@@ -40,6 +40,30 @@ namespace ConSurvBackend.Tests.Testcases.Controller
 
         [TestMethod]
         [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
+        public void GetPreview_UnknownCamera_ReturnsNotFound()
+        {
+            // Regression-test for finding CSV-03: a preview for a camera-id which does not exist must not be served.
+            // arrange
+            Mock<IPersistence> persistence = new Mock<IPersistence>();
+            Mock<IBusinessLogicService> cameraServiceMock = new Mock<IBusinessLogicService>(MockBehavior.Strict);
+            Mock<IRuntimeData> runtimeData = new Mock<IRuntimeData>(MockBehavior.Strict);
+            string unknownCameraId = Guid.NewGuid().ToString();
+            cameraServiceMock.Setup(mock => mock.GetAllCameras()).Returns(new Dictionary<string, Camera>());
+            CameraController controller = new CameraController(ServerLog.GetTransientLog(), persistence.Object, cameraServiceMock.Object, runtimeData.Object);
+
+            // act
+            IActionResult actualResult = controller.GetPreview(unknownCameraId);
+
+            // assert
+            NotFoundResult? notFoundResult = actualResult as NotFoundResult;
+            Assert.IsNotNull(notFoundResult);
+            cameraServiceMock.Verify(mock => mock.GetAllCameras(), Times.Once);
+            cameraServiceMock.VerifyNoOtherCalls();
+            runtimeData.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        [TestProperty(nameof(GRYLibrary.Core.Misc.TestKind), nameof(GRYLibrary.Core.Misc.TestKind.UnitTest))]
         public void TestRemoveCamera()
         {
             // arrange

@@ -1,8 +1,21 @@
+using ConSurvBackend.Core.Configuration;
+using ConSurvBackend.Core.Constants;
+using ConSurvBackend.Core.Controller;
 using ConSurvBackend.Core.Model.Base;
 using ConSurvBackend.Core.Services;
 using ConSurvBackend.Tests.TestUtilities;
+using GRYLibrary.Core.APIServer.CommonAuthenticationTypes;
+using GRYLibrary.Core.APIServer.CommonDBTypes;
+using GRYLibrary.Core.APIServer.Services.Auth.R;
+using GRYLibrary.Core.APIServer.Services.Init;
+using GRYLibrary.Core.APIServer.Services.Interfaces;
+using GRYLibrary.Core.APIServer.Services.OtherServices;
+using GRYLibrary.Core.APIServer.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
 {
@@ -121,5 +134,38 @@ namespace ConSurvBackend.Tests.Testcases.Services.PersistenceTests
             }
         }
 
+        public abstract void UserCanNotDoAdministratorOnlyActionTest();
+        public void UserCanNotDoAdministratorOnlyAction()
+        {
+            lock (ConSurvBackend.Tests.TestUtilities.Utilities.LockForTests)
+            {
+                //arrange
+                using PersistenceDisposable persistenceD = this.GetPersistence();
+                ServicesForTests.CreateServices(persistenceD.Persistence, new TimeService(), true, out IBusinessLogicService businessLogicService, out IInitializationService<CommandlineParameter> initializationService, out IAuthenticationService<User> authenticationService);
+                initializationService.Initialize(new CommandlineParameter());
+                string userName = $"user-{Guid.NewGuid()}";
+                string password = "password";
+                businessLogicService.Register(userName, password);
+                //creating a user is an administrator-only action: the authorization-middleware only lets callers pass whose roles match this attribute.
+                ISet<string> groupsAllowedToCreateUsers = typeof(UserController).GetMethod(nameof(UserController.CreateUser))!.GetCustomAttribute<AuthorizeAttribute>()!.Groups;
+                IRoleBasedAuthorizationService authorizationService = new StaticRoleBasedUserAuthorizationService<User>();
+                //the administrator is authorized, so a refusal for the user is caused by the missing role and not by a broken setup.
+                Assert.IsTrue(IsAuthorized(authenticationService, authorizationService, CodeUnitSpecificConstants.UsernameAdmin, CodeUnitSpecificConstants.UsernameAdmin, groupsAllowedToCreateUsers));
+
+                //act
+                bool userIsAuthorized = IsAuthorized(authenticationService, authorizationService, userName, password, groupsAllowedToCreateUsers);
+
+                //assert
+                Assert.IsFalse(userIsAuthorized, "A user who is not an administrator must not be allowed to do an administrator-only action.");
+            }
+        }
+
+        /// <summary>Does the same authorization-check as the authorization-middleware: the user is resolved by their access-token from the persistence and their roles are compared with the authorized groups.</summary>
+        private static bool IsAuthorized(IAuthenticationService<User> authenticationService, IRoleBasedAuthorizationService authorizationService, string userName, string password, ISet<string> authorizedGroups)
+        {
+            AccessToken accessToken = authenticationService.Login(userName, password);
+            User user = authenticationService.GetUserByAccessToken(accessToken.Value);
+            return authorizationService.IsAuthorized(user.GetAllRoles().Select(role => role.Name).ToHashSet(), authorizedGroups);
+        }
     }
 }

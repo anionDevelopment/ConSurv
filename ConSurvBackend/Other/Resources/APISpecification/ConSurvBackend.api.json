@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "ConSurvBackend v3.0.36 API documentation",
+    "title": "ConSurvBackend v3.0.37 API documentation",
     "description": "ConSurvBackend is the backend for ConSurv.",
     "termsOfService": "https://consurvbackend.test.local:443/API/Other/Resources/Information/TermsOfService",
     "contact": {
@@ -12,7 +12,7 @@
       "name": "License",
       "url": "https://consurvbackend.test.local:443/API/Other/Resources/Information/License"
     },
-    "version": "v3.0.36"
+    "version": "v3.0.37"
   },
   "paths": {
     "/API/v3/CameraController/GetPreview/{cameraId}": {
@@ -61,6 +61,26 @@
                 "schema": {
                   "type": "string",
                   "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1067,6 +1087,33 @@
         },
         "additionalProperties": false,
         "description": "Data transfer object used to deserialize an ONVIF PTZ command received from a client.\nThe ConSurvBackend.Core.Model.DTOs.ONVIFCommandDTO.CommandType discriminator selects the concrete ConSurvBackend.Core.Model.SpecialFunctions.ONVIF.Commands.ONVIFCommand subtype."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {}
       },
       "RecordModeDTO": {
         "type": "object",

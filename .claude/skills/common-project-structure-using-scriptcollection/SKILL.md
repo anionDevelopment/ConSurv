@@ -4,7 +4,7 @@ description: "Contains information about the automations provided by ScriptColle
 metadata:
   purpose: "Information about automation using ScriptCollection."
   tags: information, automation, conventions
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # General
@@ -96,6 +96,16 @@ Change the source instead.
 | The diagrams which are based on plantuml | the corresponding `.puml`-files             | The generated diagrams are always regenerated, so a change belongs into the `.puml`-file. |
 | The codeunits-overview-diagram           | the codeunits and their dependencies        |                                                                                           |
 
+The following files and folders are also **generated** and must therefore never be edited by hand — a manual change is useless because it is overwritten with the next build:
+
+- `<repository>/AGENTS.md`
+- `<repository>/CLAUDE.md`
+- `<repository>/Contributing.md`
+- `<repository>/ContributorLicenseAgreement.txt`
+- the CI/CD-pipeline-definitions
+- the content of `<repository>/.github`
+- the content of `<repository>/.clinerules`
+
 Additionally the line-endings of all text- and sourcecode-files are normalized to **LF**.
 Do not commit files with CRLF-line-endings: they are changed back, which shows up as a difference nobody made.
 
@@ -103,7 +113,10 @@ Do not commit files with CRLF-line-endings: they are changed back, which shows u
 
 - The folder `<repository>/.agents/skills` is the **single source of truth** for the skills of a repository. Every skill which belongs to the repository is created and changed there.
 - The skill-folders of the other agents are **synchronized from it automatically**. Never edit a skill in one of those folders: the change is lost as soon as the codeunits are built again.
-- The exception are the **openspec-skills**: they are managed by openspec itself, so they are neither written nor changed by hand.
+- Some skills are **generated** and must therefore not be edited by hand even inside `<repository>/.agents/skills`, because a manual change is overwritten with the next build. These are:
+  - `common-project-structure`
+  - `product-knowledge`
+  - the `openspec-*`-skills (these are managed by openspec itself, so they are neither written nor changed by hand).
 
 ## Tasks
 
@@ -262,3 +275,4 @@ The changelog-filename in the changelog-folder is then `v<version>.md`, where `<
 - Do not implement automation-logic redundantly in a repository if ScriptCollection already provides it. If something is missing or wrong in the automation, the fix usually belongs into the ScriptCollection-repository, not into the repository in which the problem was noticed.
 - Do not edit generated files (`Taskfile.yml`, generated diagrams, generated references, the synchronized skill-folders) manually. Change their source and regenerate them. See "Files which are generated and synchronized automatically".
 - Never bypass a failing script (for example by lowering the code-coverage-threshold or by regenerating baselines) without having understood the failure first.
+- The File `.ScriptCollection/.IsReadyToMerge` is not allowed to be created manually. It is managed automatically by the ScriptCollection system to indicate when a project is ready to be merged.
