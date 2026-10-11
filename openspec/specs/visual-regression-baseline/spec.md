@@ -8,8 +8,9 @@ derivable from the source-code itself:
 
 - They state that every visual-regression-scenario is covered in both the light- and the dark-theme, so that an
   unintended visual change is caught in both themes and not only in whichever one happened to be rendered.
-- They state that a baseline-image's filename begins with the theme-mode it was rendered in, so that the two
-  baseline-images of a scenario are told apart at a glance and it is obvious which theme a baseline belongs to.
+- They state that a baseline-image's filename begins with the theme-mode it was rendered in and uses a dash as
+  its only word-separator, so that the two baseline-images of a scenario are told apart at a glance and it is
+  obvious which theme a baseline belongs to.
 
 This specification is product-independent and meant to be reused: a product which has visual-regression-tests (for
 example OpenDMS or ConSurv) adopts it as-is. A product MAY add further, product-specific rules about the rest of the
@@ -38,17 +39,24 @@ one per theme.
 ### Requirement: A baseline-image's filename begins with its theme-mode
 
 The filename of every visual-regression-baseline-image SHALL begin with the theme-mode it was rendered in, written
-as the prefix `light_` or `dark_`, followed by the rest of the name which describes what the image shows. The
-resulting form is `<theme-mode>_<name>`, for example `light_settings_page` or `dark_login_form`.
+as the prefix `light-` or `dark-`, followed by the rest of the name which describes what the image shows. The parts
+of the filename SHALL be separated by a dash (`-`) only; an underscore (`_`) SHALL NOT appear in the filename. The
+resulting form is `<theme-mode>-<name>`, for example `light-settings-page` or `dark-login-form`.
 
 #### Scenario: A baseline-image is created
 
 - **WHEN** a baseline-image is created
-- **THEN** its filename begins with `light_` or `dark_` according to the theme it was rendered in, followed by the
-  rest of the name
+- **THEN** its filename begins with `light-` or `dark-` according to the theme it was rendered in, followed by the
+  rest of the name, using a dash as the only word-separator
 
 #### Scenario: A baseline-image's filename is missing the theme-mode prefix
 
-- **WHEN** a baseline-image's filename does not begin with a `light_` or `dark_` theme-mode prefix
+- **WHEN** a baseline-image's filename does not begin with a `light-` or `dark-` theme-mode prefix
 - **THEN** this is a defect, resolved by renaming the baseline-image (and the name the test refers to it by) to the
-  form `<theme-mode>_<name>`
+  form `<theme-mode>-<name>`
+
+#### Scenario: A baseline-image's filename contains an underscore
+
+- **WHEN** a baseline-image's filename contains an underscore
+- **THEN** this is a defect, resolved by replacing every underscore with a dash in the baseline-image's filename
+  (and in the name the test refers to it by)
