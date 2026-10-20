@@ -1,5 +1,38 @@
 # ConSurv
 
+## Features
+
+This section lists the features which are typical for an ip-camera-management-system and which one can therefore expect from this product. The `state` was determined directly in the source-code: `available` means the feature is implemented and usable, `unavailable` means it is not (yet) usable (planned, prepared or only partially present).
+
+| id      | state       | description                                                                                                                                                                       |
+| ------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| feat-1  | available   | Live-viewing of the camera-streams in the browser (delivered as hls by the streaming-controller).                                                                                 |
+| feat-2  | available   | Continuous video-recording of the camera-streams.                                                                                                                                 |
+| feat-3  | unavailable | Recording triggered by motion-detection. The motion-detection is disabled in the code (open-cv is currently not loadable on linux); see [issue 6](https://github.com/anionDevelopment/ConSurv/issues/6). |
+| feat-4  | available   | Live preview-images (snapshots) of each camera.                                                                                                                                   |
+| feat-5  | available   | Listing the recorded videos per camera.                                                                                                                                           |
+| feat-6  | unavailable | Downloading a recorded video (the endpoint throws `NotImplementedException`; see finding CSV-35).                                                                                 |
+| feat-7  | unavailable | Preview-thumbnail of a recorded video (the endpoint throws `NotImplementedException`; see finding CSV-35).                                                                        |
+| feat-8  | available   | Deleting a recorded video.                                                                                                                                                        |
+| feat-9  | available   | Automatic deletion of recordings after a configurable retention-period (housekeeping-service).                                                                                    |
+| feat-10 | available   | Privacy-masking (blackening regions of the picture via overlay-polygons).                                                                                                         |
+| feat-11 | available   | Camera-control via onvif-commands (e.g. pan-tilt-zoom) for cameras which support onvif.                                                                                           |
+| feat-12 | available   | Adding, configuring and removing cameras.                                                                                                                                         |
+| feat-13 | available   | Gpu-accelerated video-processing when a (nvidia-)gpu is available, with an automatic fallback to the cpu.                                                                         |
+| feat-14 | available   | User-authentication (login and logout with access-tokens).                                                                                                                       |
+| feat-15 | available   | Role-based authorization (roles users, camera-managers, admins).                                                                                                                  |
+| feat-16 | available   | User-administration (creating users).                                                                                                                                             |
+| feat-17 | unavailable | Changing the group-/role-memberships of users (no endpoint exists yet); see [issue 9](https://github.com/anionDevelopment/ConSurv/issues/9).                                      |
+| feat-18 | unavailable | Multi-factor-authentication (totp): the database-columns are prepared but no endpoint or page uses them; see finding CSV-28.                                                      |
+| feat-19 | unavailable | Login via openid / single-sign-on; see [issue 5](https://github.com/anionDevelopment/ConSurv/issues/5).                                                                          |
+| feat-20 | available   | Selectable color-scheme including a dark-mode, stored per user so it is applied again after a new login and on another device.                                                     |
+| feat-21 | available   | Health-check- and metrics-endpoints for monitoring.                                                                                                                               |
+| feat-22 | available   | Insight into the managed operating-system-processes (ffmpeg, mediamtx).                                                                                                           |
+| feat-23 | unavailable | Smartphone-app which provides the features of the user-area (the app currently only contains a settings-page); see [issue 8](https://github.com/anionDevelopment/ConSurv/issues/8). |
+| feat-24 | unavailable | Processing encrypted incoming camera-streams via rtsps; see [issue 11](https://github.com/anionDevelopment/ConSurv/issues/11).                                                   |
+| feat-25 | unavailable | Providing the camera-streams to clients via rtsp; see [issue 12](https://github.com/anionDevelopment/ConSurv/issues/12).                                                         |
+| feat-26 | unavailable | Providing the camera-streams to clients via rtsps; see [issue 13](https://github.com/anionDevelopment/ConSurv/issues/13).                                                        |
+
 ## Findings
 
 This section collects the findings of all code-reviews, security-checks, bug-searches and performance-analyses which are documented in the markdown-files of this repository.

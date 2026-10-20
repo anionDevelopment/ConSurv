@@ -6,19 +6,7 @@
 
 ## Features
 
-- ✅ Video-Recording
-- ✅ Live-Video-Viewing in the browser
-- ✅ Video-blacken
-- ❌ [OpenID-Login](https://github.com/anionDevelopment/ConSurv/issues/5)
-- ✅ Usage of GPU if available
-- ❌ [Record on motion-detection](https://github.com/anionDevelopment/ConSurv/issues/6)
-- ✅ Video-control using ONVIF-commands for cameras which supports ONVIF
-- ❌ [Smartphone-app which has all features from the user-area](https://github.com/anionDevelopment/ConSurv/issues/8)
-- ❌ [Being able to change group-memberships of users](https://github.com/anionDevelopment/ConSurv/issues/9)
-- ❌ [Design (including logo/favicon/dark-mode)](https://github.com/anionDevelopment/ConSurv/issues/10)
-- ❌ [Processing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/11)
-- ❌ [Providing raw camera-streams via RTSP](https://github.com/anionDevelopment/ConSurv/issues/12)
-- ❌ [Providing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/13)
+The features of ConSurv and their current state are listed in the [reference](./Other/Reference/Reference.md#features).
 
 ## Development
 
