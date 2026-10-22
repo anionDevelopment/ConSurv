@@ -166,7 +166,7 @@ namespace ConSurvBackend.Core
                             @$"^/API/Other/Maintenance/HealthCheck$",
                             @$"^/API/v{GeneralConstants.CodeUnitMajorVersion}/CameraController/GetPreview/*$",
                         },
-                        MaximalLengthofRequestBodies = 500,
+                        MaximalLengthOfRequestBodies = 500,
                         MaximalLengthOfResponseBodies = 500,
                         RoutesWhereResponseBodyIsNotLogged = new HashSet<string>()
                         {
