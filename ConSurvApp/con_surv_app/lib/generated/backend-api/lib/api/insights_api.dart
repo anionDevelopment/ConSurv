@@ -24,7 +24,7 @@ class InsightsApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3InsightsControllerGetRunningProcessesGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV3InsightsControllerGetRunningProcessesGetWithHttpInfo(String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/InsightsController/GetRunningProcesses';
 
@@ -48,6 +48,7 @@ class InsightsApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -57,8 +58,8 @@ class InsightsApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<CameraDTO?> aPIV3InsightsControllerGetRunningProcessesGet(String xAccessToken,) async {
-    final response = await aPIV3InsightsControllerGetRunningProcessesGetWithHttpInfo(xAccessToken,);
+  Future<CameraDTO?> aPIV3InsightsControllerGetRunningProcessesGet(String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3InsightsControllerGetRunningProcessesGetWithHttpInfo(xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

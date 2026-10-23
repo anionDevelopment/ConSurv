@@ -17,7 +17,7 @@ class MaintenanceRoutesApi {
   final ApiClient apiClient;
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/AvailabilityCheck' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceAvailabilityCheckGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceAvailabilityCheckGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/AvailabilityCheck';
 
@@ -39,18 +39,19 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceAvailabilityCheckGet() async {
-    final response = await aPIOtherMaintenanceAvailabilityCheckGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceAvailabilityCheckGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceAvailabilityCheckGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/CurrentVersion' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceCurrentVersionGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceCurrentVersionGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/CurrentVersion';
 
@@ -72,18 +73,19 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceCurrentVersionGet() async {
-    final response = await aPIOtherMaintenanceCurrentVersionGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceCurrentVersionGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceCurrentVersionGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/HealthCheck' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceHealthCheckGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceHealthCheckGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/HealthCheck';
 
@@ -105,18 +107,19 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceHealthCheckGet() async {
-    final response = await aPIOtherMaintenanceHealthCheckGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceHealthCheckGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceHealthCheckGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/InitializationState' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceInitializationStateGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceInitializationStateGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/InitializationState';
 
@@ -138,18 +141,19 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceInitializationStateGet() async {
-    final response = await aPIOtherMaintenanceInitializationStateGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceInitializationStateGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceInitializationStateGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/Metrics' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceMetricsGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceMetricsGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/Metrics';
 
@@ -171,18 +175,19 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceMetricsGet() async {
-    final response = await aPIOtherMaintenanceMetricsGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceMetricsGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceMetricsGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Maintenance/ShowAllEndpoints' operation and returns the [Response].
-  Future<Response> aPIOtherMaintenanceShowAllEndpointsGetWithHttpInfo() async {
+  Future<Response> aPIOtherMaintenanceShowAllEndpointsGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Maintenance/ShowAllEndpoints';
 
@@ -204,11 +209,12 @@ class MaintenanceRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherMaintenanceShowAllEndpointsGet() async {
-    final response = await aPIOtherMaintenanceShowAllEndpointsGetWithHttpInfo();
+  Future<void> aPIOtherMaintenanceShowAllEndpointsGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherMaintenanceShowAllEndpointsGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

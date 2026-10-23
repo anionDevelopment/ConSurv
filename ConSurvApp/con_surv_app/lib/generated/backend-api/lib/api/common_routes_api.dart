@@ -17,7 +17,7 @@ class CommonRoutesApi {
   final ApiClient apiClient;
 
   /// Performs an HTTP 'GET /API/Other/Resources/Information/Contact' operation and returns the [Response].
-  Future<Response> aPIOtherResourcesInformationContactGetWithHttpInfo() async {
+  Future<Response> aPIOtherResourcesInformationContactGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Resources/Information/Contact';
 
@@ -39,18 +39,19 @@ class CommonRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherResourcesInformationContactGet() async {
-    final response = await aPIOtherResourcesInformationContactGetWithHttpInfo();
+  Future<void> aPIOtherResourcesInformationContactGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherResourcesInformationContactGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Resources/Information/License' operation and returns the [Response].
-  Future<Response> aPIOtherResourcesInformationLicenseGetWithHttpInfo() async {
+  Future<Response> aPIOtherResourcesInformationLicenseGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Resources/Information/License';
 
@@ -72,18 +73,19 @@ class CommonRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherResourcesInformationLicenseGet() async {
-    final response = await aPIOtherResourcesInformationLicenseGetWithHttpInfo();
+  Future<void> aPIOtherResourcesInformationLicenseGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherResourcesInformationLicenseGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
   /// Performs an HTTP 'GET /API/Other/Resources/Information/TermsOfService' operation and returns the [Response].
-  Future<Response> aPIOtherResourcesInformationTermsOfServiceGetWithHttpInfo() async {
+  Future<Response> aPIOtherResourcesInformationTermsOfServiceGetWithHttpInfo({ Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/Other/Resources/Information/TermsOfService';
 
@@ -105,11 +107,12 @@ class CommonRoutesApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  Future<void> aPIOtherResourcesInformationTermsOfServiceGet() async {
-    final response = await aPIOtherResourcesInformationTermsOfServiceGetWithHttpInfo();
+  Future<void> aPIOtherResourcesInformationTermsOfServiceGet({ Future<void>? abortTrigger, }) async {
+    final response = await aPIOtherResourcesInformationTermsOfServiceGetWithHttpInfo(abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

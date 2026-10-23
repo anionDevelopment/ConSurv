@@ -16,15 +16,15 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 3.0.38
 
 environment:
-  # Pinned to the exact Dart-SDK of Flutter 3.47.4, which is the version the "SCBuilder"-image
+  # Pinned to the exact Dart-SDK of Flutter 3.47.7, which is the version the "SCBuilder"-image
   # (".ScriptCollection/OCIImages/ImageDefinition.csv") carries and in which the visual-regression-tests render their
   # screenshots (see Other/QualityCheck/UpdateVisualRegressionBaselines.py); it is pinned in the repository "SCBuilder"
   # ("<image>/Other/Resources/Dependencies/Flutter/Version.txt"). An environment whose Flutter differs either can not
   # resolve the packages or produces screenshots which do not match the checked-in baseline-images.
-  sdk: 3.13.3
+  sdk: 3.13.5
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions

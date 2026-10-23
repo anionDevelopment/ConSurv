@@ -9,18 +9,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**aPIV3UserControllerCreateUserPut**](UserApi.md#apiv3usercontrollercreateuserput) | **PUT** /API/v3/UserController/CreateUser | Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+[**aPIV3UserControllerCreateUserPut**](UserApi.md#apiv3usercontrollercreateuserput) | **PUT** /API/v3/UserController/CreateUser | Creates a new user account with the given credentials and assigns the admin role to it. Requires the caller to hold the admin role.
 [**aPIV3UserControllerGetRolesPut**](UserApi.md#apiv3usercontrollergetrolesput) | **PUT** /API/v3/UserController/GetRoles | Returns the list of role names assigned to the currently authenticated user.
+[**aPIV3UserControllerGetThemeGet**](UserApi.md#apiv3usercontrollergetthemeget) | **GET** /API/v3/UserController/GetTheme | Returns the color-scheme which the currently authenticated user chose.
 [**aPIV3UserControllerGetUserInformationGet**](UserApi.md#apiv3usercontrollergetuserinformationget) | **GET** /API/v3/UserController/GetUserInformation | Returns profile information (e.g., username, roles) for the currently authenticated user.
 [**aPIV3UserControllerLoginPut**](UserApi.md#apiv3usercontrollerloginput) | **PUT** /API/v3/UserController/Login | Authenticates a user with the supplied credentials and returns a new access token on success.
 [**aPIV3UserControllerLogoutPut**](UserApi.md#apiv3usercontrollerlogoutput) | **PUT** /API/v3/UserController/Logout | Invalidates the access token of the currently authenticated user, effectively logging them out.
+[**aPIV3UserControllerSetThemePut**](UserApi.md#apiv3usercontrollersetthemeput) | **PUT** /API/v3/UserController/SetTheme | Sets the color-scheme of the currently authenticated user, so that the choice is available again on another device and after a new login.
 [**aPIV3UserControllerTokenIsValidGet**](UserApi.md#apiv3usercontrollertokenisvalidget) | **GET** /API/v3/UserController/TokenIsValid | Checks whether the supplied access token is still valid (not expired and not revoked).
 
 
 # **aPIV3UserControllerCreateUserPut**
 > aPIV3UserControllerCreateUserPut(xAccessToken, user, password)
 
-Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+Creates a new user account with the given credentials and assigns the admin role to it. Requires the caller to hold the admin role.
 
 ### Example
 ```dart
@@ -90,6 +92,47 @@ Name | Type | Description  | Notes
 ### Return type
 
 **List<String>**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **aPIV3UserControllerGetThemeGet**
+> StringValueDTO aPIV3UserControllerGetThemeGet(xAccessToken)
+
+Returns the color-scheme which the currently authenticated user chose.
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = UserApi();
+final xAccessToken = xAccessToken_example; // String | Access Token
+
+try {
+    final result = api_instance.aPIV3UserControllerGetThemeGet(xAccessToken);
+    print(result);
+} catch (e) {
+    print('Exception when calling UserApi->aPIV3UserControllerGetThemeGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xAccessToken** | **String**| Access Token | 
+
+### Return type
+
+[**StringValueDTO**](StringValueDTO.md)
 
 ### Authorization
 
@@ -222,6 +265,48 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **aPIV3UserControllerSetThemePut**
+> aPIV3UserControllerSetThemePut(xAccessToken, stringValueDTO)
+
+Sets the color-scheme of the currently authenticated user, so that the choice is available again on another device and after a new login.
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = UserApi();
+final xAccessToken = xAccessToken_example; // String | Access Token
+final stringValueDTO = StringValueDTO(); // StringValueDTO | The color-scheme to store: \"system\", \"light\" or \"dark\".
+
+try {
+    api_instance.aPIV3UserControllerSetThemePut(xAccessToken, stringValueDTO);
+} catch (e) {
+    print('Exception when calling UserApi->aPIV3UserControllerSetThemePut: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xAccessToken** | **String**| Access Token | 
+ **stringValueDTO** | [**StringValueDTO**](StringValueDTO.md)| The color-scheme to store: \"system\", \"light\" or \"dark\". | [optional] 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, text/json, application/*+json
  - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
