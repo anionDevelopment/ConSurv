@@ -743,10 +743,13 @@ paths:
         {
             try
             {
+                // The transport must match the one used by the real camera-processes (see transport-protocol-spec):
+                // probing over UDP while the real processes use TCP can report "available" for sources which actually
+                // reject TCP, and would hide the resulting error-message of the real processes behind an empty stderr.
                 ExternalProgramExecutor e = new ExternalProgramExecutor(new ExternalProgramExecutorConfiguration()
                 {
                     Program = "ffprobe",
-                    Argument = $"-v error -i \"{rtspUrl}\"",
+                    Argument = $"-v error -rtsp_transport tcp -i \"{rtspUrl}\"",
                     TimeoutInMilliseconds = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
                     Verbosity = Verbosity.Quiet,
                 });
@@ -762,7 +765,7 @@ paths:
                 }
                 else
                 {
-                    message = $"Failed to probe RTSP URL \"{rtspUrl}\". StdOut: {String.Join('\n', e.AllStdOutLines)}; StdErr: {String.Join('\n', e.AllStdErrLines)}";
+                    message = $"Failed to probe RTSP URL \"{rtspUrl}\". ExitCode: {e.ExitCode}; StdOut: {String.Join('\n', e.AllStdOutLines)}; StdErr: {String.Join('\n', e.AllStdErrLines)}";
                 }
                 return success;
             }

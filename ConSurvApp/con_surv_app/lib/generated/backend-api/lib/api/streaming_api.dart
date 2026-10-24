@@ -16,21 +16,21 @@ class StreamingApi {
 
   final ApiClient apiClient;
 
-  /// Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera's fragment folder,  and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for  `.m3u8` playlists, `video/MP2T` for `.ts` segments).
+  /// Serves an HLS stream segment or playlist file for the specified stream. Validates the filename format, resolves the file from the camera's fragment folder, and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for `.m3u8` playlists, `video/MP2T` for `.ts` segments).
   ///
   /// Note: This method returns the HTTP [Response].
   ///
   /// Parameters:
   ///
   /// * [String] streamId (required):
-  ///   The identifier of the stream (typically a camera ID).
+  ///   The identifier of the stream (typically a camera ID; must match `^[0-9A-Za-z_-]+$`).
   ///
   /// * [String] filename (required):
   ///   The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$`).
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename, String xAccessToken,) async {
+  Future<Response> aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(String streamId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/StreamingController/Stream/{streamId}/{filename}'
       .replaceAll('{streamId}', streamId)
@@ -56,23 +56,24 @@ class StreamingApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
-  /// Serves an HLS stream segment or playlist file for the specified stream.  Validates the filename format, resolves the file from the camera's fragment folder,  and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for  `.m3u8` playlists, `video/MP2T` for `.ts` segments).
+  /// Serves an HLS stream segment or playlist file for the specified stream. Validates the filename format, resolves the file from the camera's fragment folder, and returns it with the appropriate MIME type (`application/vnd.apple.mpegurl` for `.m3u8` playlists, `video/MP2T` for `.ts` segments).
   ///
   /// Parameters:
   ///
   /// * [String] streamId (required):
-  ///   The identifier of the stream (typically a camera ID).
+  ///   The identifier of the stream (typically a camera ID; must match `^[0-9A-Za-z_-]+$`).
   ///
   /// * [String] filename (required):
   ///   The HLS segment or playlist filename to serve (must match `^[0-9A-Za-z_]+\\.[0-9A-Za-z]+$`).
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken,) async {
-    final response = await aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename, xAccessToken,);
+  Future<void> aPIV3StreamingControllerStreamStreamIdFilenameGet(String streamId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3StreamingControllerStreamStreamIdFilenameGetWithHttpInfo(streamId, filename, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

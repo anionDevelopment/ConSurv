@@ -11,12 +11,12 @@ test.describe('Cameras-list-page', () => {
     test('looks like the baseline-screenshot in the light color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'light');
         await simulateCameras(page);
-        await expectPageToLookLikeBaseline(page, '/user/cameras', 'light_cameras-list-page');
+        await expectPageToLookLikeBaseline(page, '/user/cameras', 'light-cameras-list-page');
     });
 
     test('looks like the baseline-screenshot in the dark color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'dark');
         await simulateCameras(page);
-        await expectPageToLookLikeBaseline(page, '/user/cameras', 'dark_cameras-list-page');
+        await expectPageToLookLikeBaseline(page, '/user/cameras', 'dark-cameras-list-page');
     });
 });

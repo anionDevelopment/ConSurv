@@ -1,0 +1,11 @@
+# Configuration for `package:test` (used by `flutter test`).
+#
+# The visual-regression-tests (test/visual_regression/**) are skipped by default: their baseline-images are only
+# reproducible when the tests run inside the visual-regression-container (see
+# TFCPS_CodeUnitSpecific_Flutter_Functions.run_visual_regression_tests_in_container and the
+# "automation-using-scriptcollection"-skill), so a plain `flutter test` on a developer's own machine or in the normal
+# (non-containerized) part of `RunTestcases.py` must not attempt them. Run them explicitly with
+# `--tags visual-regression --run-skipped`.
+tags:
+  visual-regression:
+    skip: "Only reproducible inside the visual-regression-container; run with '--tags visual-regression --run-skipped'."

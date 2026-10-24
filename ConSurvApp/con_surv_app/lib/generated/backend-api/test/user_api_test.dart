@@ -17,7 +17,7 @@ void main() {
   // final instance = UserApi();
 
   group('tests for UserApi', () {
-    // Creates a new user account with the given credentials and assigns the admin role to it.  Requires the caller to hold the admin role.
+    // Creates a new user account with the given credentials and assigns the admin role to it. Requires the caller to hold the admin role.
     //
     //Future aPIV3UserControllerCreateUserPut(String xAccessToken, { String user, String password }) async
     test('test aPIV3UserControllerCreateUserPut', () async {
@@ -28,6 +28,13 @@ void main() {
     //
     //Future<List<String>> aPIV3UserControllerGetRolesPut(String xAccessToken) async
     test('test aPIV3UserControllerGetRolesPut', () async {
+      // TODO
+    });
+
+    // Returns the color-scheme which the currently authenticated user chose.
+    //
+    //Future<StringValueDTO> aPIV3UserControllerGetThemeGet(String xAccessToken) async
+    test('test aPIV3UserControllerGetThemeGet', () async {
       // TODO
     });
 
@@ -49,6 +56,13 @@ void main() {
     //
     //Future aPIV3UserControllerLogoutPut(String xAccessToken) async
     test('test aPIV3UserControllerLogoutPut', () async {
+      // TODO
+    });
+
+    // Sets the color-scheme of the currently authenticated user, so that the choice is available again on another device and after a new login.
+    //
+    //Future aPIV3UserControllerSetThemePut(String xAccessToken, { StringValueDTO stringValueDTO }) async
+    test('test aPIV3UserControllerSetThemePut', () async {
       // TODO
     });
 

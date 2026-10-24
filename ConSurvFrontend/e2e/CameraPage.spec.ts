@@ -19,12 +19,12 @@ test.describe('Camera-page', () => {
     test('looks like the baseline-screenshot in the light color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'light');
         await simulateCameras(page);
-        await expectPageToLookLikeBaseline(page, `/user/camera?cameraId=${idOfTheCameraWithAnOwnPage}`, 'light_camera-page', [selectorOfTheVideoPlayer]);
+        await expectPageToLookLikeBaseline(page, `/user/camera?cameraId=${idOfTheCameraWithAnOwnPage}`, 'light-camera-page', [selectorOfTheVideoPlayer]);
     });
 
     test('looks like the baseline-screenshot in the dark color-scheme', async ({ page }) => {
         await simulateLoggedInUser(page, 'dark');
         await simulateCameras(page);
-        await expectPageToLookLikeBaseline(page, `/user/camera?cameraId=${idOfTheCameraWithAnOwnPage}`, 'dark_camera-page', [selectorOfTheVideoPlayer]);
+        await expectPageToLookLikeBaseline(page, `/user/camera?cameraId=${idOfTheCameraWithAnOwnPage}`, 'dark-camera-page', [selectorOfTheVideoPlayer]);
     });
 });

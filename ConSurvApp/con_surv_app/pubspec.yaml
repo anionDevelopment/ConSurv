@@ -16,10 +16,15 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 3.0.38
 
 environment:
-  sdk: 3.8.1
+  # Pinned to the exact Dart-SDK of Flutter 3.47.7, which is the version the "SCBuilder"-image
+  # (".ScriptCollection/OCIImages/ImageDefinition.csv") carries and in which the visual-regression-tests render their
+  # screenshots (see Other/QualityCheck/UpdateVisualRegressionBaselines.py); it is pinned in the repository "SCBuilder"
+  # ("<image>/Other/Resources/Dependencies/Flutter/Version.txt"). An environment whose Flutter differs either can not
+  # resolve the packages or produces screenshots which do not match the checked-in baseline-images.
+  sdk: 3.13.5
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,6 +40,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 1.0.8
 
+  # Persists the user-settings (currently the selected theme-mode, see lib/app_settings.dart).
+  shared_preferences: 2.5.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,6 +53,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: 5.0.0
+
+  # Used by the visual-regression-tests (test/visual_regression) to decode/encode and compare the rendered
+  # screenshots against their JPEG-baselines.
+  image: 4.9.2
+  path: 1.9.1
+
+  # Used by the widget- and visual-regression-tests to fake the platform-side of "shared_preferences" (see
+  # lib/app_settings.dart), so that AppSettings.load() does not need a real platform-channel in a test.
+  shared_preferences_platform_interface: 2.4.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

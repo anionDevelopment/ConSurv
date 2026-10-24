@@ -27,7 +27,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerCameraCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerCameraCameraIdGetWithHttpInfo(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/Camera/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
@@ -52,6 +52,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -64,8 +65,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<CameraDTO?> aPIV3CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerCameraCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
+  Future<CameraDTO?> aPIV3CameraControllerCameraCameraIdGet(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerCameraCameraIdGetWithHttpInfo(cameraId, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -87,7 +88,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerCamerasGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerCamerasGetWithHttpInfo(String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/Cameras';
 
@@ -111,6 +112,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -120,8 +122,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<List<CameraDTO>?> aPIV3CameraControllerCamerasGet(String xAccessToken,) async {
-    final response = await aPIV3CameraControllerCamerasGetWithHttpInfo(xAccessToken,);
+  Future<List<CameraDTO>?> aPIV3CameraControllerCamerasGet(String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerCamerasGetWithHttpInfo(xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -146,7 +148,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerCreateCameraPostWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerCreateCameraPostWithHttpInfo(String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/CreateCamera';
 
@@ -170,6 +172,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -179,8 +182,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<String?> aPIV3CameraControllerCreateCameraPost(String xAccessToken,) async {
-    final response = await aPIV3CameraControllerCreateCameraPostWithHttpInfo(xAccessToken,);
+  Future<String?> aPIV3CameraControllerCreateCameraPost(String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerCreateCameraPostWithHttpInfo(xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -208,7 +211,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/DownloadVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -234,6 +237,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -249,8 +253,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken,);
+  Future<void> aPIV3CameraControllerDownloadVideoCameraIdFilenameGet(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerDownloadVideoCameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -267,7 +271,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerGetPreviewCameraIdGetWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerGetPreviewCameraIdGetWithHttpInfo(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/GetPreview/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
@@ -292,6 +296,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -304,8 +309,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<String?> aPIV3CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerGetPreviewCameraIdGetWithHttpInfo(cameraId, xAccessToken,);
+  Future<String?> aPIV3CameraControllerGetPreviewCameraIdGet(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerGetPreviewCameraIdGetWithHttpInfo(cameraId, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -333,7 +338,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/GetPreviewOfVideo{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -359,6 +364,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -374,8 +380,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken,);
+  Future<void> aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGet(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerGetPreviewOfVideocameraIdFilenameGetWithHttpInfo(cameraId, filename, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -389,7 +395,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerListVideosGetWithHttpInfo(String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerListVideosGetWithHttpInfo(String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/ListVideos';
 
@@ -413,6 +419,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -422,8 +429,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3CameraControllerListVideosGet(String xAccessToken,) async {
-    final response = await aPIV3CameraControllerListVideosGetWithHttpInfo(xAccessToken,);
+  Future<void> aPIV3CameraControllerListVideosGet(String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerListVideosGetWithHttpInfo(xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -440,7 +447,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(String cameraId, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RemoveCamera/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
@@ -465,6 +472,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -477,8 +485,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(cameraId, xAccessToken,);
+  Future<void> aPIV3CameraControllerRemoveCameraCameraIdDelete(String cameraId, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerRemoveCameraCameraIdDeleteWithHttpInfo(cameraId, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -498,7 +506,7 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<Response> aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename, String xAccessToken,) async {
+  Future<Response> aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RemoveVideo/{cameraId}/{filename}'
       .replaceAll('{cameraId}', cameraId)
@@ -524,6 +532,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -539,8 +548,8 @@ class CameraApi {
   ///
   /// * [String] xAccessToken (required):
   ///   Access Token
-  Future<void> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename, String xAccessToken,) async {
-    final response = await aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename, xAccessToken,);
+  Future<void> aPIV3CameraControllerRemoveVideoCameraIdFilenameDelete(String cameraId, String filename, String xAccessToken, { Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerRemoveVideoCameraIdFilenameDeleteWithHttpInfo(cameraId, filename, xAccessToken, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -560,7 +569,7 @@ class CameraApi {
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
   ///   The ONVIF command to execute, including its type and parameters.
-  Future<Response> aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
+  Future<Response> aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/RunONVIFCommand/{cameraId}'
       .replaceAll('{cameraId}', cameraId);
@@ -585,6 +594,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -600,8 +610,8 @@ class CameraApi {
   ///
   /// * [ONVIFCommandDTO] oNVIFCommandDTO:
   ///   The ONVIF command to execute, including its type and parameters.
-  Future<void> aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, }) async {
-    final response = await aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId, xAccessToken,  oNVIFCommandDTO: oNVIFCommandDTO, );
+  Future<void> aPIV3CameraControllerRunONVIFCommandCameraIdPost(String cameraId, String xAccessToken, { ONVIFCommandDTO? oNVIFCommandDTO, Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerRunONVIFCommandCameraIdPostWithHttpInfo(cameraId, xAccessToken, oNVIFCommandDTO: oNVIFCommandDTO, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -618,7 +628,7 @@ class CameraApi {
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
   ///   The DTO containing the updated camera properties.
-  Future<Response> aPIV3CameraControllerUpdateCameraPutWithHttpInfo(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
+  Future<Response> aPIV3CameraControllerUpdateCameraPutWithHttpInfo(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, Future<void>? abortTrigger, }) async {
     // ignore: prefer_const_declarations
     final path = r'/API/v3/CameraController/UpdateCamera';
 
@@ -642,6 +652,7 @@ class CameraApi {
       headerParams,
       formParams,
       contentTypes.isEmpty ? null : contentTypes.first,
+      abortTrigger: abortTrigger,
     );
   }
 
@@ -654,8 +665,8 @@ class CameraApi {
   ///
   /// * [UpdateCameraDTO] updateCameraDTO:
   ///   The DTO containing the updated camera properties.
-  Future<void> aPIV3CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, }) async {
-    final response = await aPIV3CameraControllerUpdateCameraPutWithHttpInfo(xAccessToken,  updateCameraDTO: updateCameraDTO, );
+  Future<void> aPIV3CameraControllerUpdateCameraPut(String xAccessToken, { UpdateCameraDTO? updateCameraDTO, Future<void>? abortTrigger, }) async {
+    final response = await aPIV3CameraControllerUpdateCameraPutWithHttpInfo(xAccessToken, updateCameraDTO: updateCameraDTO, abortTrigger: abortTrigger,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

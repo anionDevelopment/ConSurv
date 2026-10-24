@@ -6,19 +6,7 @@
 
 ## Features
 
-- ✅ Video-Recording
-- ✅ Live-Video-Viewing in the browser
-- ✅ Video-blacken
-- ❌ [OpenID-Login](https://github.com/anionDevelopment/ConSurv/issues/5)
-- ✅ Usage of GPU if available
-- ❌ [Record on motion-detection](https://github.com/anionDevelopment/ConSurv/issues/6)
-- ✅ Video-control using ONVIF-commands for cameras which supports ONVIF
-- ❌ [Smartphone-app which has all features from the user-area](https://github.com/anionDevelopment/ConSurv/issues/8)
-- ❌ [Being able to change group-memberships of users](https://github.com/anionDevelopment/ConSurv/issues/9)
-- ❌ [Design (including logo/favicon/dark-mode)](https://github.com/anionDevelopment/ConSurv/issues/10)
-- ❌ [Processing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/11)
-- ❌ [Providing raw camera-streams via RTSP](https://github.com/anionDevelopment/ConSurv/issues/12)
-- ❌ [Providing encrypted camera-streams via RTSPS](https://github.com/anionDevelopment/ConSurv/issues/13)
+The features of ConSurv and their current state are listed in the [reference](./Other/Reference/Reference.md#features).
 
 ## Development
 
@@ -116,7 +104,7 @@ admin-password and the private key of the TLS-certificate.
 
 ### Findings
 
-The findings of this analysis (`CSV-01` to `CSV-37`, and `CSV-MT-01` to `CSV-MT-04` for the missing security-tests) including their current state are listed in the section "Findings" of the [reference](./Other/Reference/Reference.md#findings).
+The findings of this analysis (`SEC-1` to `SEC-37`, and `SEC-38` to `SEC-41` for the missing security-tests) including their current state are listed in the section "Findings" of the [reference](./Other/Reference/Reference.md#findings).
 
 Checked and not a finding: all dependencies of the backend and of the frontend except `SkiaSharp` are pinned to an exact version, both code-units have a lock-file (`packages.lock.json` and `package-lock.json`), and the build produces a bill-of-materials.
 The checked weaknesses which are not present are listed at the end of this section.
@@ -125,20 +113,20 @@ The checked weaknesses which are not present are listed at the end of this secti
 
 The order follows exploitability and impact, not the order of the categories.
 
-1. CSV-24 and CSV-25: remove the fixed accounts from a productive run and refuse to initialize without an
+1. SEC-24 and SEC-25: remove the fixed accounts from a productive run and refuse to initialize without an
    initial admin-password.
-2. CSV-01: remove the camera-credentials from the data which the API returns.
-3. CSV-05: make the TLS-certificate configurable and keep the development-certificate out of the productive
+2. SEC-1: remove the camera-credentials from the data which the API returns.
+3. SEC-5: make the TLS-certificate configurable and keep the development-certificate out of the productive
    image.
-4. CSV-18 and CSV-19: validate the `StreamURL` and the `ONVIFUrl`, and pass arguments as a list.
-5. CSV-14: register a cryptographically secure randomness-provider.
-6. CSV-26, CSV-31 and CSV-32: limit the login-rate, remove the token from the log, audit the logins.
-7. CSV-02 and CSV-20: introduce the authorization per camera and decouple the creation of a user from the
+4. SEC-18 and SEC-19: validate the `StreamURL` and the `ONVIFUrl`, and pass arguments as a list.
+5. SEC-14: register a cryptographically secure randomness-provider.
+6. SEC-26, SEC-31 and SEC-32: limit the login-rate, remove the token from the log, audit the logins.
+7. SEC-2 and SEC-20: introduce the authorization per camera and decouple the creation of a user from the
    admin-role.
-8. CSV-34: determine the state of a camera for real.
-9. CSV-08, CSV-11 and CSV-29: harden the example-deployment and the pipeline.
-10. The remaining findings: CSV-03, CSV-04, CSV-06, CSV-07, CSV-09, CSV-10, CSV-12, CSV-13, CSV-15, CSV-16,
-    CSV-17, CSV-21, CSV-22, CSV-23, CSV-27, CSV-28, CSV-30, CSV-33, CSV-35, CSV-36, CSV-37.
+8. SEC-34: determine the state of a camera for real.
+9. SEC-8, SEC-11 and SEC-29: harden the example-deployment and the pipeline.
+10. The remaining findings: SEC-3, SEC-4, SEC-6, SEC-7, SEC-9, SEC-10, SEC-12, SEC-13, SEC-15, SEC-16,
+    SEC-17, SEC-21, SEC-22, SEC-23, SEC-27, SEC-28, SEC-30, SEC-33, SEC-35, SEC-36, SEC-37.
 
 No category of the OWASP Top 10:2025 is without a finding. The following concrete weaknesses were checked and
 are not present: injection into the database (every statement is parameterized), cross-site-scripting in the
