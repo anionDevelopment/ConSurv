@@ -4,7 +4,7 @@ namespace ConSurvBackend.Core.Constants
     {
         public const string ProductName = "ConSurv";
         public const string UsernameAdmin = "admin";
-        public const string RolenameAdmins = "Adminstrators";
+        public const string RolenameAdmins = "Administrators";
         public const string RolenameModerators = "CameraManagers";
         public const string RolenameUsers = "Users";
         public const string WebControllerRoute = "Web";
