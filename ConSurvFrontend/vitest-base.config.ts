@@ -15,5 +15,18 @@ export default defineConfig({
       provider: 'istanbul',
       reportsDirectory: 'Other/Artifacts/TestCoverage',
     },
+    // Run all specs in a single reused fork. The Angular+Material module graph is heavy enough that
+    // parallel per-file forks ran into vitest's worker-respond timeout on resource-constrained CI runners.
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+        maxForks: 1,
+        isolate: false,
+      },
+    },
+    testTimeout: 60000,
+    hookTimeout: 60000,
+    teardownTimeout: 60000,
   },
 });

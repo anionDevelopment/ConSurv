@@ -191,19 +191,19 @@ namespace ConSurvBackend.Core.Misc
         /// </summary>
         /// <param name="img1Bytes">Raw bytes of the first image.</param>
         /// <param name="img2Bytes">Raw bytes of the second image.</param>
-        /// <param name="thresold">
+        /// <param name="threshold">
         /// A value between 0 and 1.  Images are considered different when their similarity score is
         /// below this threshold.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the similarity score is below <paramref name="thresold"/>;
+        /// <see langword="true"/> if the similarity score is below <paramref name="threshold"/>;
         /// otherwise <see langword="false"/>.
         /// </returns>
-        /// <exception cref="Exception">Thrown when <paramref name="thresold"/> is outside [0, 1].</exception>
-        public static bool ImagesAreDifferent(byte[] img1Bytes, byte[] img2Bytes, double thresold)
+        /// <exception cref="Exception">Thrown when <paramref name="threshold"/> is outside [0, 1].</exception>
+        public static bool ImagesAreDifferent(byte[] img1Bytes, byte[] img2Bytes, double threshold)
         {
-            GRYLibrary.Core.Misc.Utilities.AssertCondition(thresold >= 0 && thresold <= 1, "Thresold must be between 0 and 1.");
-            return CalculateImageSimilarity(img1Bytes, img2Bytes) < thresold;
+            GRYLibrary.Core.Misc.Utilities.AssertCondition(threshold >= 0 && threshold <= 1, "Threshold must be between 0 and 1.");
+            return CalculateImageSimilarity(img1Bytes, img2Bytes) < threshold;
         }
         /// <summary>
         /// Calculates a perceptual similarity score between two images using OpenCV's PHash algorithm.

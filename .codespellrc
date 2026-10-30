@@ -1,0 +1,5 @@
+[codespell]
+# Skip generated/vendored content: VCS, build output, dependencies, caches, generated artifacts and reference output, logs/metrics, and binary/minified/lock files.
+skip = ./.git,*/Other/Artifacts,*/Other/Metrics,*/Other/Logs,*/Other/Resources/DependentCodeUnits,*/TestCoverageHistory,*/TestCoverageBadges,./.ScriptCollection/Cache,*/bin,*/obj,*/dist,*/build,*/out,*/node_modules,*/.venv,*/venv,*/packages,*/vendor,*/__pycache__,*/.pytest_cache,*/.mypy_cache,*/.angular,*/.vs,*.min.js,*.min.css,*.map,*.svg,*.lock,package-lock.json,*.woff,*.woff2,*.ttf,*.eot,*.pdf,*.log
+# iif: RxJS operator name (conditional Observable), not a misspelling of "if".
+ignore-words-list = consurv,iif
