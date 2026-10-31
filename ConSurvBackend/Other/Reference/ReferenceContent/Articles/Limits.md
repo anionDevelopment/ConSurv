@@ -33,7 +33,7 @@ Three consequences are worth knowing:
 
 This means that a machine with a GeForce-GPU can serve **at most 8 cameras with GPU-encoding**, and only when nothing else on that machine uses NVENC.
 
-### Behaviour when the limit is reached
+### Behavior when the limit is reached
 
 When the encode-session cannot be created, FFmpeg terminates immediately during startup with a message such as:
 

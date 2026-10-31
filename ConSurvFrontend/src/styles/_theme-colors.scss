@@ -8,7 +8,7 @@
 // decides the background and the text:
 //
 //   light: a very light, cool-white background (neutral tone 98) with deep navy text (neutral tone 10),
-//   dark:  a dark, GitHub-like grey background (neutral tone 6) with light, non-white grey text (neutral tone 90).
+//   dark:  a dark, GitHub-like gray background (neutral tone 6) with light, non-white gray text (neutral tone 90).
 //
 // The accent (buttons, links, selection) is a navy/blue in both modes (primary/tertiary below).
 
@@ -120,7 +120,7 @@ $_light-neutral: (
   96: #eff3ff,
 );
 
-// Dark-mode neutral (GitHub-like grey): tone 6 is the dark grey background, tone 90 the light, non-white text.
+// Dark-mode neutral (GitHub-like gray): tone 6 is the dark gray background, tone 90 the light, non-white text.
 $_dark-neutral: (
   0: #000000,
   10: #161c24,

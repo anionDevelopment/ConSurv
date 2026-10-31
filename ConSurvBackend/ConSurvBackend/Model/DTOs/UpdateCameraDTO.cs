@@ -13,7 +13,7 @@ namespace ConSurvBackend.Core.Model.DTOs
         public RecordModeDTO RecordModeDTO { get; set; }
 
         /// <summary>
-        /// Maps the DTO fields to a fully initialised <see cref="Camera"/> domain object
+        /// Maps the DTO fields to a fully initialized <see cref="Camera"/> domain object
         /// that can replace the currently stored camera configuration.
         /// </summary>
         /// <returns>A new <see cref="Camera"/> instance reflecting the requested update.</returns>
