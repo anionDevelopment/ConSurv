@@ -16,16 +16,16 @@ The following table compares the two transports for the use-case of a server tha
 | Reliability | High: guaranteed delivery and ordering, no packet-loss. | Lower: UDP-packets may be dropped; the receiver has no retransmit-mechanism. |
 | Latency | Marginally higher due to retransmit-buffers. For surveillance irrelevant. | Marginally lower. |
 | Port-requirements | A single TCP-port (typically 554 or 8554); RTP and RTCP are interleaved through the same connection. | Multiple UDP-ports per stream (RTSP control + two RTP + two RTCP). For *n* cameras this multiplies accordingly. |
-| Container / NAT behaviour | Robust: one outbound TCP-connection is unaffected by Docker-bridges, NAT or stateful firewalls. | Fragile: UDP-NAT-mappings time out, return-packets can be dropped and bridges may reorder datagrams. |
+| Container / NAT behavior | Robust: one outbound TCP-connection is unaffected by Docker-bridges, NAT or stateful firewalls. | Fragile: UDP-NAT-mappings time out, return-packets can be dropped and bridges may reorder datagrams. |
 | Bandwidth-overhead | Roughly 5-8 % more because of TCP-headers, ACKs and occasional retransmits. | Lower, since there are no ACKs or retransmits. |
-| Behaviour under bandwidth-saturation | TCP throttles; latency rises, but data arrives in full and recordings stay intact. | UDP ignores congestion; packets are silently discarded, producing broken frames, torn keyframes and defective MP4-segments. |
+| Behavior under bandwidth-saturation | TCP throttles; latency rises, but data arrives in full and recordings stay intact. | UDP ignores congestion; packets are silently discarded, producing broken frames, torn keyframes and defective MP4-segments. |
 | Multicast | Not supported (point-to-point only). | Supported (one source serves many consumers). Irrelevant for ConSurv because the server is the only consumer. |
-| Behaviour on network-glitches | Connection-breaks are detected immediately; FFmpeg exits and the camera-reconciliation in ConSurv restarts the process cleanly. | No connection-state means no clear failure-signal: FFmpeg can stall silently while the process still appears to be running, requiring additional watchdogs. |
+| Behavior on network-glitches | Connection-breaks are detected immediately; FFmpeg exits and the camera-reconciliation in ConSurv restarts the process cleanly. | No connection-state means no clear failure-signal: FFmpeg can stall silently while the process still appears to be running, requiring additional watchdogs. |
 | Troubleshooting | Easy: `ss`, `netstat`, Wireshark and `tcpdump` show the connection-state clearly. | Harder: UDP is stateless, which complicates diagnosis especially inside container-networks. |
 | CPU-load | Slightly higher due to retransmit-buffer handling. Negligible for small numbers of streams. | Slightly lower. |
 | Quality of the HLS-output | Stable, because FFmpeg receives a complete byte-stream. | Keyframe-loss produces unplayable or visually corrupted HLS-segments. |
-| Industry default for recording | De-facto standard for VMS and recording-oriented systems. | Default of live-preview clients that favour latency over integrity. |
-| Behaviour over Wi-Fi | Robust against typical wireless packet-loss. | Visible artefacts whenever the wireless link glitches. |
+| Industry default for recording | De-facto standard for VMS and recording-oriented systems. | Default of live-preview clients that favor latency over integrity. |
+| Behavior over Wi-Fi | Robust against typical wireless packet-loss. | Visible artifacts whenever the wireless link glitches. |
 | Firewall / enterprise-networks | Passes through almost any firewall because only one port is required. | Often blocked, because firewalls dislike the dynamic UDP return-paths. |
 | Compatibility with RTSP-sources | Supported by professional IP-cameras (Hikvision, Dahua, Axis, Reolink, Ubiquiti etc.) and by dedicated RTSP-servers such as MediaMTX, GStreamer `rtsp-sink` or Frigate. | Supported more broadly in principle, but some RTSP-sources - especially minimalistic broadcasters that only implement RTP-over-UDP output - do not offer a TCP-interleaved transport at all. |
 

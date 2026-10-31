@@ -158,7 +158,7 @@ This product follows the [GitFlowSimplified](https://projects.aniondev.de/Public
 
 ## Image-properties
 
-The image-artifacts of this product must fulfil the image-properties defined by [DefaultImageUsabilityRequirements](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/ImageProperties/DefaultImageUsabilityRequirements/DefaultImageUsabilityRequirements.md).
+The image-artifacts of this product must fulfill the image-properties defined by [DefaultImageUsabilityRequirements](https://projects.aniondev.de/PublicProjects/Common/ProjectTemplates/-/blob/main/Conventions/ImageProperties/DefaultImageUsabilityRequirements/DefaultImageUsabilityRequirements.md).
 
 ## Versioning
 
