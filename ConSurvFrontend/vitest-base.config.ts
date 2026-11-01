@@ -17,14 +17,10 @@ export default defineConfig({
     },
     // Run all specs in a single reused fork. The Angular+Material module graph is heavy enough that
     // parallel per-file forks ran into vitest's worker-respond timeout on resource-constrained CI runners.
+    // Vitest 4 removed "poolOptions"; these are the equivalent top-level options.
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-        maxForks: 1,
-        isolate: false,
-      },
-    },
+    maxWorkers: 1,
+    isolate: false,
     testTimeout: 60000,
     hookTimeout: 60000,
     teardownTimeout: 60000,

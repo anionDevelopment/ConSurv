@@ -67,3 +67,6 @@ Every Material component and every page SHALL take its colors from the applied p
 
 - **WHEN** a new component or page is added to the user-interface
 - **THEN** it follows the applied palette through the Material theme automatically and does not define colors of its own
+
+
+<!-- This file is generated. Do not modify. -->

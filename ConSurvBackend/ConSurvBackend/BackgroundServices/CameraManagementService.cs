@@ -170,7 +170,7 @@ namespace ConSurvBackend.Core.BackgroundServices
             // one after another anyway, and keeping the whole start/stop/detect sequence under one lock
             // guarantees that the tracked runtime-information can never be observed or mutated in a
             // half-started/half-terminated state by a concurrent reader. The added latency for other
-            // holders of the lock is a conscious trade-off in favour of this consistency guarantee.
+            // holders of the lock is a conscious trade-off in favor of this consistency guarantee.
             lock (RuntimeData.CameraInternalsRuntimeDataLock)
             {
                 if (!this._RuntimeData.GetCameraInternals().ContainsKey(camera.Id))

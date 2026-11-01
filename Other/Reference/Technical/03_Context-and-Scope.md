@@ -2,7 +2,7 @@
 
 ## Context
 
-ConSurv as camera-organization-system should be usable for everyone and every organisation in a self-hosted way.
+ConSurv as camera-organization-system should be usable for everyone and every organization in a self-hosted way.
 
 ## Scope
 

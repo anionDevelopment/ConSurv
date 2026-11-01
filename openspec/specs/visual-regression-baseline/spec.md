@@ -17,3 +17,6 @@ Other separators like underscore, space or dot (except the dot before the file-e
 
 - **WHEN** a baseline-image's filename contains a word-separator other than dash
 - **THEN** this is a defect, resolved by renaming the baseline-image and the name the test refers to it by so that only dash is used as word-separator
+
+
+<!-- This file is generated. Do not modify. -->
